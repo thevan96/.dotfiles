@@ -1,4 +1,5 @@
 call plug#begin('~/.config/nvim/plugged')
+au FocusLost,WinLeave * :silent! w
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
@@ -44,26 +45,26 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-A-k> <C-u>
 nnoremap <C-A-j> <C-d>
-nnoremap <silent> <leader><space> :nohlsearch<cr>
-map <silent> bf :bfirst<cr>
-map <silent> bl :blast<cr>
-map <silent> bs :new<cr>
-map <silent> bv :vnew<cr>
-map <silent> bp :bprevious<cr>
-map <silent> bn :bnext<cr>
-map <silent> bx :bdelete <cr>
-map <silent> ts :tabnew<cr>
-map <silent> tn :tabnext<cr>
-map <silent> tp :tabprevious<cr>
-map <silent> tf :tabfirst<cr>
-map <silent> tl :tablast<cr>
-map <silent> tx :tabclose<cr>
+nnoremap <silent> no :nohlsearch<cr>
+nnoremap <silent> bf :bfirst<cr>
+nnoremap <silent> bl :blast<cr>
+nnoremap <silent> bs :new<cr>
+nnoremap <silent> bv :vnew<cr>
+nnoremap <silent> bp :bprevious<cr>
+nnoremap <silent> bn :bnext<cr>
+nnoremap <silent> bx :bdelete <cr>
+nnoremap <silent> ts :tabnew<cr>
+nnoremap <silent> tn :tabnext<cr>
+nnoremap <silent> tp :tabprevious<cr>
+nnoremap <silent> tf :tabfirst<cr>
+nnoremap <silent> tl :tablast<cr>
+nnoremap <silent> tx :tabclose<cr>
 vmap < <gv
 vmap > >gv
 let mapleader = ","
 inoremap jk <Esc>
-nmap ww :w<cr>
-nmap <leader>q :q <cr>
+nnoremap ww :w<cr>
+noremap <leader>q :q <cr>
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
 tnoremap <Esc> <C-\><C-n>
@@ -94,19 +95,20 @@ Plug 'tpope/vim-fugitive'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'thinca/vim-quickrun'
-nmap <leader>r :QuickRun<cr>
+map <leader>r :QuickRun<cr>
+
 
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
-nmap <leader>b :CtrlPBuffer<cr>
+map <leader>b :CtrlPBuffer<cr>
 
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-commentary'
 
 Plug 'easymotion/vim-easymotion'
-nmap <silent> ;; <Plug>(easymotion-overwin-f)
-nmap <silent> ;l <Plug>(easymotion-overwin-line)
+map <silent> ;; <Plug>(easymotion-overwin-f)
+map <silent> ;l <Plug>(easymotion-overwin-line)
 
 Plug 'prettier/vim-prettier', {
       \ 'do': 'npm install',
@@ -203,8 +205,8 @@ let g:airline_symbols.readonly = '🔒'
 
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
-nnoremap <Leader>t :NERDTree<CR>
-nnoremap <Leader>f :NERDTreeFind<CR>
+nnoremap <Leader>tt :NERDTreeToggle<CR>
+nnoremap <Leader>tf :NERDTreeFind<CR>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 autocmd StdinReadPre * let s:std_in=1
