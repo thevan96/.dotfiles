@@ -1,5 +1,4 @@
 call plug#begin('~/.config/nvim/plugged')
-au FocusLost,WinLeave * :silent! w
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
@@ -63,7 +62,7 @@ vmap < <gv
 vmap > >gv
 let mapleader = ","
 inoremap jk <Esc>
-nnoremap ww :w<cr>
+nnoremap <leader><space> :w<cr>
 noremap <leader>q :q <cr>
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
@@ -72,14 +71,19 @@ tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
-nnoremap <C-t>s <C-w><C-s> :terminal <cr>
-nnoremap <C-t>v <C-w><C-v> :terminal <cr>
 nnoremap <A-k> :resize +1<cr>
 nnoremap <A-j> :resize -1<cr>
 nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
+
+Plug 'mklabs/split-term.vim'
+nnoremap <C-t>s :Term<cr>
+nnoremap <C-t>v :VTerm<cr>
+nnoremap <C-t>t :TTerm<cr>
+
+Plug 'lambdalisue/suda.vim'
 
 Plug 'tpope/vim-surround'
 
@@ -112,7 +116,7 @@ map <silent> ;l <Plug>(easymotion-overwin-line)
 
 Plug 'prettier/vim-prettier', {
       \ 'do': 'npm install',
-      \ 'for': ['css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+      \ 'for': ['css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html','javascript'] }
 let g:prettier#autoformat = 0
 
 Plug 'stephpy/vim-php-cs-fixer'
@@ -172,10 +176,10 @@ endfunction
 
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gi <Plug>(coc-implementation)
+nmap <silent>gr <Plug>(coc-references)
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
