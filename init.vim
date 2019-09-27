@@ -1,6 +1,5 @@
 call plug#begin('~/.config/nvim/plugged')
 
-nmap <leader>so :so $MYVIMRC<CR>
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
@@ -13,6 +12,9 @@ set autoread
 set autowrite
 set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+if exists('&colorcolumn')
+  set colorcolumn=80
+endif
 set lazyredraw
 set showmatch
 set wildmenu
@@ -119,7 +121,9 @@ let g:airline#extensions#clock#format = '%H:%M:%S'
 let g:airline#extensions#clock#updatetime = 1000
 let g:airline#extensions#clock#auto = 0
 function! AirlineInit()
-  let g:airline_section_z = airline#section#create(['clock', g:airline_symbols.space, g:airline_section_z])
+  let g:airline_section_z = airline#section#create(
+  ['clock', g:airline_symbols.space, g:airline_section_z]
+  )
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
@@ -153,7 +157,8 @@ Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
       \ 'do': 'npm install',
-      \ 'for': ['css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html','javascript'] }
+      \ 'for': ['css', 'less', 'scss', 'json', 'graphql',
+      \ 'markdown', 'vue', 'yaml', 'html','javascript'] }
 let g:prettier#autoformat = 0
 
 Plug 'stephpy/vim-php-cs-fixer'
@@ -255,21 +260,22 @@ let g:NERDTreeIndicatorMapCustom = {
       \ "Unknown"   : "?"
       \ }
 
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab'
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
+" Syntax all language programe
 Plug 'sheerun/vim-polyglot'
 
 " Python
 let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/home/thevan/.pyenv/shims/python3'
+let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
-let g:node_host_prog= '/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
-let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
+let g:node_host_prog= '~/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+let g:coc_node_path='~/.nvm/versions/node/v10.16.3/bin/node'
 
 " Ruby
-let g:ruby_host_prog ='/home/thevan/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
+let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
 
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
@@ -289,9 +295,7 @@ set background=dark
 colorscheme onedark
 let g:onedark_terminal_italics=1
 
-" Functions
-" trailing whitespace
-match ErrorMsg '\s\+$'
+" Function trailing whitespace
 function! TrimWhiteSpace()
   %s/\s\+$//e
 endfunction
