@@ -1,16 +1,19 @@
 call plug#begin('~/.config/nvim/plugged')
 
+nmap <leader>so :so $MYVIMRC<CR>
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
 set noeol
 syntax on
 filetype plugin on
+filetype indent on
 set number
 set autoread
 set autowrite
 set cursorline
-set tabstop=2 shiftwidth=2 expandtab
+set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+set lazyredraw
 set showmatch
 set wildmenu
 set hidden
@@ -123,6 +126,10 @@ autocmd User AirlineAfterInit call AirlineInit()
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 Plug 'mhinz/vim-startify'
 let g:startify_files_number = 3
@@ -248,6 +255,9 @@ let g:NERDTreeIndicatorMapCustom = {
       \ "Unknown"   : "?"
       \ }
 
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+
 Plug 'sheerun/vim-polyglot'
 
 " Python
@@ -278,3 +288,12 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 colorscheme onedark
 let g:onedark_terminal_italics=1
+
+" Functions
+" trailing whitespace
+match ErrorMsg '\s\+$'
+function! TrimWhiteSpace()
+  %s/\s\+$//e
+endfunction
+autocmd BufWritePre * :call TrimWhiteSpace()
+"
