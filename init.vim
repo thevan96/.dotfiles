@@ -1,4 +1,5 @@
 call plug#begin('~/.config/nvim/plugged')
+
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
@@ -71,8 +72,8 @@ tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
-nnoremap <A-k> :resize +1<cr>
-nnoremap <A-j> :resize -1<cr>
+nnoremap <A-k> :resize +2<cr>
+nnoremap <A-j> :resize -2<cr>
 nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
@@ -83,36 +84,65 @@ nnoremap <C-t>s :Term<cr>
 nnoremap <C-t>v :VTerm<cr>
 nnoremap <C-t>t :TTerm<cr>
 
-Plug 'lambdalisue/suda.vim'
-
-Plug 'tpope/vim-surround'
-
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
 Plug 'maxbrunsfeld/vim-yankstack'
 
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'tpope/vim-surround'
+
+Plug 'tpope/vim-commentary'
+
+Plug 'mileszs/ack.vim'
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 Plug 'moll/vim-bbye'
+
+Plug 'lambdalisue/suda.vim'
+
+Plug 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = "<c-n>"
 
 Plug 'tpope/vim-fugitive'
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug 'thinca/vim-quickrun'
-map <leader>r :QuickRun<cr>
-
+Plug 'enricobacis/vim-airline-clock'
+let g:airline#extensions#clock#format = '%H:%M:%S'
+let g:airline#extensions#clock#updatetime = 1000
+let g:airline#extensions#clock#auto = 0
+function! AirlineInit()
+  let g:airline_section_z = airline#section#create(['clock', g:airline_symbols.space, g:airline_section_z])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
 
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
 
-Plug 'jiangmiao/auto-pairs'
+Plug 'mhinz/vim-startify'
+let g:startify_files_number = 3
+let NERDTreeHijackNetrw = 0
+let g:startify_session_persistence = 0
+let g:startify_session_before_save = [
+      \ 'echo "Cleaning up before saving.."',
+      \ 'silent! NERDTreeTabsClose'
+      \ ]
 
-Plug 'tpope/vim-commentary'
+Plug 't9md/vim-choosewin'
+nmap  -  <Plug>(choosewin)
+
+Plug 'wesq3/vim-windowswap'
 
 Plug 'easymotion/vim-easymotion'
 map <silent> ;; <Plug>(easymotion-overwin-f)
 map <silent> ;l <Plug>(easymotion-overwin-line)
+
+Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
       \ 'do': 'npm install',
@@ -123,6 +153,9 @@ Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
 nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
 nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
+
+Plug 'thinca/vim-quickrun'
+map <leader>r :QuickRun<cr>
 
 Plug 'w0rp/ale'
 let g:ale_sign_column_always = 1
@@ -163,19 +196,6 @@ let g:coc_global_extensions = [
       \ 'coc-snippets',
       \ 'coc-emmet',
       \]
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
@@ -209,12 +229,12 @@ let g:airline_symbols.readonly = '🔒'
 
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
-nnoremap <Leader>tt :NERDTreeToggle<CR>
-nnoremap <Leader>tf :NERDTreeFind<CR>
+let g:NERDTreeWinSize=20
+nnoremap tt :NERDTreeToggle<cr>
+nnoremap ff :NERDTreeFind<cr>
+nnoremap tr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -233,9 +253,6 @@ Plug 'sheerun/vim-polyglot'
 " Python
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/home/thevan/.pyenv/shims/python3'
-
-" PHP
-Plug 'StanAngeloff/php.vim'
 
 " Node
 let g:node_host_prog= '/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
