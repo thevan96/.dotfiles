@@ -10,7 +10,7 @@ filetype indent on
 set number
 set autoread
 set autowrite
-set cursorline
+" set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 if exists('&colorcolumn')
   set colorcolumn=80
@@ -26,7 +26,7 @@ set nopaste
 set clipboard+=unnamedplus
 set nobackup noswapfile
 set list
-set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
+set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set splitbelow
 set splitright
 
@@ -83,6 +83,7 @@ nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
+Plug 'flrnprz/plastic.vim'
 
 Plug 'mklabs/split-term.vim'
 nnoremap <C-t>s :Term<cr>
@@ -134,13 +135,29 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 Plug 'mhinz/vim-startify'
-let g:startify_files_number = 3
 let NERDTreeHijackNetrw = 0
 let g:startify_session_persistence = 0
 let g:startify_session_before_save = [
       \ 'echo "Cleaning up before saving.."',
       \ 'silent! NERDTreeTabsClose'
       \ ]
+let g:ascii = [
+      \ '.--.--.|__|.--------.',
+      \ '|  |  ||  ||        |',
+      \ ' \___/ |__||__|__|__|',
+      \ '',
+      \ '  To get what you want you have to deserve what you want',
+      \ '  The world is not yet a crazy world to reward undeserving people',
+      \ '  > Charlie Munger'
+      \]
+let g:startify_custom_header = g:ascii
+let g:startify_files_number = 10
+let g:startify_lists = [
+      \ { 'header': ['   MRU'],            'type': 'files' },
+      \ { 'header': ['   Sessions'],       'type': 'sessions' },
+      \ ]
+" show git edit
+Plug 'mhinz/vim-signify'
 
 Plug 't9md/vim-choosewin'
 nmap  -  <Plug>(choosewin)
@@ -291,8 +308,8 @@ call plug#end()
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
-colorscheme onedark
-let g:onedark_terminal_italics=1
+colorscheme plastic
+" let g:onedark_terminal_italics=1
 
 " Function trailing whitespace
 function! TrimWhiteSpace()
