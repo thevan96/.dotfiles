@@ -121,9 +121,7 @@ let g:airline#extensions#clock#format = '%H:%M:%S'
 let g:airline#extensions#clock#updatetime = 1000
 let g:airline#extensions#clock#auto = 0
 function! AirlineInit()
-  let g:airline_section_z = airline#section#create(
-  ['clock', g:airline_symbols.space, g:airline_section_z]
-  )
+  let g:airline_section_z = airline#section#create(['clock', g:airline_symbols.space, g:airline_section_z])
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
@@ -271,8 +269,9 @@ let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
-let g:node_host_prog= '~/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
-let g:coc_node_path='~/.nvm/versions/node/v10.16.3/bin/node'
+let g:node_host_prog= '/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
+let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+
 
 " Ruby
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
