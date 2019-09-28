@@ -269,8 +269,8 @@ let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
-let g:node_host_prog= '/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
-let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+let g:node_host_prog='/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
 
 
 " Ruby
