@@ -8,22 +8,23 @@ syntax on
 filetype plugin on
 filetype indent on
 set number
+set relativenumber
 set autoread
 set autowrite
-" set cursorline
+set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 if exists('&colorcolumn')
   set colorcolumn=80
 endif
-set lazyredraw
 set showmatch
-set wildmenu
 set hidden
 set incsearch
 set hlsearch
 set ignorecase
 set nopaste
-set clipboard+=unnamedplus
+set clipboard =unnamedplus
 set nobackup noswapfile
 set list
 set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
@@ -67,9 +68,8 @@ nnoremap <silent> tx :tabclose<cr>
 vmap < <gv
 vmap > >gv
 let mapleader = ","
-inoremap jk <Esc>
-nnoremap <leader><space> :w<cr>
-noremap <leader>q :q <cr>
+" inoremap jk <Esc>
+nnoremap <leader>q :q <cr>
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
 tnoremap <Esc> <C-\><C-n>
@@ -83,7 +83,6 @@ nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
-Plug 'flrnprz/plastic.vim'
 
 Plug 'mklabs/split-term.vim'
 nnoremap <C-t>s :Term<cr>
@@ -95,7 +94,7 @@ let g:indentLine_char_list = ['┊']
 
 Plug 'maxbrunsfeld/vim-yankstack'
 
-Plug 'jiangmiao/auto-pairs'
+Plug 'townk/vim-autoclose'
 
 Plug 'tpope/vim-surround'
 
@@ -109,11 +108,13 @@ endif
 Plug 'moll/vim-bbye'
 
 Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
@@ -146,8 +147,8 @@ let g:ascii = [
       \ '|  |  ||  ||        |',
       \ ' \___/ |__||__|__|__|',
       \ '',
-      \ '  To get what you want you have to deserve what you want',
-      \ '  The world is not yet a crazy world to reward undeserving people',
+      \ '  "To get what you want you have to deserve what you want.',
+      \ '   The world is not yet a crazy world to reward undeserving people."',
       \ '  > Charlie Munger'
       \]
 let g:startify_custom_header = g:ascii
@@ -156,8 +157,6 @@ let g:startify_lists = [
       \ { 'header': ['   MRU'],            'type': 'files' },
       \ { 'header': ['   Sessions'],       'type': 'sessions' },
       \ ]
-" show git edit
-Plug 'mhinz/vim-signify'
 
 Plug 't9md/vim-choosewin'
 nmap  -  <Plug>(choosewin)
@@ -256,7 +255,6 @@ let g:airline_symbols.readonly = '🔒'
 
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
-let g:NERDTreeWinSize=20
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
@@ -275,9 +273,6 @@ let g:NERDTreeIndicatorMapCustom = {
       \ "Unknown"   : "?"
       \ }
 
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab'
-autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
 
@@ -288,7 +283,6 @@ let g:python3_host_prog = '~/.pyenv/shims/python3'
 " Node
 let g:node_host_prog='/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
 let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
-
 
 " Ruby
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
@@ -301,6 +295,7 @@ let g:rainbow_active = 1
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled = 1
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 call plug#end()
@@ -308,12 +303,13 @@ call plug#end()
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
-colorscheme plastic
-" let g:onedark_terminal_italics=1
+colorscheme onedark
 
 " Function trailing whitespace
 function! TrimWhiteSpace()
   %s/\s\+$//e
 endfunction
 autocmd BufWritePre * :call TrimWhiteSpace()
-"
+
+" Clear register
+command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
