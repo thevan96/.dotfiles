@@ -86,9 +86,9 @@ nnoremap <A-h> :vertical resize -2<cr>
 Plug 'joshdick/onedark.vim'
 
 Plug 'mklabs/split-term.vim'
-nnoremap <C-t>s :Term<cr>
-nnoremap <C-t>v :VTerm<cr>
-nnoremap <C-t>t :TTerm<cr>
+nnoremap <leader>ts :Term<cr>
+nnoremap <leader>tv :VTerm<cr>
+nnoremap <leader>tt :TTerm<cr>
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
