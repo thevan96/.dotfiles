@@ -27,7 +27,7 @@ set nopaste
 set clipboard =unnamedplus
 set nobackup noswapfile
 set list
-set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
+set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
 set splitbelow
 set splitright
 
@@ -66,11 +66,11 @@ nnoremap <silent> tf :tabfirst<cr>
 nnoremap <silent> tl :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
 
-vmap < <gv
+map < <gv
 vmap > >gv
+imap jk <Esc>
 let mapleader = ","
-" inoremap jk <Esc>
-nnoremap <leader>qq :qall<cr>
+nnoremap <leader>qq :SClose<cr>
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
 tnoremap <Esc> <C-\><C-n>
@@ -117,7 +117,6 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'enricobacis/vim-airline-clock'
 let g:airline#extensions#clock#format = '%H:%M:%S'
@@ -134,11 +133,9 @@ map <leader>b :CtrlPBuffer<cr>
 let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 Plug 'mhinz/vim-startify'
-let NERDTreeHijackNetrw = 0
-let g:startify_change_to_dir = 1
+let NERDTreeHijackNetrw = 1
 let g:startify_session_persistence = 1
 let g:startify_session_before_save = [
       \ 'echo "Cleaning up before saving.."',
@@ -262,6 +259,7 @@ let g:airline_symbols.readonly = '🔒'
 
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
