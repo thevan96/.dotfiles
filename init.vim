@@ -1,4 +1,4 @@
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin()
 
 set spelllang=en
 set encoding=UTF-8
@@ -51,7 +51,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-A-k> <C-u>
 nnoremap <C-A-j> <C-d>
-nnoremap <silent> no :nohlsearch<cr>
+nnoremap <silent> <leader><space> :nohlsearch<cr>
 nnoremap <silent> bf :bfirst<cr>
 nnoremap <silent> bl :blast<cr>
 nnoremap <silent> bs :new<cr>
@@ -84,6 +84,7 @@ nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
+Plug 'liuchengxu/space-vim-dark'
 
 Plug 'mklabs/split-term.vim'
 nnoremap <leader>ts :Term<cr>
@@ -141,6 +142,7 @@ let g:startify_session_before_save = [
       \ 'echo "Cleaning up before saving.."',
       \ 'silent! NERDTreeTabsClose'
       \ ]
+
 let g:ascii = [
       \'   __    _  _______  _______  __   __  ___   __   __  ',
       \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  | ',
@@ -183,6 +185,8 @@ Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
 nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
 nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
+let g:php_cs_fixer_php_path = "php"
+let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 Plug 'thinca/vim-quickrun'
 map <leader>r :QuickRun<cr>
@@ -260,6 +264,7 @@ let g:airline_symbols.readonly = '🔒'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+let g:NERDTreeWinPos = "left"
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
@@ -308,7 +313,19 @@ call plug#end()
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
-colorscheme onedark
+" colorscheme onedark
+colorscheme space-vim-dark
+hi Normal     ctermbg=NONE guibg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+
+" Trim whitespace before save
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufEnter * :syntax sync fromstart
+
+"Fix not hilight restore session
+set sessionoptions-=folds
+set sessionoptions-=options
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
