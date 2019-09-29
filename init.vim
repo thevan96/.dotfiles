@@ -70,7 +70,7 @@ vmap < <gv
 vmap > >gv
 let mapleader = ","
 " inoremap jk <Esc>
-nnoremap <leader>q :q <cr>
+nnoremap <leader>qq :qall<cr>
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
 tnoremap <Esc> <C-\><C-n>
@@ -138,7 +138,8 @@ let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 Plug 'mhinz/vim-startify'
 let NERDTreeHijackNetrw = 0
-let g:startify_session_persistence = 0
+let g:startify_change_to_dir = 1
+let g:startify_session_persistence = 1
 let g:startify_session_before_save = [
       \ 'echo "Cleaning up before saving.."',
       \ 'silent! NERDTreeTabsClose'
@@ -155,7 +156,7 @@ let g:ascii = [
       \'  " To get what you want you have to deserve what you want.             ',
       \'    The world is not yet a crazy world to reward undeserving people."   ',
       \'    >  Charlie Munger'
-      \] 
+      \]
 
 let g:startify_custom_header = g:ascii
 let g:startify_files_number = 10
