@@ -156,7 +156,7 @@ let g:ascii = [
       \]
 
 let g:startify_custom_header = g:ascii
-let g:startify_files_number = 10
+let g:startify_files_number = 3
 let g:startify_lists = [
       \ { 'header': ['   MRU'],            'type': 'files' },
       \ { 'header': ['   Sessions'],       'type': 'sessions' },
