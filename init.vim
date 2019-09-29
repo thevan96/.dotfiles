@@ -59,12 +59,13 @@ nnoremap <silent> bv :vnew<cr>
 nnoremap <silent> bp :bprevious<cr>
 nnoremap <silent> bn :bnext<cr>
 nnoremap <silent> bx :bdelete <cr>
-nnoremap <silent> ts :tabnew<cr>
+nnoremap <silent> bd :Bdelete <cr>
 nnoremap <silent> tn :tabnext<cr>
 nnoremap <silent> tp :tabprevious<cr>
 nnoremap <silent> tf :tabfirst<cr>
 nnoremap <silent> tl :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
+
 vmap < <gv
 vmap > >gv
 let mapleader = ","
@@ -143,14 +144,19 @@ let g:startify_session_before_save = [
       \ 'silent! NERDTreeTabsClose'
       \ ]
 let g:ascii = [
-      \ '.--.--.|__|.--------.',
-      \ '|  |  ||  ||        |',
-      \ ' \___/ |__||__|__|__|',
-      \ '',
-      \ '  "To get what you want you have to deserve what you want.',
-      \ '   The world is not yet a crazy world to reward undeserving people."',
-      \ '  > Charlie Munger'
-      \]
+      \'   __    _  _______  _______  __   __  ___   __   __  ',
+      \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  | ',
+      \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       | ',
+      \'  |       ||   |___ |  | |  ||       ||   | |       | ',
+      \'  |  _    ||    ___||  |_|  ||       ||   | |       | ',
+      \'  | | |   ||   |___ |       | |     | |   | | ||_|| | ',
+      \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_| ',
+      \'',
+      \'  " To get what you want you have to deserve what you want.             ',
+      \'    The world is not yet a crazy world to reward undeserving people."   ',
+      \'    >  Charlie Munger'
+      \] 
+
 let g:startify_custom_header = g:ascii
 let g:startify_files_number = 10
 let g:startify_lists = [
@@ -304,12 +310,6 @@ call plug#end()
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 colorscheme onedark
-
-" Function trailing whitespace
-function! TrimWhiteSpace()
-  %s/\s\+$//e
-endfunction
-autocmd BufWritePre * :call TrimWhiteSpace()
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
