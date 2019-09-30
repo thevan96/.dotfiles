@@ -83,7 +83,6 @@ nnoremap <A-j> :resize -2<cr>
 nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
-Plug 'joshdick/onedark.vim'
 Plug 'liuchengxu/space-vim-dark'
 
 Plug 'mklabs/split-term.vim'
@@ -96,9 +95,14 @@ let g:indentLine_char_list = ['┊']
 
 Plug 'maxbrunsfeld/vim-yankstack'
 
-Plug 'townk/vim-autoclose'
+Plug 'jiangmiao/auto-pairs'
+let g:AutoPairsFlyMode = 0
+let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 Plug 'tpope/vim-surround'
+
+Plug 'bronson/vim-trailing-whitespace'
+let g:extra_whitespace_ignored_filetypes = ['startify']
 
 Plug 'tpope/vim-commentary'
 
@@ -144,16 +148,16 @@ let g:startify_session_before_save = [
       \ ]
 
 let g:ascii = [
-      \'   __    _  _______  _______  __   __  ___   __   __  ',
-      \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  | ',
-      \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       | ',
-      \'  |       ||   |___ |  | |  ||       ||   | |       | ',
-      \'  |  _    ||    ___||  |_|  ||       ||   | |       | ',
-      \'  | | |   ||   |___ |       | |     | |   | | ||_|| | ',
-      \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_| ',
+      \'   __    _  _______  _______  __   __  ___   __   __',
+      \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
+      \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
+      \'  |       ||   |___ |  | |  ||       ||   | |       |',
+      \'  |  _    ||    ___||  |_|  ||       ||   | |       |',
+      \'  | | |   ||   |___ |       | |     | |   | | ||_|| |',
+      \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
       \'',
-      \'  " To get what you want you have to deserve what you want.             ',
-      \'    The world is not yet a crazy world to reward undeserving people."   ',
+      \'  " To get what you want you have to deserve what you want.',
+      \'    The world is not yet a crazy world to reward undeserving people."',
       \'    >  Charlie Munger'
       \]
 
@@ -265,6 +269,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 let g:NERDTreeWinPos = "left"
+let g:NERDTreeWinSize= 25
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
@@ -312,18 +317,14 @@ call plug#end()
 
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 set background=dark
-" colorscheme onedark
 colorscheme space-vim-dark
 hi Normal     ctermbg=NONE guibg=NONE
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 
-" Trim whitespace before save
-autocmd BufWritePre * %s/\s\+$//e
-autocmd BufEnter * :syntax sync fromstart
-
-"Fix not hilight restore session
+" Fix not hilight restore session
 set sessionoptions-=folds
 set sessionoptions-=options
 
