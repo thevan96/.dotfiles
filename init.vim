@@ -25,7 +25,8 @@ set hlsearch
 set ignorecase
 set nopaste
 set clipboard =unnamedplus
-set nobackup noswapfile
+set nobackup
+set noswapfile
 set list
 set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
 set splitbelow
@@ -180,9 +181,24 @@ map <silent> ;l <Plug>(easymotion-overwin-line)
 Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
-      \ 'do': 'npm install',
-      \ 'for': ['css', 'less', 'scss', 'json', 'graphql',
-      \ 'markdown', 'vue', 'yaml', 'html','javascript'] }
+      \ 'do': 'yarn install',
+      \ 'branch': 'release/1.x',
+      \ 'for': [
+      \ 'javascript',
+      \ 'typescript',
+      \ 'css',
+      \ 'less',
+      \ 'scss',
+      \ 'json',
+      \ 'graphql',
+      \ 'markdown',
+      \ 'vue',
+      \ 'lua',
+      \ 'php',
+      \ 'python',
+      \ 'ruby',
+      \ 'html',
+      \ 'swift' ] }
 let g:prettier#autoformat = 0
 
 Plug 'stephpy/vim-php-cs-fixer'
@@ -195,31 +211,18 @@ let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 Plug 'thinca/vim-quickrun'
 map <leader>r :QuickRun<cr>
 
-Plug 'w0rp/ale'
-let g:ale_sign_column_always = 1
-let g:ale_linters = {'javascript': ['standard'],'php':['php','phpcs']}
-let g:ale_php_phpcs_standard = 'PSR2'
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-let g:airline#extensions#ale#enabled = 1
-function! LinterStatus() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
+Plug 'vim-syntastic/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
+let g:syntastic_javascript_checkers = ["standard"]
+let g:syntastic_javascript_standard_exec = "standard"
 
-  return l:counts.total == 0 ? 'OK' : printf(
-        \   '%dW %dE',
-        \   all_non_errors,
-        \   all_errors
-        \)
-endfunction
-set statusline=%{LinterStatus()}
-
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-
+let g:syntastic_php_checkers = ['php', 'phpcs']
+let g:syntastic_php_phpcs_exec = 'phpcs'
+let g:syntastic_php_phpcs_args = '--standard=psr2'
+"
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
@@ -233,7 +236,9 @@ let g:coc_global_extensions = [
       \ 'coc-python',
       \ 'coc-snippets',
       \ 'coc-emmet',
+      \ 'coc-prettier'
       \]
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
@@ -243,7 +248,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme = 'angr'
+let g:airline_theme = 'base16'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
