@@ -50,21 +50,19 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-nnoremap <C-A-k> <C-u>
-nnoremap <C-A-j> <C-d>
 nnoremap <silent> <leader><space> :nohlsearch<cr>
-nnoremap <silent> bf :bfirst<cr>
-nnoremap <silent> bl :blast<cr>
+nnoremap <silent> bj :bfirst<cr>
+nnoremap <silent> bk :blast<cr>
 nnoremap <silent> bs :new<cr>
 nnoremap <silent> bv :vnew<cr>
-nnoremap <silent> bp :bprevious<cr>
-nnoremap <silent> bn :bnext<cr>
+nnoremap <silent> bh :bprevious<cr>
+nnoremap <silent> bl :bnext<cr>
 nnoremap <silent> bx :bdelete <cr>
 nnoremap <silent> bd :Bdelete <cr>
-nnoremap <silent> tn :tabnext<cr>
-nnoremap <silent> tp :tabprevious<cr>
-nnoremap <silent> tf :tabfirst<cr>
-nnoremap <silent> tl :tablast<cr>
+nnoremap <silent> tl :tabnext<cr>
+nnoremap <silent> th :tabprevious<cr>
+nnoremap <silent> tj :tabfirst<cr>
+nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
 
 map < <gv
@@ -95,6 +93,7 @@ Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
 Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'machakann/vim-highlightedyank'
 
 Plug 'jiangmiao/auto-pairs'
 let g:AutoPairsFlyMode = 0
@@ -215,7 +214,6 @@ Plug 'vim-syntastic/syntastic'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_javascript_checkers = ["standard"]
 let g:syntastic_javascript_standard_exec = "standard"
 
