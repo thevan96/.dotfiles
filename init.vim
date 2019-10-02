@@ -92,9 +92,6 @@ nnoremap <leader>tt :TTerm<cr>
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
-Plug 'maxbrunsfeld/vim-yankstack'
-Plug 'machakann/vim-highlightedyank'
-
 Plug 'jiangmiao/auto-pairs'
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
