@@ -206,26 +206,25 @@ let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 Plug 'thinca/vim-quickrun'
 map <leader>r :QuickRun<cr>
 
-Plug 'neomake/neomake'
-let g:neomake_error_sign = {
-      \ 'text': '✖',
-      \ 'texthl': 'NeomakeErrorSign',
-      \ }
-let g:neomake_warning_sign = {
-      \   'text': '✖',
-      \   'texthl': 'NeomakeWarningSign',
-      \ }
-let g:neomake_message_sign = {
-      \   'text': '➤',
-      \   'texthl': 'NeomakeMessageSign',
-      \ }
-let g:neomake_info_sign = {
-      \ 'text': 'ℹ',
-      \ 'texthl': 'NeomakeInfoSign'
-      \ }
+Plug 'dense-analysis/ale'
+nmap <silent> e[ <Plug>(ale_previous_wrap)
+nmap <silent> e] <Plug>(ale_next_wrap)
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_column_always = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_set_loclist = 0
+let b:ale_linters = {
+      \ 'javascript': ['standard'],
+      \ 'php': ['phpcs']
+      \}
+let g:ale_php_phpcs_standard = "psr2"
 
+Plug 'neomake/neomake'
 let g:neomake_javascript_enabled_makers = ['standard']
-let g:neomake_php_enabled_makers = ['phpcs', 'prettier', 'phpcsfixer']
+let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 let g:neomake_javascript_standard_maker = {
       \ 'exe': 'standard',
       \ 'args': ['--fix'],
@@ -234,14 +233,10 @@ let g:neomake_php_prettier_maker = {
       \ 'exe': 'prettier',
       \ 'args': ['--write'],
       \ }
-
-let g:neomake_php_phpcs_args_standard = 'PSR2'
-
 let g:neomake_php_phpcsfixer_maker = {
       \ 'exe': 'php-cs-fixer',
       \ 'args': ['fix', '--rules=@PSR2'],
       \ }
-
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
@@ -252,7 +247,6 @@ Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
@@ -273,7 +267,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme = 'base16'
+let g:airline_theme = 'angr'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -370,7 +364,7 @@ endfunction
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nw', 100)
+  call neomake#configure#automake('nw', 150)
 endif
 
 " Clear register
