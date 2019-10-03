@@ -235,10 +235,7 @@ let g:neomake_php_prettier_maker = {
       \ 'args': ['--write'],
       \ }
 
-let g:neomake_php_phpcs_maker = {
-      \ 'exe' : 'phpcs',
-      \ 'args': ['--standard=PSR2'],
-      \ }
+let g:neomake_php_phpcs_args_standard = 'PSR2'
 
 let g:neomake_php_phpcsfixer_maker = {
       \ 'exe': 'php-cs-fixer',
@@ -255,6 +252,7 @@ Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
