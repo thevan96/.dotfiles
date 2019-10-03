@@ -64,7 +64,6 @@ nnoremap <silent> th :tabprevious<cr>
 nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
-
 map < <gv
 vmap > >gv
 imap jk <Esc>
@@ -207,22 +206,55 @@ let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 Plug 'thinca/vim-quickrun'
 map <leader>r :QuickRun<cr>
 
-Plug 'vim-syntastic/syntastic'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_javascript_checkers = ["standard"]
-let g:syntastic_javascript_standard_exec = "standard"
+Plug 'neomake/neomake'
+let g:neomake_error_sign = {
+      \ 'text': '✖',
+      \ 'texthl': 'NeomakeErrorSign',
+      \ }
+let g:neomake_warning_sign = {
+      \   'text': '✖',
+      \   'texthl': 'NeomakeWarningSign',
+      \ }
+let g:neomake_message_sign = {
+      \   'text': '➤',
+      \   'texthl': 'NeomakeMessageSign',
+      \ }
+let g:neomake_info_sign = {
+      \ 'text': 'ℹ',
+      \ 'texthl': 'NeomakeInfoSign'
+      \ }
 
-let g:syntastic_php_checkers = ['php', 'phpcs']
-let g:syntastic_php_phpcs_exec = 'phpcs'
-let g:syntastic_php_phpcs_args = '--standard=psr2'
-"
+let g:neomake_javascript_enabled_makers = ['standard']
+let g:neomake_php_enabled_makers = ['phpcs', 'prettier', 'phpcsfixer']
+let g:neomake_javascript_standard_maker = {
+      \ 'exe': 'standard',
+      \ 'args': ['--fix'],
+      \ }
+let g:neomake_php_prettier_maker = {
+      \ 'exe': 'prettier',
+      \ 'args': ['--write'],
+      \ }
+
+let g:neomake_php_phpcs_maker = {
+      \ 'exe' : 'phpcs',
+      \ 'args': ['--standard=PSR2'],
+      \ }
+
+let g:neomake_php_phpcsfixer_maker = {
+      \ 'exe': 'php-cs-fixer',
+      \ 'args': ['fix', '--rules=@PSR2'],
+      \ }
+
+autocmd! BufWritePost * Neomake
+augroup my_neomake_hooks
+  au!
+  autocmd User NeomakeJobFinished :checktime
+augroup END
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
@@ -322,9 +354,26 @@ hi Normal     ctermbg=NONE guibg=NONE
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 
-" Fix not hilight restore session
+" Fix error restore session
 set sessionoptions-=folds
 set sessionoptions-=options
+
+
+" Config neovim
+function! MyOnBattery()
+  if has('macunix')
+    return match(system('pmset -g batt'), "Now drawing from 'Battery Power'") != -1
+  elsif has('unix')
+  return readfile('/sys/class/power_supply/AC/online') == ['0']
+endif
+return 0
+endfunction
+
+if MyOnBattery()
+  call neomake#configure#automake('w')
+else
+  call neomake#configure#automake('nw', 100)
+endif
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
