@@ -247,6 +247,7 @@ Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
 
+Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
@@ -364,7 +365,7 @@ endfunction
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nw', 150)
+  call neomake#configure#automake('nw', 100)
 endif
 
 " Clear register
