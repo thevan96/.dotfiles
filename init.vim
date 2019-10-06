@@ -7,10 +7,8 @@ set noeol
 syntax on
 filetype plugin on
 filetype indent on
-set number
-set relativenumber
-set autoread
-set autowrite
+set number relativenumber
+set autoread autowrite
 set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
@@ -20,17 +18,13 @@ if exists('&colorcolumn')
 endif
 set showmatch
 set hidden
-set incsearch
-set hlsearch
-set ignorecase
+set incsearch hlsearch ignorecase
 set nopaste
-set clipboard =unnamedplus
-set nobackup
-set noswapfile
+set clipboard +=unnamedplus
+set nobackup noswapfile
 set list
 set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
-set splitbelow
-set splitright
+set splitbelow splitright
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -46,10 +40,10 @@ vnoremap <left> <nop>
 vnoremap <right> <nop>
 nnoremap <silent> j gj
 nnoremap <silent> k gk
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+nnoremap <c-j> <c-w><c-j>
+nnoremap <c-k> <c-w><c-k>
+nnoremap <c-l> <c-w><c-l>
+nnoremap <c-h> <c-w><c-h>
 nnoremap <silent> <leader><space> :nohlsearch<cr>
 nnoremap <silent> bj :bfirst<cr>
 nnoremap <silent> bk :blast<cr>
@@ -69,34 +63,28 @@ vmap > >gv
 imap jk <Esc>
 let mapleader = ","
 nnoremap <leader>qq :SClose<cr>
-tnoremap <Esc> <C-\><C-n>
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
-nnoremap <A-k> :resize +2<cr>
-nnoremap <A-j> :resize -2<cr>
-nnoremap <A-l> :vertical resize +2<cr>
-nnoremap <A-h> :vertical resize -2<cr>
+tnoremap <esc> <c-\><c-n>
+tnoremap <c-h> <c-\><c-n><C-w>h
+tnoremap <c-j> <c-\><c-n><C-w>j
+tnoremap <c-k> <c-\><c-n><C-w>k
+tnoremap <c-l> <c-\><c-n><C-w>l
+nnoremap <up> :resize +2<cr>
+nnoremap <down> :resize -2<cr>
+nnoremap <right> :vertical resize +2<cr>
+nnoremap <left> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
 Plug 'mklabs/split-term.vim'
-nnoremap <leader>ts :Term<cr>
-nnoremap <leader>tv :VTerm<cr>
-nnoremap <leader>tt :TTerm<cr>
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
 Plug 'jiangmiao/auto-pairs'
-let g:AutoPairsFlyMode = 0
-let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 Plug 'tpope/vim-surround'
 
 Plug 'bronson/vim-trailing-whitespace'
-let g:extra_whitespace_ignored_filetypes = ['startify']
 
 Plug 'tpope/vim-commentary'
 
@@ -139,18 +127,18 @@ let g:startify_session_before_save = [
   \ ]
 
 let g:ascii = [
-  \'   __    _  _______  _______  __   __  ___   __   __',
-  \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
-  \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
-  \'  |       ||   |___ |  | |  ||       ||   | |       |',
-  \'  |  _    ||    ___||  |_|  ||       ||   | |       |',
-  \'  | | |   ||   |___ |       | |     | |   | | ||_|| |',
-  \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
-  \'',
-  \'  " To get what you want you have to deserve what you want.',
-  \'    The world is not yet a crazy world to reward undeserving people."',
-  \'    >  Charlie Munger'
-  \]
+  \ '   __    _  _______  _______  __   __  ___   __   __',
+  \ '  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
+  \ '  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
+  \ '  |       ||   |___ |  | |  ||       ||   | |       |',
+  \ '  |  _    ||    ___||  |_|  ||       ||   | |       |',
+  \ '  | | |   ||   |___ |       | |     | |   | | ||_|| |',
+  \ '  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
+  \ '',
+  \ '  " To get what you want you have to deserve what you want.',
+  \ '    The world is not yet a crazy world to reward undeserving people."',
+  \ '    >  Charlie Munger'
+  \ ]
 
 let g:startify_custom_header = g:ascii
 let g:startify_files_number = 3
@@ -190,12 +178,13 @@ Plug 'prettier/vim-prettier', {
   \ 'html',
   \ 'swift' ]
   \ }
-nmap <Leader>py <Plug>(Prettier)
+nmap <leader>p <plug>(Prettier)
+let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 
 Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
-nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
-nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
+nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<cr>
+nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<cr>
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
@@ -212,6 +201,7 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_set_loclist = 0
+
 let b:ale_linters = {
   \ 'javascript': ['standard'],
   \ 'php': ['phpcs']
@@ -220,11 +210,12 @@ let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
 let g:neomake_javascript_enabled_makers = ['standard']
-let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 let g:neomake_javascript_standard_maker = {
   \ 'exe': 'standard',
   \ 'args': ['--fix'],
   \ }
+
+let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 let g:neomake_php_prettier_maker = {
   \ 'exe': 'prettier',
   \ 'args': ['--write'],
@@ -233,6 +224,7 @@ let g:neomake_php_phpcsfixer_maker = {
   \ 'exe': 'php-cs-fixer',
   \ 'args': ['fix', '--rules=@PSR2'],
   \ }
+
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
@@ -330,13 +322,13 @@ let g:rainbow_active = 1
 " Markdown
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled = 1
+
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 call plug#end()
 
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
 set background =dark
 colorscheme onedark
 
