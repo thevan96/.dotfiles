@@ -61,6 +61,7 @@ nnoremap <silent> tx :tabclose<cr>
 map < <gv
 vmap > >gv
 imap jk <Esc>
+tnoremap jk <c-\><c-n>
 let mapleader = ","
 nnoremap <leader>qq :SClose<cr>
 tnoremap <esc> <c-\><c-n>
@@ -76,6 +77,11 @@ nnoremap <left> :vertical resize -2<cr>
 Plug 'joshdick/onedark.vim'
 
 Plug 'mklabs/split-term.vim'
+
+Plug 'honza/vim-snippets'
+
+Plug 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = "<c-n>"
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
@@ -98,12 +104,10 @@ Plug 'moll/vim-bbye'
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
-Plug 'ervandew/supertab'
-let g:SuperTabDefaultCompletionType = "<c-n>"
-
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-
+nnoremap <Leader>ggn :GitGutterNextHunk<CR>
+nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
 
 Plug 'enricobacis/vim-airline-clock'
 let g:airline#extensions#clock#format = '%H:%M:%S|%d/%m/%Y'
@@ -121,31 +125,37 @@ map <leader>b :CtrlPBuffer<cr>
 Plug 'mhinz/vim-startify'
 let NERDTreeHijackNetrw = 1
 let g:startify_session_persistence = 1
+autocmd VimEnter *
+      \ if !argc()
+      \ |   Startify
+      \ |   NERDTree
+      \ |   wincmd w
+      \ | endif
 let g:startify_session_before_save = [
-  \ 'echo "Cleaning up before saving.."',
-  \ 'silent! NERDTreeTabsClose'
-  \ ]
+      \ 'echo "Cleaning up before saving.."',
+      \ 'silent! NERDTreeTabsClose'
+      \ ]
 
 let g:ascii = [
-  \ '   __    _  _______  _______  __   __  ___   __   __',
-  \ '  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
-  \ '  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
-  \ '  |       ||   |___ |  | |  ||       ||   | |       |',
-  \ '  |  _    ||    ___||  |_|  ||       ||   | |       |',
-  \ '  | | |   ||   |___ |       | |     | |   | | ||_|| |',
-  \ '  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
-  \ '',
-  \ '  " To get what you want you have to deserve what you want.',
-  \ '    The world is not yet a crazy world to reward undeserving people."',
-  \ '    >  Charlie Munger'
-  \ ]
+      \ '   __    _  _______  _______  __   __  ___   __   __',
+      \ '  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
+      \ '  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
+      \ '  |       ||   |___ |  | |  ||       ||   | |       |',
+      \ '  |  _    ||    ___||  |_|  ||       ||   | |       |',
+      \ '  | | |   ||   |___ |       | |     | |   | | ||_|| |',
+      \ '  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
+      \ '',
+      \ '  " To get what you want you have to deserve what you want.',
+      \ '    The world is not yet a crazy world to reward undeserving people."',
+      \ '    >  Charlie Munger'
+      \ ]
 
 let g:startify_custom_header = g:ascii
 let g:startify_files_number = 3
 let g:startify_lists = [
-  \ { 'header': ['   MRU'],            'type': 'files' },
-  \ { 'header': ['   Sessions'],       'type': 'sessions' },
-  \ ]
+      \ { 'header': ['   MRU'],            'type': 'files' },
+      \ { 'header': ['   Sessions'],       'type': 'sessions' },
+      \ ]
 
 Plug 't9md/vim-choosewin'
 nmap  -  <Plug>(choosewin)
@@ -159,25 +169,25 @@ map <silent> ;l <Plug>(easymotion-overwin-line)
 Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'branch': 'release/1.x',
-  \ 'for': [
-  \ 'javascript',
-  \ 'typescript',
-  \ 'css',
-  \ 'less',
-  \ 'scss',
-  \ 'json',
-  \ 'graphql',
-  \ 'markdown',
-  \ 'vue',
-  \ 'lua',
-  \ 'php',
-  \ 'python',
-  \ 'ruby',
-  \ 'html',
-  \ 'swift' ]
-  \ }
+      \ 'do': 'yarn install',
+      \ 'branch': 'release/1.x',
+      \ 'for': [
+      \ 'javascript',
+      \ 'typescript',
+      \ 'css',
+      \ 'less',
+      \ 'scss',
+      \ 'json',
+      \ 'graphql',
+      \ 'markdown',
+      \ 'vue',
+      \ 'lua',
+      \ 'php',
+      \ 'python',
+      \ 'ruby',
+      \ 'html',
+      \ 'swift' ]
+      \ }
 nmap <leader>p <plug>(Prettier)
 let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 
@@ -203,27 +213,27 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_set_loclist = 0
 
 let b:ale_linters = {
-  \ 'javascript': ['standard'],
-  \ 'php': ['phpcs']
-  \}
+      \ 'javascript': ['standard'],
+      \ 'php': ['phpcs']
+      \ }
 let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
 let g:neomake_javascript_enabled_makers = ['standard']
 let g:neomake_javascript_standard_maker = {
-  \ 'exe': 'standard',
-  \ 'args': ['--fix'],
-  \ }
+      \ 'exe': 'standard',
+      \ 'args': ['--fix'],
+      \ }
 
 let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 let g:neomake_php_prettier_maker = {
-  \ 'exe': 'prettier',
-  \ 'args': ['--write'],
-  \ }
+      \ 'exe': 'prettier',
+      \ 'args': ['--write'],
+      \ }
 let g:neomake_php_phpcsfixer_maker = {
-  \ 'exe': 'php-cs-fixer',
-  \ 'args': ['fix', '--rules=@PSR2'],
-  \ }
+      \ 'exe': 'php-cs-fixer',
+      \ 'args': ['fix', '--rules=@PSR2'],
+      \ }
 
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
@@ -237,22 +247,24 @@ let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions = [
-  \ 'coc-json',
-  \ 'coc-tsserver',
-  \ 'coc-css',
-  \ 'coc-phpls',
-  \ 'coc-python',
-  \ 'coc-snippets',
-  \ 'coc-emmet',
-  \ 'coc-prettier'
-  \]
-command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+      \ 'coc-json',
+      \ 'coc-tsserver',
+      \ 'coc-css',
+      \ 'coc-phpls',
+      \ 'coc-python',
+      \ 'coc-snippets',
+      \ 'coc-emmet',
+      \ 'coc-prettier'
+      \ ]
+inoremap <silent><expr> <c-space> coc#refresh()
+
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+set statusline^=%{coc#status()}%{StatusDiagnostic()}
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -280,25 +292,27 @@ Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize= 25
+let g:NERDTreeWinSize = 25
+let NERDTreeMinimalUI = 1
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeIndicatorMapCustom = {
-  \ "Modified"  : "✹",
-  \ "Staged"    : "✚",
-  \ "Untracked" : "✭",
-  \ "Renamed"   : "➜",
-  \ "Unmerged"  : "═",
-  \ "Deleted"   : "✖",
-  \ "Dirty"     : "✗",
-  \ "Clean"     : "✔︎",
-  \ 'Ignored'   : '☒',
-  \ "Unknown"   : "?"
-  \ }
-
+      \ "Modified"  : "✹",
+      \ "Staged"    : "✚",
+      \ "Untracked" : "✭",
+      \ "Renamed"   : "➜",
+      \ "Unmerged"  : "═",
+      \ "Deleted"   : "✖",
+      \ "Dirty"     : "✗",
+      \ "Clean"     : "✔︎",
+      \ 'Ignored'   : '☒',
+      \ "Unknown"   : "?"
+      \ }
+let NERDTreeDirArrowExpandable = "\u00a0"
+let NERDTreeDirArrowCollapsible = "\u00a0"
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
 
@@ -352,6 +366,9 @@ if MyOnBattery()
 else
   call neomake#configure#automake('nw', 100)
 endif
+
+" Auto remove trailing spaces
+autocmd BufWritePre * %s/\s\+$//e
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
