@@ -311,8 +311,7 @@ let g:NERDTreeIndicatorMapCustom = {
       \ 'Ignored'   : '☒',
       \ "Unknown"   : "?"
       \ }
-let NERDTreeDirArrowExpandable = "\u00a0"
-let NERDTreeDirArrowCollapsible = "\u00a0"
+
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
 
