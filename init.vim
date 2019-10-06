@@ -69,8 +69,6 @@ vmap > >gv
 imap jk <Esc>
 let mapleader = ","
 nnoremap <leader>qq :SClose<cr>
-nnoremap <leader>o o<Esc>
-nnoremap <leader>O O<Esc>
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
@@ -81,7 +79,7 @@ nnoremap <A-j> :resize -2<cr>
 nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
 
-Plug 'liuchengxu/space-vim-dark'
+Plug 'joshdick/onedark.vim'
 
 Plug 'mklabs/split-term.vim'
 nnoremap <leader>ts :Term<cr>
@@ -120,7 +118,7 @@ Plug 'airblade/vim-gitgutter'
 
 
 Plug 'enricobacis/vim-airline-clock'
-let g:airline#extensions#clock#format = '%H:%M:%S'
+let g:airline#extensions#clock#format = '%H:%M:%S|%d/%m/%Y'
 let g:airline#extensions#clock#updatetime = 1000
 let g:airline#extensions#clock#auto = 0
 function! AirlineInit()
@@ -131,38 +129,35 @@ autocmd User AirlineAfterInit call AirlineInit()
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
 
 Plug 'mhinz/vim-startify'
 let NERDTreeHijackNetrw = 1
 let g:startify_session_persistence = 1
 let g:startify_session_before_save = [
-      \ 'echo "Cleaning up before saving.."',
-      \ 'silent! NERDTreeTabsClose'
-      \ ]
+  \ 'echo "Cleaning up before saving.."',
+  \ 'silent! NERDTreeTabsClose'
+  \ ]
 
 let g:ascii = [
-      \'   __    _  _______  _______  __   __  ___   __   __',
-      \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
-      \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
-      \'  |       ||   |___ |  | |  ||       ||   | |       |',
-      \'  |  _    ||    ___||  |_|  ||       ||   | |       |',
-      \'  | | |   ||   |___ |       | |     | |   | | ||_|| |',
-      \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
-      \'',
-      \'  " To get what you want you have to deserve what you want.',
-      \'    The world is not yet a crazy world to reward undeserving people."',
-      \'    >  Charlie Munger'
-      \]
+  \'   __    _  _______  _______  __   __  ___   __   __',
+  \'  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
+  \'  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
+  \'  |       ||   |___ |  | |  ||       ||   | |       |',
+  \'  |  _    ||    ___||  |_|  ||       ||   | |       |',
+  \'  | | |   ||   |___ |       | |     | |   | | ||_|| |',
+  \'  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
+  \'',
+  \'  " To get what you want you have to deserve what you want.',
+  \'    The world is not yet a crazy world to reward undeserving people."',
+  \'    >  Charlie Munger'
+  \]
 
 let g:startify_custom_header = g:ascii
 let g:startify_files_number = 3
 let g:startify_lists = [
-      \ { 'header': ['   MRU'],            'type': 'files' },
-      \ { 'header': ['   Sessions'],       'type': 'sessions' },
-      \ ]
+  \ { 'header': ['   MRU'],            'type': 'files' },
+  \ { 'header': ['   Sessions'],       'type': 'sessions' },
+  \ ]
 
 Plug 't9md/vim-choosewin'
 nmap  -  <Plug>(choosewin)
@@ -176,25 +171,26 @@ map <silent> ;l <Plug>(easymotion-overwin-line)
 Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'branch': 'release/1.x',
-      \ 'for': [
-      \ 'javascript',
-      \ 'typescript',
-      \ 'css',
-      \ 'less',
-      \ 'scss',
-      \ 'json',
-      \ 'graphql',
-      \ 'markdown',
-      \ 'vue',
-      \ 'lua',
-      \ 'php',
-      \ 'python',
-      \ 'ruby',
-      \ 'html',
-      \ 'swift' ] }
-let g:prettier#autoformat = 0
+  \ 'do': 'yarn install',
+  \ 'branch': 'release/1.x',
+  \ 'for': [
+  \ 'javascript',
+  \ 'typescript',
+  \ 'css',
+  \ 'less',
+  \ 'scss',
+  \ 'json',
+  \ 'graphql',
+  \ 'markdown',
+  \ 'vue',
+  \ 'lua',
+  \ 'php',
+  \ 'python',
+  \ 'ruby',
+  \ 'html',
+  \ 'swift' ]
+  \ }
+nmap <Leader>py <Plug>(Prettier)
 
 Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
@@ -217,26 +213,26 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_set_loclist = 0
 let b:ale_linters = {
-      \ 'javascript': ['standard'],
-      \ 'php': ['phpcs']
-      \}
+  \ 'javascript': ['standard'],
+  \ 'php': ['phpcs']
+  \}
 let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
 let g:neomake_javascript_enabled_makers = ['standard']
 let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 let g:neomake_javascript_standard_maker = {
-      \ 'exe': 'standard',
-      \ 'args': ['--fix'],
-      \ }
+  \ 'exe': 'standard',
+  \ 'args': ['--fix'],
+  \ }
 let g:neomake_php_prettier_maker = {
-      \ 'exe': 'prettier',
-      \ 'args': ['--write'],
-      \ }
+  \ 'exe': 'prettier',
+  \ 'args': ['--write'],
+  \ }
 let g:neomake_php_phpcsfixer_maker = {
-      \ 'exe': 'php-cs-fixer',
-      \ 'args': ['fix', '--rules=@PSR2'],
-      \ }
+  \ 'exe': 'php-cs-fixer',
+  \ 'args': ['fix', '--rules=@PSR2'],
+  \ }
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
@@ -249,15 +245,15 @@ let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions = [
-      \ 'coc-json',
-      \ 'coc-tsserver',
-      \ 'coc-css',
-      \ 'coc-phpls',
-      \ 'coc-python',
-      \ 'coc-snippets',
-      \ 'coc-emmet',
-      \ 'coc-prettier'
-      \]
+  \ 'coc-json',
+  \ 'coc-tsserver',
+  \ 'coc-css',
+  \ 'coc-phpls',
+  \ 'coc-python',
+  \ 'coc-snippets',
+  \ 'coc-emmet',
+  \ 'coc-prettier'
+  \]
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
@@ -268,7 +264,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme = 'angr'
+let g:airline_theme = 'onedark'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -299,17 +295,17 @@ nnoremap tr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeIndicatorMapCustom = {
-      \ "Modified"  : "✹",
-      \ "Staged"    : "✚",
-      \ "Untracked" : "✭",
-      \ "Renamed"   : "➜",
-      \ "Unmerged"  : "═",
-      \ "Deleted"   : "✖",
-      \ "Dirty"     : "✗",
-      \ "Clean"     : "✔︎",
-      \ 'Ignored'   : '☒',
-      \ "Unknown"   : "?"
-      \ }
+  \ "Modified"  : "✹",
+  \ "Staged"    : "✚",
+  \ "Untracked" : "✭",
+  \ "Renamed"   : "➜",
+  \ "Unmerged"  : "═",
+  \ "Deleted"   : "✖",
+  \ "Dirty"     : "✗",
+  \ "Clean"     : "✔︎",
+  \ 'Ignored'   : '☒',
+  \ "Unknown"   : "?"
+  \ }
 
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
@@ -341,16 +337,13 @@ call plug#end()
 " Final setup colorscheme
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-set background=dark
-colorscheme space-vim-dark
-hi Normal     ctermbg=NONE guibg=NONE
-hi LineNr     ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE
+set background =dark
+colorscheme onedark
 
 " Fix error restore session
 set sessionoptions-=folds
 set sessionoptions-=options
-
+let g:onedark_terminal_italics=1
 
 " Config neovim
 function! MyOnBattery()
