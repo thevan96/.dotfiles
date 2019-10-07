@@ -78,10 +78,10 @@ Plug 'joshdick/onedark.vim'
 
 Plug 'mklabs/split-term.vim'
 
-Plug 'honza/vim-snippets'
-
 Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "<c-n>"
+
+Plug 'honza/vim-snippets'
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
@@ -264,7 +264,10 @@ nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
-set statusline^=%{coc#status()}%{StatusDiagnostic()}
+
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_next = '<c-h>'
+let g:coc_snippet_prev = '<c-l>'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -363,7 +366,7 @@ endfunction
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nw', 100)
+  call neomake#configure#automake('nw', 50)
 endif
 
 " Auto remove trailing spaces
