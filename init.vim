@@ -58,6 +58,7 @@ nnoremap <silent> th :tabprevious<cr>
 nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
+
 map < <gv
 vmap > >gv
 imap jk <Esc>
@@ -246,6 +247,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'neoclide/coc.nvim'
+let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
@@ -265,9 +267,6 @@ nmap <silent>gr <Plug>(coc-references)
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
-let g:coc_snippet_next = '<tab>'
-let g:coc_snippet_next = '<c-h>'
-let g:coc_snippet_prev = '<c-l>'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
