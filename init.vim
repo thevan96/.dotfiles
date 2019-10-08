@@ -70,10 +70,10 @@ tnoremap <c-h> <c-\><c-n><C-w>h
 tnoremap <c-j> <c-\><c-n><C-w>j
 tnoremap <c-k> <c-\><c-n><C-w>k
 tnoremap <c-l> <c-\><c-n><C-w>l
-nnoremap <up> :resize +2<cr>
-nnoremap <down> :resize -2<cr>
-nnoremap <right> :vertical resize +2<cr>
-nnoremap <left> :vertical resize -2<cr>
+nnoremap <A-k> :resize +2<cr>
+nnoremap <A-j> :resize -2<cr>
+nnoremap <A-l> :vertical resize +2<cr>
+nnoremap <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
@@ -90,8 +90,6 @@ let g:indentLine_char_list = ['┊']
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-surround'
-
-Plug 'bronson/vim-trailing-whitespace'
 
 Plug 'tpope/vim-commentary'
 
@@ -190,7 +188,6 @@ Plug 'prettier/vim-prettier', {
       \ 'swift' ]
       \ }
 nmap <leader>p <plug>(Prettier)
-let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
 
 Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
@@ -198,9 +195,6 @@ nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<cr>
 nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<cr>
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
-
-Plug 'thinca/vim-quickrun'
-map <leader>r :QuickRun<cr>
 
 Plug 'dense-analysis/ale'
 nmap <silent> e[ <Plug>(ale_previous_wrap)
@@ -259,7 +253,6 @@ let g:coc_global_extensions = [
       \ 'coc-prettier'
       \ ]
 inoremap <silent><expr> <c-space> coc#refresh()
-
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
