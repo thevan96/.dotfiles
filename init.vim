@@ -59,8 +59,6 @@ nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
 
-map < <gv
-vmap > >gv
 imap jk <Esc>
 tnoremap jk <c-\><c-n>
 let mapleader = ","
@@ -323,9 +321,13 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
 
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
+
 Plug 'jaxbot/browserlink.vim'
+
 Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1
+
+Plug 'ap/vim-css-color'
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
