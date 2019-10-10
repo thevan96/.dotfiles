@@ -59,10 +59,7 @@ nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
 
-map < <gv
-vmap > >gv
 imap jk <Esc>
-tnoremap jk <c-\><c-n>
 let mapleader = ","
 nnoremap <leader>qq :SClose<cr>
 tnoremap <esc> <c-\><c-n>
@@ -81,8 +78,6 @@ Plug 'mklabs/split-term.vim'
 
 Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "<c-n>"
-
-Plug 'honza/vim-snippets'
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
@@ -107,15 +102,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 nnoremap <Leader>ggn :GitGutterNextHunk<CR>
 nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
-
-Plug 'enricobacis/vim-airline-clock'
-let g:airline#extensions#clock#format = '%H:%M:%S|%d/%m/%Y'
-let g:airline#extensions#clock#updatetime = 1000
-let g:airline#extensions#clock#auto = 0
-function! AirlineInit()
-  let g:airline_section_z = airline#section#create(['clock', g:airline_symbols.space, g:airline_section_z])
-endfunction
-autocmd User AirlineAfterInit call AirlineInit()
 
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
@@ -150,9 +136,7 @@ let g:ascii = [
       \ ]
 
 let g:startify_custom_header = g:ascii
-let g:startify_files_number = 3
 let g:startify_lists = [
-      \ { 'header': ['   MRU'],            'type': 'files' },
       \ { 'header': ['   Sessions'],       'type': 'sessions' },
       \ ]
 
@@ -248,7 +232,6 @@ let g:coc_global_extensions = [
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-snippets',
       \ 'coc-emmet',
       \ 'coc-prettier'
       \ ]
@@ -323,9 +306,13 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
 
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
+
 Plug 'jaxbot/browserlink.vim'
+
 Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1
+
+Plug 'ap/vim-css-color'
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
@@ -358,7 +345,7 @@ endfunction
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nw', 50)
+  call neomake#configure#automake('nw', 100)
 endif
 
 " Auto remove trailing spaces
