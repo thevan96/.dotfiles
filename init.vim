@@ -25,6 +25,7 @@ set nobackup noswapfile
 set list
 set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
 set splitbelow splitright
+set mouse=r
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -44,7 +45,7 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
-nnoremap <silent> <leader><space> :nohlsearch<cr>
+nnoremap <silent> <leader> <space> :nohlsearch<cr>
 nnoremap <silent> bj :bfirst<cr>
 nnoremap <silent> bk :blast<cr>
 nnoremap <silent> bs :new<cr>
@@ -58,10 +59,10 @@ nnoremap <silent> th :tabprevious<cr>
 nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
-
 imap jk <Esc>
+tmap jk <c-\><c-n>
 let mapleader = ","
-nnoremap <leader>qq :SClose<cr>
+nnoremap <leader>qq :qall<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><C-w>h
 tnoremap <c-j> <c-\><c-n><C-w>j
@@ -71,10 +72,31 @@ nnoremap <A-k> :resize +2<cr>
 nnoremap <A-j> :resize -2<cr>
 nnoremap <A-l> :vertical resize +2<cr>
 nnoremap <A-h> :vertical resize -2<cr>
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
 
 Plug 'joshdick/onedark.vim'
 
+Plug 'justinmk/vim-sneak'
+let g:sneak#s_next = 1
+nmap s <Plug>Sneak_f
+nmap S <Plug>Sneak_F
+xmap s <Plug>Sneak_f
+xmap S <Plug>Sneak_F
+omap s <Plug>Sneak_f
+omap S <Plug>Sneak_F
+
 Plug 'mklabs/split-term.vim'
+nnoremap <leader>ts :Term<cr>
+nnoremap <leader>ts :Term<cr>
+nnoremap <leader>tv :VTerm<cr>
+nnoremap <leader>tv :VTerm<cr>
+nnoremap <leader>tt :TTerm<cr>
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 
 Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "<c-n>"
@@ -83,6 +105,12 @@ Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
 Plug 'jiangmiao/auto-pairs'
+
+Plug 'AndrewRadev/splitjoin.vim'
+
+Plug 'itchyny/vim-cursorword'
+
+Plug 'terryma/vim-multiple-cursors'
 
 Plug 'tpope/vim-surround'
 
@@ -106,42 +134,6 @@ nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
-
-Plug 'mhinz/vim-startify'
-let NERDTreeHijackNetrw = 1
-let g:startify_session_persistence = 1
-autocmd VimEnter *
-      \ if !argc()
-      \ |   Startify
-      \ |   NERDTree
-      \ |   wincmd w
-      \ | endif
-let g:startify_session_before_save = [
-      \ 'echo "Cleaning up before saving.."',
-      \ 'silent! NERDTreeTabsClose'
-      \ ]
-
-let g:ascii = [
-      \ '   __    _  _______  _______  __   __  ___   __   __',
-      \ '  |  |  | ||       ||       ||  | |  ||   | |  |_|  |',
-      \ '  |   |_| ||    ___||   _   ||  |_|  ||   | |       |',
-      \ '  |       ||   |___ |  | |  ||       ||   | |       |',
-      \ '  |  _    ||    ___||  |_|  ||       ||   | |       |',
-      \ '  | | |   ||   |___ |       | |     | |   | | ||_|| |',
-      \ '  |_|  |__||_______||_______|  |___|  |___| |_|   |_|',
-      \ '',
-      \ '  " To get what you want you have to deserve what you want.',
-      \ '    The world is not yet a crazy world to reward undeserving people."',
-      \ '    >  Charlie Munger'
-      \ ]
-
-let g:startify_custom_header = g:ascii
-let g:startify_lists = [
-      \ { 'header': ['   Sessions'],       'type': 'sessions' },
-      \ ]
-
-Plug 't9md/vim-choosewin'
-nmap  -  <Plug>(choosewin)
 
 Plug 'wesq3/vim-windowswap'
 
@@ -190,7 +182,10 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_set_loclist = 0
-
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 let b:ale_linters = {
       \ 'javascript': ['standard'],
       \ 'php': ['phpcs']
@@ -198,43 +193,40 @@ let b:ale_linters = {
 let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
-let g:neomake_javascript_enabled_makers = ['standard']
-let g:neomake_javascript_standard_maker = {
-      \ 'exe': 'standard',
-      \ 'args': ['--fix'],
-      \ }
+" let g:neomake_javascript_enabled_makers = ['standard']
+" let g:neomake_javascript_standard_maker = {
+"       \ 'exe': 'standard',
+"       \ 'args': ['--fix'],
+"       \ }
 
-let g:neomake_php_enabled_makers = ['prettier', 'phpcsfixer']
+let g:neomake_php_enabled_makers = ['prettier']
 let g:neomake_php_prettier_maker = {
-      \ 'exe': 'prettier',
-      \ 'args': ['--write'],
-      \ }
-let g:neomake_php_phpcsfixer_maker = {
-      \ 'exe': 'php-cs-fixer',
-      \ 'args': ['fix', '--rules=@PSR2'],
-      \ }
+    \ 'exe': 'prettier',
+    \ 'args': ['--write'],
+    \ }
+" let g:neomake_php_phpcsfixer_maker = {
+"       \ 'exe': 'php-cs-fixer',
+"       \ 'args': ['fix', '--rules=@PSR2'],
+"       \ }
 
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
-  au!
-  autocmd User NeomakeJobFinished :checktime
+au!
+autocmd User NeomakeJobFinished :checktime
 augroup END
 
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
-let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions = [
-      \ 'coc-json',
-      \ 'coc-tsserver',
-      \ 'coc-css',
-      \ 'coc-phpls',
-      \ 'coc-python',
-      \ 'coc-emmet',
-      \ 'coc-prettier'
-      \ ]
+    \ 'coc-json',
+    \ 'coc-tsserver',
+    \ 'coc-css',
+    \ 'coc-phpls',
+    \ 'coc-python',
+    \ 'coc-emmet',
+    \ 'coc-prettier'
+    \ ]
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
@@ -277,6 +269,8 @@ nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -307,8 +301,6 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
 
-Plug 'jaxbot/browserlink.vim'
-
 Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1
 
@@ -323,14 +315,13 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 call plug#end()
 
 " Final setup colorscheme
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background =dark
 colorscheme onedark
+let g:onedark_terminal_italics=1
 
 " Fix error restore session
 set sessionoptions-=folds
 set sessionoptions-=options
-let g:onedark_terminal_italics=1
 
 " Config neovim
 function! MyOnBattery()
