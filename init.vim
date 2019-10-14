@@ -62,20 +62,16 @@ nnoremap <silent> tx :tabclose<cr>
 imap jk <Esc>
 tmap jk <c-\><c-n>
 let mapleader = ","
-nnoremap <leader>qq :qall<cr>
-tnoremap <esc> <c-\><c-n>
-tnoremap <c-h> <c-\><c-n><C-w>h
-tnoremap <c-j> <c-\><c-n><C-w>j
-tnoremap <c-k> <c-\><c-n><C-w>k
-tnoremap <c-l> <c-\><c-n><C-w>l
-nnoremap <A-k> :resize +2<cr>
-nnoremap <A-j> :resize -2<cr>
-nnoremap <A-l> :vertical resize +2<cr>
-nnoremap <A-h> :vertical resize -2<cr>
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
+nnoremap <silent> <leader>qq :qall<cr>
+tnoremap <silent> <esc> <c-\><c-n>
+tnoremap <silent> <c-h> <c-\><c-n><C-w>h
+tnoremap <silent> <c-j> <c-\><c-n><C-w>j
+tnoremap <silent> <c-k> <c-\><c-n><C-w>k
+tnoremap <silent> <c-l> <c-\><c-n><C-w>l
+nnoremap <silent> <A-k> :resize +2<cr>
+nnoremap <silent> <A-j> :resize -2<cr>
+nnoremap <silent> <A-l> :vertical resize +2<cr>
+nnoremap <silent> <A-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
@@ -89,11 +85,18 @@ omap s <Plug>Sneak_f
 omap S <Plug>Sneak_F
 
 Plug 'mklabs/split-term.vim'
-nnoremap <leader>ts :Term<cr>
-nnoremap <leader>ts :Term<cr>
-nnoremap <leader>tv :VTerm<cr>
-nnoremap <leader>tv :VTerm<cr>
-nnoremap <leader>tt :TTerm<cr>
+nnoremap <silent> <leader>ts :Term<cr>
+nnoremap <silent> <leader>ts :Term<cr>
+nnoremap <silent> <leader>tv :VTerm<cr>
+nnoremap <silent> <leader>tv :VTerm<cr>
+nnoremap <silent> <leader>tt :TTerm<cr>
+
+Plug 'tpope/vim-obsession'
+
+Plug 'christoomey/vim-tmux-navigator'
+
+Plug 'thinca/vim-quickrun'
+nnoremap <leader>r :QuickRun<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -193,21 +196,21 @@ let b:ale_linters = {
 let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
-" let g:neomake_javascript_enabled_makers = ['standard']
-" let g:neomake_javascript_standard_maker = {
-"       \ 'exe': 'standard',
-"       \ 'args': ['--fix'],
-"       \ }
+let g:neomake_javascript_enabled_makers = ['standard']
+let g:neomake_javascript_standard_maker = {
+      \ 'exe': 'standard',
+      \ 'args': ['--fix'],
+      \ }
 
 let g:neomake_php_enabled_makers = ['prettier']
 let g:neomake_php_prettier_maker = {
     \ 'exe': 'prettier',
     \ 'args': ['--write'],
     \ }
-" let g:neomake_php_phpcsfixer_maker = {
-"       \ 'exe': 'php-cs-fixer',
-"       \ 'args': ['fix', '--rules=@PSR2'],
-"       \ }
+let g:neomake_php_phpcsfixer_maker = {
+      \ 'exe': 'php-cs-fixer',
+      \ 'args': ['fix', '--rules=@PSR2'],
+      \ }
 
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
@@ -271,6 +274,8 @@ let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",

@@ -100,7 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # Alias custom user
 #
 alias cl="clear"
-alias bb="byobu"
+alias ex="exit"
 alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  autoclean && sudo apt -y autoremove"
 alias standardlog="standard --fix | snazzy"
 
