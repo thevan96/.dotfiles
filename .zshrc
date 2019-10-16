@@ -68,7 +68,6 @@ ZSH_THEME="robbyrussell"
 plugins=(git vi-mode zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -96,6 +95,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
 #
+export EDITOR=vim
+alias cdms="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=bebuiaSKtU4"
 alias cl="clear"
 alias ex="exit"
 alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  autoclean && sudo apt -y autoremove"
@@ -116,5 +117,7 @@ export NVM_DIR="$HOME/.nvm"
 
 export PATH="$PATH:$HOME/.composer/vendor/bin"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # Include Z
-# . /usr/local/bin/z.sh
+. /usr/local/bin/z.sh
