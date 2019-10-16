@@ -39,39 +39,37 @@ vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
 vnoremap <right> <nop>
-nnoremap <silent> j gj
-nnoremap <silent> k gk
+nnoremap j gj
+nnoremap k gk
 nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
-nnoremap <silent> <space><space> :nohlsearch<cr>
-nnoremap <silent> bj :bfirst<cr>
-nnoremap <silent> bk :blast<cr>
-nnoremap <silent> bs :new<cr>
-nnoremap <silent> bv :vnew<cr>
-nnoremap <silent> bh :bprevious<cr>
-nnoremap <silent> bl :bnext<cr>
-nnoremap <silent> bx :bdelete <cr>
-nnoremap <silent> bd :Bdelete <cr>
-nnoremap <silent> tl :tabnext<cr>
-nnoremap <silent> th :tabprevious<cr>
-nnoremap <silent> tj :tabfirst<cr>
-nnoremap <silent> tk :tablast<cr>
-nnoremap <silent> tx :tabclose<cr>
+nnoremap <space><space> :nohlsearch<cr>
+nnoremap bj :bfirst<cr>
+nnoremap bk :blast<cr>
+nnoremap bs :new<cr>
+nnoremap bv :vnew<cr>
+nnoremap bh :bprevious<cr>
+nnoremap bl :bnext<cr>
+nnoremap bx :Bdelete<cr>
+nnoremap tl :tabnext<cr>
+nnoremap th :tabprevious<cr>
+nnoremap tj :tabfirst<cr>
+nnoremap tk :tablast<cr>
+nnoremap tx :tabclose<cr>
 let mapleader = ','
 nnoremap <leader><leader>r :so ~/.config/nvim/init.vim<cr>
-nnoremap <silent> <leader>qa :qall<cr>
-nnoremap <silent> <leader>qq :bd<cr>
-tnoremap <silent> <esc> <c-\><c-n>
-tnoremap <silent> <c-h> <c-\><c-n><c-w>h
-tnoremap <silent> <c-j> <c-\><c-n><c-k>j
-tnoremap <silent> <c-k> <c-\><c-n><c-w>k
-tnoremap <silent> <c-l> <c-\><c-n><c-w>l
-nnoremap <silent> <a-k> :resize +2<cr>
-nnoremap <silent> <a-j> :resize -2<cr>
-nnoremap <silent> <a-l> :vertical resize +2<cr>
-nnoremap <silent> <a-h> :vertical resize -2<cr>
+nnoremap <leader>qq :qall<cr>
+tnoremap <esc> <c-\><c-n>
+tnoremap <c-h> <c-\><c-n><c-w>h
+tnoremap <c-j> <c-\><c-n><c-k>j
+tnoremap <c-k> <c-\><c-n><c-w>k
+tnoremap <c-l> <c-\><c-n><c-w>l
+nnoremap <a-k> :resize +2<cr>
+nnoremap <a-j> :resize -2<cr>
+nnoremap <a-l> :vertical resize +2<cr>
+nnoremap <a-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
@@ -79,11 +77,11 @@ Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
 
 Plug 'mklabs/split-term.vim'
-nnoremap <silent> <leader>ts :Term<cr>
-nnoremap <silent> <leader>ts :Term<cr>
-nnoremap <silent> <leader>tv :VTerm<cr>
-nnoremap <silent> <leader>tv :VTerm<cr>
-nnoremap <silent> <leader>tt :TTerm<cr>
+nnoremap <leader>ts :Term<cr>
+nnoremap <leader>ts :Term<cr>
+nnoremap <leader>tv :VTerm<cr>
+nnoremap <leader>tv :VTerm<cr>
+nnoremap <leader>tt :TTerm<cr>
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -133,8 +131,8 @@ map <leader>b :CtrlPBuffer<cr>
 Plug 'wesq3/vim-windowswap'
 
 Plug 'easymotion/vim-easymotion'
-map <silent> ;; <Plug>(easymotion-overwin-f)
-map <silent> ;l <Plug>(easymotion-overwin-line)
+map ;; <Plug>(easymotion-overwin-f)
+map ;l <Plug>(easymotion-overwin-line)
 
 Plug 'airblade/vim-rooter'
 
@@ -162,14 +160,14 @@ nmap <leader>p <plug>(Prettier)
 
 Plug 'stephpy/vim-php-cs-fixer'
 let g:php_cs_fixer_rules = "@PSR2"
-nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<cr>
-nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<cr>
+nnoremap <leader>pcd :call PhpCsFixerFixDirectory()<cr>
+nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 Plug 'dense-analysis/ale'
-nmap <silent> e[ <Plug>(ale_previous_wrap)
-nmap <silent> e] <Plug>(ale_next_wrap)
+nmap e[ <Plug>(ale_previous_wrap)
+nmap e] <Plug>(ale_next_wrap)
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_sign_column_always = 1
@@ -212,13 +210,13 @@ let g:coc_global_extensions = [
     \ 'coc-emmet',
     \ 'coc-prettier'
     \ ]
-inoremap <silent><expr> <c-space> coc#refresh()
-nmap <silent>gd <Plug>(coc-definition)
-nmap <silent>gy <Plug>(coc-type-definition)
-nmap <silent>gi <Plug>(coc-implementation)
-nmap <silent>gr <Plug>(coc-references)
-vmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+inoremap <expr> <c-space> coc#refresh()
+nmap gd <Plug>(coc-definition)
+nmap gy <Plug>(coc-type-definition)
+nmap gi <Plug>(coc-implementation)
+nmap gr <Plug>(coc-references)
+vmap f  <Plug>(coc-format-selected)
+nmap f  <Plug>(coc-format-selected)
 
 
 Plug 'vim-airline/vim-airline'
@@ -256,8 +254,8 @@ let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
