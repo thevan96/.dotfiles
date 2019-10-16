@@ -13,9 +13,6 @@ set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-if exists('&colorcolumn')
-  set colorcolumn=80
-endif
 set showmatch
 set hidden
 set incsearch hlsearch ignorecase
@@ -23,9 +20,12 @@ set nopaste
 set clipboard +=unnamedplus
 set nobackup noswapfile
 set list
-set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:.
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
 set mouse=r
+if exists('&colorcolumn')
+  set colorcolumn=80
+endif
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -45,7 +45,7 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
-nnoremap <silent> <leader> <space> :nohlsearch<cr>
+nnoremap <silent> <space><space> :nohlsearch<cr>
 nnoremap <silent> bj :bfirst<cr>
 nnoremap <silent> bk :blast<cr>
 nnoremap <silent> bs :new<cr>
@@ -59,30 +59,24 @@ nnoremap <silent> th :tabprevious<cr>
 nnoremap <silent> tj :tabfirst<cr>
 nnoremap <silent> tk :tablast<cr>
 nnoremap <silent> tx :tabclose<cr>
-imap jk <Esc>
-tmap jk <c-\><c-n>
-let mapleader = ","
-nnoremap <silent> <leader>qq :qall<cr>
+let mapleader = ','
+nnoremap <leader><leader>r :so ~/.config/nvim/init.vim<cr>
+nnoremap <silent> <leader>qa :qall<cr>
+nnoremap <silent> <leader>qq :bd<cr>
 tnoremap <silent> <esc> <c-\><c-n>
-tnoremap <silent> <c-h> <c-\><c-n><C-w>h
-tnoremap <silent> <c-j> <c-\><c-n><C-w>j
-tnoremap <silent> <c-k> <c-\><c-n><C-w>k
-tnoremap <silent> <c-l> <c-\><c-n><C-w>l
-nnoremap <silent> <A-k> :resize +2<cr>
-nnoremap <silent> <A-j> :resize -2<cr>
-nnoremap <silent> <A-l> :vertical resize +2<cr>
-nnoremap <silent> <A-h> :vertical resize -2<cr>
+tnoremap <silent> <c-h> <c-\><c-n><c-w>h
+tnoremap <silent> <c-j> <c-\><c-n><c-k>j
+tnoremap <silent> <c-k> <c-\><c-n><c-w>k
+tnoremap <silent> <c-l> <c-\><c-n><c-w>l
+nnoremap <silent> <a-k> :resize +2<cr>
+nnoremap <silent> <a-j> :resize -2<cr>
+nnoremap <silent> <a-l> :vertical resize +2<cr>
+nnoremap <silent> <a-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
 Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
-nmap s <Plug>Sneak_f
-nmap S <Plug>Sneak_F
-xmap s <Plug>Sneak_f
-xmap S <Plug>Sneak_F
-omap s <Plug>Sneak_f
-omap S <Plug>Sneak_F
 
 Plug 'mklabs/split-term.vim'
 nnoremap <silent> <leader>ts :Term<cr>
@@ -91,12 +85,12 @@ nnoremap <silent> <leader>tv :VTerm<cr>
 nnoremap <silent> <leader>tv :VTerm<cr>
 nnoremap <silent> <leader>tt :TTerm<cr>
 
-Plug 'tpope/vim-obsession'
-
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'thinca/vim-quickrun'
 nnoremap <leader>r :QuickRun<cr>
+
+Plug 'townk/vim-autoclose'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -106,8 +100,6 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'AndrewRadev/splitjoin.vim'
 
@@ -196,21 +188,11 @@ let b:ale_linters = {
 let g:ale_php_phpcs_standard = "psr2"
 
 Plug 'neomake/neomake'
-let g:neomake_javascript_enabled_makers = ['standard']
-let g:neomake_javascript_standard_maker = {
-      \ 'exe': 'standard',
-      \ 'args': ['--fix'],
-      \ }
-
 let g:neomake_php_enabled_makers = ['prettier']
 let g:neomake_php_prettier_maker = {
     \ 'exe': 'prettier',
     \ 'args': ['--write'],
     \ }
-let g:neomake_php_phpcsfixer_maker = {
-      \ 'exe': 'php-cs-fixer',
-      \ 'args': ['fix', '--rules=@PSR2'],
-      \ }
 
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
@@ -293,15 +275,18 @@ let g:NERDTreeIndicatorMapCustom = {
 Plug 'sheerun/vim-polyglot'
 
 " Python
-let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '~/.pyenv/shims/python3'
+" let g:loaded_python_provider = 0
+let g:python_host_prog  = '/usr/bin/python'
+let g:loaded_python3_provider = 0
 
 " Node
-let g:node_host_prog='/home/thevan/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
-let g:coc_node_path='/home/thevan/.nvm/versions/node/v10.16.3/bin/node'
+let g:loaded_node_provider = 0
+" let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+" let g:coc_node_path='/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
 
 " Ruby
-let g:ruby_host_prog ='~/.rbenv/versions/2.6.4/bin/neovim-ruby-host'
+let g:loaded_ruby_provider = 0
+" let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
