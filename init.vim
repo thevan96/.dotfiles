@@ -1,10 +1,10 @@
 call plug#begin()
-
+set termguicolors
+syntax on
 set spelllang=en
 set encoding=UTF-8
 set ff=unix
 set noeol
-syntax on
 filetype plugin on
 filetype indent on
 set number relativenumber
@@ -22,7 +22,7 @@ set nobackup noswapfile
 set list
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
-set mouse=r
+set mouse=a
 if exists('&colorcolumn')
   set colorcolumn=80
 endif
@@ -59,6 +59,7 @@ nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 let mapleader = ','
+imap jk <esc>
 nnoremap <leader><leader>r :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>qq :qall<cr>
 tnoremap <esc> <c-\><c-n>
@@ -76,19 +77,31 @@ Plug 'joshdick/onedark.vim'
 Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
 
-Plug 'mklabs/split-term.vim'
-nnoremap <leader>ts :Term<cr>
-nnoremap <leader>ts :Term<cr>
-nnoremap <leader>tv :VTerm<cr>
-nnoremap <leader>tv :VTerm<cr>
-nnoremap <leader>tt :TTerm<cr>
+Plug 'ryanoasis/vim-devicons'
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_ctrlp = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
+
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'pbrisbin/vim-mkdir'
 
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'thinca/vim-quickrun'
 nnoremap <leader>r :QuickRun<cr>
 
-Plug 'townk/vim-autoclose'
+Plug 'majutsushi/tagbar'
+Plug 'hushicai/tagbar-javascript.vim'
+Plug 'vim-php/phpctags'
+nmap tb :TagbarToggle<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -129,6 +142,10 @@ let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
 
 Plug 'wesq3/vim-windowswap'
+let g:windowswap_map_keys = 0
+
+Plug 't9md/vim-choosewin'
+nmap  -  <Plug>(choosewin)
 
 Plug 'easymotion/vim-easymotion'
 map ;; <Plug>(easymotion-overwin-f)
@@ -188,28 +205,28 @@ let g:ale_php_phpcs_standard = "psr2"
 Plug 'neomake/neomake'
 let g:neomake_php_enabled_makers = ['prettier']
 let g:neomake_php_prettier_maker = {
-    \ 'exe': 'prettier',
-    \ 'args': ['--write'],
-    \ }
+      \ 'exe': 'prettier',
+      \ 'args': ['--write'],
+      \ }
 
 autocmd! BufWritePost * Neomake
 augroup my_neomake_hooks
-au!
-autocmd User NeomakeJobFinished :checktime
+  au!
+  autocmd User NeomakeJobFinished :checktime
 augroup END
 
 
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions = [
-    \ 'coc-json',
-    \ 'coc-tsserver',
-    \ 'coc-css',
-    \ 'coc-phpls',
-    \ 'coc-python',
-    \ 'coc-emmet',
-    \ 'coc-prettier'
-    \ ]
+      \ 'coc-json',
+      \ 'coc-tsserver',
+      \ 'coc-css',
+      \ 'coc-phpls',
+      \ 'coc-python',
+      \ 'coc-emmet',
+      \ 'coc-prettier'
+      \ ]
 inoremap <expr> <c-space> coc#refresh()
 nmap gd <Plug>(coc-definition)
 nmap gy <Plug>(coc-type-definition)
@@ -249,6 +266,10 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 let g:NERDTreeWinPos = "left"
 let g:NERDTreeWinSize = 25
 let NERDTreeMinimalUI = 1
+let g:NERDTreeHighlightCursorline = 0
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeCascadeSingleChildDir = 0
+highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap tr :NERDTreeRefreshRoot<cr>
@@ -256,7 +277,6 @@ let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
@@ -291,16 +311,19 @@ let g:loaded_ruby_provider = 0
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
 
-Plug 'luochen1990/rainbow'
-let g:rainbow_active = 1
+Plug 'andymass/vim-matchup'
+let g:loaded_matchit = 1
 
 Plug 'ap/vim-css-color'
 
 " Markdown
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
+Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled = 1
-
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
 
 call plug#end()
 
