@@ -13,6 +13,7 @@ set cursorline
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 set showmatch
 set hidden
 set incsearch hlsearch ignorecase
@@ -295,18 +296,15 @@ let g:NERDTreeIndicatorMapCustom = {
 Plug 'sheerun/vim-polyglot'
 
 " Python
-" let g:loaded_python_provider = 0
-let g:python_host_prog  = '/usr/bin/python'
-let g:loaded_python3_provider = 0
+let g:python_host_prog = '/home/thevan96/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/home/thevan96/.pyenv/versions/neovim3/bin/python'
 
 " Node
-let g:loaded_node_provider = 0
-" let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
-" let g:coc_node_path='/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
+let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+let g:coc_node_path='/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
 
 " Ruby
-let g:loaded_ruby_provider = 0
-" let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
+let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " HTML, CSS
 Plug 'lilydjwg/colorizer'
