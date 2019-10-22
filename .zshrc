@@ -102,9 +102,10 @@ alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  auto
 alias standardlog="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias localhostphp="php -S localhost:1996"
 alias vim="nvim"
 
-export FZF_DEFAULT_OPTS='--height 100%'
+export FZF_DEFAULT_OPTS='--height 90%'
 export EDITOR=vim
 
 export RUBYENV_ROOT="$HOME/.rbenv/"

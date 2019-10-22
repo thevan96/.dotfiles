@@ -1,27 +1,23 @@
 call plug#begin()
+
 set termguicolors
 syntax on
-set spelllang=en
-set encoding=UTF-8
-set ff=unix
-set noeol
+set spelllang=en encoding=UTF-8
+set ff=unix noeol
 filetype plugin on
 filetype indent on
 set number relativenumber
 set autoread autowrite
 set cursorline
-set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-set showmatch
+set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
+autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 set hidden
 set incsearch hlsearch ignorecase
-set nopaste
 set clipboard +=unnamedplus
 set nobackup noswapfile
-set list
-set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
 set mouse=a
 if exists('&colorcolumn')
@@ -61,17 +57,18 @@ nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 let mapleader = ','
 imap jk <esc>
-nnoremap <leader><leader>r :so ~/.config/nvim/init.vim<cr>
+nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>qq :qall<cr>
+nnoremap <leader>w :w<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
 tnoremap <c-k> <c-\><c-n><c-w>k
 tnoremap <c-l> <c-\><c-n><c-w>l
-nnoremap <a-k> :resize +2<cr>
-nnoremap <a-j> :resize -2<cr>
-nnoremap <a-l> :vertical resize +2<cr>
-nnoremap <a-h> :vertical resize -2<cr>
+nnoremap <c-a-k> :resize +2<cr>
+nnoremap <c-a-j> :resize -2<cr>
+nnoremap <c-a-l> :vertical resize +2<cr>
+nnoremap <c-a-h> :vertical resize -2<cr>
 
 Plug 'joshdick/onedark.vim'
 
@@ -86,18 +83,15 @@ let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_enable_ctrlp = 1
 let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
-let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'jiangmiao/auto-pairs'
 
-Plug 'pbrisbin/vim-mkdir'
-
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'thinca/vim-quickrun'
-nnoremap <leader>r :QuickRun<cr>
+nnoremap <leader>e :QuickRun<cr>
 
 Plug 'majutsushi/tagbar'
 Plug 'hushicai/tagbar-javascript.vim'
@@ -107,9 +101,6 @@ nmap tb :TagbarToggle<cr>
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 
-Plug 'ervandew/supertab'
-let g:SuperTabDefaultCompletionType = "<c-n>"
-
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
@@ -117,11 +108,13 @@ Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'itchyny/vim-cursorword'
 
-Plug 'terryma/vim-multiple-cursors'
-
 Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-commentary'
+
+Plug 'matze/vim-move'
+
+Plug 'mattn/emmet-vim'
 
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -225,7 +218,6 @@ let g:coc_global_extensions = [
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-emmet',
       \ 'coc-prettier'
       \ ]
 inoremap <expr> <c-space> coc#refresh()
@@ -264,7 +256,6 @@ let g:airline_symbols.readonly = '🔒'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-let g:NERDTreeWinPos = "left"
 let g:NERDTreeWinSize = 25
 let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
@@ -273,7 +264,7 @@ let g:NERDTreeCascadeSingleChildDir = 0
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
-nnoremap tr :NERDTreeRefreshRoot<cr>
+nnoremap rr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 autocmd StdinReadPre * let s:std_in=1
@@ -329,7 +320,8 @@ call plug#end()
 set background =dark
 colorscheme onedark
 let g:onedark_terminal_italics=1
-
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " Fix error restore session
 set sessionoptions-=folds
 set sessionoptions-=options
