@@ -143,7 +143,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'thinca/vim-quickrun'
-nnoremap <leader>e :QuickRun<cr>
+nnoremap <leader>r :QuickRun<cr>
 
 Plug 'majutsushi/tagbar'
 Plug 'hushicai/tagbar-javascript.vim'
@@ -167,6 +167,7 @@ Plug 'tpope/vim-commentary'
 Plug 'matze/vim-move'
 
 Plug 'mattn/emmet-vim'
+let g:user_emmet_leader_key=','
 
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -180,6 +181,7 @@ let g:suda_smart_edit = 1
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+set updatetime=100
 nnoremap <Leader>ggn :GitGutterNextHunk<CR>
 nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
 
@@ -191,7 +193,7 @@ Plug 'wesq3/vim-windowswap'
 let g:windowswap_map_keys = 0
 
 Plug 't9md/vim-choosewin'
-nmap  -  <Plug>(choosewin)
+nmap - <Plug>(choosewin)
 
 Plug 'easymotion/vim-easymotion'
 map ;; <Plug>(easymotion-overwin-f)
