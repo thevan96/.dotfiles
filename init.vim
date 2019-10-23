@@ -59,6 +59,7 @@ nnoremap tx :tabclose<cr>
 let mapleader = ','
 imap jk <esc>
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
+nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
 nnoremap <leader>qq :qall<cr>
 nnoremap <leader>w :w<cr>
 tnoremap <esc> <c-\><c-n>
@@ -123,9 +124,6 @@ nnoremap <leader>an :call FloatTerm('"node"')<cr>
 nnoremap <leader>ag :call FloatTerm('"tig"')<cr>
 
 Plug 'joshdick/onedark.vim'
-
-Plug 'justinmk/vim-sneak'
-let g:sneak#s_next = 1
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
@@ -192,31 +190,36 @@ map <leader>b :CtrlPBuffer<cr>
 Plug 'wesq3/vim-windowswap'
 let g:windowswap_map_keys = 0
 
+Plug 'takac/vim-hardtime'
+let g:hardtime_default_on = 1
+let g:hardtime_showmsg = 1
+
 Plug 't9md/vim-choosewin'
 nmap - <Plug>(choosewin)
 
 Plug 'easymotion/vim-easymotion'
-map ;; <Plug>(easymotion-overwin-f)
-map ;l <Plug>(easymotion-overwin-line)
+nmap s <Plug>(easymotion-overwin-f)
+map <leader>L <Plug>(easymotion-bd-jk)
+nmap <leader>l <Plug>(easymotion-overwin-line)
 
 Plug 'airblade/vim-rooter'
 
 Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'branch': 'release/1.x',
-      \ 'for': [
-      \ 'javascript',
-      \ 'typescript',
-      \ 'css',
-      \ 'less',
-      \ 'scss',
-      \ 'json',
-      \ 'graphql',
-      \ 'markdown',
-      \ 'vue',
-      \ 'lua',
-      \ 'php',
-      \ 'python',
+    \ 'do': 'yarn install',
+    \ 'branch': 'release/1.x',
+    \ 'for': [
+    \ 'javascript',
+    \ 'typescript',
+    \ 'css',
+    \ 'less',
+    \ 'scss',
+    \ 'json',
+    \ 'graphql',
+    \ 'markdown',
+    \ 'vue',
+    \ 'lua',
+    \ 'php',
+    \ 'python',
       \ 'ruby',
       \ 'html',
       \ 'swift' ]
@@ -279,8 +282,6 @@ nmap gd <Plug>(coc-definition)
 nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
-vmap f  <Plug>(coc-format-selected)
-nmap f  <Plug>(coc-format-selected)
 
 
 Plug 'vim-airline/vim-airline'
