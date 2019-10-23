@@ -142,8 +142,8 @@ Plug 'jiangmiao/auto-pairs'
 
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'thinca/vim-quickrun'
-nnoremap <leader>r :QuickRun<cr>
+Plug 'huytd/vim-quickrun'
+nnoremap <leader>e :QuickRunExecute<CR>
 
 Plug 'majutsushi/tagbar'
 Plug 'hushicai/tagbar-javascript.vim'
