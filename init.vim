@@ -146,6 +146,15 @@ nnoremap <leader>e :QuickRunExecute<CR>
 Plug 'majutsushi/tagbar'
 Plug 'hushicai/tagbar-javascript.vim'
 Plug 'vim-php/phpctags'
+Plug 'vim-php/tagbar-phpctags.vim'
+let g:tagbar_type_css = {
+      \ 'ctagstype' : 'Css',
+      \ 'kinds'     : [
+      \ 'c:classes',
+      \ 's:selectors',
+      \ 'i:identities'
+      \ ]
+      \ }
 nmap tb :TagbarToggle<cr>
 
 Plug 'editorconfig/editorconfig-vim'
@@ -193,33 +202,31 @@ let g:windowswap_map_keys = 0
 Plug 'takac/vim-hardtime'
 let g:hardtime_default_on = 1
 let g:hardtime_showmsg = 1
+let g:hardtime_maxcount = 3
 
 Plug 't9md/vim-choosewin'
 nmap - <Plug>(choosewin)
 
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
-map <leader>L <Plug>(easymotion-bd-jk)
-nmap <leader>l <Plug>(easymotion-overwin-line)
-
-Plug 'airblade/vim-rooter'
+map <leader>l <Plug>(easymotion-bd-jk)
 
 Plug 'prettier/vim-prettier', {
-    \ 'do': 'yarn install',
-    \ 'branch': 'release/1.x',
-    \ 'for': [
-    \ 'javascript',
-    \ 'typescript',
-    \ 'css',
-    \ 'less',
-    \ 'scss',
-    \ 'json',
-    \ 'graphql',
-    \ 'markdown',
-    \ 'vue',
-    \ 'lua',
-    \ 'php',
-    \ 'python',
+      \ 'do': 'yarn install',
+      \ 'branch': 'release/1.x',
+      \ 'for': [
+      \ 'javascript',
+      \ 'typescript',
+      \ 'css',
+      \ 'less',
+      \ 'scss',
+      \ 'json',
+      \ 'graphql',
+      \ 'markdown',
+      \ 'vue',
+      \ 'lua',
+      \ 'php',
+      \ 'python',
       \ 'ruby',
       \ 'html',
       \ 'swift' ]
@@ -316,6 +323,8 @@ let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
+let NERDTreeChDirMode=2
+set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
