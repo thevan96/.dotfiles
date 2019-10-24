@@ -196,16 +196,15 @@ Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
 
-Plug 'wesq3/vim-windowswap'
-let g:windowswap_map_keys = 0
-
 Plug 'takac/vim-hardtime'
+let g:hardtime_ignore_buffer_patterns = ["NERD.*","Tagbar*","CtrP*"]
 let g:hardtime_default_on = 1
 let g:hardtime_showmsg = 1
 let g:hardtime_maxcount = 3
 
 Plug 't9md/vim-choosewin'
-nmap - <Plug>(choosewin)
+nmap <leader>cw :ChooseWin<cr>
+nmap <leader>cs :ChooseWinSwap<cr>
 
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
@@ -294,10 +293,6 @@ nmap gr <Plug>(coc-references)
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme = 'onedark'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#ale#enabled = 1
 if !exists('g:airline_symbols')
@@ -315,10 +310,14 @@ let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:airline_symbols.readonly = '🔒'
 
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-let g:NERDTreeWinSize = 25
+
+Plug 'jistr/vim-nerdtree-tabs'
+let g:nerdtree_tabs_open_on_console_startup=2
+let g:nerdtree_tabs_autoclose=0
+
+Plug 'scrooloose/nerdtree'
+let g:NERDTreeWinSize = 22
 let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
@@ -331,9 +330,6 @@ nnoremap ff :NERDTreeFind<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
