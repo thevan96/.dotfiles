@@ -196,12 +196,6 @@ Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
 
-Plug 'takac/vim-hardtime'
-let g:hardtime_ignore_buffer_patterns = ["NERD.*","Tagbar*","CtrP*"]
-let g:hardtime_default_on = 1
-let g:hardtime_showmsg = 1
-let g:hardtime_maxcount = 3
-
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
