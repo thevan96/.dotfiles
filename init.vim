@@ -382,18 +382,12 @@ set sessionoptions-=options
 
 " Config neovim
 function! MyOnBattery()
-  if has('macunix')
-    return match(system('pmset -g batt'), "Now drawing from 'Battery Power'") != -1
-  elsif has('unix')
   return readfile('/sys/class/power_supply/AC/online') == ['0']
-endif
-return 0
 endfunction
-
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nw', 100)
+  call neomake#configure#automake('nrw', 1000)
 endif
 
 " Auto remove trailing spaces
