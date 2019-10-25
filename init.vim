@@ -6,7 +6,7 @@ set spelllang=en encoding=UTF-8
 set ff=unix noeol
 filetype plugin on
 filetype indent on
-set number relativenumber
+set number
 set autoread autowrite
 set cursorline
 set signcolumn=yes
