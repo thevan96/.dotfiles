@@ -93,7 +93,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
-#
+
 alias lofi="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=bebuiaSKtU4"
 alias falloutboy="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=LBr7kECsjcQ\&list\=OLAK5uy_ltl03A3bXBWEfk1Weu5PgBD1Hs_VJkWas"
 alias cl="clear"
@@ -103,7 +103,6 @@ alias standardlog="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias localhostphp="php -S localhost:1996"
-alias vim="nvim"
 
 export FZF_DEFAULT_OPTS='--height 90%'
 export EDITOR=vim

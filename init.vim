@@ -141,21 +141,16 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'huytd/vim-quickrun'
-nnoremap <leader>e :QuickRunExecute<CR>
+nnoremap <leader>e :QuickRunExecute<cr>
 
-Plug 'majutsushi/tagbar'
-Plug 'hushicai/tagbar-javascript.vim'
-Plug 'vim-php/phpctags'
-Plug 'vim-php/tagbar-phpctags.vim'
-let g:tagbar_type_css = {
-      \ 'ctagstype' : 'Css',
-      \ 'kinds'     : [
-      \ 'c:classes',
-      \ 's:selectors',
-      \ 'i:identities'
-      \ ]
-      \ }
-nmap tb :TagbarToggle<cr>
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'liuchengxu/vista.vim'
+nnoremap <leader>v :Vista coc<cr>
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -260,7 +255,7 @@ let g:neomake_php_prettier_maker = {
       \ 'args': ['--write'],
       \ }
 
-autocmd! BufWritePost * Neomake
+autocmd! BufReadPost,BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
   autocmd User NeomakeJobFinished :checktime
@@ -282,7 +277,12 @@ nmap gd <Plug>(coc-definition)
 nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
-
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+nnoremap <c-o> :CocList outline<cr>
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -311,7 +311,7 @@ let g:nerdtree_tabs_open_on_console_startup=2
 let g:nerdtree_tabs_autoclose=0
 
 Plug 'scrooloose/nerdtree'
-let g:NERDTreeWinSize = 22
+let g:NERDTreeWinSize = 25
 let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
