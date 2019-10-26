@@ -22,6 +22,7 @@ set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
 set autoindent smartindent
 set updatetime=100
+set re=1
 set mouse=a
 set colorcolumn=80
 
@@ -191,6 +192,14 @@ map <leader>b :CtrlPBuffer<cr>
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
+
+Plug 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+nnoremap <leader>js :e ~/.config/nvim/plugged/ultisnips/UltiSnips/javascript.snippets<cr>
+nnoremap <leader>php :e ~/.config/nvim/plugged/ultisnips/UltiSnips/php.snippets<cr>
+nnoremap <leader>html :e ~/.config/nvim/plugged/ultisnips/UltiSnips/html.snippets<cr>
 
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
