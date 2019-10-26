@@ -1,3 +1,4 @@
 # Ignore folder
-/plugged
+plugged/
+!plugged/ultisnips/UltiSnips/*
 
