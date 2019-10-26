@@ -15,15 +15,15 @@ autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expand
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 set hidden
-set incsearch hlsearch ignorecase
+set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
-set nobackup noswapfile
+set nobackup noswapfile nowritebackup
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
+set autoindent smartindent
+set updatetime=100
 set mouse=a
-if exists('&colorcolumn')
-  set colorcolumn=80
-endif
+set colorcolumn=80
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -43,7 +43,7 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
-nnoremap <space><space> :nohlsearch<cr>
+nnoremap <esc><esc> :nohlsearch<cr>
 nnoremap bj :bfirst<cr>
 nnoremap bk :blast<cr>
 nnoremap bs :new<cr>
@@ -56,7 +56,7 @@ nnoremap th :tabprevious<cr>
 nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
-let mapleader = ','
+let mapleader = ' '
 imap jk <esc>
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
@@ -148,9 +148,9 @@ Plug 'liuchengxu/vista.vim'
 nnoremap <leader>v :Vista coc<cr>
 let g:vista#renderer#enable_icon = 1
 let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
+      \   "function": "\uf794",
+      \   "variable": "\uf71b",
+      \  }
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -159,8 +159,6 @@ Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
 Plug 'AndrewRadev/splitjoin.vim'
-
-Plug 'itchyny/vim-cursorword'
 
 Plug 'tpope/vim-surround'
 
@@ -183,7 +181,6 @@ let g:suda_smart_edit = 1
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-set updatetime=100
 nnoremap <Leader>ggn :GitGutterNextHunk<CR>
 nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
 
@@ -254,7 +251,11 @@ let g:neomake_php_prettier_maker = {
       \ 'exe': 'prettier',
       \ 'args': ['--write'],
       \ }
-
+let g:neomake_javascript_enabled_makers = ['standard']
+let g:neomake_javascript_standard_maker = {
+      \ 'exe': 'standard',
+      \ 'args': ['--fix'],
+      \ }
 autocmd! BufReadPost,BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
@@ -264,13 +265,17 @@ augroup END
 
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
-let g:coc_global_extensions = [
+let g:coc_global_extensions =
+      \ [
       \ 'coc-json',
       \ 'coc-tsserver',
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-prettier'
+      \ 'coc-prettier',
+      \ 'coc-vimlsp',
+      \ 'coc-list',
+      \ 'coc-solargraph'
       \ ]
 inoremap <expr> <c-space> coc#refresh()
 nmap gd <Plug>(coc-definition)
@@ -374,11 +379,6 @@ call plug#end()
 set background =dark
 colorscheme onedark
 let g:onedark_terminal_italics=1
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-" Fix error restore session
-set sessionoptions-=folds
-set sessionoptions-=options
 
 " Config neovim
 function! MyOnBattery()
@@ -387,7 +387,7 @@ endfunction
 if MyOnBattery()
   call neomake#configure#automake('w')
 else
-  call neomake#configure#automake('nrw', 1000)
+  call neomake#configure#automake('nrw', 100)
 endif
 
 " Auto remove trailing spaces
