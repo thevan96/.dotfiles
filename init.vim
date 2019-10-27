@@ -61,7 +61,8 @@ let mapleader = ' '
 imap jk <esc>
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
-nnoremap <leader>qq :qall<cr>
+nnoremap <leader>qq :q<cr>
+nnoremap <leader>qa :qall<cr>
 nnoremap <leader>w :w<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
@@ -174,6 +175,7 @@ Plug 'mileszs/ack.vim'
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+nnoremap <leader>a :Ack<space>
 
 Plug 'moll/vim-bbye'
 
@@ -182,8 +184,8 @@ let g:suda_smart_edit = 1
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-nnoremap <Leader>ggn :GitGutterNextHunk<CR>
-nnoremap <Leader>ggp :GitGutterPrevHunk<CR>
+nnoremap <leader>ggn :GitGutterNextHunk<CR>
+nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
@@ -283,7 +285,6 @@ let g:coc_global_extensions =
       \ 'coc-python',
       \ 'coc-prettier',
       \ 'coc-vimlsp',
-      \ 'coc-list',
       \ 'coc-solargraph'
       \ ]
 inoremap <expr> <c-space> coc#refresh()
@@ -296,7 +297,6 @@ xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
-nnoremap <c-o> :CocList outline<cr>
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -321,7 +321,6 @@ let g:airline_symbols.readonly = '🔒'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'jistr/vim-nerdtree-tabs'
-let g:nerdtree_tabs_open_on_console_startup=2
 let g:nerdtree_tabs_autoclose=0
 
 Plug 'scrooloose/nerdtree'
@@ -331,13 +330,16 @@ let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
 let NERDTreeChDirMode=2
+let NERDTreeShowHidden=1
+let NERDTreeAutoDeleteBuffer = 1
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
-let NERDTreeShowHidden=1
-let NERDTreeAutoDeleteBuffer = 1
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
