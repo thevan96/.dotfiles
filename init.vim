@@ -1,13 +1,12 @@
 call plug#begin()
 
-autocmd BufEnter * :syntax sync fromstart
 set termguicolors
 syntax on
 set spelllang=en encoding=UTF-8
 set ff=unix noeol
 filetype plugin on
 filetype indent on
-set number
+set number relativenumber
 set autoread autowrite
 set cursorline
 set signcolumn=yes
@@ -22,10 +21,11 @@ set nobackup noswapfile nowritebackup
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
 set autoindent smartindent
-set updatetime=100
-set re=1
 set mouse=a
 set colorcolumn=80
+autocmd BufEnter * :syntax sync fromstart
+set re=1
+set updatetime=100
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -170,7 +170,7 @@ Plug 'tpope/vim-commentary'
 Plug 'matze/vim-move'
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key=','
+let g:user_emmet_leader_key='<leader>,'
 
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -198,9 +198,9 @@ nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-z>"
+let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 nnoremap <leader>js :e ~/.config/nvim/UltiSnips/javascript.snippets<cr>
 nnoremap <leader>php :e ~/.config/nvim/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/.config/nvim/UltiSnips/html.snippets<cr>
@@ -289,16 +289,53 @@ let g:coc_global_extensions =
       \ 'coc-vimlsp',
       \ 'coc-solargraph'
       \ ]
-inoremap <expr> <c-space> coc#refresh()
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Remap keys for gotos
 nmap gd <Plug>(coc-definition)
 nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
+
 " Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
