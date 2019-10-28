@@ -1,5 +1,6 @@
 call plug#begin()
 
+autocmd BufEnter * :syntax sync fromstart
 set termguicolors
 syntax on
 set spelllang=en encoding=UTF-8
@@ -175,7 +176,8 @@ Plug 'mileszs/ack.vim'
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-nnoremap <leader>a :Ack<space>
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
 
 Plug 'moll/vim-bbye'
 
@@ -190,8 +192,8 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
-
 Plug 't9md/vim-choosewin'
+
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
