@@ -7,6 +7,11 @@ set ff=unix noeol
 filetype plugin on
 filetype indent on
 set number relativenumber
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup end
 set autoread autowrite
 set cursorline
 set signcolumn=yes
