@@ -6,14 +6,9 @@ set spelllang=en encoding=UTF-8
 set ff=unix noeol
 filetype plugin on
 filetype indent on
-set number relativenumber
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-augroup end
+set number
 set autoread autowrite
-set cursorline
+set cursorline!
 set signcolumn=yes
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -31,6 +26,7 @@ set colorcolumn=80
 autocmd BufEnter * :syntax sync fromstart
 set re=1
 set updatetime=100
+set lazyredraw
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -197,8 +193,8 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 map <leader>b :CtrlPBuffer<cr>
-Plug 't9md/vim-choosewin'
 
+Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
@@ -244,6 +240,7 @@ let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 Plug 'dense-analysis/ale'
+let g:ale_enabled=0
 nmap e[ <Plug>(ale_previous_wrap)
 nmap e] <Plug>(ale_next_wrap)
 let g:ale_sign_error = '✘'
@@ -269,17 +266,11 @@ let g:neomake_php_prettier_maker = {
       \ 'exe': 'prettier',
       \ 'args': ['--write'],
       \ }
-let g:neomake_javascript_enabled_makers = ['standard']
-let g:neomake_javascript_standard_maker = {
-      \ 'exe': 'standard',
-      \ 'args': ['--fix'],
-      \ }
 autocmd! BufReadPost,BufWritePost * Neomake
 augroup my_neomake_hooks
   au!
   autocmd User NeomakeJobFinished :checktime
 augroup END
-
 
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
@@ -368,7 +359,8 @@ Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
 
 Plug 'scrooloose/nerdtree'
-let g:NERDTreeWinSize = 25
+let NERDTreeIgnore = ['^\.git$','^\.svn$','^tags$','^node_modules$','^vendor$']
+let g:NERDTreeWinSize = 30
 let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
