@@ -3,7 +3,7 @@ call plug#begin()
 set termguicolors
 syntax on
 set spelllang=en encoding=UTF-8
-set ff=unix noeol
+set ff=unix
 filetype plugin on
 filetype indent on
 set number
@@ -14,6 +14,7 @@ set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd BufEnter * :syntax sync fromstart
 set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
@@ -23,7 +24,6 @@ set splitbelow splitright
 set autoindent smartindent
 set mouse=a
 set colorcolumn=80
-autocmd BufEnter * :syntax sync fromstart
 set re=1
 set updatetime=100
 set lazyredraw
@@ -224,20 +224,12 @@ Plug 'prettier/vim-prettier', {
       \ 'markdown',
       \ 'vue',
       \ 'lua',
-      \ 'php',
       \ 'python',
       \ 'ruby',
       \ 'html',
       \ 'swift' ]
       \ }
 nmap <leader>p <plug>(Prettier)
-
-Plug 'stephpy/vim-php-cs-fixer'
-let g:php_cs_fixer_rules = "@PSR2"
-nnoremap <leader>pcd :call PhpCsFixerFixDirectory()<cr>
-nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
-let g:php_cs_fixer_php_path = "php"
-let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 Plug 'dense-analysis/ale'
 let g:ale_enabled=0
@@ -260,18 +252,6 @@ let b:ale_linters = {
       \ }
 let g:ale_php_phpcs_standard = "psr2"
 
-Plug 'neomake/neomake'
-let g:neomake_php_enabled_makers = ['prettier']
-let g:neomake_php_prettier_maker = {
-      \ 'exe': 'prettier',
-      \ 'args': ['--write'],
-      \ }
-autocmd! BufReadPost,BufWritePost * Neomake
-augroup my_neomake_hooks
-  au!
-  autocmd User NeomakeJobFinished :checktime
-augroup END
-
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions =
@@ -285,7 +265,6 @@ let g:coc_global_extensions =
       \ 'coc-vimlsp',
       \ 'coc-solargraph'
       \ ]
-
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -403,7 +382,23 @@ let g:coc_node_path='/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
 " Ruby
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
-" HTML, CSS
+" PHP
+Plug 'stephpy/vim-php-cs-fixer'
+let g:php_cs_fixer_rules = "@PSR2"
+nnoremap <leader>pcd :call PhpCsFixerFixDirectory()<cr>
+nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
+let g:php_cs_fixer_php_path = "php"
+let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
+
+" Prettier for PHP
+function PrettierPhp()
+  let save_pos = getpos(".")
+  %! prettier --stdin --parser=php
+  call setpos('.', save_pos)
+endfunction
+nnoremap <silent><leader>p :call PrettierPhp()<cr>
+
+"HTML, CSS
 Plug 'lilydjwg/colorizer'
 
 Plug 'andymass/vim-matchup'
@@ -426,16 +421,6 @@ call plug#end()
 set background =dark
 colorscheme onedark
 let g:onedark_terminal_italics=1
-
-" Config neovim
-function! MyOnBattery()
-  return readfile('/sys/class/power_supply/AC/online') == ['0']
-endfunction
-if MyOnBattery()
-  call neomake#configure#automake('w')
-else
-  call neomake#configure#automake('nrw', 100)
-endif
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
