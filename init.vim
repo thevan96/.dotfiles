@@ -60,7 +60,6 @@ nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 let mapleader = ' '
-imap jk <esc>
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
 nnoremap <leader>qq :q<cr>
@@ -124,8 +123,6 @@ endfunction
 nnoremap <leader>at :call FloatTerm()<cr>
 " Open node REPL
 nnoremap <leader>an :call FloatTerm('"node"')<cr>
-" Open tig, yes TIG, A FLOATING TIGGGG!!!!!!
-nnoremap <leader>ag :call FloatTerm('"tig"')<cr>
 
 Plug 'joshdick/onedark.vim'
 
@@ -134,11 +131,6 @@ if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
 let g:webdevicons_enable_nerdtree = 1
-let g:webdevicons_enable_ctrlp = 1
-let g:webdevicons_enable_airline_tabline = 1
-let g:webdevicons_enable_airline_statusline = 1
-
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -146,15 +138,6 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'huytd/vim-quickrun'
 nnoremap <leader>e :QuickRunExecute<cr>
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'liuchengxu/vista.vim'
-nnoremap <leader>v :Vista coc<cr>
-let g:vista#renderer#enable_icon = 1
-let g:vista#renderer#icons = {
-      \   "function": "\uf794",
-      \   "variable": "\uf71b",
-      \  }
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -332,13 +315,13 @@ let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:airline_symbols.readonly = '🔒'
 
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
 Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
 
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['^\.git$','^\.svn$','^tags$','^node_modules$','^vendor$']
+let NERDTreeIgnore = ['^\.git$','^node_modules$',]
 let g:NERDTreeWinSize = 30
 let NERDTreeMinimalUI = 1
 let g:NERDTreeHighlightCursorline = 0
@@ -396,7 +379,8 @@ function PrettierPhp()
   %! prettier --stdin --parser=php
   call setpos('.', save_pos)
 endfunction
-nnoremap <silent><leader>p :call PrettierPhp()<cr>
+" format on save
+autocmd BufwritePre *.php :call PrettierPhp()
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
