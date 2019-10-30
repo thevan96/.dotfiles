@@ -373,15 +373,6 @@ nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
-" Prettier for PHP
-function PrettierPhp()
-  let save_pos = getpos(".")
-  %! prettier --stdin --parser=php
-  call setpos('.', save_pos)
-endfunction
-" format on save
-autocmd BufwritePre *.php :call PrettierPhp()
-
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
 
