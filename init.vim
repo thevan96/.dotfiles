@@ -8,13 +8,14 @@ filetype plugin on
 filetype indent on
 set number
 set autoread autowrite
-set cursorline!
+set cursorline
 set signcolumn=yes
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd BufEnter * :syntax sync fromstart
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
@@ -174,8 +175,13 @@ nnoremap <leader>ggn :GitGutterNextHunk<CR>
 nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 
 Plug 'kien/ctrlp.vim'
-let g:ctrlp_map = '<c-p>'
-map <leader>b :CtrlPBuffer<cr>
+nmap <leader>p :CtrlPBuffer<cr>
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+      \ 'file': '\v\.(exe|so|dll)$',
+      \ 'link': 'some_bad_symbolic_links',
+      \ }
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
@@ -212,7 +218,7 @@ Plug 'prettier/vim-prettier', {
       \ 'html',
       \ 'swift' ]
       \ }
-nmap <leader>p <plug>(Prettier)
+nmap <leader>f <plug>(Prettier)
 
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
