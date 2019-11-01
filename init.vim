@@ -214,27 +214,6 @@ Plug 'prettier/vim-prettier', {
       \ }
 nmap <leader>p <plug>(Prettier)
 
-Plug 'dense-analysis/ale'
-let g:ale_enabled=0
-nmap e[ <Plug>(ale_previous_wrap)
-nmap e] <Plug>(ale_next_wrap)
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-let g:ale_sign_column_always = 1
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_set_loclist = 0
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let b:ale_linters = {
-      \ 'javascript': ['standard'],
-      \ 'php': ['phpcs']
-      \ }
-let g:ale_php_phpcs_standard = "psr2"
-
 Plug 'neoclide/coc.nvim'
 let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions =
