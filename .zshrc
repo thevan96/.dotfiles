@@ -65,7 +65,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git vi-mode zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -102,9 +102,12 @@ alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  auto
 alias standardlog="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias localhostphp="php -S localhost:1996"
+alias pl="php -S localhost:8886"
+alias ppp="prettier ./*.php --write"
+alias hc="history -c"
+alias cat="bat"
 
-export FZF_DEFAULT_OPTS='--height 90%'
+export FZF_DEFAULT_OPTS='--height 100%'
 export EDITOR=vim
 
 export RUBYENV_ROOT="$HOME/.rbenv/"
