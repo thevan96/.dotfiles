@@ -106,6 +106,7 @@ alias pl="php -S localhost:8886"
 alias ppp="prettier ./*.php --write"
 alias hc="history -c"
 alias cat="bat"
+alias ktmux="tmux kill-server"
 
 export FZF_DEFAULT_OPTS='--height 100%'
 export EDITOR=vim

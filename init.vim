@@ -1,5 +1,5 @@
 call plug#begin()
-
+set shellcmdflag=-ic
 set termguicolors
 syntax on
 set spelllang=en encoding=UTF-8
