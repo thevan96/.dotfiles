@@ -65,7 +65,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode zsh-syntax-highlighting)
+plugins=(git vi-mode zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -93,20 +93,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
-
-alias lofi="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=bebuiaSKtU4"
-alias falloutboy="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=LBr7kECsjcQ\&list\=OLAK5uy_ltl03A3bXBWEfk1Weu5PgBD1Hs_VJkWas"
-alias cl="clear"
-alias ex="exit"
-alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  autoclean && sudo apt -y autoremove"
-alias standardlog="standard --fix | snazzy"
-alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
-alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias pl="php -S localhost:8886"
-alias pf="prettier ./*.php --write"
-alias hc="history -c"
-alias cat="bat"
-alias ktmux="tmux kill-server"
 
 export FZF_DEFAULT_OPTS='--height 100%'
 export EDITOR=vim

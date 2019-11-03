@@ -1,5 +1,4 @@
 call plug#begin()
-set shellcmdflag=-ic
 set termguicolors
 syntax on
 set spelllang=en encoding=UTF-8
@@ -155,7 +154,7 @@ Plug 'tpope/vim-commentary'
 Plug 'matze/vim-move'
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<leader>,'
+let g:user_emmet_leader_key=','
 
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -188,7 +187,7 @@ nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-z>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 nnoremap <leader>js :e ~/.config/nvim/UltiSnips/javascript.snippets<cr>
@@ -221,7 +220,6 @@ Plug 'prettier/vim-prettier', {
 nmap <leader>f <plug>(Prettier)
 
 Plug 'neoclide/coc.nvim'
-let g:coc_snippet_next = '<tab>'
 let g:coc_global_extensions =
       \ [
       \ 'coc-json',
@@ -233,19 +231,6 @@ let g:coc_global_extensions =
       \ 'coc-vimlsp',
       \ 'coc-solargraph'
       \ ]
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
