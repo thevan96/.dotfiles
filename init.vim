@@ -23,6 +23,7 @@ set re=1
 set updatetime=100
 set lazyredraw
 set nojoinspaces
+set nowrap
 set ttyfast
 let g:is_posix = 1
 
