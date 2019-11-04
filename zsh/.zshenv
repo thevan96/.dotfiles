@@ -12,4 +12,4 @@ alias pf="prettier ./*.php --write"
 alias hc="history -c"
 alias cat="bat"
 alias ktmux="tmux kill-server"
-
+alias bs="browser-sync start --server --files '*'"

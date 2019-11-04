@@ -1,7 +1,7 @@
 call plug#begin()
 set termguicolors
 syntax on
-set spelllang=en encoding=UTF-8
+set encoding=UTF-8
 set ff=unix
 filetype plugin on
 filetype indent on
@@ -9,11 +9,6 @@ set number
 set autoread autowrite
 set cursorline
 set signcolumn=yes
-set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
-autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd BufEnter * :syntax sync fromstart
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set hidden
 set incsearch hlsearch ignorecase smartcase
@@ -27,6 +22,22 @@ set colorcolumn=80
 set re=1
 set updatetime=100
 set lazyredraw
+set nojoinspaces
+set ttyfast
+let g:is_posix = 1
+
+set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
+autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd BufEnter * :syntax sync fromstart
+
+" Auto remove trailing spaces
+autocmd BufWritePre * %s/\s\+$//e
+
+" Remap scrolling
+nnoremap <a-K> <c-u>
+nnoremap <a-J> <c-d>
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -74,6 +85,10 @@ nnoremap <c-a-k> :resize +2<cr>
 nnoremap <c-a-j> :resize -2<cr>
 nnoremap <c-a-l> :vertical resize +2<cr>
 nnoremap <c-a-h> :vertical resize -2<cr>
+
+" Setup colorscheme
+Plug 'joshdick/onedark.vim'
+set background=dark
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -124,8 +139,6 @@ nnoremap <leader>at :call FloatTerm()<cr>
 " Open node REPL
 nnoremap <leader>an :call FloatTerm('"node"')<cr>
 
-Plug 'joshdick/onedark.vim'
-
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
@@ -165,13 +178,13 @@ nnoremap <Leader>a :Ack!<Space>
 
 Plug 'moll/vim-bbye'
 
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
-
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 nnoremap <leader>ggn :GitGutterNextHunk<CR>
 nnoremap <leader>ggp :GitGutterPrevHunk<CR>
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'kien/ctrlp.vim'
 nmap <leader>p :CtrlPBuffer<cr>
@@ -351,24 +364,9 @@ let g:loaded_matchit = 1
 
 Plug 'ap/vim-css-color'
 
-" Markdown
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_conceal_code_blocks = 0
-
 call plug#end()
 
-" Final setup colorscheme
-set background =dark
 colorscheme onedark
-let g:onedark_terminal_italics=1
-
-" Auto remove trailing spaces
-autocmd BufWritePre * %s/\s\+$//e
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
