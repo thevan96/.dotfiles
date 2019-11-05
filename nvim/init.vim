@@ -36,10 +36,6 @@ autocmd BufEnter * :syntax sync fromstart
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
 
-" Remap scrolling
-nnoremap <a-K> <c-u>
-nnoremap <a-J> <c-d>
-
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
