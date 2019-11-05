@@ -1,6 +1,6 @@
 #!/bin/bash
-ln -sf ~/dotfiles/init.vim ~/.config/nvim/init.vim
-ln -sf ~/dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
+ln -sf ~/dotfiles/nvim/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
@@ -12,4 +12,4 @@ ln -sf ~/dotfiles/UltiSnips/javascript.snippets ~/.config/nvim/UltiSnips/javascr
 ln -sf ~/dotfiles/UltiSnips/php.snippets ~/.config/nvim/UltiSnips/php.snippets
 ln -sf ~/dotfiles/UltiSnips/html.snippets ~/.config/nvim/UltiSnips/html.snippets
 
-
+echo 'Sync done!'
