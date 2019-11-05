@@ -72,7 +72,6 @@ nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
 nnoremap <leader>qq :q<cr>
 nnoremap <leader>qa :qall<cr>
-nnoremap <leader>w :w<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
@@ -310,6 +309,8 @@ let g:NERDTreeCascadeSingleChildDir = 0
 let NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeMapJumpNextSibling = '<Nop>'
+let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
