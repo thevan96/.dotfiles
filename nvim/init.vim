@@ -363,6 +363,10 @@ let g:loaded_matchit = 1
 
 Plug 'ap/vim-css-color'
 
+" Markdown
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled = 1
+
 call plug#end()
 
 colorscheme onedark
