@@ -1,7 +1,7 @@
 # My-dotfile
 
 - Font : Fira Code
-- Terminal: Alacrity
+- Terminal: Alacritty
 - Shell : zsh
 - Text editor : neovim
 - Os : Ubuntu
