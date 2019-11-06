@@ -184,6 +184,7 @@ let g:suda_smart_edit = 1
 
 Plug 'kien/ctrlp.vim'
 nmap <leader>p :CtrlPBuffer<cr>
+let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$',
