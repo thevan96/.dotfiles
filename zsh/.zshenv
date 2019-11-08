@@ -13,3 +13,5 @@ alias hc="history -c"
 alias cat="bat"
 alias ktmux="tmux kill-server"
 alias bs="browser-sync start --server --files '*'"
+alias nujabes="tizonia --youtube-audio-playlist https://www.youtube.com/watch\?v\=_qU2MXeAz1E\&list\=PLpleWfPiCfvaeKJdaieurunjfUc9NpjDE\&index\=1"
+
