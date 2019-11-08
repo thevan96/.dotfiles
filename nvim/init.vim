@@ -71,8 +71,7 @@ let mapleader = ' '
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
 nnoremap <leader>w :w<cr>
-nnoremap <leader>qa :qall<cr>
-nnoremap <leader>qq :q<cr>
+nnoremap <leader>q :q<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
@@ -154,8 +153,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
-
-Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'tpope/vim-surround'
 
@@ -279,7 +276,6 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme = 'onedark'
-let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#ale#enabled = 1
 if !exists('g:airline_symbols')
@@ -304,14 +300,14 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$',]
-let g:NERDTreeWinSize = 30
 let NERDTreeMinimalUI = 1
-let g:NERDTreeHighlightCursorline = 0
-let g:NERDTreeLimitedSyntax = 1
-let g:NERDTreeCascadeSingleChildDir = 0
 let NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeWinSize = 30
+let g:NERDTreeHighlightCursorline = 0
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
