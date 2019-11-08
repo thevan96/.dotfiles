@@ -70,8 +70,9 @@ nnoremap tx :tabclose<cr>
 let mapleader = ' '
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
-nnoremap <leader>qq :q<cr>
+nnoremap <leader>w :w<cr>
 nnoremap <leader>qa :qall<cr>
+nnoremap <leader>qq :q<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
@@ -278,6 +279,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme = 'onedark'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#ale#enabled = 1
 if !exists('g:airline_symbols')
