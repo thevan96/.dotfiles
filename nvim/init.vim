@@ -5,7 +5,7 @@ set encoding=UTF-8
 set ff=unix
 filetype plugin on
 filetype indent on
-set number
+set relativenumber
 set autoread autowrite
 set cursorline
 set signcolumn=yes
@@ -276,6 +276,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme = 'onedark'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#ale#enabled = 1
 if !exists('g:airline_symbols')
@@ -313,6 +314,7 @@ let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
+nnoremap tf :NERDTreeFocus<cr>
 nnoremap ff :NERDTreeFind<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 autocmd StdinReadPre * let s:std_in=1
