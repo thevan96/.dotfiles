@@ -15,6 +15,7 @@ set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
 set nobackup noswapfile nowritebackup
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set backspace=indent,eol,start
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
@@ -68,8 +69,8 @@ nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 let mapleader = ' '
-nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
-nnoremap <leader>vi :e ~/.config/nvim/init.vim<cr>
+nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
+nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 tnoremap <esc> <c-\><c-n>
@@ -158,6 +159,9 @@ Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-commentary'
 
+Plug 'sickill/vim-pasta'
+let g:pasta_enabled_filetypes = ['ruby', 'javascript', 'php', 'vim', 'html', 'css', 'scss', 'sh']
+
 Plug 'matze/vim-move'
 
 Plug 'mattn/emmet-vim'
@@ -194,13 +198,18 @@ Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
+Plug 'benmills/vimux'
+map <leader>vp :VimuxPromptCommand<CR>
+map <leader>vq :VimuxCloseRunner<CR>
+let g:VimuxHeight = "20"
+
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-z>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-nnoremap <leader>js :e ~/.config/nvim/UltiSnips/javascript.snippets<cr>
-nnoremap <leader>php :e ~/.config/nvim/UltiSnips/php.snippets<cr>
-nnoremap <leader>html :e ~/.config/nvim/UltiSnips/html.snippets<cr>
+nnoremap <leader>js :e ~/dotfiles/nvim/UltiSnips/javascript.snippets<cr>
+nnoremap <leader>php :e ~/dotfiles/nvim/UltiSnips/php.snippets<cr>
+nnoremap <leader>html :e ~/dotfiles/nvim/UltiSnips/html.snippets<cr>
 
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
@@ -305,7 +314,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeWinSize = 30
+let g:NERDTreeWinSize = 20
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
