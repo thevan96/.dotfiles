@@ -186,7 +186,6 @@ let g:suda_smart_edit = 1
 
 Plug 'kien/ctrlp.vim'
 nmap <leader>p :CtrlPBuffer<cr>
-let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$',
@@ -197,6 +196,8 @@ let g:ctrlp_custom_ignore = {
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
+
+Plug 'pbrisbin/vim-mkdir'
 
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
