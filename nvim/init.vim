@@ -208,9 +208,9 @@ Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-z>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-nnoremap <leader>js :e ~/dotfiles/nvim/UltiSnips/javascript.snippets<cr>
-nnoremap <leader>php :e ~/dotfiles/nvim/UltiSnips/php.snippets<cr>
-nnoremap <leader>html :e ~/dotfiles/nvim/UltiSnips/html.snippets<cr>
+nnoremap <leader>js :e ~/dotfiles/UltiSnips/javascript.snippets<cr>
+nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
+nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
 
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
