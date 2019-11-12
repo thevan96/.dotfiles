@@ -15,13 +15,6 @@ Tmux panel + tizonia music
 NERDTree + coc.nvim
 ![uOxgmOb.png](https://i.imgur.com/uOxgmOb.png)
 
-Ctrp search file =]
-![bcHjZhs.png](https://i.imgur.com/bcHjZhs.png)
-
 Floating Terminal
 ![6Ahe9GM.png](https://i.imgur.com/6Ahe9GM.png)
-
-NodeJS REPL
-![NyIMnoo.png](https://i.imgur.com/NyIMnoo.png)
-
 
