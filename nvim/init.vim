@@ -5,7 +5,7 @@ set encoding=UTF-8
 set ff=unix
 filetype plugin on
 filetype indent on
-set relativenumber
+set number relativenumber
 set autoread autowrite
 set cursorline
 set signcolumn=yes
@@ -315,7 +315,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeWinSize = 20
+let g:NERDTreeWinSize=25
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
