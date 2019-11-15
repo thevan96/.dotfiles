@@ -155,6 +155,9 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
+Plug 'tpope/vim-repeat'
+silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+
 Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-commentary'
@@ -367,6 +370,8 @@ let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
+
+Plug 'othree/html5.vim'
 
 Plug 'andymass/vim-matchup'
 let g:loaded_matchit = 1
