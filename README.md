@@ -1,11 +1,11 @@
 # My-dotfile
 
-- Font : Fira Code
+- Font : Monaco
 - Terminal: Alacritty
 - Shell : zsh
 - Text editor : neovim
 - Os : Ubuntu
-- Manager panel : tmux
+- Terminal multiplexer : tmux
 
 ## Screenshots
 
