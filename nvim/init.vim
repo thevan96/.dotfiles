@@ -212,6 +212,10 @@ Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
+Plug 'takac/vim-hardtime'
+let g:hardtime_maxcount = 5
+let g:hardtime_default_on = 1
+
 Plug 'pbrisbin/vim-mkdir'
 
 Plug 'benmills/vimux'
