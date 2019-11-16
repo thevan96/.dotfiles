@@ -21,7 +21,7 @@ set autoindent smartindent
 set mouse=a
 set colorcolumn=80
 set re=1
-set updatetime=100
+set updatetime=200
 set lazyredraw
 set nojoinspaces
 set nowrap
@@ -34,9 +34,7 @@ autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expand
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd BufEnter * :syntax sync fromstart
 
-" Auto remove trailing spaces
-autocmd BufWritePre * %s/\s\+$//e
-
+let mapleader = ' '
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -68,7 +66,6 @@ nnoremap th :tabprevious<cr>
 nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
-let mapleader = ' '
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>w :w<cr>
@@ -82,6 +79,23 @@ nnoremap <c-a-k> :resize +2<cr>
 nnoremap <c-a-j> :resize -2<cr>
 nnoremap <c-a-l> :vertical resize +2<cr>
 nnoremap <c-a-h> :vertical resize -2<cr>
+
+"autoclose tags
+inoremap ( ()<Left>
+inoremap { {}<Left>
+inoremap [ []<Left>
+inoremap " ""<Left>
+inoremap ' ''<Left>
+inoremap ` ``<Left>
+
+"replace the word under cursor
+nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+
+" Auto remove trailing spaces
+autocmd BufWritePre * %s/\s\+$//e
+
+" Clear register
+command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
@@ -141,8 +155,6 @@ if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
 let g:webdevicons_enable_nerdtree = 1
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -272,6 +284,7 @@ xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
+nmap <leader>rn <Plug>(coc-rename)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -286,26 +299,40 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme = 'onedark'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#branch#enabled=1
-let g:airline#extensions#ale#enabled = 1
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.crypt = '🔐'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.maxlinenr = '㏑'
-let g:airline_symbols.branch = '⌘'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.spell = 'Ꞩ'
-let g:airline_symbols.notexists = 'Ɇ'
-let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_symbols.readonly = '🔒'
+Plug 'ap/vim-buftabline'
+Plug 'itchyny/lightline.vim'
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'readonly': 'LightlineReadonly',
+      \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename'
+      \ }
+      \ }
+function! LightlineFugitive()
+  if exists('*fugitive#head')
+    let branch = fugitive#head()
+    return branch !=# '' ? ''.branch : ''
+  endif
+  return ''
+endfunction
+function! LightlineReadonly()
+  return &readonly ? '' : ''
+endfunction
+function! LightlineModified()
+  return &ft =~ 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
 
 Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
@@ -390,5 +417,3 @@ call plug#end()
 
 colorscheme onedark
 
-" Clear register
-command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
