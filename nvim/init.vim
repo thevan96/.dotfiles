@@ -299,12 +299,12 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-Plug 'ap/vim-buftabline'
+Plug 'bling/vim-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
       \ 'colorscheme': 'one',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive','filename','absolutepath'] ]
       \ },
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
