@@ -357,10 +357,10 @@ let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
-nnoremap tt :NERDTreeToggle<cr>
-nnoremap tf :NERDTreeFocus<cr>
-nnoremap ff :NERDTreeFind<cr>
-nnoremap rr :NERDTreeRefreshRoot<cr>
+nnoremap <leader>tt :NERDTreeToggle<cr>
+nnoremap <leader>tf :NERDTreeFocus<cr>
+nnoremap <leader>ff :NERDTreeFind<cr>
+nnoremap <leader>rr :NERDTreeRefreshRoot<cr>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
