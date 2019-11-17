@@ -70,6 +70,7 @@ nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
+nnoremap <leader>qa :qa<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
@@ -199,9 +200,10 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 nmap <leader>p :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_user_command = 'find %s -type f'
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$',
       \ 'file': '\v\.(exe|so|dll)$',
@@ -211,10 +213,6 @@ let g:ctrlp_custom_ignore = {
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 5
-let g:hardtime_default_on = 1
 
 Plug 'pbrisbin/vim-mkdir'
 
@@ -303,7 +301,7 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-Plug 'bling/vim-bufferline'
+Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
       \ 'colorscheme': 'one',
@@ -316,6 +314,12 @@ let g:lightline = {
       \   'filename': 'LightlineFilename'
       \ }
       \ }
+
+set showtabline=2
+let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
+
 function! LightlineFugitive()
   if exists('*fugitive#head')
     let branch = fugitive#head()
@@ -357,10 +361,10 @@ let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
-nnoremap <leader>tt :NERDTreeToggle<cr>
-nnoremap <leader>tf :NERDTreeFocus<cr>
-nnoremap <leader>ff :NERDTreeFind<cr>
-nnoremap <leader>rr :NERDTreeRefreshRoot<cr>
+nnoremap tt :NERDTreeToggle<cr>
+nnoremap ff :NERDTreeFind<cr>
+nnoremap rr :NERDTreeRefreshRoot<cr>
+nnoremap fc :NERDTreeFocus<cr>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif

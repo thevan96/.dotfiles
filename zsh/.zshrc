@@ -94,7 +94,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
 
-export FZF_DEFAULT_OPTS='--height 100%'
+export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 export EDITOR=vim
 
 export RUBYENV_ROOT="$HOME/.rbenv/"
