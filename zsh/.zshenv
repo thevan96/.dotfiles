@@ -4,13 +4,43 @@ alias falloutboy="tizonia --youtube-audio-mix https://www.youtube.com/watch\?v\=
 alias nujabes="tizonia --youtube-audio-playlist https://www.youtube.com/watch\?v\=_qU2MXeAz1E\&list\=PLpleWfPiCfvaeKJdaieurunjfUc9NpjDE\&index\=3"
 alias cl="clear"
 alias ex="exit"
-alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y  autoclean && sudo apt -y autoremove"
+alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y autoclean && sudo apt -y autoremove"
 alias standardlog="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias pl="php -S localhost:8888"
+alias pl="php -S localhost:7000"
 alias pf="prettier ./*.php --write"
 alias hc="history -c"
 alias ktmux="tmux kill-server"
 alias bs="browser-sync start --server --files '*' --port "
+
+# Default vim text editor
+export EDITOR=vim
+
+# Pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# Rubyenv
+export RUBYENV_ROOT="$HOME/.rbenv/"
+export PATH="$RUBYENV_ROOT/bin:$PATH"
+eval "$(rbenv init -)"
+
+# NVM - Node version manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# PHP composer
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+# FZF
+export FZF_DEFAULT_OPTS='--no-height --no-reverse'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Include Z
+. /usr/local/bin/z.sh
 

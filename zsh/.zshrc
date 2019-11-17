@@ -94,29 +94,3 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
 
-export FZF_DEFAULT_OPTS='--no-height --no-reverse'
-export EDITOR=vim
-
-export RUBYENV_ROOT="$HOME/.rbenv/"
-export PATH="$RUBYENV_ROOT/bin:$PATH"
-eval "$(rbenv init -)"
-
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
-  source "${VIRTUAL_ENV}/bin/activate"
-fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PATH="$PATH:$HOME/.composer/vendor/bin"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Include Z
-. /usr/local/bin/z.sh

@@ -81,14 +81,6 @@ nnoremap <c-a-j> :resize -2<cr>
 nnoremap <c-a-l> :vertical resize +2<cr>
 nnoremap <c-a-h> :vertical resize -2<cr>
 
-"autoclose tags
-inoremap ( ()<Left>
-inoremap { {}<Left>
-inoremap [ []<Left>
-inoremap " ""<Left>
-inoremap ' ''<Left>
-inoremap ` ``<Left>
-
 "replace the word under cursor
 nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
@@ -155,7 +147,6 @@ Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
-let g:webdevicons_enable_nerdtree = 1
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -164,6 +155,8 @@ nnoremap <leader>e :QuickRunExecute<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
+
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
@@ -385,8 +378,8 @@ let g:NERDTreeIndicatorMapCustom = {
 Plug 'sheerun/vim-polyglot'
 
 " Python
-let g:python_host_prog = '/home/thevan96/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/home/thevan96/.pyenv/versions/neovim3/bin/python'
+let g:loaded_python_provider = 0
+let g:python3_host_prog = '/home/thevan96/.pyenv/shims/python3'
 
 " Node
 let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
