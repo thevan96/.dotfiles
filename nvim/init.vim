@@ -251,9 +251,6 @@ let g:coc_global_extensions =
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-prettier',
-      \ 'coc-vimlsp',
-      \ 'coc-solargraph'
       \ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -331,7 +328,7 @@ function! LightlineFilename()
         \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
 
-Plug 'jistr/vim-nerdtred-tabs'
+Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -339,7 +336,6 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$',]
 let NERDTreeMinimalUI = 1
-let NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeWinSize=25
@@ -348,6 +344,7 @@ let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
+let NERDTreeChDirMode=2
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
@@ -355,7 +352,6 @@ nnoremap rr :NERDTreeRefreshRoot<cr>
 nnoremap <leader>fc :NERDTreeFocus<cr>
 nnoremap <leader>ff :NERDTreeFind<cr>
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -385,9 +381,9 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " PHP
 Plug 'stephpy/vim-php-cs-fixer'
-let g:php_cs_fixer_rules = "@PSR2"
 nnoremap <leader>pcd :call PhpCsFixerFixDirectory()<cr>
 nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
+let g:php_cs_fixer_rules = "@PSR2"
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
@@ -412,4 +408,3 @@ let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
 colorscheme onedark
-
