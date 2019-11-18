@@ -331,7 +331,7 @@ function! LightlineFilename()
         \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
 
-Plug 'jistr/vim-nerdtree-tabs'
+Plug 'jistr/vim-nerdtred-tabs'
 let g:nerdtree_tabs_autoclose=0
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -352,9 +352,8 @@ set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
-nnoremap fc :NERDTreeFocus<cr>
+nnoremap <leader>fc :NERDTreeFocus<cr>
 nnoremap <leader>ff :NERDTreeFind<cr>
-autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let g:NERDTreeIndicatorMapCustom = {
@@ -375,7 +374,7 @@ Plug 'sheerun/vim-polyglot'
 
 " Python
 let g:loaded_python_provider = 0
-let g:python3_host_prog = '/home/thevan96/.pyenv/shims/python3'
+let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
 let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
