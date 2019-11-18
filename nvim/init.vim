@@ -15,7 +15,6 @@ set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
 set nobackup noswapfile nowritebackup
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
-set backspace=indent,eol,start
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
@@ -23,10 +22,7 @@ set colorcolumn=80
 set re=1
 set updatetime=200
 set lazyredraw
-set nojoinspaces
 set nowrap
-set ttyfast
-let g:is_posix = 1
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -355,9 +351,9 @@ let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
-nnoremap ff :NERDTreeFind<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 nnoremap fc :NERDTreeFocus<cr>
+nnoremap <leader>ff :NERDTreeFind<cr>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
