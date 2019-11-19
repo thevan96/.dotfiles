@@ -6,7 +6,6 @@ if exists('+termguicolors')
 endif
 syntax on
 set t_Co=256
-set cursorline
 set colorcolumn=80
 set encoding=UTF-8
 set ff=unix
@@ -92,7 +91,7 @@ autocmd BufWritePre * %s/\s\+$//e
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
 " Setup colorscheme
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'laggardkernel/vim-one'
 set background=dark
 
 " Floating Term
@@ -295,7 +294,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onehalfdark',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -411,4 +410,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme onehalfdark
+colorscheme one
