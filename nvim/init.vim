@@ -87,7 +87,7 @@ autocmd BufWritePre * %s/\s\+$//e
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
 " Setup colorscheme
-Plug 'joshdick/onedark.vim'
+Plug 'laggardkernel/vim-one'
 set background=dark
 
 " Floating Term
@@ -290,7 +290,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -404,7 +404,6 @@ let g:vim_markdown_conceal = 0
 let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
-
 call plug#end()
 
-colorscheme onedark
+colorscheme one
