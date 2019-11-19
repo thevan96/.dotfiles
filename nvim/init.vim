@@ -32,7 +32,6 @@ set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd BufEnter * :syntax sync fromstart
 
 let mapleader = ' '
 nnoremap <up> <nop>
