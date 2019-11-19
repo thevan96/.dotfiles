@@ -1,13 +1,19 @@
 call plug#begin()
-set termguicolors
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 syntax on
+set t_Co=256
+set cursorline
+set colorcolumn=80
 set encoding=UTF-8
 set ff=unix
 filetype plugin on
 filetype indent on
 set number relativenumber
 set autoread autowrite
-set cursorline
 set signcolumn=yes
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set hidden
@@ -18,7 +24,6 @@ set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
-set colorcolumn=80
 set re=1
 set updatetime=200
 set lazyredraw
@@ -87,7 +92,7 @@ autocmd BufWritePre * %s/\s\+$//e
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 set background=dark
 
 " Floating Term
@@ -290,7 +295,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'onehalfdark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -406,4 +411,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme one
+colorscheme onehalfdark
