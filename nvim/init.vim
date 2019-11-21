@@ -32,6 +32,7 @@ set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd BufEnter * :syntax sync fromstart
 
 let mapleader = ' '
 nnoremap <up> <nop>
@@ -53,14 +54,14 @@ nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
 nnoremap <esc><esc> :nohlsearch<cr>
-nnoremap bj :bfirst<cr>
-nnoremap bk :blast<cr>
-nnoremap bs :new<cr>
-nnoremap bv :vnew<cr>
-nnoremap bh :bprevious<cr>
-nnoremap bl :bnext<cr>
-nnoremap bx :Bdelete<cr>
-nnoremap tl :tabnext<cr>
+nnoremap gj :bfirst<cr>
+nnoremap gk :blast<cr>
+nnoremap gs :new<cr>
+nnoremap gv :vnew<cr>
+nnoremap gh :bprevious<cr
+nnoremap gl :bnext<cr>
+nnoremap gx :Bdelete<cr>
+nnoremap jl :tabnext<cr>
 nnoremap th :tabprevious<cr>
 nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
@@ -354,7 +355,6 @@ nnoremap tt :NERDTreeToggle<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 nnoremap <leader>fc :NERDTreeFocus<cr>
 nnoremap <leader>ff :NERDTreeFind<cr>
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
