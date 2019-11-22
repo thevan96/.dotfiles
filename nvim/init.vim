@@ -24,7 +24,7 @@ set splitbelow splitright
 set autoindent smartindent
 set mouse=a
 set re=1
-set updatetime=200
+set updatetime=300
 set lazyredraw
 set nowrap
 
@@ -41,8 +41,7 @@ nnoremap <left> <nop>
 nnoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
+inoremap <left> <nop> inoremap <right> <nop>
 vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
@@ -58,7 +57,7 @@ nnoremap gj :bfirst<cr>
 nnoremap gk :blast<cr>
 nnoremap gs :new<cr>
 nnoremap gv :vnew<cr>
-nnoremap gh :bprevious<cr
+nnoremap gh :bprevious<cr>
 nnoremap gl :bnext<cr>
 nnoremap gx :Bdelete<cr>
 nnoremap jl :tabnext<cr>
@@ -216,8 +215,8 @@ let g:VimuxHeight = "20"
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-z>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 nnoremap <leader>js :e ~/dotfiles/UltiSnips/javascript.snippets<cr>
 nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
@@ -351,6 +350,7 @@ let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 let NERDTreeChDirMode=2
 set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 nnoremap <leader>fc :NERDTreeFocus<cr>
