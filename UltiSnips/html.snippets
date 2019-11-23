@@ -5,9 +5,11 @@ snippet html
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>${1}</title>
+    <title>${1:title}</title>
   </head>
-  <body>${2}</body>
+  <body>
+    ${2:content}
+  </body>
 </html>
 endsnippet
 
@@ -18,7 +20,7 @@ snippet template
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>${1}</title>
+    <title>${1:title}</title>
     <link
       rel="stylesheet"
       href="node_modules/bootstrap/dist/css/bootstrap.min.css"
@@ -26,7 +28,7 @@ snippet template
   </head>
   <body>
     <!-- Your code -->
-    ${2}
+    ${2:content}
     <!-- Js -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/popper.js/dist/popper.min.js"></script>
@@ -42,18 +44,18 @@ snippet htmlfull
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>${1}</title>
+    <title>${1:title}</title>
   </head>
   <body>
-    <script src="${2}"> </script>
+    <script src="${2:path}"> </script>
   </body>
 </html>
 endsnippet
 
 snippet cl
-console.log($1);
+console.log(${1:content});
 endsnippet
 
 snippet dw
-document.write($1);
+document.write(${1:content});
 endsnippet
