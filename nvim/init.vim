@@ -68,6 +68,7 @@ nnoremap tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>q :q<cr>
+nnoremap <leader>w :w<cr>
 nnoremap <leader>qa :qa<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
@@ -144,7 +145,7 @@ function! QuickFormat()
   let runner1 ="prettier"
   if extension == "js"
     let runner2 ="semistandard"
-    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." --fix ".file_name.".".extension
+    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." --fix ".file_name.".".extension." | snazzy"
   elseif extension == "php"
     let runner2 ="php-cs-fixer"
     execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." fix --rules=@PSR2 ".file_name.".".extension." && rm .php_cs.cache"
@@ -259,6 +260,7 @@ let g:coc_global_extensions =
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
+      \ 'coc-vimlsp'
       \ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -404,6 +406,13 @@ Plug 'andymass/vim-matchup'
 let g:loaded_matchit = 1
 
 Plug 'ap/vim-css-color'
+
+" Javascript
+Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'othree/yajs.vim'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'thinca/vim-textobj-function-javascript'
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
