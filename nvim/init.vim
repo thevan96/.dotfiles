@@ -67,7 +67,6 @@ nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>qa :qa<cr>
 tnoremap <esc> <c-\><c-n>
@@ -88,10 +87,6 @@ autocmd BufWritePre * %s/\s\+$//e
 
 " Clear register
 command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
-
-" Setup colorscheme
-Plug 'laggardkernel/vim-one'
-set background=dark
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -142,15 +137,46 @@ nnoremap <leader>at :call FloatTerm()<cr>
 " Open node REPL
 nnoremap <leader>an :call FloatTerm('"node"')<cr>
 
+function! QuickFormat()
+  silent! wall
+  let file_name = expand('%:t:r')
+  let extension = expand('%:e')
+  let runner1 ="prettier"
+  if extension == "js"
+    let runner2 ="semistandard"
+    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." --fix ".file_name.".".extension
+  elseif extension == "php"
+    let runner2 ="php-cs-fixer"
+    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." fix --rules=@PSR2 ".file_name.".".extension." && rm .php_cs.cache"
+  elseif extension == "html"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  elseif extension == "css"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  elseif extension == "scss"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  elseif extension == "json"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  elseif extension == "md"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  elseif extension == "py"
+    execute ":! ".runner1." --write ".file_name.".".extension
+  else
+    echoerr "File type not supported!"
+  endif
+  execute ":e!"
+endfunction
+nnoremap <leader>e :call QuickFormat()<cr>
+
+" Setup colorscheme
+Plug 'laggardkernel/vim-one'
+set background=dark
+
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
 
 Plug 'christoomey/vim-tmux-navigator'
-
-Plug 'huytd/vim-quickrun'
-nnoremap <leader>e :QuickRunExecute<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -224,27 +250,6 @@ nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
 Plug 'easymotion/vim-easymotion'
 nmap s <Plug>(easymotion-overwin-f)
 map <leader>l <Plug>(easymotion-bd-jk)
-
-Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'branch': 'release/1.x',
-      \ 'for': [
-      \ 'javascript',
-      \ 'typescript',
-      \ 'css',
-      \ 'less',
-      \ 'scss',
-      \ 'json',
-      \ 'graphql',
-      \ 'markdown',
-      \ 'vue',
-      \ 'lua',
-      \ 'python',
-      \ 'ruby',
-      \ 'html',
-      \ 'swift' ]
-      \ }
-nmap <leader>f <plug>(Prettier)
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
