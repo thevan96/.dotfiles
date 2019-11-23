@@ -228,6 +228,20 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
+Plug 'ctrlpvim/ctrlp.vim'
+nmap <leader>p :CtrlPBuffer<cr>
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+      \ 'file': '\v\.(exe|so|dll)$',
+      \ 'link': 'some_bad_symbolic_links',
+      \ }
+
+Plug 't9md/vim-choosewin'
+nmap <leader>cw :ChooseWin<cr>
+nmap <leader>cs :ChooseWinSwap<cr>
+
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
@@ -237,6 +251,8 @@ Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
 let g:VimuxHeight = "20"
+
+Plug 'pbrisbin/vim-mkdir'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
