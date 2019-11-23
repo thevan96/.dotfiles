@@ -24,9 +24,11 @@ set splitbelow splitright
 set autoindent smartindent
 set mouse=a
 set re=1
-set updatetime=300
+set updatetime=100
 set lazyredraw
 set nowrap
+set synmaxcol=128
+syntax sync minlines=256
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -41,7 +43,8 @@ nnoremap <left> <nop>
 nnoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
-inoremap <left> <nop> inoremap <right> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
@@ -107,8 +110,6 @@ function! FloatTerm(...)
         \ 'height': height + 2,
         \ 'style': 'minimal'
         \ }
-  let border_buf = nvim_create_buf(v:false, v:true)
-  let s:float_term_border_win = nvim_open_win(border_buf, v:true, border_opts)
   " Terminal Window
   let opts = {
         \ 'relative': 'editor',
@@ -118,12 +119,18 @@ function! FloatTerm(...)
         \ 'height': height,
         \ 'style': 'minimal'
         \ }
+  let top = "╭" . repeat("─", width + 2) . "╮"
+  let mid = "│" . repeat(" ", width + 2) . "│"
+  let bot = "╰" . repeat("─", width + 2) . "╯"
+  let lines = [top] + repeat([mid], height) + [bot]
+  let bbuf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_lines(bbuf, 0, -1, v:true, lines)
+  let s:float_term_border_win = nvim_open_win(bbuf, v:true, border_opts)
   let buf = nvim_create_buf(v:false, v:true)
   let s:float_term_win = nvim_open_win(buf, v:true, opts)
   " Styling
-  hi FloatTermNormal term=None guibg=#2d3d45
-  call setwinvar(s:float_term_border_win, '&winhl', 'Normal:FloatTermNormal')
-  call setwinvar(s:float_term_win, '&winhl', 'Normal:FloatTermNormal')
+  call setwinvar(s:float_term_border_win, '&winhl', 'Normal:Normal')
+  call setwinvar(s:float_term_win, '&winhl', 'Normal:Normal')
   if a:0 == 0
     terminal
   else
@@ -133,10 +140,9 @@ function! FloatTerm(...)
   " Close border window when terminal window close
   autocmd TermClose * ++once :bd! | call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
-" Open terminal
 nnoremap <leader>at :call FloatTerm()<cr>
-" Open node REPL
 nnoremap <leader>an :call FloatTerm('"node"')<cr>
+nnoremap <leader>ag :call FloatTerm('"tig"')<cr>
 
 function! QuickFormat()
   silent! wall
@@ -187,6 +193,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
 
+Plug 'andymass/vim-matchup'
+let g:loaded_matchit = 1
+
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
@@ -219,21 +228,10 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
-Plug 'ctrlpvim/ctrlp.vim'
-nmap <leader>p :CtrlPBuffer<cr>
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_user_command = 'find %s -type f'
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-      \ 'file': '\v\.(exe|so|dll)$',
-      \ 'link': 'some_bad_symbolic_links',
-      \ }
-
-Plug 't9md/vim-choosewin'
-nmap <leader>cw :ChooseWin<cr>
-nmap <leader>cs :ChooseWinSwap<cr>
-
-Plug 'pbrisbin/vim-mkdir'
+Plug 'haya14busa/incsearch.vim'
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
@@ -399,19 +397,11 @@ let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
-
 Plug 'othree/html5.vim'
-
-Plug 'andymass/vim-matchup'
-let g:loaded_matchit = 1
-
 Plug 'ap/vim-css-color'
 
 " Javascript
-Plug 'pangloss/vim-javascript'
 Plug 'jelera/vim-javascript-syntax'
-Plug 'othree/yajs.vim'
-Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'thinca/vim-textobj-function-javascript'
 
 " Markdown

@@ -16,7 +16,7 @@ alias bs="browser-sync start --server --files '*' --port "
 alias findPort="sudo lsof -i -P -n"
 
 # Default vim text editor
-export EDITOR=vim
+export EDITOR=vi
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
