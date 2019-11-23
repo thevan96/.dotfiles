@@ -24,7 +24,7 @@ set splitbelow splitright
 set autoindent smartindent
 set mouse=a
 set re=1
-set updatetime=100
+set updatetime=150
 set lazyredraw
 set nowrap
 set synmaxcol=128
@@ -253,6 +253,17 @@ map <leader>vq :VimuxCloseRunner<CR>
 let g:VimuxHeight = "20"
 
 Plug 'pbrisbin/vim-mkdir'
+
+Plug 'terryma/vim-multiple-cursors'
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
