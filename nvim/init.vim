@@ -70,9 +70,11 @@ nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <leader>q :q<cr>
 nnoremap <leader>w :w<cr>
+nnoremap <leader>qq :q<cr>
 nnoremap <leader>qa :qa<cr>
+nnoremap <leader>y :registers<cr>
+nnoremap <leader>Y :Cr<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
