@@ -48,8 +48,8 @@ vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
 vnoremap <right> <nop>
-nnoremap j gj
 nnoremap k gk
+nnoremap j gj
 nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
@@ -62,7 +62,7 @@ nnoremap gv :vnew<cr>
 nnoremap gh :bprevious<cr>
 nnoremap gl :bnext<cr>
 nnoremap gx :Bdelete<cr>
-nnoremap jl :tabnext<cr>
+nnoremap tl :tabnext<cr>
 nnoremap th :tabprevious<cr>
 nnoremap tj :tabfirst<cr>
 nnoremap tk :tablast<cr>
@@ -442,4 +442,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme ayu
+colorscheme base16-ocean-mono

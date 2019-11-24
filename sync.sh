@@ -1,5 +1,6 @@
 #!/bin/bash
 ln -sf ~/dotfiles/nvim/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/nvim/colors/base16-ocean-mono.vim ~/.config/nvim/colors/base16-ocean-mono.vim
 ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
