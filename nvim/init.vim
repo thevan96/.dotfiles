@@ -442,4 +442,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme base16-ocean-mono
+colorscheme ayu
