@@ -176,7 +176,7 @@ endfunction
 nnoremap <leader>e :call QuickFormat()<cr>
 
 " Setup colorscheme
-Plug 'ayu-theme/ayu-vim'
+colorscheme ayu
 let ayucolor="mirage"
 set background=dark
 
@@ -442,4 +442,3 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme ayu
