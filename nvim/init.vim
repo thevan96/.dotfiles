@@ -177,7 +177,8 @@ endfunction
 nnoremap <leader>e :call QuickFormat()<cr>
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
+Plug 'ayu-theme/ayu-vim'
+let ayucolor="mirage"
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -327,7 +328,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'ayu',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -442,4 +443,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme one
+colorscheme ayu
