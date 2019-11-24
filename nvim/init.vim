@@ -15,6 +15,7 @@ set number relativenumber
 set autoread autowrite
 set signcolumn=yes
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set cursorline
 set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
@@ -27,8 +28,6 @@ set re=1
 set updatetime=150
 set lazyredraw
 set nowrap
-set synmaxcol=128
-syntax sync minlines=256
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -82,8 +81,8 @@ tnoremap <c-k> <c-\><c-n><c-w>k
 tnoremap <c-l> <c-\><c-n><c-w>l
 nnoremap <c-a-k> :resize +2<cr>
 nnoremap <c-a-j> :resize -2<cr>
-nnoremap <c-a-l> :vertical resize +2<cr>
 nnoremap <c-a-h> :vertical resize -2<cr>
+nnoremap <c-a-l> :vertical resize +2<cr>
 
 "replace the word under cursor
 nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
