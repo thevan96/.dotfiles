@@ -1,8 +1,6 @@
 #!/bin/bash
 ln -sf ~/dotfiles/nvim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/nvim/colors/base16-ocean-mono.vim ~/.config/nvim/colors/base16-ocean-mono.vim
-ln -sf ~/dotfiles/nvim/colors/ayu.vim ~/.config/nvim/colors/ayu.vim
-ln -sf ~/dotfiles/nvim/autoload/lightline/colorscheme/ayu.vim ~/.config/nvim/autoload/lightline/colorscheme/ayu.vim
 ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 
 ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
