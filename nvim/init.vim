@@ -173,10 +173,12 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>e :call QuickFormat()<cr>
+nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
-Plug 'joshdick/onedark.vim'
+" Plug 'joshdick/onedark.vim'
+Plug 'rakr/vim-one'
+let g:quantum_black=1
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -188,8 +190,6 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['┊']
@@ -211,6 +211,33 @@ Plug 'matze/vim-move'
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
+
+" Define new text object
+Plug 'kana/vim-textobj-user'
+
+Plug 'vimtaku/vim-textobj-keyvalue'
+
+Plug 'bkad/CamelCaseMotion'
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
 
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -303,11 +330,6 @@ nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
 
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
 nmap <leader>rn <Plug>(coc-rename)
 
 " Use K to show documentation in preview window
@@ -326,7 +348,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -441,4 +463,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme onedark
+colorscheme one

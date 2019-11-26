@@ -14,7 +14,7 @@ alias hc="history -c"
 alias ktmux="tmux kill-server"
 alias bs="browser-sync start --server --files '*' --port "
 alias findPort="sudo lsof -i -P -n"
-alias testVim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+alias vimTest="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 
 # Default vim text editor
 export EDITOR=vi
