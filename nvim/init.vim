@@ -202,10 +202,9 @@ silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
 
-Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
 
-Plug 'sickill/vim-pasta'
-let g:pasta_enabled_filetypes = ['ruby', 'javascript', 'php', 'vim', 'html', 'css', 'scss', 'sh']
+Plug 'tpope/vim-commentary'
 
 Plug 'matze/vim-move'
 
@@ -256,8 +255,10 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
+Plug 'FelikZ/ctrlp-py-matcher'
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 Plug 'ctrlpvim/ctrlp.vim'
-nmap <leader>p :CtrlPBuffer<cr>
+nmap <leader>b :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = 'find %s -type f'
 let g:ctrlp_custom_ignore = {
