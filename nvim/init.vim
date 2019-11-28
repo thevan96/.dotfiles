@@ -69,6 +69,9 @@ nnoremap tk :tablast<cr>
 nnoremap tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+nnoremap <leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
+nnoremap <leader>zshrc :e ~/dotfiles/zsh/.zshrc<cr>
+nnoremap <leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>qq :q<cr>
 nnoremap <leader>qa :qa<cr>
@@ -211,33 +214,6 @@ Plug 'matze/vim-move'
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 
-" Define new text object
-Plug 'kana/vim-textobj-user'
-
-Plug 'vimtaku/vim-textobj-keyvalue'
-
-Plug 'bkad/CamelCaseMotion'
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
-map <silent> ge <Plug>CamelCaseMotion_ge
-sunmap w
-sunmap b
-sunmap e
-sunmap ge
-omap <silent> iw <Plug>CamelCaseMotion_iw
-xmap <silent> iw <Plug>CamelCaseMotion_iw
-omap <silent> ib <Plug>CamelCaseMotion_ib
-xmap <silent> ib <Plug>CamelCaseMotion_ib
-omap <silent> ie <Plug>CamelCaseMotion_ie
-xmap <silent> ie <Plug>CamelCaseMotion_ie
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
 Plug 'mileszs/ack.vim'
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -332,6 +308,12 @@ nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
 
 nmap <leader>rn <Plug>(coc-rename)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>

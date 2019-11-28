@@ -15,6 +15,7 @@ alias ktmux="tmux kill-server"
 alias bs="browser-sync start --server --files '*' --port "
 alias findPort="sudo lsof -i -P -n"
 alias vimTest="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+alias fastJs="touch index.html script.js && vi *"
 
 # Default vim text editor
 export EDITOR=vi
