@@ -365,11 +365,8 @@ let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 highlight! link NERDTreeFlags NERDTreeDir
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 nnoremap tt :NERDTreeToggle<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
-nnoremap <leader>fc :NERDTreeFocus<cr>
-nnoremap <leader>ff :NERDTreeFind<cr>
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",

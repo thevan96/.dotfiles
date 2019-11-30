@@ -41,6 +41,11 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # FZF
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_COMMAND='fd --type f'
+
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
