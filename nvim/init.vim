@@ -5,7 +5,6 @@ if exists('+termguicolors')
   set termguicolors
 endif
 syntax on
-set t_Co=256
 set colorcolumn=80
 set encoding=UTF-8
 set ff=unix
@@ -61,7 +60,7 @@ nnoremap gs :new<cr>
 nnoremap gv :vnew<cr>
 nnoremap gh :bprevious<cr>
 nnoremap gl :bnext<cr>
-nnoremap gx :Bdelete<cr>
+nnoremap X :Bdelete<cr>
 nnoremap tl :tabnext<cr>
 nnoremap th :tabprevious<cr>
 nnoremap tj :tabfirst<cr>
@@ -214,13 +213,6 @@ Plug 'matze/vim-move'
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 
-Plug 'mileszs/ack.vim'
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-cnoreabbrev Ack Ack!
-nnoremap <leader>A :Ack!<Space>
-
 Plug 'moll/vim-bbye'
 
 Plug 'tpope/vim-fugitive'
@@ -230,18 +222,6 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
-
-Plug 'FelikZ/ctrlp-py-matcher'
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-Plug 'ctrlpvim/ctrlp.vim'
-nmap <leader>b :CtrlPBuffer<cr>
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_user_command = 'find %s -type f'
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-      \ 'file': '\v\.(exe|so|dll)$',
-      \ 'link': 'some_bad_symbolic_links',
-      \ }
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
@@ -361,6 +341,16 @@ endfunction
 Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+nnoremap <M-f> :Files<cr>
+nnoremap <M-a> :Ag<cr>
+nnoremap <M-b> :Buffers<cr>
+nnoremap <M-c> :Colors<cr>
+nnoremap <M-m> :Maps<cr>
+nnoremap <M-l> :Lines<cr>
+nnoremap <M-w> :Windows<cr>
+
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
@@ -374,8 +364,6 @@ let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
-let NERDTreeChDirMode=2
-set autochdir
 highlight! link NERDTreeFlags NERDTreeDir
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 nnoremap tt :NERDTreeToggle<cr>
