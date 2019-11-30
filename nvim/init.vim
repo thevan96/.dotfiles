@@ -20,7 +20,7 @@ set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
 set nobackup noswapfile nowritebackup
-set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set list listchars=eol:¬,tab:>·
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
