@@ -75,8 +75,6 @@ nnoremap <leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>qq :q<cr>
 nnoremap <leader>qa :qa<cr>
-nnoremap <leader>y :registers<cr>
-nnoremap <leader>Y :Cr<cr>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
@@ -94,7 +92,9 @@ nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 autocmd BufWritePre * %s/\s\+$//e
 
 " Clear register
-command! Cr for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+command! ClearRegister for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+nnoremap <leader>y :registers<cr>
+nnoremap <leader>Y :ClearRegister<cr>
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -219,7 +219,7 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+nnoremap <leader>A :Ack!<Space>
 
 Plug 'moll/vim-bbye'
 
@@ -258,17 +258,6 @@ map <leader>vq :VimuxCloseRunner<CR>
 let g:VimuxHeight = "20"
 
 Plug 'pbrisbin/vim-mkdir'
-
-Plug 'terryma/vim-multiple-cursors'
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<A-n>'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<A-n>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
