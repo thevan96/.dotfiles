@@ -18,8 +18,8 @@ set cursorline
 set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
+set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set nobackup noswapfile nowritebackup
-set list listchars=eol:¬,tab:>·
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
@@ -27,6 +27,8 @@ set re=1
 set updatetime=150
 set lazyredraw
 set nowrap
+vnoremap < <gv
+vnoremap > >gv
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -352,6 +354,9 @@ nnoremap <M-c> :Colors<cr>
 nnoremap <M-m> :Maps<cr>
 nnoremap <M-l> :Lines<cr>
 nnoremap <M-w> :Windows<cr>
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
