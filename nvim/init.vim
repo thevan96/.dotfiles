@@ -345,6 +345,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <M-f> :Files<cr>
 nnoremap <M-a> :Ag<cr>
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--hidden --ignore .git --ignore node_modules', <bang>0)
 nnoremap <M-b> :Buffers<cr>
 nnoremap <M-c> :Colors<cr>
 nnoremap <M-m> :Maps<cr>
