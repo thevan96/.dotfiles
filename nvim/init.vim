@@ -235,7 +235,7 @@ map g/ <Plug>(incsearch-stay)
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = "20"
+let g:VimuxHeight = "25"
 
 Plug 'pbrisbin/vim-mkdir'
 
