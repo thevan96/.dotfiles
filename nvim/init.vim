@@ -344,6 +344,7 @@ let g:nerdtree_tabs_autoclose=0
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <M-f> :Files<cr>
+command! -bang -nargs=* Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 nnoremap <M-a> :Ag<cr>
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--hidden --ignore .git --ignore node_modules', <bang>0)
 nnoremap <M-b> :Buffers<cr>
