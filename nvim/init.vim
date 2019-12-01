@@ -180,9 +180,7 @@ endfunction
 nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
-" Plug 'joshdick/onedark.vim'
 Plug 'rakr/vim-one'
-let g:quantum_black=1
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -237,7 +235,7 @@ map g/ <Plug>(incsearch-stay)
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = "25"
+let g:VimuxHeight = "22"
 
 Plug 'pbrisbin/vim-mkdir'
 
