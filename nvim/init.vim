@@ -151,27 +151,27 @@ nnoremap <leader>ag :call FloatTerm('"tig"')<cr>
 
 function! QuickFormat()
   silent! wall
-  let file_name = expand('%:t:r')
+  let fullpath = expand('%:p')
   let extension = expand('%:e')
   let runner1 ="prettier"
   if extension == "js"
     let runner2 ="semistandard"
-    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." --fix ".file_name.".".extension." | snazzy"
+    execute ":! ".runner1." --write ".fullpath ." && ".runner2." --fix ".fullpath." | snazzy"
   elseif extension == "php"
     let runner2 ="php-cs-fixer"
-    execute ":! ".runner1." --write ".file_name.".".extension." && ".runner2." fix --rules=@PSR2 ".file_name.".".extension." && rm .php_cs.cache"
+    execute ":! ".runner1." --write ".fullpath." && ".runner2." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
   elseif extension == "html"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "css"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "scss"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "json"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "md"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "py"
-    execute ":! ".runner1." --write ".file_name.".".extension
+    execute ":! ".runner1." --write ".fullpath
   else
     echoerr "File type not supported!"
   endif
@@ -180,7 +180,7 @@ endfunction
 nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
-Plug 'rakr/vim-one'
+Plug 'laggardkernel/vim-one'
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -344,9 +344,7 @@ let g:nerdtree_tabs_autoclose=0
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <M-f> :Files<cr>
-command! -bang -nargs=* Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 nnoremap <M-a> :Ag<cr>
-command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--hidden --ignore .git --ignore node_modules', <bang>0)
 nnoremap <M-b> :Buffers<cr>
 nnoremap <M-c> :Colors<cr>
 nnoremap <M-m> :Maps<cr>
@@ -359,6 +357,8 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let NERDTreeIgnore = ['^\.git$','^node_modules$',]
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1

@@ -11,11 +11,13 @@ alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias pl="php -S localhost:7000"
 alias pf="prettier ./*.php --write"
 alias hc="history -c"
-alias ktmux="tmux kill-server"
 alias bs="browser-sync start --server --files '*' --port "
 alias findPort="sudo lsof -i -P -n"
 alias vimTest="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias fastJs="touch index.html script.js && vi *"
+alias tm="tmux"
+alias tma="tmux a"
+alias tmk="tmux kill-server"
 
 # Default vim text editor
 export EDITOR=vi

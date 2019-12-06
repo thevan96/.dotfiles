@@ -37,12 +37,19 @@ document.getElementById('${1:content}')
 endsnippet
 
 snippet ls
-console.log('Load script ... ');
+console.log('Load $1 ... ');
+$2
 endsnippet
 
 snippet swapMatrix
 ${1:arr} = $1[0].map((col, index) => $1.map(row => row[index]));
 endsnippet
+
+snippet ust
+'use strict'
+$1
+endsnippet
+
 snippet ---
-console.log('----------------------------------------------------------------');
+// -------------------------------------------------------------------------- //
 endsnippet
