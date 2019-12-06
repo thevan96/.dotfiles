@@ -181,7 +181,6 @@ nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
 Plug 'laggardkernel/vim-one'
-Plug 'chriskempson/vim-tomorrow-theme'
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -427,4 +426,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme Tomorrow-Night-Bright
+colorscheme one
