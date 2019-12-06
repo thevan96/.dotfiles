@@ -14,7 +14,7 @@ set number relativenumber
 set autoread autowrite
 set signcolumn=yes
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set cursorline
+set cursorline cursorcolumn
 set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
@@ -181,6 +181,7 @@ nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
 Plug 'laggardkernel/vim-one'
+Plug 'chriskempson/vim-tomorrow-theme'
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -417,6 +418,7 @@ Plug 'jelera/vim-javascript-syntax'
 Plug 'thinca/vim-textobj-function-javascript'
 
 " Markdown
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
@@ -425,4 +427,4 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 call plug#end()
 
-colorscheme one
+colorscheme Tomorrow-Night-Bright
