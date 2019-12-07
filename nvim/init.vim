@@ -180,7 +180,8 @@ endfunction
 nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
+Plug 'joshdick/onedark.vim'
+Plug 'whatyouhide/vim-gotham'
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -300,7 +301,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'gotham',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -357,7 +358,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let NERDTreeIgnore = ['^\.git$','^node_modules$',]
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
@@ -411,10 +411,6 @@ Plug 'lilydjwg/colorizer'
 Plug 'othree/html5.vim'
 Plug 'ap/vim-css-color'
 
-" Javascript
-Plug 'jelera/vim-javascript-syntax'
-Plug 'thinca/vim-textobj-function-javascript'
-
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'plasticboy/vim-markdown'
@@ -423,6 +419,13 @@ let g:vim_markdown_conceal = 0
 let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
+
+" Text object
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-line'
+Plug 'jasonlong/vim-textobj-css'
+Plug 'whatyouhide/vim-textobj-xmlattr'
+
 call plug#end()
 
-colorscheme one
+colorscheme gotham
