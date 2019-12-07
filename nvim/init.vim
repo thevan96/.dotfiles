@@ -343,13 +343,13 @@ let g:nerdtree_tabs_autoclose=0
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-nnoremap <M-f> :Files<cr>
-nnoremap <M-a> :Ag<cr>
-nnoremap <M-b> :Buffers<cr>
-nnoremap <M-c> :Colors<cr>
-nnoremap <M-m> :Maps<cr>
-nnoremap <M-l> :Lines<cr>
-nnoremap <M-w> :Windows<cr>
+nnoremap ff :Files<cr>
+nnoremap fa :Ag<cr>
+nnoremap fb :Buffers<cr>
+nnoremap fc :Colors<cr>
+nnoremap fm :Maps<cr>
+nnoremap fl :Lines<cr>
+nnoremap fw :Windows<cr>
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
@@ -357,7 +357,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
-autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let NERDTreeIgnore = ['^\.git$','^node_modules$',]
 let NERDTreeMinimalUI = 1
