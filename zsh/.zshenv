@@ -13,10 +13,15 @@ alias bs="browser-sync start --server --files '*' --port "
 alias find-port="sudo lsof -i -P -n"
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias kill-tmux="tmux kill-server"
-rp(){
+rp (){
   php -S localhost:"$1"
 }
 
+zeal-docs-fix () {
+    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
+    find . -iname 'react-main*.js' -exec rm '{}' \;
+    popd >/dev/null || exit
+}
 # Default vim text editor
 export EDITOR=vi
 
