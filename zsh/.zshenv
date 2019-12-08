@@ -8,12 +8,14 @@ alias update-all="sudo apt -y update && sudo apt -y upgrade && sudo apt -y autoc
 alias standard-log="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
 alias rl-zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias rp="php -S localhost:"
 alias hc="history -c"
 alias bs="browser-sync start --server --files '*' --port "
 alias find-port="sudo lsof -i -P -n"
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias kill-tmux="tmux kill-server"
+rp(){
+  php -S localhost:"$1"
+}
 
 # Default vim text editor
 export EDITOR=vi

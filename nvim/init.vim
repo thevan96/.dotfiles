@@ -356,20 +356,19 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['^\.git$','^node_modules$',]
+let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeWinSize=25
 let g:NERDTreeHighlightCursorline = 0
-let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap tt :NERDTreeToggle<cr>
+nnoremap tf :NERDTreeFocus<cr>
 nnoremap rr :NERDTreeRefreshRoot<cr>
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
