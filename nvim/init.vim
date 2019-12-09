@@ -423,7 +423,11 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
 Plug 'jasonlong/vim-textobj-css'
 Plug 'whatyouhide/vim-textobj-xmlattr'
-
+Plug 'glts/vim-textobj-comment'
+Plug 'adriaanzon/vim-textobj-matchit'
+runtime macros/matchit.vim
+Plug 'akiyan/vim-textobj-php'
+Plug 'glts/vim-textobj-indblock'
 call plug#end()
 
 colorscheme onedark
