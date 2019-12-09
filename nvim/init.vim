@@ -51,23 +51,23 @@ vnoremap <left> <nop>
 vnoremap <right> <nop>
 nnoremap k gk
 nnoremap j gj
-nnoremap <c-j> <c-w><c-j>
-nnoremap <c-k> <c-w><c-k>
-nnoremap <c-l> <c-w><c-l>
-nnoremap <c-h> <c-w><c-h>
-nnoremap <esc><esc> :nohlsearch<cr>
-nnoremap gj :bfirst<cr>
-nnoremap gk :blast<cr>
-nnoremap gs :new<cr>
-nnoremap gv :vnew<cr>
-nnoremap gh :bprevious<cr>
-nnoremap gl :bnext<cr>
-nnoremap X :Bdelete<cr>
-nnoremap tl :tabnext<cr>
-nnoremap th :tabprevious<cr>
-nnoremap tj :tabfirst<cr>
-nnoremap tk :tablast<cr>
-nnoremap tx :tabclose<cr>
+nnoremap <silent><c-j> <c-w><c-j>
+nnoremap <silent><c-k> <c-w><c-k>
+nnoremap <silent><c-l> <c-w><c-l>
+nnoremap <silent><c-h> <c-w><c-h>
+nnoremap <silent><esc><esc> :nohlsearch<cr>
+nnoremap <silent>gj :bfirst<cr>
+nnoremap <silent>gk :blast<cr>
+nnoremap <silent>gs :new<cr>
+nnoremap <silent>gv :vnew<cr>
+nnoremap <silent>gh :bprevious<cr>
+nnoremap <silent>gl :bnext<cr>
+nnoremap <silent>X :Bdelete<cr>
+nnoremap <silent>tl :tabnext<cr>
+nnoremap <silent>th :tabprevious<cr>
+nnoremap <silent>tj :tabfirst<cr>
+nnoremap <silent>tk :tablast<cr>
+nnoremap <silent>tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
@@ -181,7 +181,6 @@ nnoremap <leader>f :call QuickFormat()<cr>
 
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
-Plug 'whatyouhide/vim-gotham'
 set background=dark
 
 Plug 'ryanoasis/vim-devicons'
@@ -301,7 +300,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'gotham',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
       \ },
@@ -427,4 +426,4 @@ Plug 'whatyouhide/vim-textobj-xmlattr'
 
 call plug#end()
 
-colorscheme gotham
+colorscheme onedark
