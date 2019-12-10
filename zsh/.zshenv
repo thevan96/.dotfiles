@@ -13,6 +13,9 @@ alias bs="browser-sync start --server --files '*' --port "
 alias find-port="sudo lsof -i -P -n"
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias kill-tmux="tmux kill-server"
+alias tmBegin="tmux new -s Coding -n Main"
+alias tmKill="tmux kill-session -a"
+
 rp (){
   php -S localhost:"$1"
 }

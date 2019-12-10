@@ -10,7 +10,7 @@ set encoding=UTF-8
 set ff=unix
 filetype plugin on
 filetype indent on
-set number relativenumber
+set number
 set autoread autowrite
 set signcolumn=yes
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
@@ -29,6 +29,8 @@ set lazyredraw
 set nowrap
 vnoremap < <gv
 vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -86,11 +88,19 @@ nnoremap <c-a-j> :resize -2<cr>
 nnoremap <c-a-h> :vertical resize -2<cr>
 nnoremap <c-a-l> :vertical resize +2<cr>
 
-"replace the word under cursor
-nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
-
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
+
+" Smarter cursorline
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
+
+" Faster keyword completion
+set complete-=i   " disable scanning included files
+set complete-=t   " disable searching tags
+
+" Repeat cli
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " Clear register
 command! ClearRegister for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
@@ -189,6 +199,8 @@ if exists("g:loaded_webdevicons")
 endif
 
 Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_save_on_switch = 2
+let g:tmux_navigator_disable_when_zoomed = 1
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
@@ -223,6 +235,8 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
+Plug 'vim-vdebug/vdebug'
+
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
@@ -235,7 +249,6 @@ map g/ <Plug>(incsearch-stay)
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = "22"
 
 Plug 'pbrisbin/vim-mkdir'
 
@@ -248,8 +261,9 @@ nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
 
 Plug 'easymotion/vim-easymotion'
-nmap s <Plug>(easymotion-overwin-f)
+nmap s <Plug>(easymotion-overwin-f2)
 map <leader>l <Plug>(easymotion-bd-jk)
+let g:EasyMotion_smartcase = 1
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -346,16 +360,17 @@ Plug 'junegunn/fzf.vim'
 nnoremap ff :Files<cr>
 nnoremap fa :Ag<cr>
 nnoremap fb :Buffers<cr>
-nnoremap fc :Colors<cr>
 nnoremap fm :Maps<cr>
 nnoremap fl :Lines<cr>
 nnoremap fw :Windows<cr>
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
@@ -404,6 +419,11 @@ let g:php_cs_fixer_rules = "@PSR2"
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
+Plug 'captbaritone/better-indent-support-for-php-with-html'
+Plug 'StanAngeloff/php.vim'
+Plug '2072/PHP-Indenting-for-VIm'
+Plug 'arnaud-lb/vim-php-namespace'
+
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
 Plug 'othree/html5.vim'
@@ -423,11 +443,12 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
 Plug 'jasonlong/vim-textobj-css'
 Plug 'whatyouhide/vim-textobj-xmlattr'
-Plug 'glts/vim-textobj-comment'
 Plug 'adriaanzon/vim-textobj-matchit'
 runtime macros/matchit.vim
 Plug 'akiyan/vim-textobj-php'
 Plug 'glts/vim-textobj-indblock'
+Plug 'sgur/vim-textobj-parameter'
+let g:vim_textobj_parameter_mapping = 'A'
 call plug#end()
 
 colorscheme onedark
