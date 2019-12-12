@@ -8,6 +8,7 @@ syntax on
 set colorcolumn=80
 set encoding=UTF-8
 set ff=unix
+set nocompatible
 filetype plugin on
 filetype indent on
 set number
@@ -24,13 +25,12 @@ set splitbelow splitright
 set autoindent smartindent
 set mouse=a
 set re=1
-set updatetime=150
+set updatetime=100
 set lazyredraw
 set nowrap
-vnoremap < <gv
-vnoremap > >gv
-xnoremap < <gv
-xnoremap > >gv
+set linebreak
+set showmode
+set virtualedit=block
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -51,13 +51,20 @@ vnoremap <up> <nop>
 vnoremap <down> <nop>
 vnoremap <left> <nop>
 vnoremap <right> <nop>
+vnoremap < <gv
+vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
+nnoremap <F1> <nop>
+nnoremap Q <nop>
+nnoremap K <nop>
 nnoremap k gk
 nnoremap j gj
 nnoremap <silent><c-j> <c-w><c-j>
 nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
 nnoremap <silent><c-h> <c-w><c-h>
-nnoremap <silent><esc><esc> :nohlsearch<cr>
+nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gj :bfirst<cr>
 nnoremap <silent>gk :blast<cr>
 nnoremap <silent>gs :new<cr>
@@ -65,11 +72,6 @@ nnoremap <silent>gv :vnew<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gl :bnext<cr>
 nnoremap <silent>X :Bdelete<cr>
-nnoremap <silent>tl :tabnext<cr>
-nnoremap <silent>th :tabprevious<cr>
-nnoremap <silent>tj :tabfirst<cr>
-nnoremap <silent>tk :tablast<cr>
-nnoremap <silent>tx :tabclose<cr>
 nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
@@ -78,15 +80,23 @@ nnoremap <leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>qq :q<cr>
 nnoremap <leader>qa :qa<cr>
+nnoremap Y y$
+nnoremap J mzJ`z
+nnoremap n nzz
+nnoremap } }zz
+nnoremap N Nzz
+nnoremap } }zz
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-k>j
 tnoremap <c-k> <c-\><c-n><c-w>k
 tnoremap <c-l> <c-\><c-n><c-w>l
-nnoremap <c-a-k> :resize +2<cr>
-nnoremap <c-a-j> :resize -2<cr>
-nnoremap <c-a-h> :vertical resize -2<cr>
-nnoremap <c-a-l> :vertical resize +2<cr>
+
+" windows creation
+" create horizontal window
+nnoremap <leader>ws <c-w>s
+" create vertival window
+nnoremap <leader>wv <c-w>v
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
@@ -99,12 +109,8 @@ autocmd InsertEnter,WinLeave * set nocursorline
 set complete-=i   " disable scanning included files
 set complete-=t   " disable searching tags
 
-" Repeat cli
-nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-
 " Clear register
 command! ClearRegister for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
-nnoremap <leader>y :registers<cr>
 nnoremap <leader>Y :ClearRegister<cr>
 
 " Floating Term
@@ -215,6 +221,12 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
+map <leader>" ysiw"<cr>
+map <leader>' ysiw'<cr>
+map <leader>l" yss"<cr>
+map <leader>l' yss'<cr>
+
+Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -222,11 +234,15 @@ Plug 'tpope/vim-commentary'
 
 Plug 'matze/vim-move'
 
+Plug 'yangmillstheory/vim-snipe'
+map <leader><leader>f <Plug>(snipe-f)
+
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 
 Plug 'moll/vim-bbye'
 
+Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 nnoremap <leader>ggn :GitGutterNextHunk<CR>
@@ -235,20 +251,32 @@ nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
+Plug 'tpope/vim-eunuch'
+
 Plug 'vim-vdebug/vdebug'
+
+Plug 'terryma/vim-multiple-cursors'
+
+Plug 'simeji/winresizer'
+
+Plug 'machakann/vim-highlightedyank'
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
+Plug 'junegunn/vim-peekaboo'
+
+Plug 'benmills/vimux'
+map <leader>vp :VimuxPromptCommand<CR>
+map <leader>vl :VimuxRunLastCommand<CR>
+map <leader>vz :VimuxZoomRunner<CR>
+map <Leader>vq :VimuxCloseRunner<CR>
+
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
-
-Plug 'benmills/vimux'
-map <leader>vp :VimuxPromptCommand<CR>
-map <leader>vq :VimuxCloseRunner<CR>
 
 Plug 'pbrisbin/vim-mkdir'
 
@@ -357,20 +385,19 @@ let g:nerdtree_tabs_autoclose=0
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-nnoremap ff :Files<cr>
-nnoremap fa :Ag<cr>
-nnoremap fb :Buffers<cr>
-nnoremap fm :Maps<cr>
-nnoremap fl :Lines<cr>
-nnoremap fw :Windows<cr>
+nnoremap <leader>ff :Files<cr>
+nnoremap <leader>fa :Ag<cr>
+nnoremap <leader>fb :Buffers<cr>
+nnoremap <leader>fm :Maps<cr>
+nnoremap <leader>fl :Lines<cr>
+nnoremap <leader>fc :Colors<cr>
+nnoremap <leader>fw :Windows<cr>
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
@@ -419,14 +446,12 @@ let g:php_cs_fixer_rules = "@PSR2"
 let g:php_cs_fixer_php_path = "php"
 let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
 
-Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'StanAngeloff/php.vim'
-Plug '2072/PHP-Indenting-for-VIm'
 Plug 'arnaud-lb/vim-php-namespace'
+Plug 'adoy/vim-php-refactoring-toolbox'
+Plug 'Rican7/php-doc-modded'
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
-Plug 'othree/html5.vim'
 Plug 'ap/vim-css-color'
 
 " Markdown
@@ -438,17 +463,29 @@ let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 
-" Text object
+"Text object
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-line'
-Plug 'jasonlong/vim-textobj-css'
-Plug 'whatyouhide/vim-textobj-xmlattr'
-Plug 'adriaanzon/vim-textobj-matchit'
-runtime macros/matchit.vim
-Plug 'akiyan/vim-textobj-php'
-Plug 'glts/vim-textobj-indblock'
-Plug 'sgur/vim-textobj-parameter'
-let g:vim_textobj_parameter_mapping = 'A'
+Plug 'kana/vim-textobj-line' "key l
+Plug 'jasonlong/vim-textobj-css' "key c
+Plug 'whatyouhide/vim-textobj-xmlattr' "key x
+Plug 'adriaanzon/vim-textobj-matchit' "key %
+xmap a%  <Plug>(textobj-matchit-a)
+omap a%  <Plug>(textobj-matchit-a)
+xmap i%  <Plug>(textobj-matchit-i)
+omap i%  <Plug>(textobj-matchit-i)
+
+Plug 'glts/vim-textobj-comment' " key m
+let g:textobj_comment_no_default_key_mappings = 1
+xmap am <Plug>(textobj-comment-a)
+omap am <Plug>(textobj-comment-a)
+
+" Text object params
+Plug 'machakann/vim-swap' " key p
+omap ip <Plug>(swap-textobject-i)
+xmap ip <Plug>(swap-textobject-i)
+omap ap <Plug>(swap-textobject-a)
+xmap ap <Plug>(swap-textobject-a)
+
 call plug#end()
 
 colorscheme onedark

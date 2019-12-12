@@ -13,8 +13,8 @@ alias bs="browser-sync start --server --files '*' --port "
 alias find-port="sudo lsof -i -P -n"
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias kill-tmux="tmux kill-server"
-alias tmBegin="tmux new -s Coding -n Main"
-alias tmKill="tmux kill-session -a"
+alias tm-begin="tmux new -s Coding -n Main"
+alias tm-kill="tmux kill-session -a"
 
 rp (){
   php -S localhost:"$1"
@@ -25,6 +25,13 @@ zeal-docs-fix () {
     find . -iname 'react-main*.js' -exec rm '{}' \;
     popd >/dev/null || exit
 }
+
+git-amend () {
+  git add .
+  git commit --amend
+  ggp --force
+}
+
 # Default vim text editor
 export EDITOR=vi
 
