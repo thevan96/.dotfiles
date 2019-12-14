@@ -57,7 +57,7 @@ export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # FZF
 # Setting fd as the default source for fzf
-export FZF_DEFAULT_COMMAND='fd -H --type file --exclude .git'
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

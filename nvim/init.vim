@@ -33,12 +33,14 @@ set showmode
 set virtualedit=block
 
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType php        setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
-autocmd FileType md        setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType javascript, md
+      \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+autocmd FileType php
+      \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 autocmd BufEnter * :syntax sync fromstart
 
 let mapleader = ' '
+nnoremap Q <nop>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -55,9 +57,6 @@ vnoremap < <gv
 vnoremap > >gv
 xnoremap < <gv
 xnoremap > >gv
-nnoremap <F1> <nop>
-nnoremap Q <nop>
-nnoremap K <nop>
 nnoremap k gk
 nnoremap j gj
 nnoremap <silent><c-j> <c-w><c-j>
@@ -72,25 +71,26 @@ nnoremap <silent>gv :vnew<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gl :bnext<cr>
 nnoremap <silent>X :Bdelete<cr>
-nnoremap <leader>so :so ~/dotfiles/nvim/init.vim<cr>
-nnoremap <leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
-nnoremap <leader>zshrc :e ~/dotfiles/zsh/.zshrc<cr>
-nnoremap <leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
-nnoremap <leader>w :w<cr>
-nnoremap <leader>qq :q<cr>
-nnoremap <leader>qa :qa<cr>
+nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
+nnoremap <silent><leader>zshrc :e ~/dotfiles/zsh/.zshrc<cr>
+nnoremap <silent><leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
+nnoremap <silent><leader>qq :q<cr>
+nnoremap <silent><leader>qa :qa<cr>
+nnoremap <silent><leader>e :e!<cr>
+nnoremap <silent><leader>w :w<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzz
 nnoremap } }zz
 nnoremap N Nzz
 nnoremap } }zz
-tnoremap <esc> <c-\><c-n>
-tnoremap <c-h> <c-\><c-n><c-w>h
-tnoremap <c-j> <c-\><c-n><c-k>j
-tnoremap <c-k> <c-\><c-n><c-w>k
-tnoremap <c-l> <c-\><c-n><c-w>l
+tnoremap <silent><esc> <c-\><c-n>
+tnoremap <silent><c-h> <c-\><c-n><c-w>h
+tnoremap <silent><c-j> <c-\><c-n><c-k>j
+tnoremap <silent><c-k> <c-\><c-n><c-w>k
+tnoremap <silent><c-l> <c-\><c-n><c-w>l
 
 " windows creation
 " create horizontal window
@@ -110,7 +110,8 @@ set complete-=i   " disable scanning included files
 set complete-=t   " disable searching tags
 
 " Clear register
-command! ClearRegister for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+command! ClearRegister for i in range(34,122) |
+      \ silent! call setreg(nr2char(i), []) | endfor
 nnoremap <leader>Y :ClearRegister<cr>
 
 " Floating Term
@@ -159,7 +160,8 @@ function! FloatTerm(...)
   endif
   startinsert
   " Close border window when terminal window close
-  autocmd TermClose * ++once :bd! | call nvim_win_close(s:float_term_border_win, v:true)
+  autocmd TermClose * ++once :bd! |
+        \ call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
 nnoremap <leader>at :call FloatTerm()<cr>
 nnoremap <leader>an :call FloatTerm('"node"')<cr>
@@ -172,10 +174,12 @@ function! QuickFormat()
   let runner1 ="prettier"
   if extension == "js"
     let runner2 ="semistandard"
-    execute ":! ".runner1." --write ".fullpath ." && ".runner2." --fix ".fullpath." | snazzy"
+    execute ":! ".runner1." --write ".fullpath ." && "
+          \ .runner2." --fix ".fullpath." | snazzy"
   elseif extension == "php"
     let runner2 ="php-cs-fixer"
-    execute ":! ".runner1." --write ".fullpath." && ".runner2." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
+    execute ":! ".runner1." --write ".fullpath." && "
+          \ .runner2." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
   elseif extension == "html"
     execute ":! ".runner1." --write ".fullpath
   elseif extension == "css"
@@ -193,9 +197,10 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>f :call QuickFormat()<cr>
+nnoremap <leader>F :call QuickFormat()<cr>
 
 " Setup colorscheme
+Plug 'w0ng/vim-hybrid'
 Plug 'joshdick/onedark.vim'
 set background=dark
 
@@ -253,8 +258,6 @@ let g:suda_smart_edit = 1
 
 Plug 'tpope/vim-eunuch'
 
-Plug 'vim-vdebug/vdebug'
-
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'simeji/winresizer'
@@ -289,8 +292,8 @@ nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
 
 Plug 'easymotion/vim-easymotion'
-nmap s <Plug>(easymotion-overwin-f2)
-map <leader><leader>l <Plug>(easymotion-bd-jk)
+nmap <silent> ;; <Plug>(easymotion-overwin-f)
+nmap <silent> ;l <Plug>(easymotion-bd-jk)
 let g:EasyMotion_smartcase = 1
 
 Plug 'neoclide/coc.nvim'
@@ -303,24 +306,17 @@ let g:coc_global_extensions =
       \ 'coc-python',
       \ 'coc-vimlsp'
       \ ]
-" Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Remap keys for gotos
 nmap gd <Plug>(coc-definition)
 nmap gy <Plug>(coc-type-definition)
 nmap gi <Plug>(coc-implementation)
 nmap gr <Plug>(coc-references)
-
 nmap <leader>rn <Plug>(coc-rename)
 
-" Create mappings for function text object, requires document symbols feature of languageserver.
+" Create mappings for function text object
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
@@ -342,9 +338,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'wombat',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'absolutepath'] ],
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
@@ -354,7 +350,7 @@ let g:lightline = {
       \ }
 
 set showtabline=2
-let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 
@@ -385,16 +381,20 @@ let g:nerdtree_tabs_autoclose=0
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-nnoremap <leader>ff :Files<cr>
-nnoremap <leader>fa :Ag<cr>
-nnoremap <leader>fb :Buffers<cr>
-nnoremap <leader>fm :Maps<cr>
-nnoremap <leader>fl :Lines<cr>
-nnoremap <leader>fc :Colors<cr>
-nnoremap <leader>fw :Windows<cr>
+nnoremap <silent><leader>ff :Files<cr>
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+nnoremap <silent><leader>fa :Ag<cr>
+nnoremap <silent><leader>fb :Buffers<cr>
+nnoremap <silent><leader>fm :Maps<cr>
+nnoremap <silent><leader>fl :Lines<cr>
+nnoremap <silent><leader>fc :Colors<cr>
+nnoremap <silent><leader>fw :Windows<cr>
+nnoremap <silent><leader>fg :Commits<cr>
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
@@ -432,8 +432,10 @@ let g:loaded_python_provider = 0
 let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
-let g:node_host_prog='/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
-let g:coc_node_path='/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
+let g:node_host_prog=
+      \ '/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+let g:coc_node_path=
+      \ '/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
 
 " Ruby
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
@@ -451,17 +453,12 @@ Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'Rican7/php-doc-modded'
 
 "HTML, CSS
+Plug 'othree/html5.vim'
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-Plug 'plasticboy/vim-markdown'
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0
-let g:tex_conceal = ""
-let g:vim_markdown_math = 1
-let g:vim_markdown_conceal_code_blocks = 0
 
 "Text object
 Plug 'kana/vim-textobj-user'
@@ -471,6 +468,7 @@ Plug 'kana/vim-textobj-line' "key l
 Plug 'jasonlong/vim-textobj-css' "key c
 Plug 'whatyouhide/vim-textobj-xmlattr' "key x
 Plug 'kana/vim-textobj-entire' "key e
+
 Plug 'adriaanzon/vim-textobj-matchit' "key %
 xmap a%  <Plug>(textobj-matchit-a)
 omap a%  <Plug>(textobj-matchit-a)
@@ -482,13 +480,12 @@ let g:textobj_comment_no_default_key_mappings = 1
 xmap am <Plug>(textobj-comment-a)
 omap am <Plug>(textobj-comment-a)
 
-" Text object params
-Plug 'machakann/vim-swap' " key p
-omap ia <Plug>(swap-textobject-i)
-xmap ia <Plug>(swap-textobject-i)
-omap aa <Plug>(swap-textobject-a)
-xmap aa <Plug>(swap-textobject-a)
+Plug 'machakann/vim-swap' " key s
+omap is <Plug>(swap-textobject-i)
+xmap is <Plug>(swap-textobject-i)
+omap as <Plug>(swap-textobject-a)
+xmap as <Plug>(swap-textobject-a)
 
 call plug#end()
 
-colorscheme onedark
+colorscheme hybrid
