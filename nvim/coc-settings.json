@@ -1,9 +1,4 @@
 {
-  "suggest.autoTrigger": "none",
-  "suggest.triggerAfterInsertEnter": false,
-  "suggest.enablePreselect": false,
-  "coc.preferences.diagnostic.displayByAle": true,
-  "coc.preferences.diagnostic.enable": false,
   "diagnostic.errorSign": "✖",
   "diagnostic.warningSign": "",
   "diagnostic.infoSign": "",

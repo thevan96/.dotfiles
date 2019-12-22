@@ -1,46 +1,50 @@
-call plug#begin()
-if exists('+termguicolors')
+" Basic config
+if exists('+termguicolors') " Enable true color
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+
 syntax on
+set number
 set colorcolumn=80
+set hidden
 set encoding=UTF-8
-set ff=unix
-set nocompatible
+set fileencoding=utf-8
+set fileencodings=utf-8
+set fileformats=unix,dos,mac
+set number relativenumber
 filetype plugin on
 filetype indent on
-set number
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
 set autoread autowrite
 set signcolumn=yes
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set cursorline cursorcolumn
-set hidden
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set backspace=indent,eol,start
 set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
 set mouse=a
-set re=1
 set updatetime=100
 set lazyredraw
 set nowrap
-set linebreak
-set showmode
-set virtualedit=block
 
+" Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType javascript, md
+autocmd FileType js, md, html, css, scss, json, vim
       \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
 autocmd FileType php
       \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
+
+" Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
 
+" Mapping
 let mapleader = ' '
 nnoremap Q <nop>
+nnoremap <F1> <nop>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -55,8 +59,6 @@ vnoremap <left> <nop>
 vnoremap <right> <nop>
 vnoremap < <gv
 vnoremap > >gv
-xnoremap < <gv
-xnoremap > >gv
 nnoremap <F1> <nop>
 nnoremap Q <nop>
 nnoremap K <nop>
@@ -69,44 +71,40 @@ nnoremap <silent><c-h> <c-w><c-h>
 nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gj :bfirst<cr>
 nnoremap <silent>gk :blast<cr>
-nnoremap <silent>gs :new<cr>
-nnoremap <silent>gv :vnew<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gl :bnext<cr>
-nnoremap <silent>X :Bdelete<cr>
+nnoremap <silent>gx :Bdelete<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>zshenv :e ~/dotfiles/zsh/.zshenv<cr>
-nnoremap <silent><leader>zshrc :e ~/dotfiles/zsh/.zshrc<cr>
-nnoremap <silent><leader>tmux :e ~/dotfiles/tmux/.tmux.conf<cr>
 nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
-nnoremap <silent><leader>e :e!<cr>
+nnoremap <silent><leader>ee :e!<cr>
 nnoremap <silent><leader>ww :w<cr>
+nnoremap <silent><leader>WW :wqa<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
-nnoremap n nzz
-nnoremap } }zz
-nnoremap N Nzz
-nnoremap } }zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
 tnoremap <silent><esc> <c-\><c-n>
 tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
 
+" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Disable netrw
+let g:loaded_netrw = 1
+let loaded_netrwPlugin = 1
+
 " windows creation
-" create horizontal window
 nnoremap <leader>ws <c-w>s
-" create vertival window
 nnoremap <leader>wv <c-w>v
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
-
-" Smarter cursorline
-autocmd InsertLeave,WinEnter * set cursorline
-autocmd InsertEnter,WinLeave * set nocursorline
 
 " Faster keyword completion
 set complete-=i   " disable scanning included files
@@ -167,9 +165,8 @@ function! FloatTerm(...)
         \ call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
 nnoremap <leader>at :call FloatTerm()<cr>
-nnoremap <leader>an :call FloatTerm('"node"')<cr>
-nnoremap <leader>ag :call FloatTerm('"tig"')<cr>
 
+" Format source
 function! QuickFormat()
   silent! wall
   let fullpath = expand('%:p')
@@ -200,110 +197,81 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>F :call QuickFormat()<cr>
+nnoremap <leader>fe :call QuickFormat()<cr>
+
+" Load plugin
+call plug#begin()
 
 " Setup colorscheme
-Plug 'w0ng/vim-hybrid'
 Plug 'joshdick/onedark.vim'
 set background=dark
+let g:onedark_color_overrides = {
+      \ "black": {"gui": "#1e1e1e", "cterm": "235", "cterm16": "0" },
+      \ }
+
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-eunuch'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'moll/vim-bbye'
+Plug 'simeji/winresizer'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
 
-Plug 'christoomey/vim-tmux-navigator'
-let g:tmux_navigator_save_on_switch = 2
-let g:tmux_navigator_disable_when_zoomed = 1
-
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
-
-Plug 'Yggdroot/indentLine'
-let g:indentLine_char_list = ['┊']
-
-Plug 'andymass/vim-matchup'
-let g:loaded_matchit = 1
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
-map <leader>" ysiw"
-map <leader>' ysiw'
-map <leader>l" yss"
-map <leader>l' yss'
-
-Plug 'AndrewRadev/splitjoin.vim'
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-commentary'
-
-Plug 'matze/vim-move'
-
-Plug 'yangmillstheory/vim-snipe'
-map <leader><leader>f <Plug>(snipe-f)
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 
-Plug 'moll/vim-bbye'
-
-Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-nnoremap <leader>ggn :GitGutterNextHunk<CR>
-nnoremap <leader>ggp :GitGutterPrevHunk<CR>
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
-Plug 'tpope/vim-eunuch'
-
 Plug 'terryma/vim-multiple-cursors'
 
-Plug 'simeji/winresizer'
-
 Plug 'machakann/vim-highlightedyank'
-
-Plug 'terryma/vim-multiple-cursors'
-
-Plug 'simeji/winresizer'
-
-Plug 'machakann/vim-highlightedyank'
+let g:highlightedyank_highlight_duration = 100
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
 nmap <leader>cs :ChooseWinSwap<cr>
 
-Plug 'junegunn/vim-peekaboo'
+Plug 'yangmillstheory/vim-snipe'
+map <silent>f <Plug>(snipe-f)
+map <silent>F <Plug>(snipe-F)
 
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
-map <leader>vl :VimuxRunLastCommand<CR>
-map <leader>vz :VimuxZoomRunner<CR>
-map <Leader>vq :VimuxCloseRunner<CR>
+map <leader>vq :VimuxCloseRunner<CR>
+let g:VimuxHeight = '25'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-Plug 'pbrisbin/vim-mkdir'
-
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsEditSplit="vertical"
 nnoremap <leader>js :e ~/dotfiles/UltiSnips/javascript.snippets<cr>
 nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
-
-Plug 'easymotion/vim-easymotion'
-nmap <silent> ;; <Plug>(easymotion-overwin-f)
-nmap <silent> ;l <Plug>(easymotion-bd-jk)
-let g:EasyMotion_smartcase = 1
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -313,16 +281,20 @@ let g:coc_global_extensions =
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-vimlsp'
+      \ 'coc-vimlsp',
+      \ 'coc-svelte',
+      \ 'coc-flutter',
+      \ 'coc-angular',
+      \ 'coc-html'
       \ ]
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Remap keys for gotos
-nmap gd <Plug>(coc-definition)
-nmap gy <Plug>(coc-type-definition)
-nmap gi <Plug>(coc-implementation)
-nmap gr <Plug>(coc-references)
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gi <Plug>(coc-implementation)
+nmap <silent>gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 
 " Create mappings for function text object
@@ -344,10 +316,14 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
+" navigate error
+nmap <silent><leader>ej <Plug>(coc-diagnostic-next)
+nmap <silent><leader>ek <Plug>(coc-diagnostic-prev)
+
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
@@ -357,7 +333,6 @@ let g:lightline = {
       \   'filename': 'LightlineFilename'
       \ }
       \ }
-
 set showtabline=2
 let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
@@ -388,8 +363,12 @@ endfunction
 Plug 'jistr/vim-nerdtree-tabs'
 let g:nerdtree_tabs_autoclose=0
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+if isdirectory('~/.fzf/bin/fzf')
+  Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'
+endif
 nnoremap <silent><leader>ff :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
@@ -410,8 +389,6 @@ Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
-let NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeWinSize=25
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
@@ -442,27 +419,18 @@ let g:python3_host_prog = '~/.pyenv/shims/python3'
 
 " Node
 let g:node_host_prog=
-      \ '/home/thevan96/.nvm/versions/node/v10.16.3/bin/neovim-node-host'
+      \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/neovim-node-host'
 let g:coc_node_path=
-      \ '/home/thevan96/.nvm/versions/node/v10.16.3/bin/node'
+      \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/node'
 
 " Ruby
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
-" PHP
-Plug 'stephpy/vim-php-cs-fixer'
-nnoremap <leader>pcd :call PhpCsFixerFixDirectory()<cr>
-nnoremap <leader>pcf :call PhpCsFixerFixFile()<cr>
-let g:php_cs_fixer_rules = "@PSR2"
-let g:php_cs_fixer_php_path = "php"
-let g:php_cs_fixer_path = "/usr/local/bin/php-cs-fixer"
-
+" PHP => map <leader>p
+Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 Plug 'arnaud-lb/vim-php-namespace'
-Plug 'adoy/vim-php-refactoring-toolbox'
-Plug 'Rican7/php-doc-modded'
 
 "HTML, CSS
-Plug 'othree/html5.vim'
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
@@ -471,30 +439,16 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 "Text object
 Plug 'kana/vim-textobj-user'
-Plug 'wellle/targets.vim'
-Plug 'kana/vim-textobj-indent' "key i
 Plug 'kana/vim-textobj-line' "key l
 Plug 'jasonlong/vim-textobj-css' "key c
 Plug 'whatyouhide/vim-textobj-xmlattr' "key x
-Plug 'kana/vim-textobj-entire' "key e
-
-Plug 'adriaanzon/vim-textobj-matchit' "key %
-xmap a%  <Plug>(textobj-matchit-a)
-omap a%  <Plug>(textobj-matchit-a)
-xmap i%  <Plug>(textobj-matchit-i)
-omap i%  <Plug>(textobj-matchit-i)
-
-Plug 'glts/vim-textobj-comment' " key m
-let g:textobj_comment_no_default_key_mappings = 1
-xmap am <Plug>(textobj-comment-a)
-omap am <Plug>(textobj-comment-a)
-
-Plug 'machakann/vim-swap' " key s
-omap is <Plug>(swap-textobject-i)
-xmap is <Plug>(swap-textobject-i)
-omap as <Plug>(swap-textobject-a)
-xmap as <Plug>(swap-textobject-a)
+Plug 'machakann/vim-swap' " key a
+omap ia <Plug>(swap-textobject-i)
+xmap ia <Plug>(swap-textobject-i)
+omap aa <Plug>(swap-textobject-a)
+xmap aa <Plug>(swap-textobject-a)
 
 call plug#end()
 
-colorscheme hybrid
+colorscheme onedark
+hi Cursorline ctermbg=none
