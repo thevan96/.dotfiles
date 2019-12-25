@@ -1,11 +1,11 @@
 # My-dotfile
 
-- Font : Monaco
+- Font: Monaco
 - Terminal: Alacritty
-- Shell : zsh
-- Text editor : neovim
-- Os : Ubuntu
-- Terminal multiplexer : tmux
+- Shell: zsh
+- Text editor: neovim
+- Terminal multiplexer: tmux
+- Theme terminal: onedark
 
 ## Screenshots
 ![screen](https://i.imgur.com/4vhgA8F.png)

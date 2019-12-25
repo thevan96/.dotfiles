@@ -10,6 +10,7 @@ alias bs="browser-sync start --server --files '*' --port "
 alias find-port="sudo lsof -i -P -n"
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 alias kill-tmux="tmux kill-server"
+alias phpload="composer dump-autoload"
 
 rp (){
   php -S localhost:"$1"
@@ -52,11 +53,11 @@ export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # FZF
 # Setting fd as the default source for fzf
-export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
+export FZF_DEFAULT_COMMAND='fd --type file --hidden --exclude .git --exclude node_modules --color always'
 
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--no-height --no-reverse'
+export FZF_DEFAULT_OPTS='--no-height --no-reverse --ansi'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Include Z

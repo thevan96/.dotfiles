@@ -21,7 +21,7 @@ set autoread autowrite
 set signcolumn=yes
 set incsearch hlsearch ignorecase smartcase
 set clipboard +=unnamedplus
-set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set list listchars=eol:¬,tab:>·,trail:~,space:·
 set backspace=indent,eol,start
 set nobackup noswapfile nowritebackup
 set splitbelow splitright
@@ -216,6 +216,8 @@ Plug 'moll/vim-bbye'
 Plug 'simeji/winresizer'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'diepm/vim-rest-console'
+autocmd FileType rest setlocal filetype=rest
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
@@ -224,6 +226,7 @@ endif
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
+let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -369,26 +372,38 @@ else
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 endif
+" Replace the default dictionary completion with fzf-based fuzzy completion
+inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+
 nnoremap <silent><leader>ff :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-nnoremap <silent><leader>fa :Ag<cr>
+
+nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<CR>/<CR>
+
+nnoremap <silent><leader>FF :GFiles<cr>
+command! -bang -nargs=? -complete=dir GFiles
+      \call fzf#vim#gitfiles(fzf#vim#with_preview(), <bang>0)
+
+nnoremap <silent><leader>fr :Rg<cr>
 nnoremap <silent><leader>fb :Buffers<cr>
 nnoremap <silent><leader>fm :Maps<cr>
 nnoremap <silent><leader>fl :Lines<cr>
 nnoremap <silent><leader>fc :Colors<cr>
 nnoremap <silent><leader>fw :Windows<cr>
 nnoremap <silent><leader>fg :Commits<cr>
+
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+tnoremap <expr> <esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
+let g:NERDTreeWinSize=25
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
@@ -429,6 +444,7 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 " PHP => map <leader>p
 Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 Plug 'arnaud-lb/vim-php-namespace'
+Plug 'captbaritone/better-indent-support-for-php-with-html'
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
@@ -451,4 +467,3 @@ xmap aa <Plug>(swap-textobject-a)
 call plug#end()
 
 colorscheme onedark
-hi Cursorline ctermbg=none
