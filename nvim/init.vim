@@ -7,29 +7,28 @@ endif
 
 syntax on
 set number
-set colorcolumn=80
 set hidden
-set encoding=UTF-8
-set fileencoding=utf-8
-set fileencodings=utf-8
-set fileformats=unix,dos,mac
-set number relativenumber
+set autoread autowrite
+set incsearch hlsearch ignorecase smartcase
 filetype plugin on
 filetype indent on
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
-set autoread autowrite
-set signcolumn=yes
-set incsearch hlsearch ignorecase smartcase
-set clipboard +=unnamedplus
-set list listchars=eol:¬,tab:>·,trail:~,space:·
-set backspace=indent,eol,start
 set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
-set mouse=a
-set updatetime=100
 set lazyredraw
 set nowrap
+set colorcolumn=80
+set signcolumn=yes
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
+set fileformats=unix,mac,dos
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
+set clipboard +=unnamedplus
+set list listchars=eol:¬,tab:>·,trail:~,space:·
+set backspace=indent,eol,start
+set mouse=a
+set updatetime=150
 
 " Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -43,8 +42,6 @@ autocmd BufEnter * :syntax sync fromstart
 
 " Mapping
 let mapleader = ' '
-nnoremap Q <nop>
-nnoremap <F1> <nop>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -62,8 +59,6 @@ vnoremap > >gv
 nnoremap <F1> <nop>
 nnoremap Q <nop>
 nnoremap K <nop>
-nnoremap k gk
-nnoremap j gj
 nnoremap <silent><c-j> <c-w><c-j>
 nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
@@ -91,10 +86,6 @@ tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
 
-" Move visual block
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-
 " Disable netrw
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
@@ -109,11 +100,6 @@ autocmd BufWritePre * %s/\s\+$//e
 " Faster keyword completion
 set complete-=i   " disable scanning included files
 set complete-=t   " disable searching tags
-
-" Clear register
-command! ClearRegister for i in range(34,122) |
-      \ silent! call setreg(nr2char(i), []) | endfor
-nnoremap <leader>Y :ClearRegister<cr>
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -205,9 +191,6 @@ call plug#begin()
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
 set background=dark
-let g:onedark_color_overrides = {
-      \ "black": {"gui": "#1e1e1e", "cterm": "235", "cterm16": "0" },
-      \ }
 
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-eunuch'
@@ -215,7 +198,7 @@ Plug 'pbrisbin/vim-mkdir'
 Plug 'moll/vim-bbye'
 Plug 'simeji/winresizer'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'matze/vim-move'
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
@@ -247,7 +230,7 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 100
+let g:highlightedyank_highlight_duration = 150
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
@@ -260,7 +243,7 @@ map <silent>F <Plug>(snipe-F)
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = '25'
+let g:VimuxHeight = '23'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
@@ -290,6 +273,7 @@ let g:coc_global_extensions =
       \ 'coc-angular',
       \ 'coc-html'
       \ ]
+
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -372,6 +356,7 @@ else
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 endif
+
 " Replace the default dictionary completion with fzf-based fuzzy completion
 inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 
@@ -403,7 +388,7 @@ Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
-let g:NERDTreeWinSize=25
+let g:NERDTreeWinSize=23
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
@@ -443,7 +428,6 @@ let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " PHP => map <leader>p
 Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
-Plug 'arnaud-lb/vim-php-namespace'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 
 "HTML, CSS
