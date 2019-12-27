@@ -28,7 +28,7 @@ set clipboard +=unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,space:·
 set backspace=indent,eol,start
 set mouse=a
-set updatetime=150
+set updatetime=50
 
 " Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
@@ -75,7 +75,6 @@ nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
 nnoremap <silent><leader>ee :e!<cr>
 nnoremap <silent><leader>ww :w<cr>
-nnoremap <silent><leader>WW :wqa<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzzzv
@@ -191,16 +190,30 @@ call plug#begin()
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
 set background=dark
+let g:onedark_color_overrides = {
+      \ "black": {"gui": "#242424", "cterm": "235", "cterm16": "0" },
+      \}
 
 Plug 'tpope/vim-sensible'
+
 Plug 'tpope/vim-eunuch'
+
 Plug 'pbrisbin/vim-mkdir'
+
 Plug 'moll/vim-bbye'
+
 Plug 'simeji/winresizer'
+
 Plug 'christoomey/vim-tmux-navigator'
+
 Plug 'matze/vim-move'
+
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'vim-vdebug/vdebug'
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
@@ -216,7 +229,10 @@ silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
 
-Plug 'tpope/vim-commentary'
+Plug 'scrooloose/nerdcommenter'
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 0
+let g:NERDTrimTrailingWhitespace = 1
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
@@ -282,7 +298,7 @@ nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
-nmap <leader>rn <Plug>(coc-rename)
+nmap <silent>gt :Tags<cr>
 
 " Create mappings for function text object
 xmap if <Plug>(coc-funcobj-i)
@@ -304,10 +320,13 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " navigate error
-nmap <silent><leader>ej <Plug>(coc-diagnostic-next)
-nmap <silent><leader>ek <Plug>(coc-diagnostic-prev)
+map <silent>gj <Plug>(coc-diagnostic-next)
+map <silent>gk <Plug>(coc-diagnostic-prev)
 
 Plug 'mengelbrecht/lightline-bufferline'
+let g:lightline#bufferline#enable_devicons=1
+let g:lightline#bufferline#unicode_symbols=1
+
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
       \ 'colorscheme': 'onedark',
@@ -362,13 +381,13 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 
 nnoremap <silent><leader>ff :Files<cr>
 command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+      \ call fzf#vim#files(<q-args>, <bang>0)
 
-nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<CR>/<CR>
+nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<cr>/<cr>
 
 nnoremap <silent><leader>FF :GFiles<cr>
 command! -bang -nargs=? -complete=dir GFiles
-      \call fzf#vim#gitfiles(fzf#vim#with_preview(), <bang>0)
+      \call fzf#vim#gitfiles(<q-args>, <bang>0)
 
 nnoremap <silent><leader>fr :Rg<cr>
 nnoremap <silent><leader>fb :Buffers<cr>
@@ -385,10 +404,9 @@ tnoremap <expr> <esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['^\.git$','^node_modules$']
+" let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
-let g:NERDTreeWinSize=23
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
@@ -416,8 +434,8 @@ Plug 'sheerun/vim-polyglot'
 " Python
 let g:loaded_python_provider = 0
 let g:python3_host_prog = '~/.pyenv/shims/python3'
-
 " Node
+
 let g:node_host_prog=
       \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/neovim-node-host'
 let g:coc_node_path=
@@ -427,8 +445,48 @@ let g:coc_node_path=
 let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " PHP => map <leader>p
-Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 Plug 'captbaritone/better-indent-support-for-php-with-html'
+
+Plug 'Rican7/php-doc-modded'
+let g:pdv_cfg_autoEndFunction = 0
+let g:pdv_cfg_autoEndClass = 0
+let g:pdv_cfg_annotation_Package = 0
+let g:pdv_cfg_annotation_Version = 0
+let g:pdv_cfg_annotation_Author = 0
+let g:pdv_cfg_annotation_Copyright = 0
+let g:pdv_cfg_annotation_License = 0
+
+Plug 'adoy/vim-php-refactoring-toolbox'
+let g:vim_php_refactoring_auto_validate_sg = 1
+let g:vim_php_refactoring_auto_validate_g = 1
+let g:vim_php_refactoring_auto_validate_rename = 1
+nnoremap <silent><leader>prv :call PhpRenameLocalVariable()<cr>
+nnoremap <silent><leader>prc :call PhpRenameClassVariable()<cr>
+nnoremap <silent><leader>prm :call PhpRenameMethod()<cr>
+nnoremap <silent><leader>peu :call PhpExtractUse()<cr>
+vnoremap <silent><leader>pec :call PhpExtractConst()<cr>
+nnoremap <silent><leader>pep :call PhpExtractClassProperty()<cr>
+vnoremap <silent><leader>pem :call PhpExtractMethod()<cr>
+nnoremap <silent><leader>pcp :call PhpCreateProperty()<cr>
+nnoremap <silent><leader>pdu :call PhpDetectUnusedUseStatements()<cr>
+vnoremap <silent><leader>p== :call PhpAlignAssigns()<cr>
+nnoremap <silent><leader>psg :call PhpCreateSettersAndGetters()<cr>
+nnoremap <silent><leader>pcg :call PhpCreateGetters()<cr>
+nnoremap <silent><leader>pda :call PhpDocAll()<cr>
+nnoremap <silent><leader>pds :call UpdatePhpDocIfExists()<cr>
+function! UpdatePhpDocIfExists()
+  normal! k
+  if getline('.') =~ '/'
+    normal! V%d
+  else
+    normal! j
+  endif
+  call PhpDocSingle()
+  normal! k^%k$
+  if getline('.') =~ ';'
+    exe "normal! $svoid"
+  endif
+endfunction
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
@@ -447,6 +505,8 @@ omap ia <Plug>(swap-textobject-i)
 xmap ia <Plug>(swap-textobject-i)
 omap aa <Plug>(swap-textobject-a)
 xmap aa <Plug>(swap-textobject-a)
+
+Plug 'glts/vim-textobj-comment'
 
 call plug#end()
 

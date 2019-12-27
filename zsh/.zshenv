@@ -60,6 +60,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height --no-reverse --ansi'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+export XDEBUG_CONFIG="idekey=xdebug"
+
 # Include Z
 . /usr/local/bin/z.sh
 
