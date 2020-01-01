@@ -73,8 +73,8 @@ nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
-nnoremap <silent><leader>ee :e!<cr>
-nnoremap <silent><leader>ww :w<cr>
+nnoremap <silent><leader>e :e!<cr>
+nnoremap <silent><leader>w :w<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzzzv
@@ -90,8 +90,8 @@ let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
 
 " windows creation
-nnoremap <leader>ws <c-w>s
-nnoremap <leader>wv <c-w>v
+nnoremap <leader>sp <c-w>s
+nnoremap <leader>sv <c-w>v
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
@@ -190,9 +190,9 @@ call plug#begin()
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
 set background=dark
-let g:onedark_color_overrides = {
-      \ "black": {"gui": "#242424", "cterm": "235", "cterm16": "0" },
-      \}
+" let g:onedark_color_overrides = {
+      " \ "black": {"gui": "#242424", "cterm": "235", "cterm16": "0" },
+      " \}
 
 Plug 'tpope/vim-sensible'
 
@@ -210,8 +210,6 @@ Plug 'matze/vim-move'
 
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'vim-vdebug/vdebug'
 
@@ -246,11 +244,11 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 150
+let g:highlightedyank_highlight_duration = 50
 
 Plug 't9md/vim-choosewin'
 nmap <leader>cw :ChooseWin<cr>
-nmap <leader>cs :ChooseWinSwap<cr>
+nmap <leader>sw :ChooseWinSwap<cr>
 
 Plug 'yangmillstheory/vim-snipe'
 map <silent>f <Plug>(snipe-f)
@@ -336,7 +334,8 @@ let g:lightline = {
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename'
+      \   'filename': 'LightlineFilename',
+      \   'method': 'NearestMethodOrFunction'
       \ }
       \ }
 set showtabline=2
