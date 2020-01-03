@@ -58,7 +58,6 @@ vnoremap < <gv
 vnoremap > >gv
 nnoremap <F1> <nop>
 nnoremap Q <nop>
-nnoremap K <nop>
 nnoremap <silent><c-j> <c-w><c-j>
 nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
@@ -75,6 +74,7 @@ nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
 nnoremap <silent><leader>e :e!<cr>
 nnoremap <silent><leader>w :w<cr>
+nnoremap <silent><leader>W :wa<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzzzv
@@ -190,9 +190,6 @@ call plug#begin()
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
 set background=dark
-" let g:onedark_color_overrides = {
-      " \ "black": {"gui": "#242424", "cterm": "235", "cterm16": "0" },
-      " \}
 
 Plug 'tpope/vim-sensible'
 
@@ -220,10 +217,13 @@ endif
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
-let g:EditorConfig_core_mode = 'external_command'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+
+Plug 'terryma/vim-expand-region'
+map <leader>k <Plug>(expand_region_expand)
+map <leader>j <Plug>(expand_region_shrink)
 
 Plug 'tpope/vim-surround'
 
@@ -268,7 +268,6 @@ Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsEditSplit="vertical"
 nnoremap <leader>js :e ~/dotfiles/UltiSnips/javascript.snippets<cr>
 nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
 nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
@@ -285,7 +284,8 @@ let g:coc_global_extensions =
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
-      \ 'coc-html'
+      \ 'coc-html',
+      \ 'coc-snippets'
       \ ]
 
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -404,6 +404,7 @@ tnoremap <expr> <esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
 " let NERDTreeIgnore = ['^\.git$','^node_modules$']
+let g:NERDTreeWinPos = 'left'
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
 let g:NERDTreeHighlightCursorline = 0
@@ -504,8 +505,6 @@ omap ia <Plug>(swap-textobject-i)
 xmap ia <Plug>(swap-textobject-i)
 omap aa <Plug>(swap-textobject-a)
 xmap aa <Plug>(swap-textobject-a)
-
-Plug 'glts/vim-textobj-comment'
 
 call plug#end()
 

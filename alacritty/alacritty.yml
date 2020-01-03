@@ -63,10 +63,10 @@ window:
   startup_mode: Windowed
 
   # Window title
-  title: 🐧🐧🐧
+  title: Alacritty
 
   # Window class (Linux only):
-  # class: Alacritty
+  class: Alacritty
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -87,7 +87,7 @@ scrolling:
   # faux_multiplier: 3
 
   # Scroll to the bottom when new text is written to the terminal.
-  auto_scroll: false
+  auto_scroll: true
 
 # Spaces per Tab (changes require restart)
 #
@@ -136,7 +136,7 @@ font:
     style: Italic
 
   # Point size
-  size: 9.0
+  size: 9
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.

@@ -1,4 +1,4 @@
-snippet html
+snippet html "html"
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +13,7 @@ snippet html
 </html>
 endsnippet
 
-snippet template
+snippet template "full template and bootstrap"
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,34 +37,19 @@ snippet template
 </html>
 endsnippet
 
-snippet htmlfull
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>${1:title}</title>
-  </head>
-  <body>
-    <script src="${2:path}"> </script>
-  </body>
-</html>
-endsnippet
-
-snippet cl
+snippet cl "console.log"
 console.log(${1:content});
 endsnippet
 
-snippet log
+snippet log "console variable"
 console.log(\`🐧 $1 \`, ${1:variable});
 endsnippet
 
-snippet dw
+snippet dw "document write"
 document.write(${1:content});
 endsnippet
 
-snippet ls
+snippet ls "load script"
 console.log('Load script...');
 endsnippet
 

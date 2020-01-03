@@ -65,7 +65,7 @@ ZSH_THEME="simple"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(tmux git vi-mode zsh-syntax-highlighting)
+plugins=(tmux vi-mode zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -93,5 +93,4 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Alias custom user
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#

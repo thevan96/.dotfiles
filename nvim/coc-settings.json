@@ -3,6 +3,11 @@
   "diagnostic.warningSign": "",
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": "",
+  "coc.preferences.snippets.enable": true,
+  "snippets.ultisnips.directories": ["UltiSnips"],
+  "suggest.autoTrigger": "none",
+  "suggest.noselect": false,
+  "suggest.triggerAfterInsertEnter": false,
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",
