@@ -161,6 +161,8 @@ function! QuickFormat()
     let runner2 ="semistandard"
     execute ":! ".runner1." --write ".fullpath ." && "
           \ .runner2." --fix ".fullpath." | snazzy"
+  elseif extension == "ts"
+    execute ":! ".runner1." --write ".fullpath
   elseif extension == "php"
     let runner2 ="php-cs-fixer"
     execute ":! ".runner1." --write ".fullpath." && "
@@ -189,6 +191,7 @@ call plug#begin()
 
 " Setup colorscheme
 Plug 'joshdick/onedark.vim'
+Plug 'laggardkernel/vim-one'
 set background=dark
 
 Plug 'tpope/vim-sensible'
@@ -205,10 +208,11 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'matze/vim-move'
 
+Plug 'easymotion/vim-easymotion'
+map <leader>l <plug>(easymotion-bd-jk)
+
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
-
-Plug 'vim-vdebug/vdebug'
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
@@ -222,8 +226,8 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'terryma/vim-expand-region'
-map <leader>k <Plug>(expand_region_expand)
-map <leader>j <Plug>(expand_region_shrink)
+map <leader>o <Plug>(expand_region_expand)
+map <leader>i <Plug>(expand_region_shrink)
 
 Plug 'tpope/vim-surround'
 
@@ -327,7 +331,7 @@ let g:lightline#bufferline#unicode_symbols=1
 
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
@@ -338,6 +342,7 @@ let g:lightline = {
       \   'method': 'NearestMethodOrFunction'
       \ }
       \ }
+
 set showtabline=2
 let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
@@ -403,7 +408,7 @@ tnoremap <expr> <esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
-" let NERDTreeIgnore = ['^\.git$','^node_modules$']
+let NERDTreeIgnore = ['^\.git$','^node_modules$']
 let g:NERDTreeWinPos = 'left'
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
@@ -488,9 +493,14 @@ function! UpdatePhpDocIfExists()
   endif
 endfunction
 
+Plug 'noahfrederick/vim-laravel'
+
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
+
+"Javascript
+Plug 'mxw/vim-jsx'
 
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
@@ -508,4 +518,4 @@ xmap aa <Plug>(swap-textobject-a)
 
 call plug#end()
 
-colorscheme onedark
+colorscheme one
