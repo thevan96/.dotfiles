@@ -73,7 +73,7 @@ export EDITOR=vi
 export XDEBUG_CONFIG="idekey=xdebug"
 
 # Laravel export, composer
-export LARAVEL="$HOME/.config/composer/vendor/bin:$PATH"
+export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"

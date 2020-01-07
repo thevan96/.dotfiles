@@ -1,0 +1,164 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+/	nvim/init.vim	/^map \/  <Plug>(incsearch-forward)$/;"	m
+<	nvim/init.vim	/^vnoremap < <gv$/;"	m
+<F1>	nvim/init.vim	/^nnoremap <F1> <nop>$/;"	m
+<c-h>	nvim/init.vim	/^nnoremap <silent><c-h> <c-w><c-h>$/;"	m
+<c-j>	nvim/init.vim	/^nnoremap <silent><c-j> <c-w><c-j>$/;"	m
+<c-k>	nvim/init.vim	/^nnoremap <silent><c-k> <c-w><c-k>$/;"	m
+<c-l>	nvim/init.vim	/^nnoremap <silent><c-l> <c-w><c-l>$/;"	m
+<c-space>	nvim/init.vim	/^inoremap <silent><expr> <c-space> coc#refresh()$/;"	m
+<c-x><c-k>	nvim/init.vim	/^inoremap <expr> <c-x><c-k> fzf#vim#complete('cat \/usr\/share\/dict\/words')$/;"	m
+<cr>	nvim/init.vim	/^inoremap <expr> <cr> pumvisible() ? "\\<C-y>" : "\\<C-g>u\\<CR>"$/;"	m
+<down>	nvim/init.vim	/^inoremap <down> <nop>$/;"	m
+<down>	nvim/init.vim	/^nnoremap <down> <nop>$/;"	m
+<down>	nvim/init.vim	/^vnoremap <down> <nop>$/;"	m
+<esc>	nvim/init.vim	/^nnoremap <silent><esc> :nohlsearch<cr>$/;"	m
+<leader>FF	nvim/init.vim	/^nnoremap <silent><leader>FF :GFiles<cr>$/;"	m
+<leader>W	nvim/init.vim	/^nnoremap <silent><leader>W :wa<cr>$/;"	m
+<leader>at	nvim/init.vim	/^nnoremap <leader>at :call FloatTerm()<cr>$/;"	m
+<leader>cw	nvim/init.vim	/^nmap <leader>cw :ChooseWin<cr>$/;"	m
+<leader>e	nvim/init.vim	/^nnoremap <silent><leader>e :e!<cr>$/;"	m
+<leader>f.	nvim/init.vim	/^nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<cr>\/<cr>$/;"	m
+<leader>fb	nvim/init.vim	/^nnoremap <silent><leader>fb :Buffers<cr>$/;"	m
+<leader>fc	nvim/init.vim	/^nnoremap <silent><leader>fc :Colors<cr>$/;"	m
+<leader>fe	nvim/init.vim	/^nnoremap <leader>fe :call QuickFormat()<cr>$/;"	m
+<leader>ff	nvim/init.vim	/^nnoremap <silent><leader>ff :Files<cr>$/;"	m
+<leader>fg	nvim/init.vim	/^nnoremap <silent><leader>fg :Commits<cr>$/;"	m
+<leader>fl	nvim/init.vim	/^nnoremap <silent><leader>fl :Lines<cr>$/;"	m
+<leader>fm	nvim/init.vim	/^nnoremap <silent><leader>fm :Maps<cr>$/;"	m
+<leader>fr	nvim/init.vim	/^nnoremap <silent><leader>fr :Rg<cr>$/;"	m
+<leader>fw	nvim/init.vim	/^nnoremap <silent><leader>fw :Windows<cr>$/;"	m
+<leader>html	nvim/init.vim	/^nnoremap <leader>html :e ~\/dotfiles\/UltiSnips\/html.snippets<cr>$/;"	m
+<leader>i	nvim/init.vim	/^map <leader>i <Plug>(expand_region_shrink)$/;"	m
+<leader>js	nvim/init.vim	/^nnoremap <leader>js :e ~\/dotfiles\/UltiSnips\/javascript.snippets<cr>$/;"	m
+<leader>l	nvim/init.vim	/^map <leader>l <plug>(easymotion-bd-jk)$/;"	m
+<leader>o	nvim/init.vim	/^map <leader>o <Plug>(expand_region_expand)$/;"	m
+<leader>p==	nvim/init.vim	/^vnoremap <silent><leader>p== :call PhpAlignAssigns()<cr>$/;"	m
+<leader>pcg	nvim/init.vim	/^nnoremap <silent><leader>pcg :call PhpCreateGetters()<cr>$/;"	m
+<leader>pcp	nvim/init.vim	/^nnoremap <silent><leader>pcp :call PhpCreateProperty()<cr>$/;"	m
+<leader>pda	nvim/init.vim	/^nnoremap <silent><leader>pda :call PhpDocAll()<cr>$/;"	m
+<leader>pds	nvim/init.vim	/^nnoremap <silent><leader>pds :call UpdatePhpDocIfExists()<cr>$/;"	m
+<leader>pdu	nvim/init.vim	/^nnoremap <silent><leader>pdu :call PhpDetectUnusedUseStatements()<cr>$/;"	m
+<leader>pec	nvim/init.vim	/^vnoremap <silent><leader>pec :call PhpExtractConst()<cr>$/;"	m
+<leader>pem	nvim/init.vim	/^vnoremap <silent><leader>pem :call PhpExtractMethod()<cr>$/;"	m
+<leader>pep	nvim/init.vim	/^nnoremap <silent><leader>pep :call PhpExtractClassProperty()<cr>$/;"	m
+<leader>peu	nvim/init.vim	/^nnoremap <silent><leader>peu :call PhpExtractUse()<cr>$/;"	m
+<leader>php	nvim/init.vim	/^nnoremap <leader>php :e ~\/dotfiles\/UltiSnips\/php.snippets<cr>$/;"	m
+<leader>prc	nvim/init.vim	/^nnoremap <silent><leader>prc :call PhpRenameClassVariable()<cr>$/;"	m
+<leader>prm	nvim/init.vim	/^nnoremap <silent><leader>prm :call PhpRenameMethod()<cr>$/;"	m
+<leader>prv	nvim/init.vim	/^nnoremap <silent><leader>prv :call PhpRenameLocalVariable()<cr>$/;"	m
+<leader>psg	nvim/init.vim	/^nnoremap <silent><leader>psg :call PhpCreateSettersAndGetters()<cr>$/;"	m
+<leader>qa	nvim/init.vim	/^nnoremap <silent><leader>qa :qa<cr>$/;"	m
+<leader>qq	nvim/init.vim	/^nnoremap <silent><leader>qq :q<cr>$/;"	m
+<leader>so	nvim/init.vim	/^nnoremap <silent><leader>so :so ~\/dotfiles\/nvim\/init.vim<cr>$/;"	m
+<leader>sp	nvim/init.vim	/^nnoremap <leader>sp <c-w>s$/;"	m
+<leader>sv	nvim/init.vim	/^nnoremap <leader>sv <c-w>v$/;"	m
+<leader>sw	nvim/init.vim	/^nmap <leader>sw :ChooseWinSwap<cr>$/;"	m
+<leader>vi	nvim/init.vim	/^nnoremap <silent><leader>vi :e ~\/dotfiles\/nvim\/init.vim<cr>$/;"	m
+<leader>vp	nvim/init.vim	/^map <leader>vp :VimuxPromptCommand<CR>$/;"	m
+<leader>vq	nvim/init.vim	/^map <leader>vq :VimuxCloseRunner<CR>$/;"	m
+<leader>vt	nvim/init.vim	/^map <leader>vt :Vista coc<cr>$/;"	m
+<leader>w	nvim/init.vim	/^nnoremap <silent><leader>w :w<cr>$/;"	m
+<left>	nvim/init.vim	/^inoremap <left> <nop>$/;"	m
+<left>	nvim/init.vim	/^nnoremap <left> <nop>$/;"	m
+<left>	nvim/init.vim	/^vnoremap <left> <nop>$/;"	m
+<right>	nvim/init.vim	/^inoremap <right> <nop>$/;"	m
+<right>	nvim/init.vim	/^nnoremap <right> <nop>$/;"	m
+<right>	nvim/init.vim	/^vnoremap <right> <nop>$/;"	m
+<up>	nvim/init.vim	/^inoremap <up> <nop>$/;"	m
+<up>	nvim/init.vim	/^nnoremap <up> <nop>$/;"	m
+<up>	nvim/init.vim	/^vnoremap <up> <nop>$/;"	m
+>	nvim/init.vim	/^vnoremap > >gv$/;"	m
+?	nvim/init.vim	/^map ?  <Plug>(incsearch-backward)$/;"	m
+F	nvim/init.vim	/^map <silent>F <Plug>(snipe-F)$/;"	m
+Files	nvim/init.vim	/^command! -bang -nargs=? -complete=dir Files$/;"	c
+FloatTerm	nvim/init.vim	/^function! FloatTerm(...)$/;"	f
+GFiles	nvim/init.vim	/^command! -bang -nargs=? -complete=dir GFiles$/;"	c
+J	nvim/init.vim	/^nnoremap J mzJ`z$/;"	m
+K	nvim/init.vim	/^nnoremap <silent> K :call <SID>show_documentation()<CR>$/;"	m
+LightlineFilename	nvim/init.vim	/^function! LightlineFilename()$/;"	f
+LightlineFugitive	nvim/init.vim	/^function! LightlineFugitive()$/;"	f
+LightlineModified	nvim/init.vim	/^function! LightlineModified()$/;"	f
+LightlineReadonly	nvim/init.vim	/^function! LightlineReadonly()$/;"	f
+N	nvim/init.vim	/^nnoremap N Nzzzv$/;"	m
+NERDTreeIgnore	nvim/init.vim	/^let NERDTreeIgnore = ['^\\.git$','^node_modules$']$/;"	v
+NERDTreeMinimalUI	nvim/init.vim	/^let NERDTreeMinimalUI = 1$/;"	v
+NERDTreeShowHidden	nvim/init.vim	/^let NERDTreeShowHidden=1$/;"	v
+Q	nvim/init.vim	/^nnoremap Q <nop>$/;"	m
+QuickFormat	nvim/init.vim	/^function! QuickFormat()$/;"	f
+UpdatePhpDocIfExists	nvim/init.vim	/^function! UpdatePhpDocIfExists()$/;"	f
+Y	nvim/init.vim	/^nnoremap Y y\$$/;"	m
+aa	nvim/init.vim	/^omap aa <Plug>(swap-textobject-a)$/;"	m
+af	nvim/init.vim	/^omap af <Plug>(coc-funcobj-a)$/;"	m
+f	nvim/init.vim	/^map <silent>f <Plug>(snipe-f)$/;"	m
+g/	nvim/init.vim	/^map g\/ <Plug>(incsearch-stay)$/;"	m
+g:EditorConfig_exclude_patterns	nvim/init.vim	/^let g:EditorConfig_exclude_patterns = ['fugitive:\/\/.\\*', 'scp:\/\/.\\*']$/;"	v
+g:NERDCompactSexyComs	nvim/init.vim	/^let g:NERDCompactSexyComs = 0$/;"	v
+g:NERDSpaceDelims	nvim/init.vim	/^let g:NERDSpaceDelims = 1$/;"	v
+g:NERDTreeCascadeSingleChildDir	nvim/init.vim	/^let g:NERDTreeCascadeSingleChildDir = 0$/;"	v
+g:NERDTreeHighlightCursorline	nvim/init.vim	/^let g:NERDTreeHighlightCursorline = 0$/;"	v
+g:NERDTreeIndicatorMapCustom	nvim/init.vim	/^let g:NERDTreeIndicatorMapCustom = {$/;"	v
+g:NERDTreeMapJumpNextSibling	nvim/init.vim	/^let g:NERDTreeMapJumpNextSibling = '<Nop>'$/;"	v
+g:NERDTreeMapJumpPrevSibling	nvim/init.vim	/^let g:NERDTreeMapJumpPrevSibling = '<Nop>'$/;"	v
+g:NERDTreeWinPos	nvim/init.vim	/^let g:NERDTreeWinPos = 'left'$/;"	v
+g:NERDTrimTrailingWhitespace	nvim/init.vim	/^let g:NERDTrimTrailingWhitespace = 1$/;"	v
+g:UltiSnipsExpandTrigger	nvim/init.vim	/^let g:UltiSnipsExpandTrigger="<tab>"$/;"	v
+g:UltiSnipsJumpBackwardTrigger	nvim/init.vim	/^let g:UltiSnipsJumpBackwardTrigger="<s-tab>"$/;"	v
+g:UltiSnipsJumpForwardTrigger	nvim/init.vim	/^let g:UltiSnipsJumpForwardTrigger="<tab>"$/;"	v
+g:VimuxHeight	nvim/init.vim	/^let g:VimuxHeight = '23'$/;"	v
+g:coc_global_extensions	nvim/init.vim	/^let g:coc_global_extensions =$/;"	v
+g:coc_node_path	nvim/init.vim	/^let g:coc_node_path=$/;"	v
+g:highlightedyank_highlight_duration	nvim/init.vim	/^let g:highlightedyank_highlight_duration = 50$/;"	v
+g:lightline	nvim/init.vim	/^let g:lightline = {$/;"	v
+g:lightline	nvim/init.vim	/^let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}$/;"	v
+g:lightline	nvim/init.vim	/^let g:lightline.component_type   = {'buffers': 'tabsel'}$/;"	v
+g:lightline	nvim/init.vim	/^let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}$/;"	v
+g:lightline#bufferline#enable_devicons	nvim/init.vim	/^let g:lightline#bufferline#enable_devicons=1$/;"	v
+g:lightline#bufferline#unicode_symbols	nvim/init.vim	/^let g:lightline#bufferline#unicode_symbols=1$/;"	v
+g:loaded_netrw	nvim/init.vim	/^let g:loaded_netrw = 1$/;"	v
+g:loaded_python_provider	nvim/init.vim	/^let g:loaded_python_provider = 0$/;"	v
+g:nerdtree_tabs_autoclose	nvim/init.vim	/^let g:nerdtree_tabs_autoclose=0$/;"	v
+g:node_host_prog	nvim/init.vim	/^let g:node_host_prog=$/;"	v
+g:pdv_cfg_annotation_Author	nvim/init.vim	/^let g:pdv_cfg_annotation_Author = 0$/;"	v
+g:pdv_cfg_annotation_Copyright	nvim/init.vim	/^let g:pdv_cfg_annotation_Copyright = 0$/;"	v
+g:pdv_cfg_annotation_License	nvim/init.vim	/^let g:pdv_cfg_annotation_License = 0$/;"	v
+g:pdv_cfg_annotation_Package	nvim/init.vim	/^let g:pdv_cfg_annotation_Package = 0$/;"	v
+g:pdv_cfg_annotation_Version	nvim/init.vim	/^let g:pdv_cfg_annotation_Version = 0$/;"	v
+g:pdv_cfg_autoEndClass	nvim/init.vim	/^let g:pdv_cfg_autoEndClass = 0$/;"	v
+g:pdv_cfg_autoEndFunction	nvim/init.vim	/^let g:pdv_cfg_autoEndFunction = 0$/;"	v
+g:python3_host_prog	nvim/init.vim	/^let g:python3_host_prog = '~\/.pyenv\/shims\/python3'$/;"	v
+g:ruby_host_prog	nvim/init.vim	/^let g:ruby_host_prog ='~\/.rbenv\/versions\/2.6.5\/bin\/neovim-ruby-host'$/;"	v
+g:suda_smart_edit	nvim/init.vim	/^let g:suda_smart_edit = 1$/;"	v
+g:user_emmet_leader_key	nvim/init.vim	/^let g:user_emmet_leader_key=','$/;"	v
+g:vim_php_refactoring_auto_validate_g	nvim/init.vim	/^let g:vim_php_refactoring_auto_validate_g = 1$/;"	v
+g:vim_php_refactoring_auto_validate_rename	nvim/init.vim	/^let g:vim_php_refactoring_auto_validate_rename = 1$/;"	v
+g:vim_php_refactoring_auto_validate_sg	nvim/init.vim	/^let g:vim_php_refactoring_auto_validate_sg = 1$/;"	v
+g:vista_icon_indent	nvim/init.vim	/^let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]$/;"	v
+gd	nvim/init.vim	/^nmap <silent>gd <Plug>(coc-definition)$/;"	m
+gh	nvim/init.vim	/^nnoremap <silent>gh :bprevious<cr>$/;"	m
+gi	nvim/init.vim	/^nmap <silent>gi <Plug>(coc-implementation)$/;"	m
+gj	nvim/init.vim	/^map <silent>gj <Plug>(coc-diagnostic-next)$/;"	m
+gj	nvim/init.vim	/^nnoremap <silent>gj :bfirst<cr>$/;"	m
+gk	nvim/init.vim	/^map <silent>gk <Plug>(coc-diagnostic-prev)$/;"	m
+gk	nvim/init.vim	/^nnoremap <silent>gk :blast<cr>$/;"	m
+gl	nvim/init.vim	/^nnoremap <silent>gl :bnext<cr>$/;"	m
+gr	nvim/init.vim	/^nmap <silent>gr <Plug>(coc-references)$/;"	m
+gt	nvim/init.vim	/^nmap <silent>gt :Tags<cr>$/;"	m
+gx	nvim/init.vim	/^nnoremap <silent>gx :Bdelete<cr>$/;"	m
+gy	nvim/init.vim	/^nmap <silent>gy <Plug>(coc-type-definition)$/;"	m
+ia	nvim/init.vim	/^omap ia <Plug>(swap-textobject-i)$/;"	m
+if	nvim/init.vim	/^omap if <Plug>(coc-funcobj-i)$/;"	m
+loaded_netrwPlugin	nvim/init.vim	/^let loaded_netrwPlugin = 1$/;"	v
+mapleader	nvim/init.vim	/^let mapleader = ' '$/;"	v
+n	nvim/init.vim	/^nnoremap n nzzzv$/;"	m
+rr	nvim/init.vim	/^nnoremap rr :NERDTreeRefreshRoot<cr>$/;"	m
+s:float_term_border_win	nvim/init.vim	/^let s:float_term_border_win = 0$/;"	v
+s:float_term_win	nvim/init.vim	/^let s:float_term_win = 0$/;"	v
+show_documentation	nvim/init.vim	/^function! s:show_documentation()$/;"	f
+tf	nvim/init.vim	/^nnoremap tf :NERDTreeFocus<cr>$/;"	m
+tt	nvim/init.vim	/^nnoremap tt :NERDTreeToggle<cr>$/;"	m

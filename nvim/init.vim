@@ -25,7 +25,7 @@ set fileencodings=utf-8
 set fileformats=unix,mac,dos
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
 set clipboard +=unnamedplus
-set list listchars=eol:¬,tab:>·,trail:~,space:·
+set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set backspace=indent,eol,start
 set mouse=a
 set updatetime=50
@@ -214,6 +214,12 @@ map <leader>l <plug>(easymotion-bd-jk)
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
+Plug 'liuchengxu/vista.vim'
+map <leader>vt :Vista coc<cr>
+map <leader>vs :Vista finder coc<cr>:Vista coc<cr>
+map <leader>vf :Vista focus<cr>
+
+let g:vista_sidebar_width= 35
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
@@ -340,7 +346,7 @@ let g:lightline = {
       \   'fugitive': 'LightlineFugitive',
       \   'filename': 'LightlineFilename',
       \   'method': 'NearestMethodOrFunction'
-      \ }
+      \   }
       \ }
 
 set showtabline=2
