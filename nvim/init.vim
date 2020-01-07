@@ -63,10 +63,6 @@ nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
 nnoremap <silent><c-h> <c-w><c-h>
 nnoremap <silent><esc> :nohlsearch<cr>
-nnoremap <silent>gj :bfirst<cr>
-nnoremap <silent>gk :blast<cr>
-nnoremap <silent>gh :bprevious<cr>
-nnoremap <silent>gl :bnext<cr>
 nnoremap <silent>gx :Bdelete<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
@@ -74,7 +70,6 @@ nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
 nnoremap <silent><leader>e :e!<cr>
 nnoremap <silent><leader>w :w<cr>
-nnoremap <silent><leader>W :wa<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzzzv
@@ -88,10 +83,6 @@ tnoremap <silent><c-l> <c-\><c-n><c-w>l
 " Disable netrw
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
-
-" windows creation
-nnoremap <leader>sp <c-w>s
-nnoremap <leader>sv <c-w>v
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
@@ -155,18 +146,29 @@ nnoremap <leader>at :call FloatTerm()<cr>
 function! QuickFormat()
   silent! wall
   let fullpath = expand('%:p')
-  let extension = expand('%:e')
-  let runner1 ="prettier"
+  let listExtension = split(expand('%t'), '\.')
+
+  " List format tool
+  let runner1 = "prettier"
+  let runner2 = "semistandard"
+  let runner3 = "php-cs-fixer"
+  let runner4 = "blade-formatter"
+
+  let extension = listExtension[len(listExtension) - 1]
   if extension == "js"
-    let runner2 ="semistandard"
     execute ":! ".runner1." --write ".fullpath ." && "
           \ .runner2." --fix ".fullpath." | snazzy"
   elseif extension == "ts"
     execute ":! ".runner1." --write ".fullpath
   elseif extension == "php"
-    let runner2 ="php-cs-fixer"
-    execute ":! ".runner1." --write ".fullpath." && "
-          \ .runner2." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
+    let isBlade = listExtension[len(listExtension) - 2]
+    if isBlade =='blade'
+      execute ":! ".runner1." --write ".fullpath." && "
+            \ .runner4." --write ".fullpath
+    else
+      execute ":! ".runner1." --write ".fullpath." && "
+            \ .runner3." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
+    endif
   elseif extension == "html"
     execute ":! ".runner1." --write ".fullpath
   elseif extension == "css"
@@ -194,8 +196,6 @@ Plug 'joshdick/onedark.vim'
 Plug 'laggardkernel/vim-one'
 set background=dark
 
-Plug 'tpope/vim-sensible'
-
 Plug 'tpope/vim-eunuch'
 
 Plug 'pbrisbin/vim-mkdir'
@@ -218,15 +218,15 @@ Plug 'liuchengxu/vista.vim'
 map <leader>vt :Vista coc<cr>
 map <leader>vs :Vista finder coc<cr>:Vista coc<cr>
 map <leader>vf :Vista focus<cr>
-
 let g:vista_sidebar_width= 35
+
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
 
 Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.\*', 'scp://.\*']
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -254,20 +254,15 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 50
+let g:highlightedyank_highlight_duration = 80
 
 Plug 't9md/vim-choosewin'
-nmap <leader>cw :ChooseWin<cr>
 nmap <leader>sw :ChooseWinSwap<cr>
-
-Plug 'yangmillstheory/vim-snipe'
-map <silent>f <Plug>(snipe-f)
-map <silent>F <Plug>(snipe-F)
 
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = '23'
+let g:VimuxHeight = '22'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
@@ -278,9 +273,6 @@ Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-nnoremap <leader>js :e ~/dotfiles/UltiSnips/javascript.snippets<cr>
-nnoremap <leader>php :e ~/dotfiles/UltiSnips/php.snippets<cr>
-nnoremap <leader>html :e ~/dotfiles/UltiSnips/html.snippets<cr>
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -290,10 +282,13 @@ let g:coc_global_extensions =
       \ 'coc-css',
       \ 'coc-phpls',
       \ 'coc-python',
+      \ 'coc-sql',
+      \ 'coc-webpack',
       \ 'coc-vimlsp',
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
+      \ 'coc-tailwindcss',
       \ 'coc-html',
       \ 'coc-snippets'
       \ ]
@@ -306,7 +301,6 @@ nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
-nmap <silent>gt :Tags<cr>
 
 " Create mappings for function text object
 xmap if <Plug>(coc-funcobj-i)
@@ -331,13 +325,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
-Plug 'mengelbrecht/lightline-bufferline'
-let g:lightline#bufferline#enable_devicons=1
-let g:lightline#bufferline#unicode_symbols=1
-
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
@@ -348,11 +338,6 @@ let g:lightline = {
       \   'method': 'NearestMethodOrFunction'
       \   }
       \ }
-
-set showtabline=2
-let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 function! LightlineFugitive()
   if exists('*fugitive#head')
@@ -386,38 +371,40 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
-" Replace the default dictionary completion with fzf-based fuzzy completion
-inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
-
 nnoremap <silent><leader>ff :Files<cr>
 command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, <bang>0)
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<cr>/<cr>
 
-nnoremap <silent><leader>FF :GFiles<cr>
-command! -bang -nargs=? -complete=dir GFiles
-      \call fzf#vim#gitfiles(<q-args>, <bang>0)
+nnoremap <silent><leader>fb :Buffers<cr>
+command! -bang -nargs=? -complete=dir Buffers
+      \ call fzf#vim#buffers(fzf#vim#with_preview(), <bang>0)
 
 nnoremap <silent><leader>fr :Rg<cr>
-nnoremap <silent><leader>fb :Buffers<cr>
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
 nnoremap <silent><leader>fm :Maps<cr>
 nnoremap <silent><leader>fl :Lines<cr>
 nnoremap <silent><leader>fc :Colors<cr>
-nnoremap <silent><leader>fw :Windows<cr>
 nnoremap <silent><leader>fg :Commits<cr>
+nnoremap <silent><leader>fw :Windows<cr>
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-tnoremap <expr> <esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+tnoremap <expr> <esc> (&filetype == "fzf") ? "<esc>" : "<c-\><c-n>"
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['^\.git$','^node_modules$']
+let NERDTreeIgnore = ['^\.git$','^node_modules$', '^vendor$']
 let g:NERDTreeWinPos = 'left'
 let NERDTreeMinimalUI = 1
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden= 1
+let NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
@@ -507,9 +494,7 @@ Plug 'ap/vim-css-color'
 
 "Javascript
 Plug 'mxw/vim-jsx'
-
-" Markdown
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'Galooshi/vim-import-js'
 
 "Text object
 Plug 'kana/vim-textobj-user'
@@ -524,4 +509,4 @@ xmap aa <Plug>(swap-textobject-a)
 
 call plug#end()
 
-colorscheme one
+colorscheme onedark

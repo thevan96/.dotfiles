@@ -14,8 +14,6 @@ alias hc="history -c"
 alias find-port="sudo lsof -i -P -n"
 
 # Alias tmux
-alias ta="tmux attach"
-alias t="tmux"
 alias kp="kill-port "
 alias tk="tmux kill-server"
 
@@ -37,9 +35,10 @@ gps (){
 gpsf (){
   git push origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" --force
 }
-
+git-amend (){
+  ga . && gca && gpsf
+}
 # Alias php
-alias dl="composer dump-autoload"
 rp() {
   php -S localhost:"$1"
 }
@@ -93,7 +92,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type file -i -H -I --exclude .git --exclude node_modules --color always'
+export FZF_DEFAULT_COMMAND='fd --type file -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height --no-reverse --ansi'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -16,6 +16,7 @@ ln -sf ~/dotfiles/UltiSnips/php.snippets ~/.config/nvim/UltiSnips/php.snippets
 ln -sf ~/dotfiles/UltiSnips/javascript.snippets ~/.config/nvim/UltiSnips/javascript.snippets
 ln -sf ~/dotfiles/UltiSnips/html.snippets ~/.config/nvim/UltiSnips/html.snippets
 ln -sf ~/dotfiles/UltiSnips/css.snippets ~/.config/nvim/UltiSnips/css.snippets
+ln -sf ~/dotfiles/UltiSnips/blade.snippets ~/.config/nvim/UltiSnips/blade.snippets
 
 # zsh
 ln -sf ~/dotfiles/zsh/starship.toml  ~/.config/starship.toml

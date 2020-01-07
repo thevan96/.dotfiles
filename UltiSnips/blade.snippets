@@ -1,0 +1,42 @@
+snippet yi "@yield"
+@yield('$1')
+endsnippet
+
+snippet in "@inlude"
+@include('$1')
+endsnippet
+
+snippet se "@section"
+@section('$1')
+endsnippet
+
+snippet ex "@extends"
+@extends('$1')
+endsnippet
+
+snippet if "if"
+@if ($1)
+    $2
+@endif
+endsnippet
+
+snippet ifelse "if else"
+@if ($1)
+    $2
+@else($3)
+    $4
+@endif
+endsnippet
+
+snippet foreach "for each"
+@foreach ($1)
+    $2
+@endforeach
+endsnippet
+
+snippet foreach "for"
+@for ($1 = 0; $1 < $2; $1++)
+    $3
+@endfor
+endsnippet
+
