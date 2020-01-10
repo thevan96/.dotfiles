@@ -16,6 +16,8 @@ set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
 set lazyredraw
+set shortmess+=c
+set cmdheight=2
 set nowrap
 set colorcolumn=80
 set signcolumn=yes
@@ -56,8 +58,8 @@ vnoremap <left> <nop>
 vnoremap <right> <nop>
 vnoremap < <gv
 vnoremap > >gv
+nnoremap <Q> <nop>
 nnoremap <F1> <nop>
-nnoremap Q <nop>
 nnoremap <silent><c-j> <c-w><c-j>
 nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
@@ -68,7 +70,6 @@ nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>qq :q<cr>
 nnoremap <silent><leader>qa :qa<cr>
-nnoremap <silent><leader>e :e!<cr>
 nnoremap <silent><leader>w :w<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
@@ -203,6 +204,8 @@ Plug 'pbrisbin/vim-mkdir'
 Plug 'moll/vim-bbye'
 
 Plug 'simeji/winresizer'
+let g:winresizer_vert_resize=1
+let g:winresizer_horiz_resize=1
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -213,6 +216,9 @@ map <leader>l <plug>(easymotion-bd-jk)
 
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
+
+Plug 'frazrepo/vim-rainbow'
+let g:rainbow_active = 1
 
 Plug 'liuchengxu/vista.vim'
 map <leader>vt :Vista coc<cr>
@@ -262,7 +268,10 @@ nmap <leader>sw :ChooseWinSwap<cr>
 Plug 'benmills/vimux'
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
-let g:VimuxHeight = '22'
+map <leader>vl :VimuxRunLastCommand<CR>
+map <leader>vx :VimuxInterruptRunner<CR>
+map <leader>vz :VimuxZoomRunner<CR>
+let g:VimuxHeight = '25'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
@@ -271,8 +280,8 @@ map g/ <Plug>(incsearch-stay)
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-n>"
+let g:UltiSnipsJumpBackwardTrigger="<c-p>"
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -294,7 +303,7 @@ let g:coc_global_extensions =
       \ ]
 
 inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
 " Remap keys for gotos
 nmap <silent>gd <Plug>(coc-definition)
@@ -492,15 +501,29 @@ Plug 'noahfrederick/vim-laravel'
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
+" Blade
+Plug 'jwalton512/vim-blade'
+
+" Flutter, dart
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+nnoremap <leader>ds :FlutterRun<cr>
+nnoremap <leader>dq :FlutterQuit<cr>
+nnoremap <leader>dr :FlutterHotReload<cr>
+nnoremap <leader>dR :FlutterHotRestart<cr>
+nnoremap <leader>dd :FlutterVisualDebug<cr>
+
 "Javascript
 Plug 'mxw/vim-jsx'
 Plug 'Galooshi/vim-import-js'
 
 "Text object
-Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-user' " key e
+Plug 'kana/vim-textobj-entire' " key
 Plug 'kana/vim-textobj-line' "key l
 Plug 'jasonlong/vim-textobj-css' "key c
 Plug 'whatyouhide/vim-textobj-xmlattr' "key x
+Plug 'adriaanzon/vim-textobj-blade-directive' "key d
 Plug 'machakann/vim-swap' " key a
 omap ia <Plug>(swap-textobject-i)
 xmap ia <Plug>(swap-textobject-i)

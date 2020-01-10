@@ -1,55 +1,44 @@
-snippet cl
+snippet cl "console.log()"
 console.log(${1:variable});
 endsnippet
 
-snippet log
-console.log(\`🐧 $1 \`, ${1:variable});
+snippet ls "Load script"
+console.log('Load $1 ... ');
+$2
 endsnippet
 
-snippet logt
-console.log(\`🐧 $1[${$2}] \`, ${1:variable}[${2:index}]);
-endsnippet
-
-snippet logtt
-console.log(\`🐧 $1[${$2}][${$3}] \`, ${1:variable}[${2:index}][${3:index}]);
-endsnippet
-
-snippet sw
+snippet sw "${1:a} = ${2:b} + ($2=$1, 0);"
 ${1:a} = ${2:b} + ($2=$1, 0);
 endsnippet
 
-snippet fore
+snippet fore "${1:variable}.forEach(${2:element} => ${3:content});"
 ${1:variable}.forEach(${2:element} => ${3:content});
 endsnippet
 
-snippet forl
+snippet for "for (let ${1:i} = 0; $1 < ${2:variable}; $1++) { "
 for (let ${1:i} = 0; $1 < ${2:variable}; $1++) {
   $3
 }
 endsnippet
 
-snippet dw
+snippet dw "document.write()"
 document.write(${1:content});
 endsnippet
 
-snippet dgi
+snippet dgi "document.getElementById"
 document.getElementById('${1:content}')
 endsnippet
 
-snippet ls
-console.log('Load $1 ... ');
-$2
-endsnippet
 
-snippet swapMatrix
+snippet swapMatrix "swapMatrix"
 ${1:arr} = $1[0].map((col, index) => $1.map(row => row[index]));
 endsnippet
 
-snippet ust
+snippet ust "use strict"
 'use strict'
 $1
 endsnippet
 
-snippet ---
+snippet --- "------------------------------------------"
 // -------------------------------------------------------------------------- //
 endsnippet

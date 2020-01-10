@@ -1,9 +1,9 @@
 # Config plugin zsh
-ZSH_TMUX_AUTOSTART=false
+ZSH_TMUX_AUTOSTART=true
 
 # Config starship shell zsh
 eval "$(starship init zsh)"
-alias reload-zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Alias define shell
 alias cl="clear"
@@ -38,10 +38,6 @@ gpsf (){
 git-amend (){
   ga . && gca && gpsf
 }
-# Alias php
-rp() {
-  php -S localhost:"$1"
-}
 
 # Alias tool
 update-all() {
@@ -53,12 +49,15 @@ update-all() {
   cd $HOME/.oh-my-zsh && git pull origin master &&
   cd $HOME/.pyenv && git pull origin master &&
   cd $HOME/.rbenv && git pull origin master &&
+  cd $HOME/flutter && git pull origin master &&
   cd
 }
 alias standard-log="standard --fix | snazzy"
 alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
-alias bs="browser-sync start --server --files '*' --port "
 alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+bs () {
+  browser-sync start --server --files '*' --port "${1:-3000}"
+}
 zeal-docs-fix() {
     pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
     find . -iname 'react-main*.js' -exec rm '{}' \;
@@ -71,8 +70,12 @@ export EDITOR=vi
 # Config vimdebug php
 export XDEBUG_CONFIG="idekey=xdebug"
 
-# Laravel export, composer
+# Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+alias rl='firefox http://127.0.0.1:8000 && php artisan serve'
+rp() {
+  php -S 127.0.0.1:"${1:-8000}"
+}
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -103,7 +106,11 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-alias run-phone="emulator @Pixel_2_XL_API_28"
+alias run-phone="emulator @Pixel_3_API_28"
+
+
+# Flutter, dart
+export PATH="$PATH:$HOME/flutter/bin"
 
 # Include Z
 . /usr/local/bin/z.sh
