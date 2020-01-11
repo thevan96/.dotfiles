@@ -26,7 +26,7 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 set fileformats=unix,mac,dos
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
-set clipboard +=unnamedplus
+set clipboard^=unnamed,unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set backspace=indent,eol,start
 set mouse=a
@@ -68,18 +68,20 @@ nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gx :Bdelete<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>qq :q<cr>
-nnoremap <silent><leader>qa :qa<cr>
+nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>w :w<cr>
 nnoremap Y y$
 nnoremap J mzJ`z
-nnoremap n nzzzv
-nnoremap N Nzzzv
 tnoremap <silent><esc> <c-\><c-n>
 tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
+
+" Past before
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -141,7 +143,7 @@ function! FloatTerm(...)
   autocmd TermClose * ++once :bd! |
         \ call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
-nnoremap <leader>at :call FloatTerm()<cr>
+nnoremap <silent><leader>at :call FloatTerm()<cr>
 
 " Format source
 function! QuickFormat()
@@ -204,27 +206,25 @@ Plug 'pbrisbin/vim-mkdir'
 Plug 'moll/vim-bbye'
 
 Plug 'simeji/winresizer'
-let g:winresizer_vert_resize=1
-let g:winresizer_horiz_resize=1
+let g:winresizer_vert_resize=3
+let g:winresizer_horiz_resize=3
 
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'matze/vim-move'
 
 Plug 'easymotion/vim-easymotion'
-map <leader>l <plug>(easymotion-bd-jk)
+nmap <silent>,w <Plug>(easymotion-overwin-f)
+nmap <silent>,l <plug>(easymotion-bd-jk)
 
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
-Plug 'frazrepo/vim-rainbow'
-let g:rainbow_active = 1
-
 Plug 'liuchengxu/vista.vim'
-map <leader>vt :Vista coc<cr>
-map <leader>vs :Vista finder coc<cr>:Vista coc<cr>
-map <leader>vf :Vista focus<cr>
-let g:vista_sidebar_width= 35
+map <silent><leader>vt :Vista coc<cr>
+map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
+map <silent><leader>vf :Vista focus<cr>
+let g:vista_sidebar_width= 32
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
@@ -234,12 +234,14 @@ endif
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
+Plug 'jiangmiao/auto-pairs'
+
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'terryma/vim-expand-region'
-map <leader>o <Plug>(expand_region_expand)
-map <leader>i <Plug>(expand_region_shrink)
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug(expand_region_shrink)
 
 Plug 'tpope/vim-surround'
 
@@ -260,23 +262,27 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 80
+let g:highlightedyank_highlight_duration = 100
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
 
 Plug 'benmills/vimux'
-map <leader>vp :VimuxPromptCommand<CR>
-map <leader>vq :VimuxCloseRunner<CR>
-map <leader>vl :VimuxRunLastCommand<CR>
-map <leader>vx :VimuxInterruptRunner<CR>
-map <leader>vz :VimuxZoomRunner<CR>
+map <silent><leader>vp :VimuxPromptCommand<CR>
+map <silent><leader>vq :VimuxCloseRunner<CR>
+map <silent><leader>vl :VimuxRunLastCommand<CR>
+map <silent><leader>vx :VimuxInterruptRunner<CR>
 let g:VimuxHeight = '25'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
+
+Plug 'osyo-manga/vim-anzu'
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+set statusline=%{anzu#search_status()}
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -297,12 +303,11 @@ let g:coc_global_extensions =
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
-      \ 'coc-tailwindcss',
-      \ 'coc-html',
-      \ 'coc-snippets'
+      \ 'coc-tailwindcss'
       \ ]
 
-inoremap <silent><expr> <c-space> coc#refresh()
+" Refresh suggest
+inoremap <silent><expr> <c-n> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
 " Remap keys for gotos
@@ -336,7 +341,7 @@ map <silent>gk <Plug>(coc-diagnostic-prev)
 
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
@@ -380,27 +385,21 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
-nnoremap <silent><leader>ff :Files<cr>
+nnoremap <silent><leader>o :Files<cr>
 command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+      \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>f. :Files <C-r>=expand("%:h")<cr>/<cr>
-
-nnoremap <silent><leader>fb :Buffers<cr>
+nnoremap <silent><leader>b :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
-      \ call fzf#vim#buffers(fzf#vim#with_preview(), <bang>0)
+      \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>fr :Rg<cr>
+nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
 
-nnoremap <silent><leader>fm :Maps<cr>
-nnoremap <silent><leader>fl :Lines<cr>
-nnoremap <silent><leader>fc :Colors<cr>
-nnoremap <silent><leader>fg :Commits<cr>
-nnoremap <silent><leader>fw :Windows<cr>
+nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
+nnoremap <silent><leader>m :Maps<cr>
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -412,16 +411,16 @@ Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$', '^vendor$']
 let g:NERDTreeWinPos = 'left'
 let NERDTreeMinimalUI = 1
-let NERDTreeShowHidden= 1
+let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 highlight! link NERDTreeFlags NERDTreeDir
-nnoremap tt :NERDTreeToggle<cr>
-nnoremap tf :NERDTreeFocus<cr>
-nnoremap rr :NERDTreeRefreshRoot<cr>
+nnoremap <silent>tt :NERDTreeToggle<cr>
+nnoremap <silent>tf :NERDTreeFind<cr>
+nnoremap <silent>rr :NERDTreeRefreshRoot<cr>
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -467,6 +466,7 @@ Plug 'adoy/vim-php-refactoring-toolbox'
 let g:vim_php_refactoring_auto_validate_sg = 1
 let g:vim_php_refactoring_auto_validate_g = 1
 let g:vim_php_refactoring_auto_validate_rename = 1
+let g:vim_php_refactoring_use_default_mapping = 0
 nnoremap <silent><leader>prv :call PhpRenameLocalVariable()<cr>
 nnoremap <silent><leader>prc :call PhpRenameClassVariable()<cr>
 nnoremap <silent><leader>prm :call PhpRenameMethod()<cr>
@@ -532,4 +532,4 @@ xmap aa <Plug>(swap-textobject-a)
 
 call plug#end()
 
-colorscheme onedark
+colorscheme one

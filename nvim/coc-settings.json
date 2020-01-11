@@ -3,12 +3,8 @@
   "diagnostic.warningSign": "",
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": "",
-  "coc.preferences.snippets.enable": true,
-  "snippets.ultisnips.directories": ["UltiSnips"],
   "coc.preferences.extensionUpdateCheck":"daily",
-  "typescript.showUnused": true,
-  "javascript.showUnused": true,
-  "suggest.autoTrigger": "none",
+  "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",

@@ -1,7 +1,4 @@
-# Config plugin zsh
-ZSH_TMUX_AUTOSTART=true
-
-# Config starship shell zsh
+# Configl zsh
 eval "$(starship init zsh)"
 alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
@@ -11,11 +8,11 @@ alias ex="exit"
 alias ..="cd .."
 alias mkdir="mkdir -p"
 alias hc="history -c"
-alias find-port="sudo lsof -i -P -n"
+alias fp="sudo lsof -i -P -n"
+alias kp="kill-port "
 
 # Alias tmux
-alias kp="kill-port "
-alias tk="tmux kill-server"
+alias kt="tmux kill-server"
 
 # Alias define git
 alias gs="git status"
@@ -26,21 +23,21 @@ alias glo="git log --oneline"
 alias gca="git commit --amend"
 alias gc="git commit -m "
 alias grh="git reset --hard"
-gpl (){
+gpl () {
   git pull origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)"
 }
-gps (){
+gps () {
   git push origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)"
 }
-gpsf (){
+gpsf () {
   git push origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" --force
 }
-git-amend (){
+gam () {
   ga . && gca && gpsf
 }
 
 # Alias tool
-update-all() {
+ua () {
   sudo apt -y update &&
   sudo apt -y upgrade &&
   sudo apt -y autoclean &&
@@ -52,13 +49,12 @@ update-all() {
   cd $HOME/flutter && git pull origin master &&
   cd
 }
-alias standard-log="standard --fix | snazzy"
-alias npmplease="rm -rf node_modules && rm package-lock.json && npm install"
-alias test-vim="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+alias stl="standard --fix | snazzy"
+alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 bs () {
   browser-sync start --server --files '*' --port "${1:-3000}"
 }
-zeal-docs-fix() {
+zeal-docs-fix () {
     pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
     find . -iname 'react-main*.js' -exec rm '{}' \;
     popd >/dev/null || exit
@@ -72,8 +68,12 @@ export XDEBUG_CONFIG="idekey=xdebug"
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
-alias rl='firefox http://127.0.0.1:8000 && php artisan serve'
-rp() {
+rl () {
+  port=${1:-8000}
+  firefox http://127.0.0.1:$port;
+  php artisan serve --port $port
+}
+rp () {
   php -S 127.0.0.1:"${1:-8000}"
 }
 
@@ -95,9 +95,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type file -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color always'
+export FZF_DEFAULT_COMMAND='fd --type f -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--no-height --no-reverse --ansi'
+export FZF_DEFAULT_OPTS='--no-height --ansi'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Android
