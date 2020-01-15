@@ -4,9 +4,8 @@ if exists('+termguicolors') " Enable true color
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-
 syntax on
-set number
+set number relativenumber
 set hidden
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
@@ -17,7 +16,7 @@ set splitbelow splitright
 set autoindent smartindent
 set lazyredraw
 set shortmess+=c
-set cmdheight=2
+set cmdheight=1
 set nowrap
 set colorcolumn=80
 set signcolumn=yes
@@ -30,58 +29,51 @@ set clipboard^=unnamed,unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set backspace=indent,eol,start
 set mouse=a
-set updatetime=50
+set updatetime=80
 
 " Setting tab/space by language programing
-set tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
-autocmd FileType js, md, html, css, scss, json, vim
-      \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab shiftround
+set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType js, md, html, css, scss, json
+      \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType php
-      \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
+      \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
 
 " Mapping
 let mapleader = ' '
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-vnoremap <up> <nop>
-vnoremap <down> <nop>
-vnoremap <left> <nop>
-vnoremap <right> <nop>
 vnoremap < <gv
 vnoremap > >gv
-nnoremap <Q> <nop>
-nnoremap <F1> <nop>
+nnoremap Y y$
+nnoremap J mzJ`z
+nnoremap n nzz
+nnoremap N Nzz
+map h <nop>
+map l <nop>
+map Q <nop>
+map <F1> <nop>
+map <silent>zo <c-w>=
+map <silent>zi :NERDTreeClose<cr><c-w>_ \| <c-w>\|
 nnoremap <silent><c-j> <c-w><c-j>
 nnoremap <silent><c-k> <c-w><c-k>
 nnoremap <silent><c-l> <c-w><c-l>
 nnoremap <silent><c-h> <c-w><c-h>
 nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gx :Bdelete<cr>
+nnoremap <silent>gh :bprevious<cr>
+nnoremap <silent>gl :bnext<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>q :q<cr>
+nnoremap <silent><leader>qq :q<cr>
+nnoremap <silent><leader>qa :qa<cr>
+nnoremap <silent><leader>q! :qa!<cr>
 nnoremap <silent><leader>w :w<cr>
-nnoremap Y y$
-nnoremap J mzJ`z
 tnoremap <silent><esc> <c-\><c-n>
 tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
-
-" Past before
-vnoremap <silent> y y`]
-vnoremap <silent> p p`]
-nnoremap <silent> p p`]
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -89,10 +81,6 @@ let loaded_netrwPlugin = 1
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
-
-" Faster keyword completion
-set complete-=i   " disable scanning included files
-set complete-=t   " disable searching tags
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -195,7 +183,6 @@ nnoremap <leader>fe :call QuickFormat()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'joshdick/onedark.vim'
 Plug 'laggardkernel/vim-one'
 set background=dark
 
@@ -213,10 +200,6 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'matze/vim-move'
 
-Plug 'easymotion/vim-easymotion'
-nmap <silent>,w <Plug>(easymotion-overwin-f)
-nmap <silent>,l <plug>(easymotion-bd-jk)
-
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
@@ -224,34 +207,29 @@ Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
 map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
 map <silent><leader>vf :Vista focus<cr>
-let g:vista_sidebar_width= 32
+let g:vista_sidebar_width= 30
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
-
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+Plug 'Yggdroot/indentLine'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
-Plug 'terryma/vim-expand-region'
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug(expand_region_shrink)
-
 Plug 'tpope/vim-surround'
 
-Plug 'scrooloose/nerdcommenter'
-let g:NERDSpaceDelims = 1
-let g:NERDCompactSexyComs = 0
-let g:NERDTrimTrailingWhitespace = 1
+Plug 'tpope/vim-commentary'
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key=','
+let g:user_emmet_leader_key='<C-e>'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -262,17 +240,10 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 100
+let g:highlightedyank_highlight_duration = 80
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
-
-Plug 'benmills/vimux'
-map <silent><leader>vp :VimuxPromptCommand<CR>
-map <silent><leader>vq :VimuxCloseRunner<CR>
-map <silent><leader>vl :VimuxRunLastCommand<CR>
-map <silent><leader>vx :VimuxInterruptRunner<CR>
-let g:VimuxHeight = '25'
 
 Plug 'haya14busa/incsearch.vim'
 map /  <Plug>(incsearch-forward)
@@ -303,11 +274,12 @@ let g:coc_global_extensions =
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
-      \ 'coc-tailwindcss'
+      \ 'coc-tailwindcss',
+      \ 'coc-snippets'
       \ ]
 
 " Refresh suggest
-inoremap <silent><expr> <c-n> coc#refresh()
+inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
 " Remap keys for gotos
@@ -339,6 +311,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
+Plug 'mengelbrecht/lightline-bufferline'
+
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
       \ 'colorscheme': 'one',
@@ -352,6 +326,10 @@ let g:lightline = {
       \   'method': 'NearestMethodOrFunction'
       \   }
       \ }
+set showtabline=2
+let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 function! LightlineFugitive()
   if exists('*fugitive#head')
@@ -395,11 +373,11 @@ command! -bang -nargs=? -complete=dir Buffers
 
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
 
 nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
-nnoremap <silent><leader>m :Maps<cr>
+nnoremap <silent><leader>k :Maps<cr>
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -415,8 +393,8 @@ let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
-let g:NERDTreeMapJumpNextSibling = '<Nop>'
-let g:NERDTreeMapJumpPrevSibling = '<Nop>'
+let g:NERDTreeMapJumpNextSibling = '<nop>'
+let g:NERDTreeMapJumpPrevSibling = '<nop>'
 highlight! link NERDTreeFlags NERDTreeDir
 nnoremap <silent>tt :NERDTreeToggle<cr>
 nnoremap <silent>tf :NERDTreeFind<cr>
@@ -440,8 +418,8 @@ Plug 'sheerun/vim-polyglot'
 " Python
 let g:loaded_python_provider = 0
 let g:python3_host_prog = '~/.pyenv/shims/python3'
-" Node
 
+" Node
 let g:node_host_prog=
       \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/neovim-node-host'
 let g:coc_node_path=
@@ -501,8 +479,24 @@ Plug 'noahfrederick/vim-laravel'
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
+" Markdown
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_frontmatter = 1
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+nmap <leader>mp <Plug>MarkdownPreviewToggle
+nmap <leader>mq <Plug>MarkdownPreviewStop
+
 " Blade
 Plug 'jwalton512/vim-blade'
+autocmd BufNewFile,BufRead *.blade.php set ft=html | set ft=phtml | set ft=blade
 
 " Flutter, dart
 Plug 'dart-lang/dart-vim-plugin'
@@ -514,10 +508,10 @@ nnoremap <leader>dR :FlutterHotRestart<cr>
 nnoremap <leader>dd :FlutterVisualDebug<cr>
 
 "Javascript
-Plug 'mxw/vim-jsx'
 Plug 'Galooshi/vim-import-js'
 
 "Text object
+Plug 'wellle/targets.vim' "textobject + n + target
 Plug 'kana/vim-textobj-user' " key e
 Plug 'kana/vim-textobj-entire' " key
 Plug 'kana/vim-textobj-line' "key l

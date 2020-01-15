@@ -1,40 +1,18 @@
 # Configl zsh
+ZSH_TMUX_AUTOSTART=false
+ZSH_TMUX_AUTOQUIT=false
 eval "$(starship init zsh)"
 alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Alias define shell
 alias cl="clear"
 alias ex="exit"
-alias ..="cd .."
-alias mkdir="mkdir -p"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port "
 
 # Alias tmux
 alias kt="tmux kill-server"
-
-# Alias define git
-alias gs="git status"
-alias ga="git add "
-alias gl="git log"
-alias gd="git diff"
-alias glo="git log --oneline"
-alias gca="git commit --amend"
-alias gc="git commit -m "
-alias grh="git reset --hard"
-gpl () {
-  git pull origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)"
-}
-gps () {
-  git push origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)"
-}
-gpsf () {
-  git push origin "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" --force
-}
-gam () {
-  ga . && gca && gpsf
-}
 
 # Alias tool
 ua () {
@@ -49,11 +27,17 @@ ua () {
   cd $HOME/flutter && git pull origin master &&
   cd
 }
-alias stl="standard --fix | snazzy"
-alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
-bs () {
-  browser-sync start --server --files '*' --port "${1:-3000}"
+
+gam () {
+  git add . && git commit --amend && git push --force
 }
+
+alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+
+bs () {
+  browser-sync start --server --files '*' --port "${1:-3004}"
+}
+
 zeal-docs-fix () {
     pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
     find . -iname 'react-main*.js' -exec rm '{}' \;
@@ -63,19 +47,8 @@ zeal-docs-fix () {
 # Default vim text editor
 export EDITOR=vi
 
-# Config vimdebug php
-export XDEBUG_CONFIG="idekey=xdebug"
-
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
-rl () {
-  port=${1:-8000}
-  firefox http://127.0.0.1:$port;
-  php artisan serve --port $port
-}
-rp () {
-  php -S 127.0.0.1:"${1:-8000}"
-}
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -95,7 +68,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type f -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color always'
+export FZF_DEFAULT_COMMAND='fd --type f -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height --ansi'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -114,4 +87,3 @@ export PATH="$PATH:$HOME/flutter/bin"
 
 # Include Z
 . /usr/local/bin/z.sh
-
