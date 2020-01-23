@@ -5,8 +5,9 @@ if exists('+termguicolors') " Enable true color
   set termguicolors
 endif
 syntax on
-set number relativenumber
+set number
 set hidden
+set showcmd
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
 filetype plugin on
@@ -18,6 +19,8 @@ set lazyredraw
 set shortmess+=c
 set cmdheight=1
 set nowrap
+set mouse=a
+set updatetime=100
 set colorcolumn=80
 set signcolumn=yes
 set encoding=utf-8
@@ -25,11 +28,10 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 set fileformats=unix,mac,dos
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
-set clipboard^=unnamed,unnamedplus
+set clipboard=unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
 set backspace=indent,eol,start
-set mouse=a
-set updatetime=80
+set whichwrap=<,>,h,l
 
 " Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
@@ -41,6 +43,18 @@ autocmd FileType php
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
 
+" Tweak for Markdown mode
+autocmd FileType markdown call s:markdown_mode_setup()
+function! s:markdown_mode_setup()
+  set wrap
+  set conceallevel=0
+endfunction
+
+" Save position cursor
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
 " Mapping
 let mapleader = ' '
 vnoremap < <gv
@@ -49,7 +63,18 @@ nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzz
 nnoremap N Nzz
+noremap 0 g0
+noremap $ g$
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <left> <nop>
+noremap <right> <nop>
 map Q <nop>
+map K <nop>
 map <F1> <nop>
 map <silent>zo <c-w>=
 map <silent>zi :NERDTreeClose<cr><c-w>_ \| <c-w>\|
@@ -61,17 +86,16 @@ nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gx :Bdelete<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gl :bnext<cr>
-nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>qq :q<cr>
-nnoremap <silent><leader>qa :qa<cr>
-nnoremap <silent><leader>q! :qa!<cr>
+nnoremap <silent><leader>q :q<cr>
+nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>w :w<cr>
 tnoremap <silent><esc> <c-\><c-n>
 tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
+noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -175,18 +199,16 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-" nnoremap <leader>fe :call QuickFormat()<cr>
+nnoremap <leader>f :call QuickFormat()<cr>
 
 " Load plugin
 call plug#begin()
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
+Plug 'joshdick/onedark.vim'
 set background=dark
 
 Plug 'tpope/vim-eunuch'
-
-Plug 'pbrisbin/vim-mkdir'
 
 Plug 'moll/vim-bbye'
 
@@ -196,38 +218,30 @@ let g:winresizer_horiz_resize=3
 
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'matze/vim-move'
-
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_default_on = 1
-let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_visual_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_disabled_keys = []
-let g:hardtime_ignore_buffer_patterns = [ "CustomPatt[ae]rn", "NERD.*", "FZF"]
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_timeout = 2000
 
 Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
 map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
 map <silent><leader>vf :Vista focus<cr>
-let g:vista_sidebar_width= 30
+let g:vista_sidebar_width= 33
 
 Plug 'ryanoasis/vim-devicons'
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_fileTypeExclude = ['markdown']
 
 Plug 'jiangmiao/auto-pairs'
+
+Plug 'matze/vim-move'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -237,7 +251,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<C-e>'
+let g:user_emmet_leader_key='<C-,>'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -248,7 +262,8 @@ let g:suda_smart_edit = 1
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 80
+let g:highlightedyank_highlight_duration = 100
+" highlight HighlightedyankRegion cterm=reverse gui=reverse
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
@@ -302,8 +317,8 @@ xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use D to show documentation in preview window
+nnoremap <silent>D :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -323,7 +338,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
       \ },
@@ -373,19 +388,18 @@ endif
 
 nnoremap <silent><leader>o :Files<cr>
 command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
+      \ call fzf#vim#files(<q-args>, <bang>0)
 
 nnoremap <silent><leader>b :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
-      \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
+      \ call fzf#vim#buffers(<bang>0)
 
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
+      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 
 nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
-nnoremap <silent><leader>k :Maps<cr>
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -397,16 +411,17 @@ Plug 'scrooloose/nerdtree'
 let NERDTreeIgnore = ['^\.git$','^node_modules$', '^vendor$']
 let g:NERDTreeWinPos = 'left'
 let NERDTreeMinimalUI = 1
+let NERDTreeMinimalMenu = 0
 let NERDTreeShowHidden = 1
-let NERDTreeAutoDeleteBuffer=1
+let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeCascadeSingleChildDir = 0
 let g:NERDTreeMapJumpNextSibling = '<nop>'
 let g:NERDTreeMapJumpPrevSibling = '<nop>'
 highlight! link NERDTreeFlags NERDTreeDir
-nnoremap <silent>tt :NERDTreeToggle<cr>
-nnoremap <silent>tf :NERDTreeFind<cr>
-nnoremap <silent>rr :NERDTreeRefreshRoot<cr>
+nnoremap <silent><leader>nt :NERDTreeToggle<cr>
+nnoremap <silent><leader>nf :NERDTreeFind<cr>
+nnoremap <silent><leader>nr :NERDTreeRefreshRoot<cr>
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -422,19 +437,6 @@ let g:NERDTreeIndicatorMapCustom = {
 
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
-
-" Python
-let g:loaded_python_provider = 0
-let g:python3_host_prog = '~/.pyenv/shims/python3'
-
-" Node
-let g:node_host_prog=
-      \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/neovim-node-host'
-let g:coc_node_path=
-      \ '/home/thevan96/.nvm/versions/node/v12.14.0/bin/node'
-
-" Ruby
-let g:ruby_host_prog ='~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 " PHP => map <leader>p
 Plug 'captbaritone/better-indent-support-for-php-with-html'
@@ -481,26 +483,12 @@ function! UpdatePhpDocIfExists()
   endif
 endfunction
 
-Plug 'noahfrederick/vim-laravel'
-
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
-" Markdown
-Plug 'plasticboy/vim-markdown'
-let g:vim_markdown_new_list_item_indent = 2
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_toml_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_frontmatter = 1
-
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 nmap <leader>mp <Plug>MarkdownPreviewToggle
-nmap <leader>mq <Plug>MarkdownPreviewStop
 
 " Blade
 Plug 'jwalton512/vim-blade'
@@ -509,9 +497,9 @@ autocmd BufNewFile,BufRead *.blade.php set ft=html | set ft=phtml | set ft=blade
 " Flutter, dart
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
-nnoremap <leader>ds :FlutterRun<cr>
+nnoremap <leader>dr :FlutterRun<cr>
 nnoremap <leader>dq :FlutterQuit<cr>
-nnoremap <leader>dr :FlutterHotReload<cr>
+nnoremap <leader>dh :FlutterHotReload<cr>
 nnoremap <leader>dR :FlutterHotRestart<cr>
 nnoremap <leader>dd :FlutterVisualDebug<cr>
 
@@ -520,18 +508,26 @@ Plug 'Galooshi/vim-import-js'
 
 "Text object
 Plug 'wellle/targets.vim' "textobject + n + target
-Plug 'kana/vim-textobj-user' " key e
-Plug 'kana/vim-textobj-entire' " key
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire' "key e
 Plug 'kana/vim-textobj-line' "key l
 Plug 'jasonlong/vim-textobj-css' "key c
 Plug 'whatyouhide/vim-textobj-xmlattr' "key x
+Plug 'kana/vim-textobj-indent' "key i
 Plug 'adriaanzon/vim-textobj-blade-directive' "key d
-Plug 'machakann/vim-swap' " key a
-omap ia <Plug>(swap-textobject-i)
-xmap ia <Plug>(swap-textobject-i)
-omap aa <Plug>(swap-textobject-a)
-xmap aa <Plug>(swap-textobject-a)
+Plug 'machakann/vim-swap' "key s
+omap is <Plug>(swap-textobject-i)
+xmap is <Plug>(swap-textobject-i)
+omap as <Plug>(swap-textobject-a)
+xmap as <Plug>(swap-textobject-a)
 
+" Provider
+let g:loaded_perl_provider = 0
+let g:loaded_python_provider = 0
+let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
+let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node-host')
+let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
+let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 call plug#end()
 
-colorscheme one
+colorscheme onedark

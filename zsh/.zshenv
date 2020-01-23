@@ -1,8 +1,9 @@
-# Configl zsh
-ZSH_TMUX_AUTOSTART=false
-ZSH_TMUX_AUTOQUIT=false
+# Config zsh
 eval "$(starship init zsh)"
 alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+if [ -z "$TMUX" ]; then
+  tmux a || tmux new -s main
+fi
 
 # Alias define shell
 alias cl="clear"
@@ -10,21 +11,23 @@ alias ex="exit"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port "
+alias note="cd ~/Note && vim"
 
 # Alias tmux
 alias kt="tmux kill-server"
+alias nt="tmux new -s "
 
 # Alias tool
 ua () {
-  sudo apt -y update &&
-  sudo apt -y upgrade &&
-  sudo apt -y autoclean &&
-  sudo apt -y autoremove &&
+  sudo dnf -y update &&
+  sudo dnf -y upgrade &&
+  sudo dnf -y autoremove &&
   cd $HOME/.nvm && git pull origin master &&
   cd $HOME/.oh-my-zsh && git pull origin master &&
   cd $HOME/.pyenv && git pull origin master &&
   cd $HOME/.rbenv && git pull origin master &&
   cd $HOME/flutter && git pull origin master &&
+  cd $HOME/.fzf && git pull origin master &&
   cd
 }
 
@@ -44,8 +47,9 @@ zeal-docs-fix () {
     popd >/dev/null || exit
 }
 
-# Default vim text editor
-export EDITOR=vi
+# Default vim text editor & enable vi mode in zsh
+export KEYTIMEOUT=1
+export EDITOR=vim
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
@@ -71,7 +75,6 @@ export NVM_DIR="$HOME/.nvm"
 export FZF_DEFAULT_COMMAND='fd --type f -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height --ansi'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Android
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -84,6 +87,8 @@ alias run-phone="emulator @Pixel_3_API_28"
 
 # Flutter, dart
 export PATH="$PATH:$HOME/flutter/bin"
+export DART_ROOT="$HOME/dart-sdk"
+export PATH="$DART_ROOT/bin:$PATH"
 
 # Include Z
 . /usr/local/bin/z.sh
