@@ -1,9 +1,5 @@
 # Config zsh
-eval "$(starship init zsh)"
 alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-if [ -z "$TMUX" ]; then
-  tmux a || tmux new -s main
-fi
 
 # Alias define shell
 alias cl="clear"
@@ -11,17 +7,13 @@ alias ex="exit"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port "
-alias note="cd ~/Note && vim"
-
-# Alias tmux
-alias kt="tmux kill-server"
-alias nt="tmux new -s "
 
 # Alias tool
 ua () {
-  sudo dnf -y update &&
-  sudo dnf -y upgrade &&
-  sudo dnf -y autoremove &&
+  sudo apt -y update &&
+  sudo apt -y upgrade &&
+  sudo apt -y autoremove &&
+  sudo apt -y autoclean &&
   cd $HOME/.nvm && git pull origin master &&
   cd $HOME/.oh-my-zsh && git pull origin master &&
   cd $HOME/.pyenv && git pull origin master &&
@@ -31,20 +23,15 @@ ua () {
   cd
 }
 
-gam () {
-  git add . && git commit --amend && git push --force
+# Help
+hp () {
+  tldr "${1}"
 }
 
 alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
-}
-
-zeal-docs-fix () {
-    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
-    find . -iname 'react-main*.js' -exec rm '{}' \;
-    popd >/dev/null || exit
 }
 
 # Default vim text editor & enable vi mode in zsh
@@ -91,4 +78,4 @@ export DART_ROOT="$HOME/dart-sdk"
 export PATH="$DART_ROOT/bin:$PATH"
 
 # Include Z
-. /usr/local/bin/z.sh
+# . /usr/local/bin/z.sh

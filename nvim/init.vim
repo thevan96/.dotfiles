@@ -8,6 +8,7 @@ syntax on
 set number
 set hidden
 set showcmd
+set showmatch
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
 filetype plugin on
@@ -21,7 +22,6 @@ set cmdheight=1
 set nowrap
 set mouse=a
 set updatetime=100
-set colorcolumn=80
 set signcolumn=yes
 set encoding=utf-8
 set fileencoding=utf-8
@@ -73,6 +73,12 @@ noremap <up> <nop>
 noremap <down> <nop>
 noremap <left> <nop>
 noremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap 0 ^
+nnoremap $ g_
 map Q <nop>
 map K <nop>
 map <F1> <nop>
@@ -94,8 +100,8 @@ tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
-noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+" noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
+" nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -221,6 +227,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
+Plug 'mattn/emmet-vim'
+let g:user_emmet_leader_key='<C-Z>'
+
 Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
 map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
@@ -250,9 +259,6 @@ Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-commentary'
 
-Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<C-,>'
-
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
@@ -263,7 +269,8 @@ Plug 'terryma/vim-multiple-cursors'
 
 Plug 'machakann/vim-highlightedyank'
 let g:highlightedyank_highlight_duration = 100
-" highlight HighlightedyankRegion cterm=reverse gui=reverse
+
+Plug 'itchyny/vim-cursorword'
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
@@ -390,6 +397,8 @@ nnoremap <silent><leader>o :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, <bang>0)
 
+nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
+
 nnoremap <silent><leader>b :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers(<bang>0)
@@ -397,9 +406,9 @@ command! -bang -nargs=? -complete=dir Buffers
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
-
-nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
+      \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>),
+      \ 1,
+      \ fzf#vim#with_preview(), <bang>0)
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -488,7 +497,7 @@ Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-nmap <leader>mp <Plug>MarkdownPreviewToggle
+nmap <silent><leader>m <Plug>MarkdownPreviewToggle
 
 " Blade
 Plug 'jwalton512/vim-blade'
@@ -531,3 +540,6 @@ let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host'
 call plug#end()
 
 colorscheme onedark
+hi Normal     ctermbg=NONE guibg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE

@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p ~/.config/{nvim/UltiSnips,alacritty}
 ln -sf ~/dotfiles/nvim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 
