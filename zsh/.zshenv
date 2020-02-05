@@ -8,6 +8,29 @@ alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port "
 
+# tmux
+alias kw="tmux kill-window"
+alias kp="tmux kill-pane"
+alias kt="tmux kill-server"
+alias ks="tmux kill-session"
+alias ta="tmux attach"
+alias tn="tmux new -s "
+alias tl="tmux ls"
+
+# git
+alias g.="git add ."
+alias gs="git status"
+alias gr="git reset --hard"
+alias gcm="git commit -m "
+alias gca="git commit --amend"
+alias gpf="git push --force "
+alias gps="git push "
+alias gpl="git pull "
+alias gd="git diff"
+alias gl="git log"
+alias glo="git log --oneline"
+alias glp="git log --graph"
+
 # Alias tool
 ua () {
   sudo apt -y update &&
@@ -21,11 +44,6 @@ ua () {
   cd $HOME/flutter && git pull origin master &&
   cd $HOME/.fzf && git pull origin master &&
   cd
-}
-
-# Help
-hp () {
-  tldr "${1}"
 }
 
 alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
@@ -78,4 +96,4 @@ export DART_ROOT="$HOME/dart-sdk"
 export PATH="$DART_ROOT/bin:$PATH"
 
 # Include Z
-# . /usr/local/bin/z.sh
+. /usr/local/bin/z.sh

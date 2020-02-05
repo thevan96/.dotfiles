@@ -174,17 +174,17 @@ draw_bold_text_with_bright_colors: true
 colors:
   # Default colors
   primary:
-    background: '0x111111'
+    background: '0x282c34'
     foreground: '0xabb2bf'
 
   # Cursor colors
   cursor:
-    text: '0x111111'
+    text: '0x282c34'
     cursor: '0xabb2bf'
 
   # Normal colors
   normal:
-    black:   '0x111111'
+    black:   '0x282c34'
     red:     '0xe06c75'
     green:   '0x98c379'
     yellow:  '0xe5c07b'
@@ -244,7 +244,7 @@ visual_bell:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 1.0
+background_opacity: 0.97
 
 # Mouse bindings
 #

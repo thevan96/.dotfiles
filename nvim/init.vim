@@ -57,18 +57,8 @@ endif
 
 " Mapping
 let mapleader = ' '
-vnoremap < <gv
-vnoremap > >gv
-nnoremap Y y$
-nnoremap J mzJ`z
-nnoremap n nzz
-nnoremap N Nzz
-noremap 0 g0
-noremap $ g$
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+
+" disable nop
 noremap <up> <nop>
 noremap <down> <nop>
 noremap <left> <nop>
@@ -77,31 +67,66 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
-nnoremap 0 ^
-nnoremap $ g_
 map Q <nop>
 map K <nop>
 map <F1> <nop>
-map <silent>zo <c-w>=
-map <silent>zi :NERDTreeClose<cr><c-w>_ \| <c-w>\|
-nnoremap <silent><c-j> <c-w><c-j>
-nnoremap <silent><c-k> <c-w><c-k>
-nnoremap <silent><c-l> <c-w><c-l>
-nnoremap <silent><c-h> <c-w><c-h>
-nnoremap <silent><esc> :nohlsearch<cr>
-nnoremap <silent>gx :Bdelete<cr>
-nnoremap <silent>gh :bprevious<cr>
-nnoremap <silent>gl :bnext<cr>
+
+" remap key
+vnoremap < <gv
+vnoremap > >gv
+nnoremap Y y$
+nnoremap J mzJ`z
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap 0 ^
+nnoremap $ g_
+nnoremap H <C-d>
+nnoremap L <C-u>
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>w :w<cr>
+noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+
+
+" zoom in, zoom out
+map <silent>zo <c-w>=
+map <silent>zi :NERDTreeClose<cr><c-w>_ \| <c-w>\|
+
+" disable highlight search
+nnoremap <silent><esc> :nohlsearch<cr>
+
+" manager buffer
+nnoremap gx :Bdelete<cr>
+nnoremap gh :bprevious<cr>
+nnoremap gl :bnext<cr>
+
+" navigate terminal buit-int
 tnoremap <silent><esc> <c-\><c-n>
 tnoremap <silent><c-h> <c-\><c-n><c-w>h
 tnoremap <silent><c-j> <c-\><c-n><c-k>j
 tnoremap <silent><c-k> <c-\><c-n><c-w>k
 tnoremap <silent><c-l> <c-\><c-n><c-w>l
-" noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
-" nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+
+" Split window
+nmap ss :split<Return><C-w>w
+nmap sv :vsplit<Return><C-w>w
+
+" Move window
+nnoremap sj <c-w><c-j>
+nnoremap sk <c-w><c-k>
+nnoremap sl <c-w><c-l>
+nnoremap sh <c-w><c-h>
+
+" Switch tab
+nmap tn :tabprev<cr>
+nmap tp :tabnext<cr>
+nmap te :tabedit<cr>
+nmap tc :tabclose<cr>
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -222,13 +247,18 @@ Plug 'simeji/winresizer'
 let g:winresizer_vert_resize=3
 let g:winresizer_horiz_resize=3
 
-Plug 'christoomey/vim-tmux-navigator'
+Plug 'kien/tabman.vim'
+let g:tabman_width = 25
+let g:tabman_side = 'right'
+let g:tabman_specials = 0
+let g:tabman_toggle = '<leader>tt'
+let g:tabman_focus  = '<leader>tf'
 
 Plug 'diepm/vim-rest-console'
 autocmd FileType rest setlocal filetype=rest
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<C-Z>'
+let g:user_emmet_leader_key='ee'
 
 Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
@@ -353,12 +383,14 @@ let g:lightline = {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
       \   'filename': 'LightlineFilename',
-      \   'method': 'NearestMethodOrFunction'
+      \   'method': 'NearestMethodOrFunction',
       \   }
-      \ }
+     \ }
+
 set showtabline=2
 let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 function! LightlineFugitive()
