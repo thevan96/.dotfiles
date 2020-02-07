@@ -4,7 +4,7 @@
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": "",
   "coc.preferences.extensionUpdateCheck": "daily",
-  "suggest.autoTrigger": "always",
+  "suggest.autoTrigger": "none",
   "snippets.ultisnips.directories": ["UltiSnips"],
   "coc.preferences.snippets.enable": true,
   "suggest.completionItemKindLabels": {

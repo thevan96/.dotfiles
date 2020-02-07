@@ -1,14 +1,17 @@
-" Basic config
-if exists('+termguicolors') " Enable true color
+" Enable true color
+if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+
+" Set property
 syntax on
 set number
 set hidden
 set showcmd
 set showmatch
+set nocompatible
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
 filetype plugin on
@@ -34,20 +37,27 @@ set backspace=indent,eol,start
 set whichwrap=<,>,h,l
 
 " Setting tab/space by language programing
-set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType js, md, html, css, scss, json
-      \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType php
-      \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+set tabstop=2 shiftwidth=2
+set softtabstop=0 expandtab
+autocmd FileType md, html, css, scss, json
+      \ setlocal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+autocmd FileType php, js
+      \ setlocal tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
 
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
 
-" Tweak for Markdown mode
+" Markdown mode
 autocmd FileType markdown call s:markdown_mode_setup()
 function! s:markdown_mode_setup()
   set wrap
   set conceallevel=0
+endfunction
+
+" Blade mode
+autocmd FileType *.blade.php call s:blade_mode_setup()
+function! s:blade_mode_setup()
+  set ft=html | set ft=phtml | set ft=blade
 endfunction
 
 " Save position cursor
@@ -55,10 +65,10 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-" Mapping
+" Mapping leader
 let mapleader = ' '
 
-" disable nop
+" Disable nop
 noremap <up> <nop>
 noremap <down> <nop>
 noremap <left> <nop>
@@ -67,54 +77,49 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
+map <F1> <nop>
 map Q <nop>
 map K <nop>
-map <F1> <nop>
 
-" remap key
+" Remap key
 vnoremap < <gv
 vnoremap > >gv
 nnoremap Y y$
 nnoremap J mzJ`z
 nnoremap n nzz
 nnoremap N Nzz
-nnoremap 0 ^
-nnoremap $ g_
-nnoremap H <C-d>
-nnoremap L <C-u>
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-nnoremap <silent><leader>q :q<cr>
+
+" Fast command
+nnoremap <silent><leader>q :q!<cr>
 nnoremap <silent><leader>Q :qa!<cr>
-nnoremap <silent><leader>w :w<cr>
-noremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>w :w!<cr>
+nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 
+" Remap scrolling
+nnoremap H <C-u>
+nnoremap L <C-d>
 
-" zoom in, zoom out
-map <silent>zo <c-w>=
-map <silent>zi :NERDTreeClose<cr><c-w>_ \| <c-w>\|
+" Zoom in, zoom out
+nnoremap <silent>zo :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
+nnoremap <silent>zi <c-w>=
 
-" disable highlight search
+" Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
 
-" manager buffer
+" Manager buffer
+nnoremap gd :bclose<cr>
 nnoremap gx :Bdelete<cr>
 nnoremap gh :bprevious<cr>
 nnoremap gl :bnext<cr>
 
-" navigate terminal buit-int
-tnoremap <silent><esc> <c-\><c-n>
-tnoremap <silent><c-h> <c-\><c-n><c-w>h
-tnoremap <silent><c-j> <c-\><c-n><c-k>j
-tnoremap <silent><c-k> <c-\><c-n><c-w>k
-tnoremap <silent><c-l> <c-\><c-n><c-w>l
-
 " Split window
-nmap ss :split<Return><C-w>w
-nmap sv :vsplit<Return><C-w>w
+nmap <silent>ss :split<cr>
+nmap <silent>sv :vsplit<cr>
 
 " Move window
 nnoremap sj <c-w><c-j>
@@ -122,69 +127,12 @@ nnoremap sk <c-w><c-k>
 nnoremap sl <c-w><c-l>
 nnoremap sh <c-w><c-h>
 
-" Switch tab
-nmap tn :tabprev<cr>
-nmap tp :tabnext<cr>
-nmap te :tabedit<cr>
-nmap tc :tabclose<cr>
-
 " Disable netrw
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
 
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
-
-" Floating Term
-let s:float_term_border_win = 0
-let s:float_term_win = 0
-function! FloatTerm(...)
-  " Configuration
-  let height = float2nr((&lines - 2) * 0.6)
-  let row = float2nr((&lines - height) / 2)
-  let width = float2nr(&columns * 0.6)
-  let col = float2nr((&columns - width) / 2)
-  " Border Window
-  let border_opts = {
-        \ 'relative': 'editor',
-        \ 'row': row - 1,
-        \ 'col': col - 2,
-        \ 'width': width + 4,
-        \ 'height': height + 2,
-        \ 'style': 'minimal'
-        \ }
-  " Terminal Window
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': row,
-        \ 'col': col,
-        \ 'width': width,
-        \ 'height': height,
-        \ 'style': 'minimal'
-        \ }
-  let top = "╭" . repeat("─", width + 2) . "╮"
-  let mid = "│" . repeat(" ", width + 2) . "│"
-  let bot = "╰" . repeat("─", width + 2) . "╯"
-  let lines = [top] + repeat([mid], height) + [bot]
-  let bbuf = nvim_create_buf(v:false, v:true)
-  call nvim_buf_set_lines(bbuf, 0, -1, v:true, lines)
-  let s:float_term_border_win = nvim_open_win(bbuf, v:true, border_opts)
-  let buf = nvim_create_buf(v:false, v:true)
-  let s:float_term_win = nvim_open_win(buf, v:true, opts)
-  " Styling
-  call setwinvar(s:float_term_border_win, '&winhl', 'Normal:Normal')
-  call setwinvar(s:float_term_win, '&winhl', 'Normal:Normal')
-  if a:0 == 0
-    terminal
-  else
-    call termopen(a:1)
-  endif
-  startinsert
-  " Close border window when terminal window close
-  autocmd TermClose * ++once :bd! |
-        \ call nvim_win_close(s:float_term_border_win, v:true)
-endfunction
-nnoremap <silent><leader>at :call FloatTerm()<cr>
 
 " Format source
 function! QuickFormat()
@@ -230,46 +178,31 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>f :call QuickFormat()<cr>
+nnoremap <leader>F :call QuickFormat()<cr>
 
 " Load plugin
 call plug#begin()
 
 " Setup colorscheme
-Plug 'joshdick/onedark.vim'
+Plug 'laggardkernel/vim-one'
 set background=dark
 
-Plug 'tpope/vim-eunuch'
-
-Plug 'moll/vim-bbye'
-
 Plug 'simeji/winresizer'
+let g:winresizer_start_key = '<leader>e'
 let g:winresizer_vert_resize=3
 let g:winresizer_horiz_resize=3
 
-Plug 'kien/tabman.vim'
-let g:tabman_width = 25
-let g:tabman_side = 'right'
-let g:tabman_specials = 0
-let g:tabman_toggle = '<leader>tt'
-let g:tabman_focus  = '<leader>tf'
-
-Plug 'diepm/vim-rest-console'
-autocmd FileType rest setlocal filetype=rest
+Plug 'moll/vim-bbye'
 
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='ee'
+let g:user_emmet_leader_key=','
+let g:user_emmet_mode='i'
 
 Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
 map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
 map <silent><leader>vf :Vista focus<cr>
-let g:vista_sidebar_width= 33
-
-Plug 'ryanoasis/vim-devicons'
-if exists("g:loaded_webdevicons")
-  call webdevicons#refresh()
-endif
+let g:vista_sidebar_width= 35
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -279,8 +212,6 @@ let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 let g:indentLine_fileTypeExclude = ['markdown']
 
 Plug 'jiangmiao/auto-pairs'
-
-Plug 'matze/vim-move'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -295,12 +226,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
-Plug 'terryma/vim-multiple-cursors'
-
 Plug 'machakann/vim-highlightedyank'
 let g:highlightedyank_highlight_duration = 100
-
-Plug 'itchyny/vim-cursorword'
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
@@ -317,8 +244,8 @@ set statusline=%{anzu#search_status()}
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-n>"
-let g:UltiSnipsJumpBackwardTrigger="<c-p>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -348,7 +275,7 @@ nmap <silent>gy <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
 
-" Create mappings for function text object
+" Create mappings for function text object - coc-nvim
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
@@ -371,28 +298,21 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
-Plug 'mengelbrecht/lightline-bufferline'
-
 Plug 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'one',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'absolutepath'] ],
+      \   'left': [ [ 'mode', 'paste'], [ 'fugitive', 'absolutepath'] ],
       \ },
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
       \   'filename': 'LightlineFilename',
       \   'method': 'NearestMethodOrFunction',
-      \   }
-     \ }
-
-set showtabline=2
-let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+      \ }
+      \}
 
 let g:lightline.component_type   = {'buffers': 'tabsel'}
-
 function! LightlineFugitive()
   if exists('*fugitive#head')
     let branch = fugitive#head()
@@ -400,12 +320,15 @@ function! LightlineFugitive()
   endif
   return ''
 endfunction
+
 function! LightlineReadonly()
   return &readonly ? '' : ''
 endfunction
+
 function! LightlineModified()
   return &ft =~ 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
+
 function! LightlineFilename()
   return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
         \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
@@ -414,9 +337,6 @@ function! LightlineFilename()
         \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
-
-Plug 'jistr/vim-nerdtree-tabs'
-let g:nerdtree_tabs_autoclose=0
 
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
@@ -442,39 +362,79 @@ command! -bang -nargs=* Rg
       \ 1,
       \ fzf#vim#with_preview(), <bang>0)
 
+nnoremap <silent><leader>k :Maps<cr>
+
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 tnoremap <expr> <esc> (&filetype == "fzf") ? "<esc>" : "<c-\><c-n>"
 
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['^\.git$','^node_modules$', '^vendor$']
-let g:NERDTreeWinPos = 'left'
-let NERDTreeMinimalUI = 1
-let NERDTreeMinimalMenu = 0
-let NERDTreeShowHidden = 1
-let NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeHighlightCursorline = 0
-let g:NERDTreeCascadeSingleChildDir = 0
-let g:NERDTreeMapJumpNextSibling = '<nop>'
-let g:NERDTreeMapJumpPrevSibling = '<nop>'
-highlight! link NERDTreeFlags NERDTreeDir
-nnoremap <silent><leader>nt :NERDTreeToggle<cr>
-nnoremap <silent><leader>nf :NERDTreeFind<cr>
-nnoremap <silent><leader>nr :NERDTreeRefreshRoot<cr>
-let g:NERDTreeIndicatorMapCustom = {
-      \ "Modified"  : "✹",
-      \ "Staged"    : "✚",
-      \ "Untracked" : "✭",
-      \ "Renamed"   : "➜",
-      \ "Unmerged"  : "═",
-      \ "Deleted"   : "✖",
-      \ "Dirty"     : "✗",
-      \ "Clean"     : "✔︎",
-      \ 'Ignored'   : '☒',
-      \ "Unknown"   : "?"
-      \ }
+Plug 'Shougo/defx.nvim'
+Plug 'kristijanhusak/defx-git'
+Plug 'kristijanhusak/defx-icons'
+let g:defx_icons_enable_syntax_highlight = 0
+nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent>tt :Defx -columns=mark:indent:icons:git:filename -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
+
+autocmd BufWritePost * call defx#redraw()
+autocmd FileType defx call s:defx_my_settings()
+function! s:defx_my_settings() abort
+  " Define mapping
+  nnoremap <silent><buffer><expr> <cr>
+        \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> u
+        \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> o
+        \ defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> ss
+        \ defx#do_action('drop','split')
+  nnoremap <silent><buffer><expr> sv
+        \ defx#do_action('drop', 'vsplit')
+  nnoremap <silent><buffer><expr> d
+        \ defx#do_action('remove_trash')
+  nnoremap <silent><buffer><expr> D
+        \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> yy
+        \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m
+        \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> p
+        \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> f
+        \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> t
+        \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> T
+        \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> r
+        \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> > defx#do_action('resize',
+        \ defx#get_context().winwidth + 5)
+  nnoremap <silent><buffer><expr> < defx#do_action('resize',
+        \ defx#get_context().winwidth - 5)
+  nnoremap <silent><buffer><expr> <esc>
+        \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <space>
+        \ defx#do_action('toggle_select')
+  nnoremap <silent><buffer><expr> *
+        \ defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> a
+        \ defx#do_action('toggle_select_visual')
+  nnoremap <silent><buffer><expr> c
+        \ defx#do_action('clear_select_all')
+  nnoremap <silent><buffer><expr> j
+        \ line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k
+        \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> yp
+        \ defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> !
+        \ defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> i
+        \ defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> cd
+        \ defx#do_action('change_vim_cwd')
+endfunction
 
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
@@ -531,10 +491,6 @@ Plug 'ap/vim-css-color'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 nmap <silent><leader>m <Plug>MarkdownPreviewToggle
 
-" Blade
-Plug 'jwalton512/vim-blade'
-autocmd BufNewFile,BufRead *.blade.php set ft=html | set ft=phtml | set ft=blade
-
 " Flutter, dart
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
@@ -544,19 +500,16 @@ nnoremap <leader>dh :FlutterHotReload<cr>
 nnoremap <leader>dR :FlutterHotRestart<cr>
 nnoremap <leader>dd :FlutterVisualDebug<cr>
 
-"Javascript
-Plug 'Galooshi/vim-import-js'
-
 "Text object
-Plug 'wellle/targets.vim' "textobject + n + target
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire' "key e
-Plug 'kana/vim-textobj-line' "key l
-Plug 'jasonlong/vim-textobj-css' "key c
-Plug 'whatyouhide/vim-textobj-xmlattr' "key x
-Plug 'kana/vim-textobj-indent' "key i
-Plug 'adriaanzon/vim-textobj-blade-directive' "key d
-Plug 'machakann/vim-swap' "key s
+Plug 'kana/vim-textobj-user' " Core textobject customer
+Plug 'wellle/targets.vim' " Textobject + n + target
+Plug 'kana/vim-textobj-entire' " Key e
+Plug 'kana/vim-textobj-line' " Key l
+Plug 'jasonlong/vim-textobj-css' " Key c
+Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
+Plug 'kana/vim-textobj-indent' " Key i
+Plug 'adriaanzon/vim-textobj-blade-directive' " Key d
+Plug 'machakann/vim-swap' " Key s
 omap is <Plug>(swap-textobject-i)
 xmap is <Plug>(swap-textobject-i)
 omap as <Plug>(swap-textobject-a)
@@ -571,7 +524,5 @@ let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 call plug#end()
 
-colorscheme onedark
+colorscheme one
 hi Normal     ctermbg=NONE guibg=NONE
-hi LineNr     ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE

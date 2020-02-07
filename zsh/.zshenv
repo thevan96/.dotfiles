@@ -1,5 +1,5 @@
 # Config zsh
-alias rlzsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias rz=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Alias define shell
 alias cl="clear"
@@ -13,23 +13,6 @@ alias kw="tmux kill-window"
 alias kp="tmux kill-pane"
 alias kt="tmux kill-server"
 alias ks="tmux kill-session"
-alias ta="tmux attach"
-alias tn="tmux new -s "
-alias tl="tmux ls"
-
-# git
-alias g.="git add ."
-alias gs="git status"
-alias gr="git reset --hard"
-alias gcm="git commit -m "
-alias gca="git commit --amend"
-alias gpf="git push --force "
-alias gps="git push "
-alias gpl="git pull "
-alias gd="git diff"
-alias gl="git log"
-alias glo="git log --oneline"
-alias glp="git log --graph"
 
 # Alias tool
 ua () {
@@ -77,9 +60,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type f -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea --color=always'
+export FZF_DEFAULT_COMMAND='fd --type f -i -H -I --exclude .git --exclude node_modules --exclude vendor --exclude .idea'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--no-height --ansi'
+export FZF_DEFAULT_OPTS='--no-height'
 
 # Android
 export ANDROID_HOME=$HOME/Android/Sdk
