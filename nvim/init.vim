@@ -30,22 +30,25 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set fileformats=unix,mac,dos
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.git,*.pyc,__pycache__,.idea,*.o,*.obj,*rbc
 set clipboard=unnamedplus
-set list listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+set list listchars=eol:¬,tab:>·,trail:~,space:·
 set backspace=indent,eol,start
 set whichwrap=<,>,h,l
 
 " Setting tab/space by language programing
-set tabstop=2 shiftwidth=2
-set softtabstop=0 expandtab
-autocmd FileType md, html, css, scss, json
-      \ setlocal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
-autocmd FileType php, js
-      \ setlocal tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
+set tabstop=2
+set shiftwidth=2
+set expandtab
+autocmd FileType js, md, html, css, scss, json
+      \ setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd FileType php
+      \ setlocal tabstop=4 shiftwidth=4 expandtab
 
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
+
+" Record
+nnoremap Q @q
 
 " Markdown mode
 autocmd FileType markdown call s:markdown_mode_setup()
@@ -68,48 +71,57 @@ endif
 " Mapping leader
 let mapleader = ' '
 
-" Disable nop
-noremap <up> <nop>
-noremap <down> <nop>
-noremap <left> <nop>
-noremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-map <F1> <nop>
-map Q <nop>
-map K <nop>
-
-" Remap key
-vnoremap < <gv
-vnoremap > >gv
-nnoremap Y y$
-nnoremap J mzJ`z
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
-
 " Fast command
 nnoremap <silent><leader>q :q!<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>w :w!<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
+nnoremap <silent><leader>b :bufdo! e<cr>
 
-" Remap scrolling
-nnoremap H <C-u>
-nnoremap L <C-d>
+" Disable nop
+nmap <up>    <nop>
+nmap <down>  <nop>
+nmap <left>  <nop>
+nmap <right> <nop>
+imap <up>    <nop>
+imap <down>  <nop>
+imap <left>  <nop>
+imap <right> <nop>
+map { <nop>
+map } <nop>
+map <F1> <nop>
+map Q <nop>
+map K <nop>
+
+" Remap yank
+nnoremap Y y$
+
+" Center search
+nnoremap n nzz
+nnoremap N Nzz
+
+" Overide jk, >, <
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Indent
+vnoremap >> >gv
+vnoremap << <gv
 
 " Zoom in, zoom out
-nnoremap <silent>zo :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
-nnoremap <silent>zi <c-w>=
+nnoremap <silent>zz :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
+nnoremap <silent>zo <c-w>=
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
+
+" Remap navigte
+noremap H {
+noremap L }
+noremap X :bp<bar>bd #<cr>
 
 " Manager buffer
 nnoremap gd :bclose<cr>
@@ -178,7 +190,7 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>F :call QuickFormat()<cr>
+" nnoremap <leader>F :call QuickFormat()<cr>
 
 " Load plugin
 call plug#begin()
@@ -189,8 +201,8 @@ set background=dark
 
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
-let g:winresizer_vert_resize=3
-let g:winresizer_horiz_resize=3
+let g:winresizer_vert_resize = 3
+let g:winresizer_horiz_resize = 3
 
 Plug 'moll/vim-bbye'
 
@@ -202,16 +214,10 @@ Plug 'liuchengxu/vista.vim'
 map <silent><leader>vt :Vista coc<cr>
 map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
 map <silent><leader>vf :Vista focus<cr>
-let g:vista_sidebar_width= 35
+let g:vista_sidebar_width = 35
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-Plug 'Yggdroot/indentLine'
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-let g:indentLine_fileTypeExclude = ['markdown']
-
-Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -221,13 +227,14 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 
 Plug 'tpope/vim-fugitive'
+
 Plug 'airblade/vim-gitgutter'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 100
+let g:highlightedyank_highlight_duration = 120
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
@@ -298,45 +305,48 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
+Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
+
 let g:lightline = {
       \ 'colorscheme': 'one',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste'], [ 'fugitive', 'absolutepath'] ],
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'relativepath'] ]
       \ },
       \ 'component_function': {
-      \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \   'method': 'NearestMethodOrFunction',
+      \   'filename': 'LightlineFilename'
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
-      \}
-
-let g:lightline.component_type   = {'buffers': 'tabsel'}
+function! LightlineModified()
+  return &ft =~# 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
+endfunction
+function! LightlineFilename()
+  return (LightlineReadonly() !=# '' ? LightlineReadonly() . ' ' : '') .
+        \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft ==# 'unite' ? unite#get_status_string() :
+        \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
+        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]') .
+        \ (LightlineModified() !=# '' ? ' ' . LightlineModified() : '')
+endfunction
 function! LightlineFugitive()
-  if exists('*fugitive#head')
-    let branch = fugitive#head()
-    return branch !=# '' ? ''.branch : ''
+  if &ft !~? 'vimfiler' && exists('*FugitiveHead')
+    let branch = FugitiveHead()
+    return branch !=# '' ? ' '.branch : ''
   endif
   return ''
 endfunction
 
-function! LightlineReadonly()
-  return &readonly ? '' : ''
-endfunction
-
-function! LightlineModified()
-  return &ft =~ 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! LightlineFilename()
-  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft == 'unite' ? unite#get_status_string() :
-        \  &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
-endfunction
+set showtabline=2
+let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
@@ -345,13 +355,15 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+
 nnoremap <silent><leader>o :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, <bang>0)
 
 nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
 
-nnoremap <silent><leader>b :Buffers<cr>
+nnoremap <silent><leader><cr> :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers(<bang>0)
 
@@ -362,21 +374,14 @@ command! -bang -nargs=* Rg
       \ 1,
       \ fzf#vim#with_preview(), <bang>0)
 
-nnoremap <silent><leader>k :Maps<cr>
-
-autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 tnoremap <expr> <esc> (&filetype == "fzf") ? "<esc>" : "<c-\><c-n>"
 
 Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
-Plug 'kristijanhusak/defx-icons'
-let g:defx_icons_enable_syntax_highlight = 0
-nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
-nnoremap <silent>tt :Defx -columns=mark:indent:icons:git:filename -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icon:git:filename -split=vertical -winwidth=28 -direction=topleft -show-ignored-files<cr>
 
 autocmd BufWritePost * call defx#redraw()
+
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
   " Define mapping
@@ -390,7 +395,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('drop','split')
   nnoremap <silent><buffer><expr> sv
         \ defx#do_action('drop', 'vsplit')
-  nnoremap <silent><buffer><expr> d
+  nnoremap <silent><buffer><expr> dd
         \ defx#do_action('remove_trash')
   nnoremap <silent><buffer><expr> D
         \ defx#do_action('remove')
@@ -400,11 +405,11 @@ function! s:defx_my_settings() abort
         \ defx#do_action('move')
   nnoremap <silent><buffer><expr> p
         \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> f
+  nnoremap <silent><buffer><expr> K
         \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> t
+  nnoremap <silent><buffer><expr> f
         \ defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> T
+  nnoremap <silent><buffer><expr> F
         \ defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> r
         \ defx#do_action('rename')
@@ -428,12 +433,12 @@ function! s:defx_my_settings() abort
         \ line('.') == 1 ? 'G' : 'k'
   nnoremap <silent><buffer><expr> yp
         \ defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> !
-        \ defx#do_action('execute_command')
   nnoremap <silent><buffer><expr> i
         \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> cd
+  nnoremap <silent><buffer><expr> .
         \ defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> <C-l>
+        \ defx#do_action('redraw')
 endfunction
 
 " Syntax all language programe
@@ -441,48 +446,6 @@ Plug 'sheerun/vim-polyglot'
 
 " PHP => map <leader>p
 Plug 'captbaritone/better-indent-support-for-php-with-html'
-
-Plug 'Rican7/php-doc-modded'
-let g:pdv_cfg_autoEndFunction = 0
-let g:pdv_cfg_autoEndClass = 0
-let g:pdv_cfg_annotation_Package = 0
-let g:pdv_cfg_annotation_Version = 0
-let g:pdv_cfg_annotation_Author = 0
-let g:pdv_cfg_annotation_Copyright = 0
-let g:pdv_cfg_annotation_License = 0
-
-Plug 'adoy/vim-php-refactoring-toolbox'
-let g:vim_php_refactoring_auto_validate_sg = 1
-let g:vim_php_refactoring_auto_validate_g = 1
-let g:vim_php_refactoring_auto_validate_rename = 1
-let g:vim_php_refactoring_use_default_mapping = 0
-nnoremap <silent><leader>prv :call PhpRenameLocalVariable()<cr>
-nnoremap <silent><leader>prc :call PhpRenameClassVariable()<cr>
-nnoremap <silent><leader>prm :call PhpRenameMethod()<cr>
-nnoremap <silent><leader>peu :call PhpExtractUse()<cr>
-vnoremap <silent><leader>pec :call PhpExtractConst()<cr>
-nnoremap <silent><leader>pep :call PhpExtractClassProperty()<cr>
-vnoremap <silent><leader>pem :call PhpExtractMethod()<cr>
-nnoremap <silent><leader>pcp :call PhpCreateProperty()<cr>
-nnoremap <silent><leader>pdu :call PhpDetectUnusedUseStatements()<cr>
-vnoremap <silent><leader>p== :call PhpAlignAssigns()<cr>
-nnoremap <silent><leader>psg :call PhpCreateSettersAndGetters()<cr>
-nnoremap <silent><leader>pcg :call PhpCreateGetters()<cr>
-nnoremap <silent><leader>pda :call PhpDocAll()<cr>
-nnoremap <silent><leader>pds :call UpdatePhpDocIfExists()<cr>
-function! UpdatePhpDocIfExists()
-  normal! k
-  if getline('.') =~ '/'
-    normal! V%d
-  else
-    normal! j
-  endif
-  call PhpDocSingle()
-  normal! k^%k$
-  if getline('.') =~ ';'
-    exe "normal! $svoid"
-  endif
-endfunction
 
 "HTML, CSS
 Plug 'lilydjwg/colorizer'
@@ -500,7 +463,7 @@ nnoremap <leader>dh :FlutterHotReload<cr>
 nnoremap <leader>dR :FlutterHotRestart<cr>
 nnoremap <leader>dd :FlutterVisualDebug<cr>
 
-"Text object
+" Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
 Plug 'wellle/targets.vim' " Textobject + n + target
 Plug 'kana/vim-textobj-entire' " Key e
@@ -526,3 +489,5 @@ call plug#end()
 
 colorscheme one
 hi Normal     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+hi Comment cterm=italic gui=italic
