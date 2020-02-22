@@ -1,4 +1,3 @@
-" Enable true color
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -10,7 +9,6 @@ syntax on
 set number
 set hidden
 set showcmd
-set showmatch
 set nocompatible
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
@@ -33,6 +31,7 @@ set fileformats=unix,mac,dos
 set clipboard=unnamedplus
 set list listchars=eol:¬,tab:>·,trail:~,space:·
 set backspace=indent,eol,start
+set shortmess-=S
 set whichwrap=<,>,h,l
 
 " Setting tab/space by language programing
@@ -88,18 +87,10 @@ imap <up>    <nop>
 imap <down>  <nop>
 imap <left>  <nop>
 imap <right> <nop>
-map { <nop>
-map } <nop>
 map <F1> <nop>
-map Q <nop>
-map K <nop>
 
 " Remap yank
 nnoremap Y y$
-
-" Center search
-nnoremap n nzz
-nnoremap N Nzz
 
 " Overide jk, >, <
 nnoremap j gj
@@ -119,9 +110,8 @@ nnoremap <silent>zo <c-w>=
 nnoremap <silent><esc> :nohlsearch<cr>
 
 " Remap navigte
-noremap H {
-noremap L }
-noremap X :bp<bar>bd #<cr>
+noremap H <c-u>
+noremap L <c-d>
 
 " Manager buffer
 nnoremap gd :bclose<cr>
@@ -190,7 +180,7 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-" nnoremap <leader>F :call QuickFormat()<cr>
+nnoremap <leader>F :call QuickFormat()<cr>
 
 " Load plugin
 call plug#begin()
@@ -210,12 +200,6 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
-Plug 'liuchengxu/vista.vim'
-map <silent><leader>vt :Vista coc<cr>
-map <silent><leader>vs :Vista finder coc<cr>:Vista coc<cr>
-map <silent><leader>vf :Vista focus<cr>
-let g:vista_sidebar_width = 35
-
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -223,6 +207,9 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
+
+Plug 'matze/vim-move'
+let g:move_key_modifier = 'C'
 
 Plug 'tpope/vim-commentary'
 
@@ -244,10 +231,7 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-Plug 'osyo-manga/vim-anzu'
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <Plug>(anzu-N-with-echo)
-set statusline=%{anzu#search_status()}
+Plug 'google/vim-searchindex'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -288,8 +272,8 @@ xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
-" Use D to show documentation in preview window
-nnoremap <silent>D :call <SID>show_documentation()<CR>
+" Use K to show documentation in preview window
+nnoremap <silent>K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -320,12 +304,15 @@ let g:lightline = {
       \ 'separator': { 'left': '', 'right': '' },
       \ 'subseparator': { 'left': '', 'right': '' }
       \ }
+
 function! LightlineModified()
   return &ft =~# 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
+
 function! LightlineReadonly()
   return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
 endfunction
+
 function! LightlineFilename()
   return (LightlineReadonly() !=# '' ? LightlineReadonly() . ' ' : '') .
         \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
@@ -334,6 +321,7 @@ function! LightlineFilename()
         \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]') .
         \ (LightlineModified() !=# '' ? ' ' . LightlineModified() : '')
 endfunction
+
 function! LightlineFugitive()
   if &ft !~? 'vimfiler' && exists('*FugitiveHead')
     let branch = FugitiveHead()
@@ -345,7 +333,6 @@ endfunction
 set showtabline=2
 let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 if isdirectory('~/.fzf/bin/fzf')
@@ -378,13 +365,14 @@ tnoremap <expr> <esc> (&filetype == "fzf") ? "<esc>" : "<c-\><c-n>"
 
 Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
-nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icon:git:filename -split=vertical -winwidth=28 -direction=topleft -show-ignored-files<cr>
+Plug 'kristijanhusak/defx-icons'
+
+nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files<cr>
 
 autocmd BufWritePost * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
-  " Define mapping
   nnoremap <silent><buffer><expr> <cr>
         \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> u
@@ -419,6 +407,8 @@ function! s:defx_my_settings() abort
         \ defx#get_context().winwidth - 5)
   nnoremap <silent><buffer><expr> <esc>
         \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> q
+        \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> <space>
         \ defx#do_action('toggle_select')
   nnoremap <silent><buffer><expr> *
@@ -444,10 +434,10 @@ endfunction
 " Syntax all language programe
 Plug 'sheerun/vim-polyglot'
 
-" PHP => map <leader>p
+" PHP
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 
-"HTML, CSS
+" HTML, CSS
 Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
@@ -487,7 +477,10 @@ let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 call plug#end()
 
-colorscheme one
+let g:one_allow_italics = 1
+
+" Overide color background -> terminal
 hi Normal     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
-hi Comment cterm=italic gui=italic
+
+colorscheme one

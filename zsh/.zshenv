@@ -14,6 +14,7 @@ alias kp="tmux kill-pane"
 alias kt="tmux kill-server"
 alias ks="tmux kill-session"
 
+
 # Alias tool
 ua () {
   sudo apt -y update &&
@@ -35,9 +36,10 @@ bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
 }
 
-# Default vim text editor & enable vi mode in zsh
+# Set env variable
 export KEYTIMEOUT=1
 export EDITOR=vim
+export TERM="screen-256color"
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
