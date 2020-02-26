@@ -17,8 +17,6 @@ filetype indent on
 set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
-set lazyredraw
-set shortmess+=c
 set cmdheight=1
 set nowrap
 set mouse=a
@@ -33,20 +31,21 @@ set list listchars=eol:¬,tab:>·,trail:~,space:·
 set backspace=indent,eol,start
 set shortmess-=S
 set whichwrap=<,>,h,l
+set re=1
+set foldmethod=indent
 
 " Setting tab/space by language programing
-set tabstop=2
-set shiftwidth=2
-set expandtab
+set tabstop=2 shiftwidth=2 expandtab
 autocmd FileType js, md, html, css, scss, json
       \ setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd FileType php
       \ setlocal tabstop=4 shiftwidth=4 expandtab
 
 " Sync syntax highlight
+set lazyredraw
 autocmd BufEnter * :syntax sync fromstart
 
-" Record
+" Run record
 nnoremap Q @q
 
 " Markdown mode
@@ -71,23 +70,10 @@ endif
 let mapleader = ' '
 
 " Fast command
-nnoremap <silent><leader>q :q!<cr>
+nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
-nnoremap <silent><leader>w :w!<cr>
 nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
 nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>b :bufdo! e<cr>
-
-" Disable nop
-nmap <up>    <nop>
-nmap <down>  <nop>
-nmap <left>  <nop>
-nmap <right> <nop>
-imap <up>    <nop>
-imap <down>  <nop>
-imap <left>  <nop>
-imap <right> <nop>
-map <F1> <nop>
 
 " Remap yank
 nnoremap Y y$
@@ -207,6 +193,19 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-surround'
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'Yggdroot/indentLine'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
+Plug 'pseewald/vim-anyfold'
+autocmd Filetype * AnyFoldActivate
+set foldlevel=99
+
+Plug 'tpope/vim-sleuth'
+
+Plug 'vim-scripts/matchit.zip'
 
 Plug 'matze/vim-move'
 let g:move_key_modifier = 'C'
@@ -342,15 +341,15 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.9 } }
 
-nnoremap <silent><leader>o :Files<cr>
+nnoremap <silent><leader>i :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, <bang>0)
 
 nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
 
-nnoremap <silent><leader><cr> :Buffers<cr>
+nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers(<bang>0)
 
@@ -405,8 +404,6 @@ function! s:defx_my_settings() abort
         \ defx#get_context().winwidth + 5)
   nnoremap <silent><buffer><expr> < defx#do_action('resize',
         \ defx#get_context().winwidth - 5)
-  nnoremap <silent><buffer><expr> <esc>
-        \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> q
         \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> <space>
@@ -431,7 +428,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('redraw')
 endfunction
 
-" Syntax all language programe
+" Hilight syntax language
 Plug 'sheerun/vim-polyglot'
 
 " PHP
@@ -461,7 +458,6 @@ Plug 'kana/vim-textobj-line' " Key l
 Plug 'jasonlong/vim-textobj-css' " Key c
 Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
 Plug 'kana/vim-textobj-indent' " Key i
-Plug 'adriaanzon/vim-textobj-blade-directive' " Key d
 Plug 'machakann/vim-swap' " Key s
 omap is <Plug>(swap-textobject-i)
 xmap is <Plug>(swap-textobject-i)
@@ -475,12 +471,15 @@ let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
 let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node-host')
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
+
 call plug#end()
 
 let g:one_allow_italics = 1
 
 " Overide color background -> terminal
 hi Normal     ctermbg=NONE guibg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
+hi Folded     ctermbg=NONE guibg=NONE
 
 colorscheme one

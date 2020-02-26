@@ -2,7 +2,6 @@
 alias rz=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Alias define shell
-alias cl="clear"
 alias ex="exit"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
