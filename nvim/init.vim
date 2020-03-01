@@ -6,17 +6,17 @@ endif
 
 " Set property
 syntax on
-set number
+set number relativenumber
 set hidden
 set showcmd
 set nocompatible
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
-filetype plugin on
-filetype indent on
 set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
+filetype plugin on
+filetype indent on
 set cmdheight=1
 set nowrap
 set mouse=a
@@ -95,10 +95,6 @@ nnoremap <silent>zo <c-w>=
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
 
-" Remap navigte
-noremap H <c-u>
-noremap L <c-d>
-
 " Manager buffer
 nnoremap gd :bclose<cr>
 nnoremap gx :Bdelete<cr>
@@ -172,7 +168,7 @@ nnoremap <leader>F :call QuickFormat()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
+Plug 'tomasr/molokai'
 set background=dark
 
 Plug 'simeji/winresizer'
@@ -341,8 +337,6 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.9 } }
-
 nnoremap <silent><leader>i :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, <bang>0)
@@ -366,12 +360,16 @@ Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
 
-nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
 
 autocmd BufWritePost * call defx#redraw()
+let g:defx_icons_enable_syntax_highlight = 1
 
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
+  call defx#custom#column('filename', {
+    \ 'min_width': '100'
+    \})
   nnoremap <silent><buffer><expr> <cr>
         \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> u
@@ -424,7 +422,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> .
         \ defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> <C-l>
+  nnoremap <silent><buffer><expr> <R>
         \ defx#do_action('redraw')
 endfunction
 
@@ -453,8 +451,8 @@ nnoremap <leader>dd :FlutterVisualDebug<cr>
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
 Plug 'wellle/targets.vim' " Textobject + n + target
-Plug 'kana/vim-textobj-entire' " Key e
 Plug 'kana/vim-textobj-line' " Key l
+Plug 'kana/vim-textobj-entire' " Key e
 Plug 'jasonlong/vim-textobj-css' " Key c
 Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
 Plug 'kana/vim-textobj-indent' " Key i
@@ -474,12 +472,10 @@ let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host'
 
 call plug#end()
 
-let g:one_allow_italics = 1
-
 " Overide color background -> terminal
 hi Normal     ctermbg=NONE guibg=NONE
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 hi Folded     ctermbg=NONE guibg=NONE
 
-colorscheme one
+colorscheme molokai
