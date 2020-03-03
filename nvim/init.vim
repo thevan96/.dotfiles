@@ -4,11 +4,17 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+
 " Set property
-syntax on
+syntax enable
 set number relativenumber
 set hidden
 set showcmd
+set nocursorcolumn
+set nocursorline
 set nocompatible
 set autoread autowrite
 set incsearch hlsearch ignorecase smartcase
@@ -41,12 +47,25 @@ autocmd FileType js, md, html, css, scss, json
 autocmd FileType php
       \ setlocal tabstop=4 shiftwidth=4 expandtab
 
+map <F7> :if exists("g:syntax_on")<cr>
+      \    syntax off <cr>
+      \  else <cr>
+      \    syntax on <cr>
+      \    hi Normal     ctermbg=NONE guibg=NONE<cr>
+      \    hi LineNr     ctermbg=NONE guibg=NONE<cr>
+      \    hi SignColumn ctermbg=NONE guibg=NONE<cr>
+      \    hi Folded     ctermbg=NONE guibg=NONE<cr>
+      \  endif <cr>
+      \  <cr>
+
 " Sync syntax highlight
 set lazyredraw
 autocmd BufEnter * :syntax sync fromstart
 
 " Run record
 nnoremap Q @q
+
+nnoremap S <c-^>
 
 " Markdown mode
 autocmd FileType markdown call s:markdown_mode_setup()
@@ -72,8 +91,6 @@ let mapleader = ' '
 " Fast command
 nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
-nnoremap <silent><leader>so :so ~/dotfiles/nvim/init.vim<cr>
-nnoremap <silent><leader>vi :e ~/dotfiles/nvim/init.vim<cr>
 
 " Remap yank
 nnoremap Y y$
@@ -88,6 +105,18 @@ vnoremap k gk
 vnoremap >> >gv
 vnoremap << <gv
 
+" Center search
+nnoremap n nzzzv
+nnoremap N nzzzv
+
+" Map fast move begin, end
+map L $
+map H ^
+
+" Scroll
+nnoremap <c-n> <c-d>
+nnoremap <c-p> <c-u>
+
 " Zoom in, zoom out
 nnoremap <silent>zz :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
 nnoremap <silent>zo <c-w>=
@@ -96,10 +125,9 @@ nnoremap <silent>zo <c-w>=
 nnoremap <silent><esc> :nohlsearch<cr>
 
 " Manager buffer
-nnoremap gd :bclose<cr>
-nnoremap gx :Bdelete<cr>
-nnoremap gh :bprevious<cr>
-nnoremap gl :bnext<cr>
+nnoremap <silent>X :Bdelete<cr>
+nnoremap <silent>gh :bprevious<cr>
+nnoremap <silent>gl :bnext<cr>
 
 " Split window
 nmap <silent>ss :split<cr>
@@ -168,13 +196,13 @@ nnoremap <leader>F :call QuickFormat()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'tomasr/molokai'
+Plug 'joshdick/onedark.vim'
 set background=dark
 
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
-let g:winresizer_vert_resize = 3
-let g:winresizer_horiz_resize = 3
+let g:winresizer_vert_resize = 1
+let g:winresizer_horiz_resize = 1
 
 Plug 'moll/vim-bbye'
 
@@ -285,6 +313,7 @@ map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
 Plug 'mengelbrecht/lightline-bufferline'
+
 Plug 'itchyny/lightline.vim'
 
 let g:lightline = {
@@ -292,12 +321,12 @@ let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'relativepath'] ]
       \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' },
       \ 'component_function': {
       \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename'
+      \   'filename': 'LightlineFilename',
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
 
 function! LightlineModified()
@@ -355,6 +384,8 @@ command! -bang -nargs=* Rg
       \ fzf#vim#with_preview(), <bang>0)
 
 tnoremap <expr> <esc> (&filetype == "fzf") ? "<esc>" : "<c-\><c-n>"
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
@@ -368,8 +399,8 @@ let g:defx_icons_enable_syntax_highlight = 1
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
-    \ 'min_width': '100'
-    \})
+        \ 'min_width': '100'
+        \})
   nnoremap <silent><buffer><expr> <cr>
         \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> u
@@ -422,18 +453,18 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> .
         \ defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> <R>
+  nnoremap <silent><buffer><expr> C
         \ defx#do_action('redraw')
 endfunction
 
 " Hilight syntax language
-Plug 'sheerun/vim-polyglot'
+Plug 'jwalton512/vim-blade'
+Plug 'pangloss/vim-javascript'
 
 " PHP
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 
 " HTML, CSS
-Plug 'lilydjwg/colorizer'
 Plug 'ap/vim-css-color'
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
@@ -470,7 +501,11 @@ let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 
+let g:onedark_terminal_italics=1
+
 call plug#end()
+
+colorscheme onedark
 
 " Overide color background -> terminal
 hi Normal     ctermbg=NONE guibg=NONE
@@ -478,4 +513,3 @@ hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 hi Folded     ctermbg=NONE guibg=NONE
 
-colorscheme molokai

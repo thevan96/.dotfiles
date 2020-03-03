@@ -36,9 +36,14 @@ bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
 }
 
+ide () {
+  tmux split-window -v -p 18
+  tmux split-window -h -p 35
+}
+
 # Set env variable
 export KEYTIMEOUT=1
-export EDITOR=vim
+export EDITOR=vi
 export TERM="screen-256color"
 
 # Laravel export, composer, php
