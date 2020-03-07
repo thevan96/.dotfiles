@@ -14,7 +14,6 @@ alias kp="tmux kill-pane"
 alias kt="tmux kill-server"
 alias ks="tmux kill-session"
 
-
 # Alias tool
 ua () {
   sudo apt -y update &&
@@ -34,11 +33,6 @@ alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
-}
-
-ide () {
-  tmux split-window -v -p 18
-  tmux split-window -h -p 35
 }
 
 # Set env variable

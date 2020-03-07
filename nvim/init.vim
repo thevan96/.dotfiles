@@ -1,14 +1,9 @@
+" Set property
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-
-if (has("nvim"))
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-
-" Set property
 syntax enable
 set number relativenumber
 set hidden
@@ -39,6 +34,7 @@ set shortmess-=S
 set whichwrap=<,>,h,l
 set re=1
 set foldmethod=indent
+set showtabline=2
 
 " Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 expandtab
@@ -61,11 +57,6 @@ map <F7> :if exists("g:syntax_on")<cr>
 " Sync syntax highlight
 set lazyredraw
 autocmd BufEnter * :syntax sync fromstart
-
-" Run record
-nnoremap Q @q
-
-nnoremap S <c-^>
 
 " Markdown mode
 autocmd FileType markdown call s:markdown_mode_setup()
@@ -106,38 +97,43 @@ vnoremap >> >gv
 vnoremap << <gv
 
 " Center search
-nnoremap n nzzzv
-nnoremap N nzzzv
-
-" Map fast move begin, end
-map L $
-map H ^
-
-" Scroll
-nnoremap <c-n> <c-d>
-nnoremap <c-p> <c-u>
-
-" Zoom in, zoom out
-nnoremap <silent>zz :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
-nnoremap <silent>zo <c-w>=
+nnoremap n nzz
+nnoremap N Nzz
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
 
 " Manager buffer
 nnoremap <silent>X :Bdelete<cr>
-nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gl :bnext<cr>
+nnoremap <silent>gh :bprevious<cr>
+nnoremap <silent>gv =G
+nnoremap <silent>S <c-^>
 
-" Split window
-nmap <silent>ss :split<cr>
-nmap <silent>sv :vsplit<cr>
+" Run record
+nnoremap Q @q
 
 " Move window
 nnoremap sj <c-w><c-j>
 nnoremap sk <c-w><c-k>
 nnoremap sl <c-w><c-l>
 nnoremap sh <c-w><c-h>
+
+" Map fast move begin, end in line
+map H ^
+map L $
+
+" Disable h, l
+map h <nop>
+map l <nop>
+
+" Split window
+nmap <silent>ss :split<cr>
+nmap <silent>sv :vsplit<cr>
+
+" Zoom in, zoom out
+nnoremap <silent>si :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
+nnoremap <silent>so <c-w>=
 
 " Disable netrw
 let g:loaded_netrw = 1
@@ -244,15 +240,10 @@ Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
 Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 120
+let g:highlightedyank_highlight_duration = 150
 
 Plug 't9md/vim-choosewin'
 nmap <leader>sw :ChooseWinSwap<cr>
-
-Plug 'haya14busa/incsearch.vim'
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
 
 Plug 'google/vim-searchindex'
 
@@ -280,7 +271,7 @@ let g:coc_global_extensions =
       \ ]
 
 " Refresh suggest
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-n> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
 " Remap keys for gotos
@@ -312,52 +303,15 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
 
-Plug 'mengelbrecht/lightline-bufferline'
-
-Plug 'itchyny/lightline.vim'
-
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'relativepath'] ]
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' },
-      \ 'component_function': {
-      \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \ },
-      \ }
-
-function! LightlineModified()
-  return &ft =~# 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! LightlineReadonly()
-  return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
-endfunction
-
-function! LightlineFilename()
-  return (LightlineReadonly() !=# '' ? LightlineReadonly() . ' ' : '') .
-        \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft ==# 'unite' ? unite#get_status_string() :
-        \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
-        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]') .
-        \ (LightlineModified() !=# '' ? ' ' . LightlineModified() : '')
-endfunction
-
-function! LightlineFugitive()
-  if &ft !~? 'vimfiler' && exists('*FugitiveHead')
-    let branch = FugitiveHead()
-    return branch !=# '' ? ' '.branch : ''
-  endif
-  return ''
-endfunction
-
-set showtabline=2
-let g:lightline.tabline          = {'left': [['buffers']], 'right':[[]]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_theme = 'onedark'
+let g:airline_powerline_fonts = 1
+let g:airline_detect_crypt = 1
+let g:airline_detect_paste = 1
+let g:airline_detect_modified = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
@@ -512,4 +466,3 @@ hi Normal     ctermbg=NONE guibg=NONE
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 hi Folded     ctermbg=NONE guibg=NONE
-
