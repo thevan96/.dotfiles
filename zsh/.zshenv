@@ -73,7 +73,6 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 alias run-phone="emulator @Pixel_3_API_28"
 
-
 # Flutter, dart
 export PATH="$PATH:$HOME/flutter/bin"
 export DART_ROOT="$HOME/dart-sdk"
