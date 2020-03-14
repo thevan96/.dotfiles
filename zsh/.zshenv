@@ -15,19 +15,23 @@ alias kt="tmux kill-server"
 alias ks="tmux kill-session"
 
 # Alias tool
+alias vi="nvim"
+alias vim="nvim"
+alias note="cd ~/Notes && vi"
+
 ua () {
   sudo apt -y update &&
-  sudo apt -y upgrade &&
-  sudo apt -y autoremove &&
-  sudo apt -y autoclean &&
-  cd $HOME/.nvm && git pull origin master &&
-  cd $HOME/.oh-my-zsh && git pull origin master &&
-  cd $HOME/.pyenv && git pull origin master &&
-  cd $HOME/.rbenv && git pull origin master &&
-  cd $HOME/flutter && git pull origin master &&
-  cd $HOME/.fzf && git pull origin master &&
-  cd
-}
+    sudo apt -y upgrade &&
+    sudo apt -y autoremove &&
+    sudo apt -y autoclean &&
+    cd $HOME/.nvm && git pull origin master &&
+    cd $HOME/.oh-my-zsh && git pull origin master &&
+    cd $HOME/.pyenv && git pull origin master &&
+    cd $HOME/.rbenv && git pull origin master &&
+    cd $HOME/flutter && git pull origin master &&
+    cd $HOME/.fzf && git pull origin master &&
+    cd
+  }
 
 alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
 

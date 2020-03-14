@@ -75,9 +75,10 @@ endif
 " Auto remove trailing spaces
 autocmd BufWritePre * %s/\s\+$//e
 
-" Disable netrw
+" Disable netrw, Q
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
+map Q <nop>
 
 " Mapping leader
 let mapleader = ' '
@@ -179,17 +180,55 @@ function! QuickFormat()
 endfunction
 nnoremap <leader>F :call QuickFormat()<cr>
 
-" Rename curren file
-function! RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'), 'file')
-  if new_name != '' && new_name != old_name
-    exec ':saveas ' . new_name
-    exec ':silent !rm ' . old_name
-    redraw!
+" Floating Term
+let s:float_term_border_win = 0
+let s:float_term_win = 0
+function! FloatTerm(...)
+  " Configuration
+  let height = float2nr((&lines - 2) * 0.6)
+  let row = float2nr((&lines - height) / 2)
+  let width = float2nr(&columns * 0.6)
+  let col = float2nr((&columns - width) / 2)
+  " Border Window
+  let border_opts = {
+        \ 'relative': 'editor',
+        \ 'row': row - 1,
+        \ 'col': col - 2,
+        \ 'width': width + 4,
+        \ 'height': height + 2,
+        \ 'style': 'minimal'
+        \ }
+  " Terminal Window
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': row,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+  let top = "╭" . repeat("─", width + 2) . "╮"
+  let mid = "│" . repeat(" ", width + 2) . "│"
+  let bot = "╰" . repeat("─", width + 2) . "╯"
+  let lines = [top] + repeat([mid], height) + [bot]
+  let bbuf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_lines(bbuf, 0, -1, v:true, lines)
+  let s:float_term_border_win = nvim_open_win(bbuf, v:true, border_opts)
+  let buf = nvim_create_buf(v:false, v:true)
+  let s:float_term_win = nvim_open_win(buf, v:true, opts)
+  " Styling
+  call setwinvar(s:float_term_border_win, '&winhl', 'Normal:Normal')
+  call setwinvar(s:float_term_win, '&winhl', 'Normal:Normal')
+  if a:0 == 0
+    terminal
+  else
+    call termopen(a:1)
   endif
+  startinsert
+  " Close border window when terminal window close
+  autocmd TermClose * ++once :bd! | call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
-map <leader>R :call RenameFile()<cr>
+nnoremap <leader>a :call FloatTerm()<cr>
 
 " Load plugin
 call plug#begin()
@@ -365,7 +404,7 @@ Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
 
-nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle<cr>
 autocmd BufWritePost * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
@@ -434,10 +473,6 @@ Plug 'captbaritone/better-indent-support-for-php-with-html'
 
 " HTML, CSS
 Plug 'ap/vim-css-color'
-
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-nmap <silent><leader>m <Plug>MarkdownPreviewToggle
-
 " Flutter, dart
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
@@ -451,8 +486,17 @@ nnoremap <leader>dd :FlutterVisualDebug<cr>
 Plug 'othree/yajs.vim'
 Plug 'jwalton512/vim-blade'
 Plug 'othree/html5.vim'
+Plug 'StanAngeloff/php.vim'
+Plug 'cakebaker/scss-syntax.vim'
 Plug 'tpope/vim-markdown'
 let g:markdown_syntax_conceal = 0
+let g:markdown_minlines = 256
+
+Plug 'shime/vim-livedown'
+nnoremap <leader>m :LivedownToggle<cr>
+
+Plug 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
 
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
@@ -486,6 +530,6 @@ call plug#end()
 
 colorscheme solarized
 hi VertSplit ctermbg=NONE ctermfg=NONE
-hi Pmenu ctermfg=NONE ctermbg=NONE cterm=NONE
-hi PmenuSel ctermfg=NONE ctermbg=24 cterm=NONE
+hi Pmenu ctermfg=NONE ctermbg=24 cterm=NONE
+hi PmenuSel ctermfg=NONE ctermbg=NONE cterm=NONE
 hi Comment cterm=italic gui=italic
