@@ -1,6 +1,7 @@
 " General setting
 syntax on
 set nocompatible
+set termguicolors
 set number
 set hidden
 set showcmd
@@ -178,7 +179,7 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>F :call QuickFormat()<cr>
+nnoremap <leader>f :call QuickFormat()<cr>
 
 " Floating Term
 let s:float_term_border_win = 0
@@ -234,7 +235,8 @@ nnoremap <leader>a :call FloatTerm()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'altercation/vim-colors-solarized'
+Plug 'arcticicestudio/nord-vim'
+Plug 'joshdick/onedark.vim'
 set background=dark
 
 Plug 'simeji/winresizer'
@@ -351,10 +353,8 @@ map <silent>gk <Plug>(coc-diagnostic-prev)
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'angr'
+let g:airline_theme = 'onedark'
 let g:airline_powerline_fonts = 1
-let g:airline_detect_crypt = 1
-let g:airline_detect_paste = 1
 let g:airline_detect_modified = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -368,7 +368,7 @@ endif
 
 let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
-      \ 'ctrl-x': 'split',
+      \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
 
@@ -388,7 +388,7 @@ nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>f :Rg <c-r><c-w><cr>
+nnoremap <silent><leader>R :Rg <c-r><c-w><cr>
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
@@ -404,7 +404,8 @@ Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
 
-nnoremap <silent>ff :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle<cr>
+nnoremap <silent>sf :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent>sF :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files -toggle<cr>
 autocmd BufWritePost * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
@@ -516,20 +517,10 @@ let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 
-" Config solarized true color
-let g:solarized_termcolors = 16
-let g:solarized_italic = 1
-let g:solarized_bold = 1
-let g:solarized_underline = 1
-let g:solarized_termtrans = 1
-let g:solarized_visibility = 'low'
-let g:solarized_diffmode = 'low'
-let g:solarized_contrast = 'normal'
+let g:onedark_terminal_italics=1
 
 call plug#end()
 
-colorscheme solarized
-hi VertSplit ctermbg=NONE ctermfg=NONE
-hi Pmenu ctermfg=NONE ctermbg=24 cterm=NONE
-hi PmenuSel ctermfg=NONE ctermbg=NONE cterm=NONE
-hi Comment cterm=italic gui=italic
+colorscheme onedark
+
+hi Normal     ctermbg=NONE guibg=NONE

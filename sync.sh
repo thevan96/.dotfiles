@@ -6,8 +6,6 @@ ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 
 ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
-ln -sf ~/dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
-
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 
 ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
