@@ -17,7 +17,6 @@ alias ks="tmux kill-session"
 # Alias tool
 alias vi="nvim"
 alias vim="nvim"
-alias emacs="emacs -nw"
 alias note="cd ~/Notes && vi"
 
 ua () {

@@ -1,6 +1,8 @@
 " General setting
 syntax on
 set nocompatible
+set t_8b=^[[48;2;%lu;%lu;%lum
+set t_8f=^[[38;2;%lu;%lu;%lum
 set termguicolors
 set number
 set hidden
@@ -14,7 +16,7 @@ set splitbelow splitright
 set autoindent smartindent
 filetype plugin on
 filetype indent on
-set synmaxcol=256
+set synmaxcol=512
 set cmdheight=1
 set nowrap
 set mouse=a
@@ -45,10 +47,7 @@ map <F7> :if exists("g:syntax_on")<cr>
       \    syntax off <cr>
       \  else <cr>
       \    syntax on <cr>
-      \ hi VertSplit ctermbg=NONE ctermfg=NONE <cr>
-      \ hi Pmenu ctermfg=NONE ctermbg=NONE cterm=NONE <cr>
-      \ hi PmenuSel ctermfg=NONE ctermbg=24 cterm=NONE <cr>
-      \ hi Comment cterm=italic gui=italic <cr>
+      \ hi Normal ctermbg=NONE guibg=NONE<cr>
       \  endif <cr>
       \  <cr>
 
@@ -113,7 +112,7 @@ nnoremap <silent>gl :bnext<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gx :Bdelete<cr>
 nnoremap <silent>gv =G
-nnoremap <silent>gs <c-^>
+nnoremap <silent>S <c-^>
 
 " Split window
 nnoremap <silent>ss :split<cr>
@@ -179,16 +178,16 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>f :call QuickFormat()<cr>
+nnoremap <leader>p :call QuickFormat()<cr>
 
 " Floating Term
 let s:float_term_border_win = 0
 let s:float_term_win = 0
 function! FloatTerm(...)
   " Configuration
-  let height = float2nr((&lines - 2) * 0.6)
+  let height = float2nr((&lines - 2) * 0.7)
   let row = float2nr((&lines - height) / 2)
-  let width = float2nr(&columns * 0.6)
+  let width = float2nr(&columns * 0.7)
   let col = float2nr((&columns - width) / 2)
   " Border Window
   let border_opts = {
@@ -235,8 +234,8 @@ nnoremap <leader>a :call FloatTerm()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'arcticicestudio/nord-vim'
-Plug 'joshdick/onedark.vim'
+Plug 'laggardkernel/vim-one'
+Plug 'morhetz/gruvbox'
 set background=dark
 
 Plug 'simeji/winresizer'
@@ -252,6 +251,8 @@ let g:user_emmet_mode='i'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+Plug 'wakatime/vim-wakatime'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -404,8 +405,8 @@ Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
 
-nnoremap <silent>sf :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files<cr>
-nnoremap <silent>sF :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files -toggle<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle<cr>
 autocmd BufWritePost * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
@@ -484,6 +485,9 @@ nnoremap <leader>dR :FlutterHotRestart<cr>
 nnoremap <leader>dd :FlutterVisualDebug<cr>
 
 " Hilight syntax language
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['markdown', 'javascript', 'blade', 'php', 'html','scss']
+
 Plug 'othree/yajs.vim'
 Plug 'jwalton512/vim-blade'
 Plug 'othree/html5.vim'
@@ -491,7 +495,7 @@ Plug 'StanAngeloff/php.vim'
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'tpope/vim-markdown'
 let g:markdown_syntax_conceal = 0
-let g:markdown_minlines = 256
+let g:markdown_minlines = 512
 
 Plug 'shime/vim-livedown'
 nnoremap <leader>m :LivedownToggle<cr>
@@ -517,10 +521,16 @@ let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 
-let g:onedark_terminal_italics=1
+" Config gruvbox theme
+let g:gruvbox_bold = 1
+let g:gruvbox_italic = 1
+let g:gruvbox_underline = 1
+let g:gruvbox_termcolors = 256
+let g:gruvbox_contrast_dark = "hard"
 
 call plug#end()
 
-colorscheme onedark
-
-hi Normal     ctermbg=NONE guibg=NONE
+colorscheme gruvbox
+hi Normal ctermbg=NONE guibg=NONE
+hi LineNr ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
