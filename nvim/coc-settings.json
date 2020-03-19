@@ -6,7 +6,6 @@
   "coc.preferences.extensionUpdateCheck": "daily",
   "suggest.autoTrigger": "always",
   "suggest.noselect": false,
-  "snippets.ultisnips.directories": ["UltiSnips"],
   "coc.preferences.snippets.enable": true,
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",

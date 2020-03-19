@@ -1,9 +1,9 @@
 " General setting
 syntax on
 set nocompatible
-set t_8b=^[[48;2;%lu;%lu;%lum
-set t_8f=^[[38;2;%lu;%lu;%lum
 set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set number
 set hidden
 set showcmd
@@ -35,6 +35,7 @@ set re=1
 set lazyredraw
 set foldmethod=indent
 set showtabline=2
+set conceallevel=2
 
 " Setting tab/space by language programing
 set tabstop=2 shiftwidth=2 expandtab
@@ -53,13 +54,6 @@ map <F7> :if exists("g:syntax_on")<cr>
 
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
-
-" Markdown mode
-autocmd FileType markdown call s:markdown_mode_setup()
-function! s:markdown_mode_setup()
-  set wrap
-  set conceallevel=0
-endfunction
 
 " Blade mode
 autocmd FileType *.blade.php call s:blade_mode_setup()
@@ -84,15 +78,15 @@ map Q <nop>
 let mapleader = ' '
 
 " Fast command
-nnoremap <silent><leader>q :q<cr>
+nnoremap <silent><leader>q :Bdelete<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 
 " Remap yank
 nnoremap Y y$
 
-" Begin, end move fast ($, ^, 0)
-map H ^
-map L $
+" Mapping rename, delete
+nnoremap <leader>R :Rename<space>
+nnoremap <leader>D :Delete<cr>
 
 " Overide jk, >, <
 nnoremap j gj
@@ -108,10 +102,9 @@ vnoremap << <gv
 nnoremap <silent><esc> :nohlsearch<cr>
 
 " Manager buffer
-nnoremap <silent>gl :bnext<cr>
-nnoremap <silent>gh :bprevious<cr>
-nnoremap <silent>gx :Bdelete<cr>
-nnoremap <silent>gv =G
+nnoremap <silent>dl :bnext<cr>
+nnoremap <silent>dh :bprevious<cr>
+nnoremap <silent>dv =G
 nnoremap <silent>S <c-^>
 
 " Split window
@@ -129,14 +122,18 @@ nnoremap <silent>si :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
 nnoremap <silent>so <c-w>=
 
 " Note setup Zettelkasten method
+nnoremap <silent><leader>wf :Files ~/Notes<cr>
 function! Note(...)
-  let path = strftime("%Y%m%d%H%M")."-".trim(join(a:000, '-')).".md"
+  let timestamp = strftime("%Y%m%d%H%M%S")
+  let path = tolower(timestamp.".md")
   execute ":e " . fnameescape(path)
 endfunction
-command! -nargs=* Note call Note(<f-args>)
-nnoremap <leader>n :Note<space>
+command! -nargs=* Note call Note()
+nnoremap <leader>wn :Note<cr>
 
-" Format source
+inoremap <leader>I <c-r>=strftime("%Y%m%d%H%M%S")<cr><esc>
+
+" Form
 function! QuickFormat()
   silent! wall
   let fullpath = expand('%:p')
@@ -145,7 +142,6 @@ function! QuickFormat()
   let runner2 = "semistandard"
   let runner3 = "php-cs-fixer"
   let runner4 = "blade-formatter"
-
   let extension = listExtension[len(listExtension) - 1]
   if extension == "js"
     execute ":! ".runner1." --write ".fullpath ." && "
@@ -234,7 +230,6 @@ nnoremap <leader>a :call FloatTerm()<cr>
 call plug#begin()
 
 " Setup colorscheme
-Plug 'laggardkernel/vim-one'
 Plug 'morhetz/gruvbox'
 set background=dark
 
@@ -252,13 +247,36 @@ let g:user_emmet_mode='i'
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_list = [
+      \ {'path': '~/Notes/',
+      \ 'syntax': 'markdown',
+      \ 'ext': '.md'}
+      \ ]
+
+let g:vimwiki_ext2syntax = {
+      \ '.md': 'markdown',
+      \ '.mkd': 'markdown',
+      \ '.wiki': 'media'}
+
+let g:vimwiki_global_ext=0
+
+" Vimwiki setup mode
+autocmd FileType vimwiki call s:vimwiki_mode_setup()
+function! s:vimwiki_mode_setup()
+  set wrap
+  set concealcursor="inc"
+endfunction
+
 Plug 'wakatime/vim-wakatime'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
+Plug 'easymotion/vim-easymotion'
+nmap <silent><leader>L <Plug>(easymotion-overwin-line)
+
 Plug 'tpope/vim-eunuch'
-nnoremap <leader>R :Rename<space>
 
 Plug 'tpope/vim-surround'
 
@@ -266,6 +284,8 @@ Plug 'jiangmiao/auto-pairs'
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_fileTypeExclude = ['vimwiki', 'markdown']
+let g:indentLine_concealcursor="in"
 
 Plug 'pseewald/vim-anyfold'
 autocmd Filetype * AnyFoldActivate
@@ -296,9 +316,9 @@ nmap <leader>sw :ChooseWinSwap<cr>
 Plug 'google/vim-searchindex'
 
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+let g:UltiSnipsExpandTrigger="<C-n>"
+let g:UltiSnipsJumpForwardTrigger="<C-n>"
+let g:UltiSnipsJumpBackwardTrigger="<C-p>"
 
 Plug 'neoclide/coc.nvim'
 let g:coc_global_extensions =
@@ -314,8 +334,7 @@ let g:coc_global_extensions =
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
-      \ 'coc-tailwindcss',
-      \ 'coc-snippets'
+      \ 'coc-tailwindcss'
       \ ]
 
 " Refresh suggest
@@ -360,13 +379,25 @@ let g:airline_detect_modified = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.dirty='⚡'
+
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
 else
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 endif
-
 let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-s': 'split',
@@ -374,14 +405,11 @@ let g:fzf_action = {
       \ }
 
 " Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
 
 nnoremap <silent><leader>i :Files<cr>
 command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
 
 nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
 
@@ -389,7 +417,7 @@ nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>R :Rg <c-r><c-w><cr>
+nnoremap <silent><leader>S :Rg <c-r><c-w><cr>
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
@@ -404,12 +432,12 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Shougo/defx.nvim'
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
-
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files<cr>
 nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=mark:indent:icons:git:filename:type -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle<cr>
-autocmd BufWritePost * call defx#redraw()
 
+autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
+
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
         \ 'min_width': '100'
@@ -442,10 +470,6 @@ function! s:defx_my_settings() abort
         \ defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> r
         \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> > defx#do_action('resize',
-        \ defx#get_context().winwidth + 5)
-  nnoremap <silent><buffer><expr> < defx#do_action('resize',
-        \ defx#get_context().winwidth - 5)
   nnoremap <silent><buffer><expr> q
         \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> <space>
@@ -466,7 +490,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> .
         \ defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> C
+  nnoremap <silent><buffer><expr> R
         \ defx#do_action('redraw')
 endfunction
 
@@ -475,6 +499,7 @@ Plug 'captbaritone/better-indent-support-for-php-with-html'
 
 " HTML, CSS
 Plug 'ap/vim-css-color'
+
 " Flutter, dart
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
@@ -486,22 +511,19 @@ nnoremap <leader>dd :FlutterVisualDebug<cr>
 
 " Hilight syntax language
 Plug 'sheerun/vim-polyglot'
-let g:polyglot_disabled = ['markdown', 'javascript', 'blade', 'php', 'html','scss']
+let g:polyglot_disabled = ['javascript', 'markdown', 'jsx']
 
 Plug 'othree/yajs.vim'
-Plug 'jwalton512/vim-blade'
-Plug 'othree/html5.vim'
-Plug 'StanAngeloff/php.vim'
-Plug 'cakebaker/scss-syntax.vim'
+
 Plug 'tpope/vim-markdown'
-let g:markdown_syntax_conceal = 0
 let g:markdown_minlines = 512
 
-Plug 'shime/vim-livedown'
-nnoremap <leader>m :LivedownToggle<cr>
-
-Plug 'elzr/vim-json'
-let g:vim_json_syntax_conceal = 0
+" Markdown mode
+autocmd FileType markdown call s:markdown_mode_setup()
+function! s:markdown_mode_setup()
+  set wrap
+  set conceallevel=0
+endfunction
 
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
@@ -511,7 +533,11 @@ Plug 'kana/vim-textobj-entire' " Key e
 Plug 'jasonlong/vim-textobj-css' " Key c
 Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
 Plug 'kana/vim-textobj-indent' " Key i
-Plug 'b4winckler/vim-angry' " key a
+Plug 'machakann/vim-swap' "key s
+omap is <Plug>(swap-textobject-i)
+xmap is <Plug>(swap-textobject-i)
+omap as <Plug>(swap-textobject-a)
+xmap as <Plug>(swap-textobject-a)
 
 " Provider
 let g:loaded_perl_provider = 0
@@ -522,10 +548,11 @@ let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 
 " Config gruvbox theme
-let g:gruvbox_bold = 1
-let g:gruvbox_italic = 1
-let g:gruvbox_underline = 1
-let g:gruvbox_termcolors = 256
+let g:gruvbox_bold=1
+let g:gruvbox_italic=1
+let g:gruvbox_underline=1
+let g:gruvbox_undercurl=1
+let g:gruvbox_termcolors=256
 let g:gruvbox_contrast_dark = "hard"
 
 call plug#end()
