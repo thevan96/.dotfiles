@@ -29,12 +29,12 @@ ua () {
     cd $HOME/.oh-my-zsh && git pull origin master &&
     cd $HOME/.pyenv && git pull origin master &&
     cd $HOME/.rbenv && git pull origin master &&
-    cd $HOME/flutter && git pull origin master &&
     cd $HOME/.fzf && git pull origin master &&
+    cd $HOME/vim-plugins-profile && git pull origin master &&
     cd
   }
 
-alias tv="ruby /opt/vim-plugins-profile-master/vim-plugins-profile.rb nvim"
+alias tv="ruby ~/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"

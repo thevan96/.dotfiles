@@ -78,15 +78,18 @@ map Q <nop>
 let mapleader = ' '
 
 " Fast command
-nnoremap <silent><leader>q :Bdelete<cr>
+nnoremap <silent><leader>q :bdelete<cr>
 nnoremap <silent><leader>Q :qa!<cr>
+nnoremap <leader>R :Rename<space>
+nnoremap <leader>D :Delete<cr>
 
 " Remap yank
 nnoremap Y y$
 
-" Mapping rename, delete
-nnoremap <leader>R :Rename<space>
-nnoremap <leader>D :Delete<cr>
+" Begin, end move fast ($, ^, 0)
+map H 0
+map L g_
+map M ^
 
 " Overide jk, >, <
 nnoremap j gj
@@ -104,6 +107,7 @@ nnoremap <silent><esc> :nohlsearch<cr>
 " Manager buffer
 nnoremap <silent>dl :bnext<cr>
 nnoremap <silent>dh :bprevious<cr>
+nnoremap <silent>dx :Bdelete<cr>
 nnoremap <silent>dv =G
 nnoremap <silent>S <c-^>
 
@@ -122,16 +126,12 @@ nnoremap <silent>si :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
 nnoremap <silent>so <c-w>=
 
 " Note setup Zettelkasten method
-nnoremap <silent><leader>wf :Files ~/Notes<cr>
 function! Note(...)
-  let timestamp = strftime("%Y%m%d%H%M%S")
-  let path = tolower(timestamp.".md")
+  let path = tolower(trim(join(a:000, ' '))).".md"
   execute ":e " . fnameescape(path)
 endfunction
-command! -nargs=* Note call Note()
-nnoremap <leader>wn :Note<cr>
-
-inoremap <leader>I <c-r>=strftime("%Y%m%d%H%M%S")<cr><esc>
+command! -nargs=* Note call Note(<f-args>)
+nnoremap <leader>N :Note<space>
 
 " Form
 function! QuickFormat()
@@ -224,7 +224,7 @@ function! FloatTerm(...)
   " Close border window when terminal window close
   autocmd TermClose * ++once :bd! | call nvim_win_close(s:float_term_border_win, v:true)
 endfunction
-nnoremap <leader>a :call FloatTerm()<cr>
+nnoremap <leader>A :call FloatTerm()<cr>
 
 " Load plugin
 call plug#begin()
@@ -247,6 +247,8 @@ let g:user_emmet_mode='i'
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
+Plug 'mattn/calendar-vim'
+
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_list = [
       \ {'path': '~/Notes/',
@@ -258,7 +260,6 @@ let g:vimwiki_ext2syntax = {
       \ '.md': 'markdown',
       \ '.mkd': 'markdown',
       \ '.wiki': 'media'}
-
 let g:vimwiki_global_ext=0
 
 " Vimwiki setup mode
@@ -279,6 +280,8 @@ nmap <silent><leader>L <Plug>(easymotion-overwin-line)
 Plug 'tpope/vim-eunuch'
 
 Plug 'tpope/vim-surround'
+
+Plug 'tpope/vim-abolish'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -543,8 +546,8 @@ xmap as <Plug>(swap-textobject-a)
 let g:loaded_perl_provider = 0
 let g:loaded_python_provider = 0
 let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
-let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.14.1/bin/neovim-node-host')
-let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.14.1/bin/node')
+let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.1/bin/neovim-node-host')
+let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.1/bin/node')
 let g:ruby_host_prog = expand('$HOME/.rbenv/versions/2.7.0/bin/neovim-ruby-host')
 
 " Config gruvbox theme
