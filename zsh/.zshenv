@@ -1,5 +1,5 @@
 # Config zsh
-alias rz=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias reload-zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Alias define shell
 alias ex="exit"
@@ -13,15 +13,21 @@ alias kw="tmux kill-window"
 alias kp="tmux kill-pane"
 alias kt="tmux kill-server"
 alias ks="tmux kill-session"
+alias ta="tmux attach"
+alias tm="tmux"
 
 # Alias tool
-alias vi="nvim"
-alias vim="nvim"
 alias emacs="emacs -nw"
-alias note="cd ~/Notes && vi"
+alias note="cd ~/Notes && vim"
+alias code="code --disable-gpu"
+
+ide () {
+  tmux split-window -v -p 25
+  tmux split-window -h -p 50
+}
 
 ua () {
-  sudo apt -y update &&
+    sudo apt -y update &&
     sudo apt -y upgrade &&
     sudo apt -y autoremove &&
     sudo apt -y autoclean &&
@@ -30,20 +36,28 @@ ua () {
     cd $HOME/.pyenv && git pull origin master &&
     cd $HOME/.rbenv && git pull origin master &&
     cd $HOME/.fzf && git pull origin master &&
-    cd $HOME/vim-plugins-profile && git pull origin master &&
     cd
-  }
+}
 
-alias tv="ruby ~/vim-plugins-profile/vim-plugins-profile.rb nvim"
+alias tv="ruby /opt/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
 }
 
+fix-zeal() {
+    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
+    find . -iname 'react-main*.js' -exec rm '{}' \;
+    popd >/dev/null || exit
+}
+
 # Set env variable
 export KEYTIMEOUT=1
-export EDITOR=vi
+export EDITOR=vim
 export TERM="screen-256color"
+
+# File excute
+export PATH="$HOME/.bin:$PATH"
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"

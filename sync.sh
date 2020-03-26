@@ -1,8 +1,8 @@
 #!/bin/bash
-mkdir -p ~/.config/{nvim/UltiSnips,alacritty,kitty}
+mkdir -p ~/.config/{nvim/UltiSnips,alacritty}
 
-ln -sf ~/dotfiles/nvim/init.vim ~/.config/nvim/init.vim
-ln -sf ~/dotfiles/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
+ln -sf ~/dotfiles/configvim/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/configvim/coc-settings.json ~/.config/nvim/coc-settings.json
 
 ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
@@ -20,6 +20,5 @@ ln -sf ~/dotfiles/UltiSnips/html.snippets ~/.config/nvim/UltiSnips/html.snippets
 ln -sf ~/dotfiles/UltiSnips/css.snippets ~/.config/nvim/UltiSnips/css.snippets
 ln -sf ~/dotfiles/UltiSnips/blade.snippets ~/.config/nvim/UltiSnips/blade.snippets
 ln -sf ~/dotfiles/UltiSnips/markdown.snippets ~/.config/nvim/UltiSnips/markdown.snippets
-ln -sf ~/dotfiles/UltiSnips/vimwiki.snippets ~/.config/nvim/UltiSnips/vimwiki.snippets
 
 echo 'Sync done!'
