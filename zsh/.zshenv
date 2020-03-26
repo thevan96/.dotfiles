@@ -15,10 +15,8 @@ alias kt="tmux kill-server"
 alias ks="tmux kill-session"
 
 # Alias tool
-alias vi="nvim"
-alias vim="nvim"
 alias emacs="emacs -nw"
-alias note="cd ~/Notes && vi"
+alias note="cd ~/Notes && vim"
 
 ua () {
   sudo apt -y update &&
@@ -30,20 +28,28 @@ ua () {
     cd $HOME/.pyenv && git pull origin master &&
     cd $HOME/.rbenv && git pull origin master &&
     cd $HOME/.fzf && git pull origin master &&
-    cd $HOME/vim-plugins-profile && git pull origin master &&
     cd
   }
 
-alias tv="ruby ~/vim-plugins-profile/vim-plugins-profile.rb nvim"
+alias tv="ruby /opt/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
 }
 
+zeal-docs-fix() {
+    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
+    find . -iname 'react-main*.js' -exec rm '{}' \;
+    popd >/dev/null || exit
+}
+
 # Set env variable
 export KEYTIMEOUT=1
-export EDITOR=vi
+export EDITOR=vim
 export TERM="screen-256color"
+
+# File excute
+export PATH="$HOME/.bin:$PATH"
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"

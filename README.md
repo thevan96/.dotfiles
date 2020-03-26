@@ -4,5 +4,5 @@
 - Shell: zsh
 - Text editor: neovim
 - Terminal multiplexer: tmux
-- Theme terminal: One dark
+- Theme terminal: Gruvbox
 

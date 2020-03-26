@@ -2,4 +2,4 @@
   name = thevan96
   email = vothevan96@gmail.com
 [core]
-  editor = vi
+  editor = vim
