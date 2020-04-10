@@ -105,7 +105,7 @@ endfunction
 command! -nargs=* Note call Note(<f-args>)
 nnoremap <leader>N :Note<space>
 
-" Floating Term
+" floating Term
 let s:float_term_border_win = 0
 let s:float_term_win = 0
 function! FloatTerm(...)
