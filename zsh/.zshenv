@@ -1,12 +1,10 @@
 # Config zsh
-alias reload-zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias reload=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
-# Alias define shell
-alias ex="exit"
-alias cl="clear"
-alias hc="history -c"
-alias fp="sudo lsof -i -P -n"
-alias kp="kill-port "
+# Directory
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
 # tmux
 alias kw="tmux kill-window"
@@ -17,13 +15,25 @@ alias ta="tmux attach"
 alias tm="tmux"
 
 # Alias tool
-alias emacs="emacs -nw"
+alias rj="create-react-app"
+alias rn="react-native"
 alias note="cd ~/Notes && vim"
 alias code="code --disable-gpu"
+alias reboot="sudo reboot -h now"
+alias shutdown="sudo shutdown -h now"
+
+alias ex="exit"
+alias cl="clear"
+alias hc="history -c"
+alias fp="sudo lsof -i -P -n"
+alias kp="kill-port"
+alias top='htop'
+alias pwdc="pwd | xclip -selection clipboard "
+alias tv="ruby /opt/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 ide () {
-  tmux split-window -v -p 25
-  tmux split-window -h -p 50
+  tmux split-window -v -p 20
+  tmux split-window -h -p 40
 }
 
 ua () {
@@ -39,7 +49,6 @@ ua () {
     cd
 }
 
-alias tv="ruby /opt/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 bs () {
   browser-sync start --server --files '*' --port "${1:-3004}"
@@ -55,9 +64,6 @@ fix-zeal() {
 export KEYTIMEOUT=1
 export EDITOR=vim
 export TERM="screen-256color"
-
-# File excute
-export PATH="$HOME/.bin:$PATH"
 
 # Laravel export, composer, php
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
@@ -90,7 +96,7 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-alias run-phone="emulator @Pixel_3_API_28"
+alias phone="emulator @Pixel_3_API_28"
 
 # Flutter, dart
 export PATH="$PATH:$HOME/flutter/bin"

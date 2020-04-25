@@ -13,6 +13,8 @@ ln -sf ~/dotfiles/zsh/.zshenv ~/.zshenv
 
 ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
 
+ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
+
 # snippet
 ln -sf ~/dotfiles/UltiSnips/php.snippets ~/.config/nvim/UltiSnips/php.snippets
 ln -sf ~/dotfiles/UltiSnips/javascript.snippets ~/.config/nvim/UltiSnips/javascript.snippets

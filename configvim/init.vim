@@ -2,16 +2,14 @@
 syntax on
 set nocompatible
 set termguicolors
-set number
-set hidden
 set ignorecase hlsearch
+set nobackup noswapfile
 set autoread autowrite
-set nobackup noswapfile nowritebackup
 set splitbelow splitright
 set autoindent smartindent
 filetype plugin on
 filetype indent on
-set nowrap
+set hidden number nowrap
 set lazyredraw
 set cmdheight=1
 set mouse=a
@@ -30,13 +28,13 @@ set tabstop=2 shiftwidth=2 expandtab
 
 " Sync syntax highlight
 autocmd BufEnter * :syntax sync fromstart
-" autocmd BufReadPost,FileReadPost,BufNewFile,BufEnter * call system("tmux rename-window '" . expand("%:t") . "'")
 
 " Turn off syntax
 map <F7> :if exists("g:syntax_on")<cr>
       \    syntax off <cr>
       \  else <cr>
       \    syntax on <cr>
+      \    hi VertSplit ctermbg=NONE guibg=NONE <cr>
       \  endif <cr>
       \  <cr>
 
@@ -64,12 +62,9 @@ nnoremap <leader>D :Delete<cr>
 
 " Remap
 map Y y$
-
-" Overide jk, >, <
+nnoremap * *N
 nnoremap j gj
 nnoremap k gk
-vnoremap j gj
-vnoremap k gk
 
 " Indent
 vnoremap >> >gv
@@ -82,8 +77,6 @@ nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>gl :bnext<cr>
 nnoremap <silent>gh :bprevious<cr>
 nnoremap <silent>gv =G
-
-" Keep layout
 nnoremap <silent>gx :Bdelete<cr>
 
 " Switch last buffer
@@ -98,10 +91,6 @@ nnoremap sj <c-w><c-j>
 nnoremap sk <c-w><c-k>
 nnoremap sl <c-w><c-l>
 nnoremap sh <c-w><c-h>
-
-" Zoom in, zoom out
-nnoremap <silent>si :call defx#do_action('quit')<cr><c-w>_ \| <c-w>\|
-nnoremap <silent>so <c-w>=
 
 " Format
 function! QuickFormat()
@@ -149,27 +138,27 @@ nnoremap <leader>p :call QuickFormat()<cr>
 " Load plugin
 call plug#begin()
 
+Plug 'mattn/emmet-vim'
+let g:user_emmet_leader_key=','
+let g:user_emmet_mode='i'
+
+Plug 'tpope/vim-surround'
+
+Plug 'tpope/vim-abolish'
+
+Plug 'tpope/vim-commentary'
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+Plug 'wakatime/vim-wakatime'
+
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
 let g:winresizer_vert_resize = 3
 let g:winresizer_horiz_resize = 3
 
 Plug 'moll/vim-bbye'
-
-Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key=','
-let g:user_emmet_mode='i'
-
-Plug 'jiangmiao/auto-pairs'
-
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-Plug 'tpope/vim-surround'
-
-Plug 'tpope/vim-abolish'
-
-Plug 'wakatime/vim-wakatime'
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -182,15 +171,10 @@ set foldlevel=99
 
 Plug 'tpope/vim-sleuth'
 
-Plug 'tpope/vim-commentary'
-
 Plug 'airblade/vim-gitgutter'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
-
-Plug 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 200
 
 Plug 'google/vim-searchindex'
 
@@ -208,7 +192,8 @@ let g:coc_global_extensions =
       \ 'coc-svelte',
       \ 'coc-flutter',
       \ 'coc-angular',
-      \ 'coc-tailwindcss'
+      \ 'coc-tailwindcss',
+      \ 'coc-highlight'
       \ ]
 
 " Refresh suggest
@@ -247,7 +232,7 @@ map <silent>gk <Plug>(coc-diagnostic-prev)
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'onedark'
+let g:airline_theme = 'wombat'
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified = 1
 let g:airline#extensions#branch#enabled = 1
@@ -279,7 +264,7 @@ nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>S :Rg <c-r><c-w><cr>
+nnoremap <silent><leader>s :Rg <c-r><c-w><cr>
 nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
@@ -294,8 +279,8 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=38 -direction=topleft -show-ignored-files<cr>
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=38 -direction=topleft -show-ignored-files -toggle<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=32 -direction=topleft -show-ignored-files -toggle<cr>
 
 autocmd BufWritePost * call defx#redraw()
 
@@ -366,34 +351,21 @@ function! s:defx_my_settings() abort
         \ defx#do_action('redraw')
 endfunction
 
-" PHP
-Plug 'captbaritone/better-indent-support-for-php-with-html'
+Plug 'jelera/vim-javascript-syntax'
 
-" HTML, CSS
-Plug 'ap/vim-css-color'
+" Better syntax all language
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['javascript']
 
-"Blade php
-Plug 'jwalton512/vim-blade'
-autocmd FileType *.blade.php call s:blade_mode_setup()
-function! s:blade_mode_setup()
-  set ft=html | set ft=phtml | set ft=blade
-endfunction
-
-Plug 'othree/yajs.vim'
-
-Plug 'tpope/vim-markdown'
+" Tweak for markdown
 autocmd FileType markdown call s:markdown_mode_setup()
 function! s:markdown_mode_setup()
   set wrap
   set conceallevel=0
 endfunction
 
-Plug 'elzr/vim-json'
-let g:vim_json_syntax_conceal = 0
-
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
-Plug 'kana/vim-textobj-entire' " Core e
 Plug 'jasonlong/vim-textobj-css' " Key c
 Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
 Plug 'kana/vim-textobj-indent' " Key i
@@ -411,8 +383,11 @@ let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
 let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.2/bin/neovim-node-host')
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.2/bin/node')
 
-Plug 'joshdick/onedark.vim'
+Plug 'lifepillar/vim-solarized8'
+let g:solarized_termtrans = 1
+
 set background=dark
 call plug#end()
 
-colorscheme onedark
+colorscheme solarized8
+hi VertSplit ctermbg=NONE guibg=NONE
