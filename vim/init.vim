@@ -49,6 +49,7 @@ autocmd BufWritePre * %s/\s\+$//e
 " Disable netrw, Q
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
+let g:vimtex_latexml_enabled = 1
 map Q <nop>
 
 " Mapping leader
@@ -352,17 +353,18 @@ function! s:defx_my_settings() abort
 endfunction
 
 Plug 'jelera/vim-javascript-syntax'
-
-" Better syntax all language
-Plug 'sheerun/vim-polyglot'
-let g:polyglot_disabled = ['javascript']
-
-" Tweak for markdown
+Plug 'ap/vim-css-color'
+Plug 'othree/yajs.vim'
+Plug 'tpope/vim-markdown'
 autocmd FileType markdown call s:markdown_mode_setup()
 function! s:markdown_mode_setup()
   set wrap
   set conceallevel=0
 endfunction
+
+" Better syntax all language
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['javascript', 'markdown']
 
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
@@ -379,9 +381,10 @@ xmap as <Plug>(swap-textobject-a)
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:loaded_python_provider = 0
+let g:vimtex_compiler_progname = 'nvr'
 let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
-let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.2/bin/neovim-node-host')
-let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.2/bin/node')
+let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.3/bin/neovim-node-host')
+let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.3/bin/node')
 
 Plug 'lifepillar/vim-solarized8'
 let g:solarized_termtrans = 1

@@ -32,7 +32,7 @@ alias pwdc="pwd | xclip -selection clipboard "
 alias tv="ruby /opt/vim-plugins-profile/vim-plugins-profile.rb nvim"
 
 ide () {
-  tmux split-window -v -p 20
+  tmux split-window -v -p 15
   tmux split-window -h -p 40
 }
 
