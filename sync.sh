@@ -15,12 +15,4 @@ ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
 
 ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
 
-# snippet
-ln -sf ~/dotfiles/UltiSnips/php.snippets ~/.config/nvim/UltiSnips/php.snippets
-ln -sf ~/dotfiles/UltiSnips/javascript.snippets ~/.config/nvim/UltiSnips/javascript.snippets
-ln -sf ~/dotfiles/UltiSnips/html.snippets ~/.config/nvim/UltiSnips/html.snippets
-ln -sf ~/dotfiles/UltiSnips/css.snippets ~/.config/nvim/UltiSnips/css.snippets
-ln -sf ~/dotfiles/UltiSnips/blade.snippets ~/.config/nvim/UltiSnips/blade.snippets
-ln -sf ~/dotfiles/UltiSnips/markdown.snippets ~/.config/nvim/UltiSnips/markdown.snippets
-
 echo 'Sync done!'

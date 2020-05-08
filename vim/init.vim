@@ -143,6 +143,8 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
+Plug 'terryma/vim-multiple-cursors'
+
 Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-abolish'
