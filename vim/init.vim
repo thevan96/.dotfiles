@@ -22,6 +22,7 @@ set shortmess-=S
 set foldmethod=indent
 set showtabline=2
 set conceallevel=2
+set completeopt-=preview
 
 " Setting default tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -34,6 +35,10 @@ map <F7> :if exists("g:syntax_on")<cr>
       \    syntax off <cr>
       \  else <cr>
       \    syntax on <cr>
+      \    hi Normal     ctermbg=NONE guibg=NONE <cr>
+      \    hi NonText     ctermbg=NONE guibg=NONE <cr>
+      \    hi LineNr     ctermbg=NONE guibg=NONE <cr>
+      \    hi SignColumn ctermbg=NONE guibg=NONE <cr>
       \    hi VertSplit ctermbg=NONE guibg=NONE <cr>
       \  endif <cr>
       \  <cr>
@@ -50,7 +55,8 @@ autocmd BufWritePre * %s/\s\+$//e
 let g:loaded_netrw = 1
 let loaded_netrwPlugin = 1
 let g:vimtex_latexml_enabled = 1
-map Q <nop>
+nnoremap Q <nop>
+nnoremap <Space> <Nop>
 
 " Mapping leader
 let mapleader = ' '
@@ -187,21 +193,14 @@ let g:coc_global_extensions =
       \ 'coc-json',
       \ 'coc-tsserver',
       \ 'coc-css',
-      \ 'coc-phpls',
       \ 'coc-python',
-      \ 'coc-sql',
-      \ 'coc-webpack',
-      \ 'coc-vimlsp',
-      \ 'coc-svelte',
-      \ 'coc-flutter',
-      \ 'coc-angular',
-      \ 'coc-tailwindcss',
       \ 'coc-highlight'
       \ ]
 
 " Refresh suggest
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+nnoremap <silent><leader><leader> :call coc#util#float_hide()<cr>
 
 " Remap keys for gotos
 nmap <silent>gd <Plug>(coc-definition)
@@ -355,8 +354,13 @@ function! s:defx_my_settings() abort
 endfunction
 
 Plug 'jelera/vim-javascript-syntax'
-Plug 'ap/vim-css-color'
 Plug 'othree/yajs.vim'
+Plug 'Galooshi/vim-import-js'
+nnoremap<silent><leader>j :ImportJSWord<cr>
+nnoremap<silent><leader>J :ImportJSFix<cr>
+
+Plug 'ap/vim-css-color'
+
 Plug 'tpope/vim-markdown'
 autocmd FileType markdown call s:markdown_mode_setup()
 function! s:markdown_mode_setup()
@@ -388,11 +392,13 @@ let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
 let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.3/bin/neovim-node-host')
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.3/bin/node')
 
-Plug 'lifepillar/vim-solarized8'
-let g:solarized_termtrans = 1
-
+Plug 'sickill/vim-monokai'
 set background=dark
 call plug#end()
 
-colorscheme solarized8
+colorscheme monokai
+hi Normal     ctermbg=NONE guibg=NONE
+hi NonText     ctermbg=NONE guibg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
 hi VertSplit ctermbg=NONE guibg=NONE
