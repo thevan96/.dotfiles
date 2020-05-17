@@ -22,7 +22,6 @@ set shortmess-=S
 set foldmethod=indent
 set showtabline=2
 set conceallevel=2
-set completeopt-=preview
 
 " Setting default tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -35,11 +34,6 @@ map <F7> :if exists("g:syntax_on")<cr>
       \    syntax off <cr>
       \  else <cr>
       \    syntax on <cr>
-      \    hi Normal     ctermbg=NONE guibg=NONE <cr>
-      \    hi NonText     ctermbg=NONE guibg=NONE <cr>
-      \    hi LineNr     ctermbg=NONE guibg=NONE <cr>
-      \    hi SignColumn ctermbg=NONE guibg=NONE <cr>
-      \    hi VertSplit ctermbg=NONE guibg=NONE <cr>
       \  endif <cr>
       \  <cr>
 
@@ -64,8 +58,6 @@ let mapleader = ' '
 " Fast command
 nnoremap <silent><leader>q :bdelete<cr>
 nnoremap <silent><leader>Q :qa!<cr>
-nnoremap <leader>R :Rename<space>
-nnoremap <leader>D :Delete<cr>
 
 " Remap
 map Y y$
@@ -74,8 +66,10 @@ nnoremap j gj
 nnoremap k gk
 
 " Indent
-vnoremap >> >gv
-vnoremap << <gv
+vnoremap >> >gv<cr>gv=gv
+vnoremap << <gv<cr>gv=gv
+vnoremap J :m '>+1<cr>gv=gv
+vnoremap K :m '<-2<cr>gv=gv
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
@@ -149,7 +143,21 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'takac/vim-hardtime'
+let g:hardtime_default_on = 1
+let g:list_of_normal_keys = ["h", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_visual_keys = ["h", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_disabled_keys = []
+let g:hardtime_ignore_buffer_patterns = ["Defx"]
+let g:hardtime_maxcount = 20
+
 Plug 'terryma/vim-multiple-cursors'
+
+Plug 'machakann/vim-highlightedyank'
+let g:highlightedyank_highlight_duration = 150
 
 Plug 'tpope/vim-surround'
 
@@ -173,6 +181,8 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-eunuch'
+nnoremap <leader>R :Rename<space>
+nnoremap <leader>D :Delete<cr>
 
 Plug 'pseewald/vim-anyfold'
 autocmd Filetype * AnyFoldActivate
@@ -187,46 +197,6 @@ let g:suda_smart_edit = 1
 
 Plug 'google/vim-searchindex'
 
-Plug 'neoclide/coc.nvim'
-let g:coc_global_extensions =
-      \ [
-      \ 'coc-json',
-      \ 'coc-tsserver',
-      \ 'coc-css',
-      \ 'coc-python',
-      \ 'coc-highlight'
-      \ ]
-
-" Refresh suggest
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-nnoremap <silent><leader><leader> :call coc#util#float_hide()<cr>
-
-" Remap keys for gotos
-nmap <silent>gd <Plug>(coc-definition)
-nmap <silent>gy <Plug>(coc-type-definition)
-nmap <silent>gi <Plug>(coc-implementation)
-nmap <silent>gr <Plug>(coc-references)
-
-" Create mappings for function text object - coc-nvim
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use K to show documentation in preview window
-nnoremap <silent>K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " navigate error
 map <silent>gj <Plug>(coc-diagnostic-next)
 map <silent>gk <Plug>(coc-diagnostic-prev)
@@ -234,7 +204,7 @@ map <silent>gk <Plug>(coc-diagnostic-prev)
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'wombat'
+let g:airline_theme = 'onedark'
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified = 1
 let g:airline#extensions#branch#enabled = 1
@@ -281,16 +251,15 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 Plug 'kristijanhusak/defx-icons'
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files<cr>
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=25 -direction=topleft -show-ignored-files -toggle<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=40 -direction=topleft -show-ignored-files<cr>
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=40 -direction=topleft -show-ignored-files -toggle<cr>
 
 autocmd BufWritePost * call defx#redraw()
-
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
-        \ 'min_width': '100',
-        \ 'max_width': '100'
+        \ 'max_width': '100',
+        \ 'min_width': '100'
         \})
   call defx#custom#column('icon', {
         \ 'directory_icon': '▸',
@@ -311,7 +280,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('drop','split')
   nnoremap <silent><buffer><expr> sv
         \ defx#do_action('drop', 'vsplit')
-  nnoremap <silent><buffer><expr> rm
+  nnoremap <silent><buffer><expr> dd
         \ defx#do_action('remove_trash')
   nnoremap <silent><buffer><expr> D
         \ defx#do_action('remove')
@@ -349,15 +318,12 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> .
         \ defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> R
+  nnoremap <silent><buffer><expr> rr
         \ defx#do_action('redraw')
 endfunction
 
 Plug 'jelera/vim-javascript-syntax'
 Plug 'othree/yajs.vim'
-Plug 'Galooshi/vim-import-js'
-nnoremap<silent><leader>j :ImportJSWord<cr>
-nnoremap<silent><leader>J :ImportJSFix<cr>
 
 Plug 'ap/vim-css-color'
 
@@ -374,9 +340,7 @@ let g:polyglot_disabled = ['javascript', 'markdown']
 
 " Text object
 Plug 'kana/vim-textobj-user' " Core textobject customer
-Plug 'jasonlong/vim-textobj-css' " Key c
 Plug 'whatyouhide/vim-textobj-xmlattr' " Key x
-Plug 'kana/vim-textobj-indent' " Key i
 Plug 'machakann/vim-swap' "key s
 omap is <Plug>(swap-textobject-i)
 xmap is <Plug>(swap-textobject-i)
@@ -392,13 +356,9 @@ let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
 let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.3/bin/neovim-node-host')
 let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.3/bin/node')
 
-Plug 'sickill/vim-monokai'
+Plug 'joshdick/onedark.vim'
 set background=dark
 call plug#end()
 
-colorscheme monokai
-hi Normal     ctermbg=NONE guibg=NONE
-hi NonText     ctermbg=NONE guibg=NONE
-hi LineNr     ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE
-hi VertSplit ctermbg=NONE guibg=NONE
+" colorscheme solarized8
+colorscheme onedark

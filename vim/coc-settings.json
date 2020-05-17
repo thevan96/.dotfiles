@@ -4,8 +4,9 @@
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": "",
   "coc.preferences.extensionUpdateCheck": "daily",
-  "suggest.autoTrigger": "always",
-  "suggest.noselect": false,
+  "suggest.autoTrigger": "none",
+  "suggest.noselect": true,
+  "suggest.floatEnable": false,
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",

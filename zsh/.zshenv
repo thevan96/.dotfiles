@@ -35,6 +35,10 @@ ide () {
   tmux split-window -v -p 15
 }
 
+gitsearch () {
+  git log --all --grep="${1}"
+}
+
 fix-git () {
   ssh-add ~/.ssh/id_rsa_github
 }
@@ -54,7 +58,7 @@ ua () {
 
 
 bs () {
-  browser-sync start --server --files '*' --port "${1:-3004}"
+  browser-sync start --server --files '*' --port "${1}"
 }
 
 fix-zeal() {
@@ -65,7 +69,7 @@ fix-zeal() {
 
 # Set env variable
 export KEYTIMEOUT=1
-export EDITOR=vim
+export EDITOR=vi
 export TERM="screen-256color"
 
 # Laravel export, composer, php

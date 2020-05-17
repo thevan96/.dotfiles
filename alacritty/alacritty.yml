@@ -96,7 +96,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux) monospace
     #   - () Consolas
-    family: Source Code Pro
+    family: Monaco
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -107,7 +107,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Source Code Pro
+    family: Monaco
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -118,13 +118,13 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Source Code Pro
+    family: Monaco
 
     # The `style` can be specified to pick a specific face.
     style: Italic
 
   # Point size
-  size: 9.0
+  size: 9
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -137,7 +137,7 @@ font:
   # increasing `y` moves the glyph upwards.
   glyph_offset:
     x: 0
-    y: -1
+    y: 1
 
   # Thin stroke font rendering (macOS only)
   #
@@ -157,35 +157,37 @@ font:
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
-#
-# Colors (Monokai Dark)
+
+# Colors (One Dark)
 colors:
   # Default colors
   primary:
-    background: '#1b1d1e'
-    foreground: '#F8F8F2'
+    background: '#282c34'
+    foreground: '#abb2bf'
 
   # Normal colors
   normal:
-   black:   '#1b1d1e'
-   red:     '#F92672'
-   green:   '#A6E22E'
-   yellow:  '#F4BF75'
-   blue:    '#66D9EF'
-   magenta: '#AE81FF'
-   cyan:    '#A1EFE4'
-   white:   '#F8F8F2'
+    # NOTE: Use '#131613' for the `black` color if you'd like to see
+    # black text on the background.
+    black:   '#282c34'
+    red:     '#e06c75'
+    green:   '#98c379'
+    yellow:  '#d19a66'
+    blue:    '#61afef'
+    magenta: '#c678dd'
+    cyan:    '#56b6c2'
+    white:   '#abb2bf'
 
   # Bright colors
   bright:
-   black:   '#75715E'
-   red:     '#F92672'
-   green:   '#A6E22E'
-   yellow:  '#F4BF75'
-   blue:    '#66D9EF'
-   magenta: '#AE81FF'
-   cyan:    '#A1EFE4'
-   white:   '#F9F8F5'
+    black:   '#5c6370'
+    red:     '#e06c75'
+    green:   '#98c379'
+    yellow:  '#d19a66'
+    blue:    '#61afef'
+    magenta: '#c678dd'
+    cyan:    '#56b6c2'
+    white:   '#ffffff'
 
   # Indexed Colors
   #
@@ -227,7 +229,7 @@ visual_bell:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.99
+background_opacity: 1.0
 
 # Mouse bindings
 #
