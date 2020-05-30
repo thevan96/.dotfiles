@@ -3,10 +3,10 @@
   "diagnostic.warningSign": "",
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": "",
-  "coc.preferences.extensionUpdateCheck": "daily",
   "suggest.autoTrigger": "none",
+  "suggest.floatEnable": true,
   "suggest.noselect": true,
-  "suggest.floatEnable": false,
+  "coc.preferences.extensionUpdateCheck": "daily",
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",

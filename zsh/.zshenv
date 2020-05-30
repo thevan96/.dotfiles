@@ -17,7 +17,7 @@ alias tm="tmux"
 # Alias tool
 alias rj="create-react-app"
 alias rn="react-native"
-alias note="cd ~/Notes && vim"
+alias rm="rm -rf"
 alias code="code --disable-gpu"
 alias reboot="sudo reboot -h now"
 alias shutdown="sudo shutdown -h now"
@@ -54,11 +54,6 @@ ua () {
     cd $HOME/.rbenv && git pull origin master &&
     cd $HOME/.fzf && git pull origin master &&
     cd
-}
-
-
-bs () {
-  browser-sync start --server --files '*' --port "${1}"
 }
 
 fix-zeal() {

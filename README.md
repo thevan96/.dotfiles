@@ -4,5 +4,4 @@
 - Shell: zsh
 - Text editor: neovim
 - Terminal multiplexer: tmux
-- Theme terminal: Solarized
-
+- Theme terminal: Onedark
