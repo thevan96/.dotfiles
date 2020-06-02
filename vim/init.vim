@@ -1,36 +1,11 @@
-" General setting
+" General setping leader
 syntax on
-set nocompatible
-set termguicolors
-set ignorecase hlsearch
-set nobackup noswapfile
-set splitbelow splitright
-set autoindent smartindent
-set hidden number nowrap
-set lazyredraw
-set cmdheight=1
-set mouse=a
-set updatetime=100
-set signcolumn=yes
-set encoding=utf-8
-set list listchars=tab:␣\ ,extends:▶,precedes:◀
-set shortmess-=S
-" set showtabline=2
-set conceallevel=2
-
-" Setting default tab/space
-set tabstop=2 shiftwidth=2 expandtab
-
-" Sync syntax highlight
-autocmd BufEnter * :syntax sync fromstart
+autocmd FocusGained * :checktime
 
 " Save position cursor
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
-
-" Auto remove trailing spaces
-autocmd BufWritePre * %s/\s\+$//e
 
 " Disable
 nnoremap Q <nop>
@@ -43,34 +18,26 @@ let mapleader = ' '
 nnoremap <silent><leader>q :bdelete<cr>
 nnoremap <silent><leader>w :w<cr>
 nnoremap <silent><leader>Q :qa!<cr>
+nnoremap <silent><leader>z <c-z><cr>
 
 " Remap
-map Y y$
 nnoremap j gj
 nnoremap k gk
 nnoremap * *N
+nnoremap <silent>S <c-^>
 
 " Move
-vnoremap . >gv
-vnoremap , <gv
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-vnoremap <C-j> :m '>+1<cr>gv=gv
-vnoremap <C-k> :m '<-2<cr>gv=gv
+nnoremap <silent>< <<
+nnoremap <silent>> >>
+vnoremap <silent>< <gv
+vnoremap <silent>> >gv
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
 
-" Manager buffer
-nnoremap <silent>gl :bnext<cr>
-nnoremap <silent>gh :bprevious<cr>
-nnoremap <silent>gv =G
-nnoremap <silent>gx :Bdelete<cr>
-nnoremap <silent>S <c-^>
-
 " Split window
-nnoremap <silent>ss :split<cr>
 nnoremap <silent>sv :vsplit<cr>
+nnoremap <silent>ss :split<cr>
 
 " Move window
 nnoremap sj <c-w><c-j>
@@ -81,23 +48,25 @@ nnoremap sh <c-w><c-h>
 call plug#begin()
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html', 'php'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 let g:prettier#quickfix_enabled = 0
-nnoremap <leader>p :Prettier<cr>
-autocmd  BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html,*.php PrettierAsync
+let g:prettier#autoformat = 0
+nnoremap <silent><leader>p :Prettier<cr>
 
+Plug 'nelstrom/vim-visual-star-search'
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
-Plug 'jiangmiao/auto-pairs'
+Plug 'zivyangll/git-blame.vim'
+nnoremap <silent><leader>b :<C-u>call gitblame#echo()<cr>
 
-Plug 'terryma/vim-multiple-cursors'
+Plug 'wincent/ferret'
+
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 Plug 'tpope/vim-surround'
-
-Plug 'tpope/vim-abolish'
 
 Plug 'tpope/vim-commentary'
 
@@ -111,25 +80,18 @@ let g:winresizer_start_key = '<leader>e'
 let g:winresizer_vert_resize = 3
 let g:winresizer_horiz_resize = 3
 
-Plug 'moll/vim-bbye'
+Plug 'Yggdroot/indentLine'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_fileTypeExclude = ['defx', '']
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
-Plug 'tpope/vim-eunuch'
-nnoremap <leader>R :Rename<space>
-nnoremap <leader>D :Delete<cr>
-
 Plug 'tpope/vim-sleuth'
 
 Plug 'airblade/vim-gitgutter'
-
-Plug 'google/vim-searchindex'
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme = 'onedark'
-" let g:airline#extensions#tabline#enabled = 1
+nmap gl <Plug>(GitGutterNextHunk)
+nmap gh <Plug>(GitGutterPrevHunk)
 
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
@@ -148,14 +110,12 @@ nnoremap <silent><leader>i :Files<cr>
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>l :Files <C-r>=expand("%:h")<cr>/<cr>
-
 nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>S :Rg <c-r><c-w><cr>
-nnoremap <silent><leader>s :Rg<cr>
+nnoremap <silent><leader>R :Rg <c-r><c-w><cr>
+nnoremap <silent><leader>r :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>),
@@ -169,6 +129,7 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions =
       \ [
+      \ 'coc-styled-components',
       \ 'coc-json',
       \ 'coc-tsserver',
       \ 'coc-css',
@@ -176,13 +137,11 @@ let g:coc_global_extensions =
       \ ]
 
 " Refresh suggest
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-nnoremap <silent><leader><leader> :call coc#util#float_hide()<cr>
+imap <silent><expr> <c-n> coc#refresh()
 
 " Remap keys for gotos
 nmap <silent>gd <Plug>(coc-definition)
-nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gt <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
 
@@ -202,20 +161,19 @@ map <silent>gk <Plug>(coc-diagnostic-prev
 
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
-Plug 'kristijanhusak/defx-icons'
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=32 -direction=topleft -show-ignored-files<cr>
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:icons:filename:type -split=vertical -winwidth=32 -direction=topleft -show-ignored-files -toggle<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files -resume<cr>
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files -toggle -resume<cr>
 
 autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
-        \ 'min_width': '100'
+        \ 'min_width': '50'
         \})
   call defx#custom#column('icon', {
-        \ 'directory_icon': '▸',
-        \ 'opened_icon': '▾',
-        \ 'root_icon': 'R',
+        \ 'directory_icon': ' ⮞',
+        \ 'opened_icon': ' ⮟',
+        \ 'root_icon': ' ⬢',
         \ })
   call defx#custom#column('mark', {
         \ 'readonly_icon': '✗',
@@ -259,10 +217,8 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_select_visual')
   nnoremap <silent><buffer><expr> cl
         \ defx#do_action('clear_select_all')
-  nnoremap <silent><buffer><expr> j
-        \ line('.') == line('$') ? 'gg' : 'j'
-  nnoremap <silent><buffer><expr> k
-        \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> j 'j'
+  nnoremap <silent><buffer><expr> k  'k'
   nnoremap <silent><buffer><expr> yp
         \ defx#do_action('yank_path')
   nnoremap <silent><buffer><expr> i
@@ -273,9 +229,13 @@ function! s:defx_my_settings() abort
         \ defx#do_action('redraw')
 endfunction
 
-Plug 'othree/yajs.vim'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'ap/vim-css-color'
+
+Plug 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
 
 Plug 'tpope/vim-markdown'
 autocmd FileType markdown call s:markdown_mode_setup()
@@ -284,18 +244,9 @@ function! s:markdown_mode_setup()
   set conceallevel=0
 endfunction
 
-Plug 'elzr/vim-json'
-let g:vim_json_syntax_conceal = 0
-
-" Text object
-Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
-Plug 'whatyouhide/vim-textobj-xmlattr' " key x
-Plug 'machakann/vim-swap' "key s
-omap is <Plug>(swap-textobject-i)
-xmap is <Plug>(swap-textobject-i)
-omap as <Plug>(swap-textobject-a)
-xmap as <Plug>(swap-textobject-a)
+Plug 'sgur/vim-textobj-parameter'
+let g:vim_textobj_parameter_mapping = 's'
 
 " Provider
 let g:loaded_perl_provider = 0
@@ -304,11 +255,19 @@ let g:vimtex_compiler_progname = 'nvr'
 let g:loaded_python_provider = 0
 let g:python_host_prog = expand('$HOME/.pyenv/shims/python2')
 let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
-let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.16.3/bin/neovim-node-host')
-let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.16.3/bin/node')
+let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.18.1/bin/neovim-node-host')
+let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.18.1/bin/node')
 
-Plug 'joshdick/onedark.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_theme = 'wombat'
+
+Plug 'nanotech/jellybeans.vim'
 set background=dark
+
 call plug#end()
 
-colorscheme onedark
+colorscheme jellybeans
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+hi VertSplit  ctermbg=NONE guibg=NONE

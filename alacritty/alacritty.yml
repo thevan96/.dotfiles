@@ -71,7 +71,7 @@ window:
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
-  history: 10000
+  history: 100000
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
@@ -96,7 +96,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux) monospace
     #   - () Consolas
-    family: Monaco
+    family: Source Code Pro
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -107,7 +107,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Monaco
+    family: Source Code Pro
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -118,13 +118,13 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Monaco
+    family: Source Code Pro
 
     # The `style` can be specified to pick a specific face.
     style: Italic
 
   # Point size
-  size: 9
+  size: 8.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -137,7 +137,7 @@ font:
   # increasing `y` moves the glyph upwards.
   glyph_offset:
     x: 0
-    y: 1
+    y: 0
 
   # Thin stroke font rendering (macOS only)
   #
@@ -158,36 +158,44 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (One Dark)
+# Colors (Jellybeans)
 colors:
   # Default colors
   primary:
-    background: '#282c34'
-    foreground: '#abb2bf'
+    background: '#161616'
+    foreground: '#e4e4e4'
+
+  # Cursor volors
+  cursor:
+    text: '#feffff'
+    cursor: '#ffb472'
 
   # Normal colors
   normal:
-    # NOTE: Use '#131613' for the `black` color if you'd like to see
-    # black text on the background.
-    black:   '#282c34'
-    red:     '#e06c75'
-    green:   '#98c379'
-    yellow:  '#d19a66'
-    blue:    '#61afef'
-    magenta: '#c678dd'
-    cyan:    '#56b6c2'
-    white:   '#abb2bf'
+    black:   '#a3a3a3'
+    red:     '#e98885'
+    green:   '#a3c38b'
+    yellow:  '#ffc68d'
+    blue:    '#a6cae2'
+    magenta: '#e7cdfb'
+    cyan:    '#00a69f'
+    white:   '#e4e4e4'
 
   # Bright colors
   bright:
-    black:   '#5c6370'
-    red:     '#e06c75'
-    green:   '#98c379'
-    yellow:  '#d19a66'
-    blue:    '#61afef'
-    magenta: '#c678dd'
-    cyan:    '#56b6c2'
-    white:   '#ffffff'
+    black:   '#c8c8c8'
+    red:     '#ffb2b0'
+    green:   '#c8e2b9'
+    yellow:  '#ffe1af'
+    blue:    '#bddff7'
+    magenta: '#fce2ff'
+    cyan:    '#0bbdb6'
+    white:   '#feffff'
+
+  # Selection colors
+  selection:
+    text: '#5963a2'
+    background: '#f6f6f6'
 
   # Indexed Colors
   #
@@ -539,8 +547,7 @@ key_bindings:
   - { key: F8,                      chars: "\x1b[19~"                        }
   - { key: F9,                      chars: "\x1b[20~"                        }
   - { key: F10,                     chars: "\x1b[21~"                        }
-  # - { key: F11,                     chars: "\x1b[23~"                        }
-  - { key: F11,      command: { program: "fullscreen" }                      }
+  - { key: F11,      command: { program: "fullscreen.sh" }                      }
   - { key: F12,                     chars: "\x1b[24~"                        }
   - { key: F1,       mods: Shift,   chars: "\x1b[1;2P"                       }
   - { key: F2,       mods: Shift,   chars: "\x1b[1;2Q"                       }
@@ -591,12 +598,3 @@ key_bindings:
   - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
   - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
   - { key: NumpadEnter,             chars: "\n"                              }
-
-# Use Alacritty as default terminal (Ctrl + Alt + T)
-# gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
-# /usr/local/bin/run-dropbox
-# !/bin/bash
-# cd ~/.dropbox-dist && ./dropboxd
-#
-# Fullscreen alacritty
-# wmctrl -ir `xdotool getwindowfocus` -b toggle,fullscreen

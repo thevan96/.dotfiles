@@ -1,8 +1,8 @@
 {
-  "diagnostic.errorSign": "✖",
-  "diagnostic.warningSign": "",
-  "diagnostic.infoSign": "",
-  "diagnostic.hintSign": "",
+  "diagnostic.errorSign": "X",
+  "diagnostic.warningSign": "O",
+  "diagnostic.infoSign": "!!",
+  "diagnostic.hintSign": "!!",
   "suggest.autoTrigger": "none",
   "suggest.floatEnable": true,
   "suggest.noselect": true,
