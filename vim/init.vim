@@ -1,5 +1,25 @@
-" General setping leader
+" General setting
 syntax on
+set nocompatible
+set termguicolors
+set ignorecase hlsearch
+set nobackup noswapfile
+set splitbelow splitright
+set autoindent smartindent
+set hidden number nowrap
+set lazyredraw
+set cmdheight=1
+set mouse=a
+set updatetime=100
+set signcolumn=yes
+set encoding=utf-8
+set list listchars=tab:␣\ ,extends:▶,precedes:◀
+set conceallevel=2
+
+" Setting default tab/space
+set tabstop=2 shiftwidth=2 expandtab
+
+" Sync
 autocmd FocusGained * :checktime
 
 " Save position cursor
@@ -15,7 +35,7 @@ nnoremap <Space> <Nop>
 let mapleader = ' '
 
 " Fast command
-nnoremap <silent><leader>q :bdelete<cr>
+nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>w :w<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>z <c-z><cr>
@@ -31,6 +51,8 @@ nnoremap <silent>< <<
 nnoremap <silent>> >>
 vnoremap <silent>< <gv
 vnoremap <silent>> >gv
+nnoremap <c-k> <c-u>
+nnoremap <c-j> <c-d>
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
@@ -52,8 +74,6 @@ Plug 'prettier/vim-prettier', {
 let g:prettier#quickfix_enabled = 0
 let g:prettier#autoformat = 0
 nnoremap <silent><leader>p :Prettier<cr>
-
-Plug 'nelstrom/vim-visual-star-search'
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
@@ -79,10 +99,6 @@ Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
 let g:winresizer_vert_resize = 3
 let g:winresizer_horiz_resize = 3
-
-Plug 'Yggdroot/indentLine'
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-let g:indentLine_fileTypeExclude = ['defx', '']
 
 Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -243,10 +259,6 @@ function! s:markdown_mode_setup()
   set wrap
   set conceallevel=0
 endfunction
-
-Plug 'kana/vim-textobj-user'
-Plug 'sgur/vim-textobj-parameter'
-let g:vim_textobj_parameter_mapping = 's'
 
 " Provider
 let g:loaded_perl_provider = 0

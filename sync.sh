@@ -20,6 +20,9 @@ ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
 ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
 echo 'Mycli done!'
 
+ln -sf ~/dotfiles/etc/config.rasi ~/.config/rofi/
+echo 'Rofi done!'
+
 # Config file global bin
 sudo ln -sf ~/dotfiles/etc/z.sh /usr/local/bin
 sudo ln -sf ~/dotfiles/etc/fullscreen.sh /usr/local/bin

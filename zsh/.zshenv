@@ -23,11 +23,10 @@ alias cl="clear"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
-alias top='htop'
 alias pwdc="pwd | xclip -selection clipboard "
 
 ide () {
-  tmux split-window -v -p 20
+  tmux split-window -v -p 25
 }
 
 git-search () {
@@ -50,6 +49,11 @@ fix-zeal() {
     pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
     find . -iname 'react-main*.js' -exec rm '{}' \;
     popd >/dev/null || exit
+}
+
+keep-android () {
+  wmctrl -i -r $(wmctrl -l | grep ' Android Emulator - ' |
+  sed -e 's/\s.*$//g') -b toggle,above
 }
 
 # Set env variable
@@ -86,13 +90,9 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 alias phone="emulator @Pixel_3_API_28"
 alias rp="scrcpy --turn-screen-off"
 
-# Flutter, dart
-export PATH="$PATH:$HOME/flutter/bin"
-export DART_ROOT="$HOME/dart-sdk"
-export PATH="$DART_ROOT/bin:$PATH"
-
-# Remap caplocks to esc
-setxkbmap -option caps:escape
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
 
 # Include Z
 . /usr/local/bin/z.sh
