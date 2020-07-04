@@ -19,6 +19,7 @@ alias rj="create-react-app"
 alias rn="react-native"
 
 alias ex="exit"
+alias ff="fg"
 alias cl="clear"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
@@ -26,7 +27,8 @@ alias kp="kill-port"
 alias pwdc="pwd | xclip -selection clipboard "
 
 ide () {
-  tmux split-window -v -p 25
+  tmux split-window -v -p 20
+  tmux split-window -h -p 50
 }
 
 git-search () {
@@ -43,12 +45,6 @@ ua () {
     cd $HOME/.pyenv && git pull origin master &&
     cd $HOME/.fzf && git pull origin master &&
     cd
-}
-
-fix-zeal() {
-    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
-    find . -iname 'react-main*.js' -exec rm '{}' \;
-    popd >/dev/null || exit
 }
 
 keep-android () {

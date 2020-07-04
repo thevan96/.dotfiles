@@ -13,13 +13,15 @@ set mouse=a
 set updatetime=100
 set signcolumn=yes
 set encoding=utf-8
+set clipboard=unnamedplus
 set list listchars=tab:␣\ ,extends:▶,precedes:◀
+set fillchars+=vert:\|
 set conceallevel=2
 
 " Setting default tab/space
 set tabstop=2 shiftwidth=2 expandtab
 
-" Sync
+" Sync file another open
 autocmd FocusGained * :checktime
 
 " Save position cursor
@@ -27,32 +29,26 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-" Disable
-nnoremap Q <nop>
-nnoremap <Space> <Nop>
-
 " Mapping leader
 let mapleader = ' '
 
 " Fast command
-nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>w :w<cr>
+nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>z <c-z><cr>
 
 " Remap
+map * *N
+map S <c-^>
+map <c-n> <c-d>
+map <c-p> <c-u>
 nnoremap j gj
 nnoremap k gk
-nnoremap * *N
-nnoremap <silent>S <c-^>
-
-" Move
 nnoremap <silent>< <<
 nnoremap <silent>> >>
 vnoremap <silent>< <gv
 vnoremap <silent>> >gv
-nnoremap <c-k> <c-u>
-nnoremap <c-j> <c-d>
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
@@ -79,12 +75,16 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
-Plug 'zivyangll/git-blame.vim'
-nnoremap <silent><leader>b :<C-u>call gitblame#echo()<cr>
+Plug 'bronson/vim-visual-star-search'
+
+Plug 'MattesGroeger/vim-bookmarks'
+let g:bookmark_highlight_lines = 1
+
+Plug 'wellle/targets.vim'
+
+Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'wincent/ferret'
-
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 Plug 'tpope/vim-surround'
 
@@ -92,8 +92,6 @@ Plug 'tpope/vim-commentary'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-Plug 'wakatime/vim-wakatime'
 
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
@@ -108,6 +106,11 @@ Plug 'tpope/vim-sleuth'
 Plug 'airblade/vim-gitgutter'
 nmap gl <Plug>(GitGutterNextHunk)
 nmap gh <Plug>(GitGutterPrevHunk)
+
+Plug 'zivyangll/git-blame.vim'
+nnoremap <silent><leader>b :<C-u>call gitblame#echo()<cr>
+
+Plug 'wakatime/vim-wakatime'
 
 if isdirectory('~/.fzf/bin/fzf')
   Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
@@ -177,8 +180,8 @@ map <silent>gk <Plug>(coc-diagnostic-prev
 
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files -resume<cr>
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=35 -direction=topleft -show-ignored-files -toggle -resume<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -resume<cr>
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle -resume<cr>
 
 autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
@@ -245,9 +248,9 @@ function! s:defx_my_settings() abort
         \ defx#do_action('redraw')
 endfunction
 
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jelera/vim-javascript-syntax'
 Plug 'maxmellon/vim-jsx-pretty'
-
 Plug 'ap/vim-css-color'
 
 Plug 'elzr/vim-json'
@@ -273,6 +276,11 @@ let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.18.1/bin/node')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme = 'wombat'
+
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-line'
+Plug 'sgur/vim-textobj-parameter'
+let g:vim_textobj_parameter_mapping = 's'
 
 Plug 'nanotech/jellybeans.vim'
 set background=dark
