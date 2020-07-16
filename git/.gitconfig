@@ -3,3 +3,4 @@
   email = vothevan96@gmail.com
 [core]
   editor = vi
+	excludesfile = /home/thevan96/.gitignore_global

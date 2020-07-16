@@ -83,7 +83,9 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-alias phone="emulator @Pixel_3_API_28"
+alias phone4="emulator @phone4"
+alias phone5="emulator @phone5"
+alias phone6="emulator @phone6"
 alias rp="scrcpy --turn-screen-off"
 
 export GTK_IM_MODULE=ibus

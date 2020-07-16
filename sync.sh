@@ -5,23 +5,25 @@ echo 'Vim done!'
 ln -sf ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/vim/coc-settings.json ~/.config/nvim/coc-settings.json
 
-ln -sf ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
-echo 'Alacritty done!'
-
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 echo 'Tmux done!'
 
 ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/zsh/.zshenv ~/.zshenv
+echo 'ZSH done!'
 
-echo 'Zsh done!'
 ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
+ln -sf ~/dotfiles/git/.gitignore_global ~/.gitignore_global
+echo 'Git done!'
 
 ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
 echo 'Mycli done!'
 
 ln -sf ~/dotfiles/etc/config.rasi ~/.config/rofi/
 echo 'Rofi done!'
+
+ln -sf ~/dotfiles/etc/kitty.conf ~/.config/kitty/
+echo 'Kitty done!'
 
 # Config file global bin
 sudo ln -sf ~/dotfiles/etc/z.sh /usr/local/bin

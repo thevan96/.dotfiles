@@ -9,9 +9,8 @@ set autoindent smartindent
 set hidden number nowrap
 set lazyredraw
 set cmdheight=1
-set mouse=a
 set updatetime=100
-set signcolumn=yes
+set signcolumn=yes:2
 set encoding=utf-8
 set clipboard=unnamedplus
 set list listchars=tab:␣\ ,extends:▶,precedes:◀
@@ -32,23 +31,25 @@ endif
 " Mapping leader
 let mapleader = ' '
 
-" Fast command
-nnoremap <silent><leader>w :w<cr>
+" Fast mapping
+map S <c-^>
+map H <c-u>
+map L <c-d>
+nnoremap <leader>w :w<cr>
 nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>z <c-z><cr>
+nnoremap <silent><leader>h q:
+nnoremap <leader>v `[v`]
 
 " Remap
 map * *N
-map S <c-^>
-map <c-n> <c-d>
-map <c-p> <c-u>
 nnoremap j gj
 nnoremap k gk
-nnoremap <silent>< <<
-nnoremap <silent>> >>
-vnoremap <silent>< <gv
-vnoremap <silent>> >gv
+nnoremap < <<
+nnoremap > >>
+vnoremap < <gv
+vnoremap > >gv
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
@@ -75,10 +76,16 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
+Plug 'Yggdroot/indentLine'
+let g:indentLine_char_list = ['¦']
+let g:indentLine_fileTypeExclude = ['defx', '']
+
 Plug 'bronson/vim-visual-star-search'
 
 Plug 'MattesGroeger/vim-bookmarks'
 let g:bookmark_highlight_lines = 1
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
 
 Plug 'wellle/targets.vim'
 
@@ -251,6 +258,8 @@ endfunction
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jelera/vim-javascript-syntax'
 Plug 'maxmellon/vim-jsx-pretty'
+let g:vim_jsx_pretty_highlight_close_tag = 1
+
 Plug 'ap/vim-css-color'
 
 Plug 'elzr/vim-json'
@@ -279,6 +288,9 @@ let g:airline_theme = 'wombat'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
+Plug 'glts/vim-textobj-comment'
+Plug 'kana/vim-textobj-entire'
+Plug 'whatyouhide/vim-textobj-xmlattr'
 Plug 'sgur/vim-textobj-parameter'
 let g:vim_textobj_parameter_mapping = 's'
 
@@ -288,6 +300,8 @@ set background=dark
 call plug#end()
 
 colorscheme jellybeans
+hi Normal     ctermbg=NONE guibg=NONE
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
-hi VertSplit  ctermbg=NONE guibg=NONE
+hi VertSplit  guibg=NONE guifg=#E8E8D3
+hi Comment    guifg=#CAE682
