@@ -1,11 +1,12 @@
 " General setting
 syntax on
 set nocompatible
+set mouse=a
 set termguicolors
-set ignorecase hlsearch
+set hlsearch
 set nobackup noswapfile
 set splitbelow splitright
-set autoindent smartindent
+set autoindent
 set hidden number nowrap
 set lazyredraw
 set cmdheight=1
@@ -25,31 +26,37 @@ autocmd FocusGained * :checktime
 
 " Save position cursor
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
+        \ | exe "normal! g'\"" | endif
 endif
 
 " Mapping leader
 let mapleader = ' '
 
 " Fast mapping
-map S <c-^>
+nnoremap S <c-^>
+map <enter> %
 map H <c-u>
 map L <c-d>
 nnoremap <leader>w :w<cr>
-nnoremap <silent><leader>q :q<cr>
-nnoremap <silent><leader>Q :qa!<cr>
-nnoremap <silent><leader>z <c-z><cr>
-nnoremap <silent><leader>h q:
-nnoremap <leader>v `[v`]
+nnoremap <leader>q :q<cr>
+nnoremap <leader>Q :qa!<cr>
+nnoremap gs `[v`]
 
 " Remap
 map * *N
+vnoremap p "0P
 nnoremap j gj
 nnoremap k gk
+
 nnoremap < <<
 nnoremap > >>
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
+
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
 
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
@@ -65,9 +72,8 @@ nnoremap sl <c-w><c-l>
 nnoremap sh <c-w><c-h>
 
 call plug#begin()
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 let g:prettier#quickfix_enabled = 0
 let g:prettier#autoformat = 0
 nnoremap <silent><leader>p :Prettier<cr>
@@ -76,22 +82,35 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
-Plug 'Yggdroot/indentLine'
-let g:indentLine_char_list = ['¦']
-let g:indentLine_fileTypeExclude = ['defx', '']
+Plug 'wakatime/vim-wakatime'
 
-Plug 'bronson/vim-visual-star-search'
+Plug 'Valloric/MatchTagAlways'
+let g:mta_filetypes = {
+      \ 'html' : 1,
+      \ 'xml' : 1,
+      \ 'javascript' : 1,
+      \ 'jsx' : 1,
+      \}
 
-Plug 'MattesGroeger/vim-bookmarks'
-let g:bookmark_highlight_lines = 1
-let g:bookmark_save_per_working_dir = 1
-let g:bookmark_auto_save = 1
+Plug 'puremourning/vimspector'
+let g:vimspector_enable_mappings = 'HUMAN'
+
+Plug 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+Plug 'AndrewRadev/tagalong.vim'
+let g:tagalong_filetypes = [
+      \ 'javascript', 'html',
+      \ 'xml', 'jsx',
+      \ 'eruby', 'php',
+      \ 'javascriptreact',
+      \ 'typescriptreact']
 
 Plug 'wellle/targets.vim'
 
 Plug 'AndrewRadev/splitjoin.vim'
-
-Plug 'wincent/ferret'
 
 Plug 'tpope/vim-surround'
 
@@ -110,24 +129,15 @@ silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'tpope/vim-sleuth'
 
+Plug 'tpope/vim-fugitive'
+
 Plug 'airblade/vim-gitgutter'
 nmap gl <Plug>(GitGutterNextHunk)
 nmap gh <Plug>(GitGutterPrevHunk)
 
-Plug 'zivyangll/git-blame.vim'
-nnoremap <silent><leader>b :<C-u>call gitblame#echo()<cr>
-
-Plug 'wakatime/vim-wakatime'
-
-if isdirectory('~/.fzf/bin/fzf')
-  Plug '~/.fzf/bin/fzf' | Plug 'junegunn/fzf.vim'
-else
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'
-endif
-
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
@@ -140,8 +150,8 @@ nnoremap <silent><leader>o :Buffers<cr>
 command! -bang -nargs=? -complete=dir Buffers
       \ call fzf#vim#buffers({'options': ['--layout=reverse']}, <bang>0)
 
-nnoremap <silent><leader>R :Rg <c-r><c-w><cr>
-nnoremap <silent><leader>r :Rg<cr>
+nnoremap <silent><leader>S :Rg <c-r><c-w><cr>
+nnoremap <silent><leader>s :Rg<cr>
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>),
@@ -187,8 +197,14 @@ map <silent>gk <Plug>(coc-diagnostic-prev
 
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -resume<cr>
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')` -columns=indent:icon:mark:git:filename -split=vertical -winwidth=30 -direction=topleft -show-ignored-files -toggle -resume<cr>
+nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
+      \ -columns=indent:icon:mark:git:filename
+      \ -split=vertical -winwidth=30
+      \ -direction=topleft -show-ignored-files -resume<cr>
+nnoremap <silent><leader>F :Defx
+      \ -columns=indent:icon:mark:git:filename
+      \ -split=vertical -winwidth=30
+      \ -direction=topleft -show-ignored-files -toggle -resume<cr>
 
 autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
@@ -233,7 +249,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> rn
         \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> q
+  nnoremap <silent><buffer><expr> <esc>
         \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> <tab>
         \ defx#do_action('toggle_select')
@@ -279,8 +295,8 @@ let g:vimtex_compiler_progname = 'nvr'
 let g:loaded_python_provider = 0
 let g:python_host_prog = expand('$HOME/.pyenv/shims/python2')
 let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
-let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.18.1/bin/neovim-node-host')
-let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.18.1/bin/node')
+let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.18.3/bin/neovim-node-host')
+let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.18.3/bin/node')
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -288,10 +304,9 @@ let g:airline_theme = 'wombat'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
-Plug 'glts/vim-textobj-comment'
 Plug 'kana/vim-textobj-entire'
-Plug 'whatyouhide/vim-textobj-xmlattr'
 Plug 'sgur/vim-textobj-parameter'
+Plug 'whatyouhide/vim-textobj-xmlattr'
 let g:vim_textobj_parameter_mapping = 's'
 
 Plug 'nanotech/jellybeans.vim'
@@ -300,8 +315,8 @@ set background=dark
 call plug#end()
 
 colorscheme jellybeans
-hi Normal     ctermbg=NONE guibg=NONE
-hi LineNr     ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE
-hi VertSplit  guibg=NONE guifg=#E8E8D3
-hi Comment    guifg=#CAE682
+highlight Normal     ctermbg=NONE guibg=NONE
+highlight LineNr     ctermbg=NONE guibg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit  guibg=NONE guifg=white
+highlight Comment    guifg=#cae682

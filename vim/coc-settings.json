@@ -5,7 +5,7 @@
   "diagnostic.hintSign": "!!",
   "suggest.autoTrigger": "none",
   "suggest.floatEnable": true,
-  "suggest.noselect": true,
+  "suggest.noselect": false,
   "coc.preferences.extensionUpdateCheck": "daily",
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",

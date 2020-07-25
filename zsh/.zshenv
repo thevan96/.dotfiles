@@ -1,36 +1,21 @@
 # Config zsh
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
-# Directory
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
 # tmux
-alias kw="tmux kill-window"
-alias kp="tmux kill-pane"
-alias kt="tmux kill-server"
-alias ks="tmux kill-session"
-alias ta="tmux attach"
-alias tm="tmux"
+alias kwindow="tmux kill-window"
+alias ktmux="tmux kill-server"
 
 # Alias tool
-alias rj="create-react-app"
-alias rn="react-native"
-
 alias ex="exit"
 alias ff="fg"
 alias cl="clear"
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
+alias cat="bat"
+alias top="htop"
 alias pwdc="pwd | xclip -selection clipboard "
-
-ide () {
-  tmux split-window -v -p 20
-  tmux split-window -h -p 50
-}
-
+ 
 git-search () {
   git log --all --grep="${1}"
 }
@@ -83,14 +68,16 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-alias phone4="emulator @phone4"
-alias phone5="emulator @phone5"
-alias phone6="emulator @phone6"
+alias phone429="emulator @phone429"
+alias phone529="emulator @phone529"
+alias phone528="emulator @phone528"
+alias phone629="emulator @phone629"
 alias rp="scrcpy --turn-screen-off"
 
 export GTK_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
+ZSH_TMUX_AUTOSTART=true
 
 # Include Z
 . /usr/local/bin/z.sh

@@ -1,0 +1,42 @@
+snippet cl "console.log()"
+console.log('${1:variable}', $1)
+endsnippet
+
+snippet rhcp "react hook component"
+import React from 'react';
+import {View} from 'react-native';
+import PropTypes from 'prop-types';
+
+const ${1:name} = () => {
+	return (
+		<View>
+			$4
+		</View>
+	);
+};
+
+$1.propTypes = {
+	$2
+};
+
+$1.defaultProps = {
+	$3
+};
+
+export default $1;
+endsnippet
+
+snippet rhco "react hook component"
+import React from 'react';
+import {View} from 'react-native';
+
+const ${1:name} = () => {
+	return (
+		<View>
+			$4
+		</View>
+	);
+};
+
+export default $1;
+endsnippet

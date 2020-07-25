@@ -1,36 +1,48 @@
 #!/bin/bash
-mkdir -p ~/.config/{nvim,alacritty}
+mkdir -p ~/.config/nvim
 
-echo 'Vim done!'
 ln -sf ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/vim/coc-settings.json ~/.config/nvim/coc-settings.json
+echo 'vim done!'
 
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
-echo 'Tmux done!'
+echo 'tmux done!'
 
 ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/zsh/.zshenv ~/.zshenv
-echo 'ZSH done!'
+echo 'zsh done!'
 
 ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
-ln -sf ~/dotfiles/git/.gitignore_global ~/.gitignore_global
-echo 'Git done!'
+echo 'git done!'
 
 ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
-echo 'Mycli done!'
-
-ln -sf ~/dotfiles/etc/config.rasi ~/.config/rofi/
-echo 'Rofi done!'
+echo 'mycli done!'
 
 ln -sf ~/dotfiles/etc/kitty.conf ~/.config/kitty/
-echo 'Kitty done!'
+echo 'kitty done!'
+
+ln -sf ~/dotfiles/UltiSnips ~/.config/nvim/
+echo 'snippets done!'
+
+# Program
+sudo apt install -y g++ gcc tree nano bat htop neofetch fzf fonts-firacode\
+  curl uget openjdk-8-jdk openjdk-8-jre blender uget ripgrep\
+  transmission gimp inkscape flameshot skypeforlinux slack-desktop
 
 # Config file global bin
 sudo ln -sf ~/dotfiles/etc/z.sh /usr/local/bin
-sudo ln -sf ~/dotfiles/etc/fullscreen.sh /usr/local/bin
 sudo ln -sf ~/dotfiles/etc/fix-git.sh /usr/local/bin
 sudo ln -sf ~/dotfiles/etc/memory.sh /usr/local/bin
+echo 'file execute done!'
 
-echo 'File execute done!'
+# Setup python
+python3 -m pip install --user --upgrade pynvim
+pip3 install --user pynvim
+pip install Send2Trash
+echo 'python done!'
 
-echo 'Sync done!'
+# Setup npm
+npm i -g prettier nodemon kill-port react-native-cli create-react-app yarn tldr neovim standard semistandard
+echo 'npm done!'
+
+echo 'Sync success!'
