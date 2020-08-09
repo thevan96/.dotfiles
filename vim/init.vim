@@ -10,10 +10,11 @@ set autoindent
 set hidden number nowrap
 set lazyredraw
 set cmdheight=1
-set updatetime=100
+set updatetime=50
 set signcolumn=yes:2
 set encoding=utf-8
-set clipboard=unnamedplus
+set clipboard=unnamed
+set lazyredraw
 set list listchars=tab:␣\ ,extends:▶,precedes:◀
 set fillchars+=vert:\|
 set conceallevel=2
@@ -35,9 +36,8 @@ let mapleader = ' '
 
 " Fast mapping
 nnoremap S <c-^>
-map <enter> %
-map H <c-u>
-map L <c-d>
+nnoremap H <c-u>
+nnoremap L <c-d>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>Q :qa!<cr>
@@ -48,7 +48,6 @@ map * *N
 vnoremap p "0P
 nnoremap j gj
 nnoremap k gk
-
 nnoremap < <<
 nnoremap > >>
 xnoremap < <gv
@@ -65,13 +64,8 @@ nnoremap <silent><esc> :nohlsearch<cr>
 nnoremap <silent>sv :vsplit<cr>
 nnoremap <silent>ss :split<cr>
 
-" Move window
-nnoremap sj <c-w><c-j>
-nnoremap sk <c-w><c-k>
-nnoremap sl <c-w><c-l>
-nnoremap sh <c-w><c-h>
-
 call plug#begin()
+Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 let g:prettier#quickfix_enabled = 0
@@ -82,23 +76,13 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
-Plug 'wakatime/vim-wakatime'
+Plug 'Galooshi/vim-import-js'
+nnoremap <silent><leader>J :ImportJSFix<cr>
 
-Plug 'Valloric/MatchTagAlways'
-let g:mta_filetypes = {
-      \ 'html' : 1,
-      \ 'xml' : 1,
-      \ 'javascript' : 1,
-      \ 'jsx' : 1,
-      \}
+Plug 'wakatime/vim-wakatime'
 
 Plug 'puremourning/vimspector'
 let g:vimspector_enable_mappings = 'HUMAN'
-
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 Plug 'AndrewRadev/tagalong.vim'
 let g:tagalong_filetypes = [
@@ -170,6 +154,7 @@ let g:coc_global_extensions =
       \ 'coc-tsserver',
       \ 'coc-css',
       \ 'coc-python',
+      \ 'coc-phpls',
       \ ]
 
 " Refresh suggest
@@ -199,11 +184,11 @@ Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
       \ -columns=indent:icon:mark:git:filename
-      \ -split=vertical -winwidth=30
+      \ -split=vertical -winwidth=35
       \ -direction=topleft -show-ignored-files -resume<cr>
 nnoremap <silent><leader>F :Defx
       \ -columns=indent:icon:mark:git:filename
-      \ -split=vertical -winwidth=30
+      \ -split=vertical -winwidth=35
       \ -direction=topleft -show-ignored-files -toggle -resume<cr>
 
 autocmd BufWritePost * call defx#redraw()
@@ -213,9 +198,9 @@ function! s:defx_my_settings() abort
         \ 'min_width': '50'
         \})
   call defx#custom#column('icon', {
-        \ 'directory_icon': ' ⮞',
-        \ 'opened_icon': ' ⮟',
-        \ 'root_icon': ' ⬢',
+        \ 'directory_icon': ' ➜',
+        \ 'opened_icon': ' |',
+        \ 'root_icon': ' ⌘',
         \ })
   call defx#custom#column('mark', {
         \ 'readonly_icon': '✗',
@@ -231,9 +216,9 @@ function! s:defx_my_settings() abort
         \ defx#do_action('drop','split')
   nnoremap <silent><buffer><expr> sv
         \ defx#do_action('drop', 'vsplit')
-  nnoremap <silent><buffer><expr> dd
-        \ defx#do_action('remove_trash')
   nnoremap <silent><buffer><expr> D
+        \ defx#do_action('remove_trash')
+  nnoremap <silent><buffer><expr> dd
         \ defx#do_action('remove')
   nnoremap <silent><buffer><expr> yy
         \ defx#do_action('copy')
@@ -290,13 +275,12 @@ endfunction
 
 " Provider
 let g:loaded_perl_provider = 0
-let g:loaded_ruby_provider = 0
 let g:vimtex_compiler_progname = 'nvr'
-let g:loaded_python_provider = 0
-let g:python_host_prog = expand('$HOME/.pyenv/shims/python2')
-let g:python3_host_prog = expand('$HOME/.pyenv/shims/python3')
-let g:node_host_prog = expand('$HOME/.nvm/versions/node/v12.18.3/bin/neovim-node-host')
-let g:coc_node_path =  expand('$HOME/.nvm/versions/node/v12.18.3/bin/node')
+let g:ruby_host_prog = expand('$HOME/.asdf/shims/neovim-ruby-host')
+let g:python_host_prog = expand('$HOME/.asdf/shims/python2')
+let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
+let g:coc_node_path =  expand('$HOME/.asdf/shims/node')
+let g:node_host_prog = expand('$HOME/.asdf/shims/neovim-node-host')
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
