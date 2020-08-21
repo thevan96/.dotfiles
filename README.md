@@ -1,6 +1,6 @@
 # dotfile
 
-- Terminal: kitty
+- Terminal: Alacritty
 - Shell: zsh
 - Text editor: neovim
 - Terminal multiplexer: tmux

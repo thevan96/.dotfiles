@@ -10,7 +10,7 @@ set autoindent
 set hidden number nowrap
 set lazyredraw
 set cmdheight=1
-set updatetime=50
+set updatetime=10
 set signcolumn=yes:2
 set encoding=utf-8
 set clipboard=unnamed
@@ -36,8 +36,8 @@ let mapleader = ' '
 
 " Fast mapping
 nnoremap S <c-^>
-nnoremap H <c-u>
-nnoremap L <c-d>
+nnoremap H {
+nnoremap L }
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>Q :qa!<cr>
@@ -53,12 +53,16 @@ nnoremap > >>
 xnoremap < <gv
 xnoremap > >gv
 
-vnoremap <silent> y y`]
-vnoremap <silent> p p`]
-nnoremap <silent> p p`]
-
 " Disable highlight search
 nnoremap <silent><esc> :nohlsearch<cr>
+
+" Disable
+nnoremap <F1> <nop>
+nnoremap Q <nop>
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
 
 " Split window
 nnoremap <silent>sv :vsplit<cr>
@@ -77,9 +81,7 @@ let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
 Plug 'Galooshi/vim-import-js'
-nnoremap <silent><leader>J :ImportJSFix<cr>
-
-Plug 'wakatime/vim-wakatime'
+nnoremap <leader>J :ImportJSFix<cr>
 
 Plug 'puremourning/vimspector'
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -93,8 +95,6 @@ let g:tagalong_filetypes = [
       \ 'typescriptreact']
 
 Plug 'wellle/targets.vim'
-
-Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'tpope/vim-surround'
 
@@ -119,8 +119,8 @@ Plug 'airblade/vim-gitgutter'
 nmap gl <Plug>(GitGutterNextHunk)
 nmap gh <Plug>(GitGutterPrevHunk)
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+set rtp+=/usr/local/opt/fzf
 let g:fzf_action = {
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
@@ -177,18 +177,18 @@ function! s:show_documentation()
 endfunction
 
 " Navigate error
-map <silent>gj <Plug>(coc-diagnostic-next)
-map <silent>gk <Plug>(coc-diagnostic-prev
+map <silent>sj <Plug>(coc-diagnostic-next)
+map <silent>sk <Plug>(coc-diagnostic-prev
 
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
       \ -columns=indent:icon:mark:git:filename
-      \ -split=vertical -winwidth=35
+      \ -split=vertical -winwidth=40
       \ -direction=topleft -show-ignored-files -resume<cr>
 nnoremap <silent><leader>F :Defx
       \ -columns=indent:icon:mark:git:filename
-      \ -split=vertical -winwidth=35
+      \ -split=vertical -winwidth=40
       \ -direction=topleft -show-ignored-files -toggle -resume<cr>
 
 autocmd BufWritePost * call defx#redraw()
@@ -276,7 +276,7 @@ endfunction
 " Provider
 let g:loaded_perl_provider = 0
 let g:vimtex_compiler_progname = 'nvr'
-let g:ruby_host_prog = expand('$HOME/.asdf/shims/neovim-ruby-host')
+let g:loaded_ruby_provider = 0
 let g:python_host_prog = expand('$HOME/.asdf/shims/python2')
 let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 let g:coc_node_path =  expand('$HOME/.asdf/shims/node')
@@ -288,7 +288,6 @@ let g:airline_theme = 'wombat'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
-Plug 'kana/vim-textobj-entire'
 Plug 'sgur/vim-textobj-parameter'
 Plug 'whatyouhide/vim-textobj-xmlattr'
 let g:vim_textobj_parameter_mapping = 's'

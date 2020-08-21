@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Setting link file
 mkdir -p ~/.config/nvim
 
 ln -sf ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
@@ -25,21 +27,19 @@ echo 'alacritty done!'
 sudo ln -sf ~/dotfiles/etc/fix-git /usr/local/bin
 echo 'file execute done!'
 
+# Install brew package
+brew install tig tmux bat fd ripgrep nvim tree neofetch fzf
+
 # Setup python
 python3 -m pip install --user --upgrade pynvim
 python2 -m pip install --user --upgrade pynvim
-python -m pip install --user --upgrade pynvim
 pip3 install --user pynvim neovim Send2Trash
 pip2 install --user pynvim neovim Send2Trash
-pip install --user pynvim neovim Send2Trash
 echo 'python done!'
 
 # Setup npm
-npm i -g prettier nodemon kill-port react-native-cli\
+npm i -g prettier nodemon kill-port react-native\
   create-react-app yarn tldr neovim standard semistandard import-js
 echo 'npm done!'
-
-# Setup ruby
-gem install neovim
 
 echo 'Sync success!'
