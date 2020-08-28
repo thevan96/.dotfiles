@@ -1,11 +1,9 @@
 {
-  "diagnostic.errorSign": "X",
-  "diagnostic.warningSign": "O",
-  "diagnostic.infoSign": "!!",
-  "diagnostic.hintSign": "!!",
-  "suggest.autoTrigger": "none",
+  "diagnostic.errorSign": "E",
+  "diagnostic.warningSign": "W",
+  "diagnostic.infoSign": "I",
+  "diagnostic.hintSign": "H",
   "suggest.floatEnable": true,
-  "suggest.noselect": false,
   "coc.preferences.extensionUpdateCheck": "daily",
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
@@ -35,3 +33,4 @@
     "default": "\uf29c"
   }
 }
+

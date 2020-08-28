@@ -23,10 +23,6 @@ echo 'mycli done!'
 ln -sf ~/dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
-# Config file global bin
-sudo ln -sf ~/dotfiles/etc/fix-git /usr/local/bin
-echo 'file execute done!'
-
 # Install brew package
 brew install tig tmux bat fd ripgrep nvim tree neofetch fzf
 
