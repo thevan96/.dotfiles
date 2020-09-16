@@ -1,7 +1,5 @@
 " General setting
 syntax on
-set nocompatible
-set fillchars+=vert:\|
 set mouse=a
 set termguicolors
 set hlsearch
@@ -10,17 +8,14 @@ set splitbelow splitright
 set autoindent
 set hidden number nowrap
 set lazyredraw
-set cmdheight=1
-set updatetime=100
+set updatetime=150
 set signcolumn=yes:2
 set encoding=utf-8
 set clipboard=unnamed
-set lazyredraw
-set list listchars=tab:␣\ ,extends:▶,precedes:◀
 set conceallevel=2
-set foldlevel=99
-set sidescroll=1
 set virtualedit=all
+set fillchars+=vert:\|
+set list listchars=tab:␣\ ,extends:▶,precedes:◀
 
 " Mapping leader
 let mapleader = ' '
@@ -93,8 +88,6 @@ function! QuickFormat()
   if extension == "js"
     execute ":! ".prettier." --write ".fullpath ." && "
           \ .semistandard." --fix ".fullpath." | snazzy"
-  elseif extension == "ts"
-    execute ":! ".prettier." --write ".fullpath
   elseif extension == "php"
     let isBlade = listExtension[len(listExtension) - 2]
     if isBlade =='blade'
@@ -109,32 +102,18 @@ function! QuickFormat()
   endif
   execute ":e!"
 endfunction
-nnoremap <leader>p :call QuickFormat()<cr>
+nnoremap <leader>P :call QuickFormat()<cr>
 
 call plug#begin()
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-fugitive'
-Plug 'bronson/vim-visual-star-search'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'jiangmiao/auto-pairs'
-
-Plug 't9md/vim-choosewin'
-let g:choosewin_overlay_enable = 1
-let g:choosewin_statusline_replace = 0
-nnoremap <silent><leader>cc :ChooseWin<cr>
-nnoremap <silent><leader>cs :ChooseWinSwapStay<cr>
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
-
-Plug 'pseewald/vim-anyfold'
-autocmd Filetype * AnyFoldActivate
-
-Plug 'Galooshi/vim-import-js'
-nnoremap <leader>J :ImportJSFix<cr>
 
 Plug 'puremourning/vimspector'
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -146,9 +125,6 @@ Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
 let g:winresizer_vert_resize = 3
 let g:winresizer_horiz_resize = 3
-
-Plug 'tpope/vim-repeat'
-silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 Plug 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
@@ -188,6 +164,7 @@ let g:coc_global_extensions =
       \ 'coc-phpls',
       \ 'coc-html',
       \ ]
+
 " Remap keys for gotos, refresh
 imap <silent><expr> <c-n> coc#refresh()
 nmap <silent>gd <Plug>(coc-definition)
@@ -195,8 +172,11 @@ nmap <silent>gt <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
 
+" Navigate error
+map <silent>gl <Plug>(coc-diagnostic-next)
+map <silent>gk <Plug>(coc-diagnostic-prev
+
 " Use K to show documentation in preview window
-nnoremap <silent>K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -204,15 +184,14 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+nnoremap <silent>K :call <SID>show_documentation()<CR>
 
-" Navigate error
-map <silent>gl <Plug>(coc-diagnostic-next)
-map <silent>gk <Plug>(coc-diagnostic-prev
-
+Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 nmap gj <Plug>(GitGutterNextHunk)
 nmap gk <Plug>(GitGutterPrevHunk)
 
+Plug 'sheerun/vim-polyglot'
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 autocmd FileType defx setlocal nobuflisted
@@ -220,28 +199,23 @@ autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
 
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
-      \ -split=vertical -winwidth=30 -direction=topleft
+      \ -split=vertical -winwidth=35 -direction=topleft
       \ -columns=indent:icon:mark:git:filename
       \ -show-ignored-files -listed
       \ -resume -listed <cr>
 nnoremap <silent><leader>F :Defx
-      \ -split=vertical -winwidth=30 -direction=topleft
+      \ -split=vertical -winwidth=35 -direction=topleft
       \ -columns=indent:icon:mark:git:filename
       \ -show-ignored-files -listed
       \ -toggle -resume -listed <cr>
 
 function! s:defx_my_settings() abort
   call defx#custom#column('icon', {
-        \ 'directory_icon': ' ▸',
-        \ 'opened_icon': ' ▾',
-        \ 'root_icon': 'R',
-        \ })
-  call defx#custom#column('mark', {
-        \ 'readonly_icon': '✗',
-        \ 'selected_icon': '✓',
+        \ 'directory_icon': ' +',
+        \ 'opened_icon': ' -',
         \ })
   call defx#custom#column('filename', {
-        \ 'min_width': 30,
+        \ 'min_width': 40,
         \ 'max_width': 50,
         \})
   nnoremap <silent><buffer><expr> <cr>
@@ -276,10 +250,8 @@ function! s:defx_my_settings() abort
         \ defx#do_action('toggle_select_all')
   nnoremap <silent><buffer><expr> a
         \ defx#do_action('toggle_select_visual')
-  nnoremap <silent><buffer><expr> cl
+  nnoremap <silent><buffer><expr> <esc>
         \ defx#do_action('clear_select_all')
-  nnoremap <silent><buffer><expr> j 'j'
-  nnoremap <silent><buffer><expr> k 'k'
   nnoremap <silent><buffer><expr> yp
         \ defx#do_action('yank_path')
   nnoremap <silent><buffer><expr> i
@@ -288,22 +260,9 @@ function! s:defx_my_settings() abort
         \ defx#do_action('change_vim_cwd')
   nnoremap <silent><buffer><expr> rr
         \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> j 'j'
+  nnoremap <silent><buffer><expr> k 'k'
 endfunction
-
-Plug 'sheerun/vim-polyglot'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-
-function! BuildComposer(info)
-  if a:info.status != 'unchanged' || a:info.force
-    if has('nvim')
-      !cargo build --release --locked
-    else
-      !cargo build --release --locked --no-default-features --features json-rpc
-    endif
-  endif
-endfunction
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-let g:markdown_composer_autostart = 0
 
 " Provider
 let g:loaded_perl_provider = 0
@@ -314,28 +273,9 @@ let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 let g:coc_node_path =  expand('$HOME/.asdf/shims/node')
 let g:node_host_prog = expand('$HOME/.asdf/shims/neovim-node-host')
 
-Plug 'itchyny/lightline.vim'
-let g:lightline = {
-      \ 'colorscheme': 'jellybeans',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'readonly': 'LightlineReadonly',
-      \ },
-      \ }
-function! LightlineReadonly()
-  return &readonly && &filetype !=# 'help' ? 'RO' : ''
-endfunction
-
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-line'
-Plug 'sgur/vim-textobj-parameter'
-Plug 'whatyouhide/vim-textobj-xmlattr'
 Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-entire'
+Plug 'sgur/vim-textobj-parameter'
 let g:vim_textobj_parameter_mapping = 's'
 
 Plug 'nanotech/jellybeans.vim'
@@ -346,5 +286,5 @@ colorscheme jellybeans
 highlight Normal      ctermbg=NONE guibg=NONE
 highlight LineNr      ctermbg=NONE guibg=NONE
 highlight SignColumn  ctermbg=NONE guibg=NONE
-highlight VertSplit   guibg=NONE guifg=NONE
-" highlight StatusLine  guibg=NONE guifg=white
+highlight VertSplit   guibg=NONE   guifg=NONE
+highlight StatusLine  guibg=NONE   guifg=NONE

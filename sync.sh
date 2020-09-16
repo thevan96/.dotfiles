@@ -24,17 +24,17 @@ ln -sf ~/dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
 # Install brew package
-brew install tig tmux bat fd ripgrep nvim tree neofetch fzf
+brew install tig tmux fd ripgrep nvim tree neofetch fzf
+brew cask install firefox google-chrome alacritty blender vlc
 
 # Setup python
+pip install --upgrade pip
 python3 -m pip install --user --upgrade pynvim
-python2 -m pip install --user --upgrade pynvim
 pip3 install --user pynvim neovim Send2Trash
-pip2 install --user pynvim neovim Send2Trash
 echo 'python done!'
 
 # Setup npm
-npm i -g prettier nodemon kill-port react-native\
+npm i -g prettier nodemon kill-port react-native browser-sync\
   create-react-app yarn tldr neovim standard semistandard import-js
 echo 'npm done!'
 

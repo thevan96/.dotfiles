@@ -1,9 +1,6 @@
 # Config zsh
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
-# Auto open zsh
-# ZSH_TMUX_AUTOSTART="true"
-
 # Alias tool
 alias ex="exit"
 alias cl="clear"
@@ -12,12 +9,12 @@ alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias vi="nvim"
 
-fix-git() {
+fixg() {
   ssh-add $HOME/.ssh/id_rsa_github $HOME/.ssh/id_rsa_gitlab
 }
 
 ide () {
-  tmux split-window -v -p 20
+  tmux split-window -v -p 15
   tmux split-window -h -p 50
 }
 
@@ -40,9 +37,6 @@ export FZF_DEFAULT_COMMAND='fd --type f -i -H -I --exclude .git --exclude node_m
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--no-height'
 
-# Bison
-export PATH="/usr/local/opt/bison/bin:$PATH"
-
 # Android
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -62,5 +56,7 @@ alias tabletc="emulator @tabletc"
 # Run simulator
 alias listSimulator="xcrun simctl list devices"
 
-# Vscode
+# Etc program
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+export PATH="/Applications/Sublime Text.app/Contents/MacOS/:$PATH"
+export PATH="/usr/local/opt/bison/bin:$PATH"
