@@ -1,31 +1,6 @@
 # Config zsh
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
-# Alias tool
-alias ex="exit"
-alias cl="clear"
-alias hc="history -c"
-alias fp="sudo lsof -i -P -n"
-alias kp="kill-port"
-alias vi="nvim"
-
-fixg() {
-  ssh-add $HOME/.ssh/id_rsa_github $HOME/.ssh/id_rsa_gitlab
-}
-
-ide () {
-  tmux split-window -v -p 15
-  tmux split-window -h -p 50
-}
-
-git-search () {
-  git log --all --grep="${1}"
-}
-
-bs () {
-  browser-sync start --server --files --files "**/*.*" --port ${1}
-}
-
 # Set env variable
 export LANG=en_US.UTF-8
 export KEYTIMEOUT=1
@@ -47,16 +22,39 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # Mirrow phone
 alias rp="scrcpy --turn-screen-off"
 
-# Run emulator
+# Emulator
 alias listEmulator="emulator -list-avds"
 alias phone5="emulator @phone5"
 alias phone56="emulator @phone56"
 alias tabletc="emulator @tabletc"
 
-# Run simulator
+# Simulator
 alias listSimulator="xcrun simctl list devices"
 
-# Etc program
-export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
-export PATH="/Applications/Sublime Text.app/Contents/MacOS/:$PATH"
+# export program
 export PATH="/usr/local/opt/bison/bin:$PATH"
+
+# Alias tool
+alias ex="exit"
+alias hc="history -c"
+alias fp="sudo lsof -i -P -n"
+alias kp="kill-port"
+alias vi="nvim"
+
+ffg() {
+  ssh-add $HOME/.ssh/id_rsa_github $HOME/.ssh/id_rsa_gitlab
+}
+
+ide () {
+  tmux split-window -v -p 15
+  tmux split-window -h -p 50
+}
+
+git-search () {
+  git log --all --grep="${1}"
+}
+
+bs () {
+  browser-sync start --server --files --files "**/*.*" --port ${1}
+}
+

@@ -13,7 +13,6 @@ set signcolumn=yes:2
 set encoding=utf-8
 set clipboard=unnamed
 set conceallevel=2
-set virtualedit=all
 set fillchars+=vert:\|
 set list listchars=tab:␣\ ,extends:▶,precedes:◀
 
@@ -54,6 +53,18 @@ xnoremap > >gv
 xnoremap < <gv
 xnoremap > >gv
 
+" Split window
+map <silent>ss :split<cr>
+map <silent>sv :vsplit<cr>
+
+" Navigate
+map sj <c-w><c-j>
+map sk <c-w><c-k>
+map sl <c-w><c-l>
+map sh <c-w><c-h>
+map so <c-d>
+map si <c-u>
+
 " Disable highlight search, clear
 nnoremap <silent><esc> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
@@ -62,18 +73,9 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " Disable
+map s <nop>
 nnoremap Q <nop>
 nnoremap <F1> <nop>
-
-" Split window
-nmap <silent>ss :split<cr>
-nmap <silent>sv :vsplit<cr>
-
-" Move window
-nnoremap sj <c-w><c-j>
-nnoremap sk <c-w><c-k>
-nnoremap sl <c-w><c-l>
-nnoremap sh <c-w><c-h>
 
 " Format
 function! QuickFormat()
@@ -103,6 +105,9 @@ function! QuickFormat()
   execute ":e!"
 endfunction
 nnoremap <leader>P :call QuickFormat()<cr>
+
+" Open file
+nnoremap <leader>O :!open %<cr>
 
 call plug#begin()
 Plug 'tpope/vim-surround'
@@ -184,14 +189,17 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-nnoremap <silent>K :call <SID>show_documentation()<CR>
+nnoremap <silent>K :call <SID>show_documentation()<cr>
 
 Plug 'tpope/vim-fugitive'
+set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
+
 Plug 'airblade/vim-gitgutter'
 nmap gj <Plug>(GitGutterNextHunk)
 nmap gk <Plug>(GitGutterPrevHunk)
 
 Plug 'sheerun/vim-polyglot'
+
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 autocmd FileType defx setlocal nobuflisted
@@ -211,13 +219,13 @@ nnoremap <silent><leader>F :Defx
 
 function! s:defx_my_settings() abort
   call defx#custom#column('icon', {
-        \ 'directory_icon': ' +',
-        \ 'opened_icon': ' -',
+        \ 'directory_icon': ' ●',
+        \ 'opened_icon': ' ○',
         \ })
   call defx#custom#column('filename', {
         \ 'min_width': 40,
         \ 'max_width': 50,
-        \})
+        \ })
   nnoremap <silent><buffer><expr> <cr>
         \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> u
@@ -276,6 +284,7 @@ let g:node_host_prog = expand('$HOME/.asdf/shims/neovim-node-host')
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'sgur/vim-textobj-parameter'
+Plug 'kana/vim-textobj-line'
 let g:vim_textobj_parameter_mapping = 's'
 
 Plug 'nanotech/jellybeans.vim'
@@ -288,3 +297,4 @@ highlight LineNr      ctermbg=NONE guibg=NONE
 highlight SignColumn  ctermbg=NONE guibg=NONE
 highlight VertSplit   guibg=NONE   guifg=NONE
 highlight StatusLine  guibg=NONE   guifg=NONE
+highlight NonText     guibg=NONE   guifg=NONE
