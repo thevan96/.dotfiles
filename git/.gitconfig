@@ -2,5 +2,4 @@
   name = thevan96
   email = vothevan96@gmail.com
 [core]
-  editor = vi
-	pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = nvim

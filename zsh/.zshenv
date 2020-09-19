@@ -41,17 +41,8 @@ alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias vi="nvim"
 
-ffg() {
-  ssh-add $HOME/.ssh/id_rsa_github $HOME/.ssh/id_rsa_gitlab
-}
-
-ide () {
-  tmux split-window -v -p 15
-  tmux split-window -h -p 50
-}
-
-git-search () {
-  git log --all --grep="${1}"
+fix-git() {
+  ssh-add $HOME/.ssh/github $HOME/.ssh/gitlab
 }
 
 bs () {

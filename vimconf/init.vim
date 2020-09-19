@@ -1,72 +1,50 @@
 " General setting
 syntax on
-set mouse=a
 set termguicolors
 set hlsearch
 set nobackup noswapfile
 set splitbelow splitright
 set autoindent
-set hidden number nowrap
-set lazyredraw
+set ruler showcmd hidden number nowrap
+set mouse=a
+set list listchars=tab:␣\ ,extends:▶,precedes:◀
+set tabstop=2 shiftwidth=2 expandtab
 set updatetime=150
 set signcolumn=yes:2
 set encoding=utf-8
 set clipboard=unnamed
-set conceallevel=2
-set fillchars+=vert:\|
-set list listchars=tab:␣\ ,extends:▶,precedes:◀
+set conceallevel=0
+set textwidth=80
 
 " Mapping leader
 let mapleader = ' '
 
-" Setting default tab/space
-set tabstop=2 shiftwidth=2 expandtab
-
 " Sync file another open
 autocmd FocusGained * :checktime
 
-" Save position cursor
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
-        \ | exe "normal! g'\"" | endif
-endif
-
-" Smarter cursorline
-autocmd InsertLeave,WinEnter * set cursorline
-autocmd InsertEnter,WinLeave * set nocursorline
-
-" Fast mapping
-map S <c-^>
-nnoremap <leader>q :q<cr>
-nnoremap <leader>Q :qa!<cr>
-
 " Remap
-map * *N
+map S <c-^>
 vnoremap p "0P
+nnoremap gv `[v`]
 nnoremap < <<
 nnoremap > >>
-
-" Fix missing visual block
-nnoremap gv `[v`]
 xnoremap < <gv
 xnoremap > >gv
 xnoremap < <gv
 xnoremap > >gv
 
-" Split window
+" Navigate, split
+map <silent>sj <c-w><c-j>
+map <silent>sk <c-w><c-k>
+map <silent>sl <c-w><c-l>
+map <silent>sh <c-w><c-h>
+
+" Split
 map <silent>ss :split<cr>
 map <silent>sv :vsplit<cr>
 
-" Navigate
-map sj <c-w><c-j>
-map sk <c-w><c-k>
-map sl <c-w><c-l>
-map sh <c-w><c-h>
-map so <c-d>
-map si <c-u>
-
-" Disable highlight search, clear
-nnoremap <silent><esc> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+" Disable highlight search
+nnoremap <silent><esc> :nohlsearch<cr>
 
 " Scaner command-line history
 cnoremap <c-n> <down>
@@ -74,62 +52,30 @@ cnoremap <c-p> <up>
 
 " Disable
 map s <nop>
-nnoremap Q <nop>
-nnoremap <F1> <nop>
-
-" Format
-function! QuickFormat()
-  silent! wall
-  let fullpath = expand('%:p')
-  let listExtension = split(expand('%t'), '\.')
-  let prettier = "prettier"
-  let semistandard = "semistandard"
-  let phpCsFixer = "php-cs-fixer"
-  let bladeFormat = "blade-formatter"
-  let extension = listExtension[len(listExtension) - 1]
-  if extension == "js"
-    execute ":! ".prettier." --write ".fullpath ." && "
-          \ .semistandard." --fix ".fullpath." | snazzy"
-  elseif extension == "php"
-    let isBlade = listExtension[len(listExtension) - 2]
-    if isBlade =='blade'
-      execute ":! ".prettier." --write ".fullpath." && "
-            \ .bladeFormat." --write ".fullpath
-    else
-      execute ":! ".prettier." --write ".fullpath." && "
-            \ .phpCsFixer." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
-    endif
-  else
-    execute ":! ".prettier." --write ".fullpath
-  endif
-  execute ":e!"
-endfunction
-nnoremap <leader>P :call QuickFormat()<cr>
-
-" Open file
-nnoremap <leader>O :!open %<cr>
+map q <nop>
+map Q <nop>
+map <F1> <nop>
 
 call plug#begin()
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
-Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key=','
-let g:user_emmet_mode='i'
-
-Plug 'puremourning/vimspector'
-let g:vimspector_enable_mappings = 'HUMAN'
+Plug 'takac/vim-hardtime'
+let g:hardtime_maxcount = 5
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_ignore_buffer_patterns = [ "defx"]
+let g:list_of_normal_keys = ["h", "l"]
+let g:list_of_visual_keys = ["h", "l"]
+let g:list_of_insert_keys = []
+let g:list_of_disabled_keys = []
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-Plug 'simeji/winresizer'
-let g:winresizer_start_key = '<leader>e'
-let g:winresizer_vert_resize = 3
-let g:winresizer_horiz_resize = 3
+Plug 'mattn/emmet-vim'
+let g:user_emmet_leader_key=','
+let g:user_emmet_mode='i'
 
 Plug 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
@@ -167,7 +113,6 @@ let g:coc_global_extensions =
       \ 'coc-css',
       \ 'coc-python',
       \ 'coc-phpls',
-      \ 'coc-html',
       \ ]
 
 " Remap keys for gotos, refresh
@@ -176,10 +121,8 @@ nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gt <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 nmap <silent>gr <Plug>(coc-references)
-
-" Navigate error
-map <silent>gl <Plug>(coc-diagnostic-next)
-map <silent>gk <Plug>(coc-diagnostic-prev
+nmap <silent>gl <Plug>(coc-diagnostic-next)
+nmap <silent>gk <Plug>(coc-diagnostic-prev
 
 " Use K to show documentation in preview window
 function! s:show_documentation()
@@ -191,15 +134,6 @@ function! s:show_documentation()
 endfunction
 nnoremap <silent>K :call <SID>show_documentation()<cr>
 
-Plug 'tpope/vim-fugitive'
-set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
-
-Plug 'airblade/vim-gitgutter'
-nmap gj <Plug>(GitGutterNextHunk)
-nmap gk <Plug>(GitGutterPrevHunk)
-
-Plug 'sheerun/vim-polyglot'
-
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 Plug 'kristijanhusak/defx-git'
 autocmd FileType defx setlocal nobuflisted
@@ -207,12 +141,12 @@ autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
 
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
-      \ -split=vertical -winwidth=35 -direction=topleft
+      \ -split=vertical -winwidth=40 -direction=topleft
       \ -columns=indent:icon:mark:git:filename
       \ -show-ignored-files -listed
       \ -resume -listed <cr>
 nnoremap <silent><leader>F :Defx
-      \ -split=vertical -winwidth=35 -direction=topleft
+      \ -split=vertical -winwidth=40 -direction=topleft
       \ -columns=indent:icon:mark:git:filename
       \ -show-ignored-files -listed
       \ -toggle -resume -listed <cr>
@@ -281,20 +215,15 @@ let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 let g:coc_node_path =  expand('$HOME/.asdf/shims/node')
 let g:node_host_prog = expand('$HOME/.asdf/shims/neovim-node-host')
 
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'sgur/vim-textobj-parameter'
-Plug 'kana/vim-textobj-line'
-let g:vim_textobj_parameter_mapping = 's'
-
-Plug 'nanotech/jellybeans.vim'
 set background=dark
 call plug#end()
 
-colorscheme jellybeans
+colorscheme desert
 highlight Normal      ctermbg=NONE guibg=NONE
-highlight LineNr      ctermbg=NONE guibg=NONE
 highlight SignColumn  ctermbg=NONE guibg=NONE
 highlight VertSplit   guibg=NONE   guifg=NONE
-highlight StatusLine  guibg=NONE   guifg=NONE
 highlight NonText     guibg=NONE   guifg=NONE
+highlight Pmenu       ctermbg=NONE guibg=gray
+highlight LineNr      guifg=gray   guibg=NONE
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
