@@ -4,8 +4,6 @@
   "diagnostic.infoSign": "I",
   "diagnostic.hintSign": "H",
   "suggest.autoTrigger": "none",
-  "suggest.floatEnable": true,
-  "suggest.noselect": true,
   "coc.preferences.extensionUpdateCheck": "daily"
 }
 

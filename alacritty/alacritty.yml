@@ -41,24 +41,24 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Monaco
+    family: Source Code Pro
     style: Regular
 
   bold:
-    family: Monaco
+    family: Source Code Pro
     style: Bold
 
   italic:
-    family: Monaco
+    family: Source Code Pro
     style: Italic
 
   # Point size
-  size: 11.0
+  size: 11
 
   # Offset
   offset:
     x: 0
-    y: 0
+    y: 2
 
   # Glyph offset
   glyph_offset:
@@ -74,8 +74,7 @@ draw_bold_text_with_bright_colors: false
 colors:
   # Default colors
   primary:
-    # background: '#161616'
-    background: "#000000"
+    background: "#161616"
     foreground: "#e4e4e4"
 
   # Cursor volors
@@ -110,7 +109,7 @@ colors:
     text: "#5963a2"
     background: "#f6f6f6"
 
-  indexed_colors: []
+indexed_colors: []
 
 # Background opacity [0, 1]
 background_opacity: 1.0
@@ -119,8 +118,8 @@ mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
 
 mouse:
-  double_click: { threshold: 300 }
-  triple_click: { threshold: 300 }
+  double_click: { threshold: 100 }
+  triple_click: { threshold: 100 }
   hide_when_typing: true
 
   url:
@@ -146,11 +145,6 @@ cursor:
 # Live config reload (changes require restart)
 live_config_reload: true
 
-shell:
-  program: /bin/zsh
-  args:
-    - --login
-
 # Startup directory
 working_directory: None
 
@@ -167,7 +161,6 @@ debug:
   ref_test: false
 
 key_bindings:
-  # Global keybind
   - { key: V, mods: Control|Shift, action: Paste }
   - { key: C, mods: Control|Shift, action: Copy }
   - { key: V, mods: Command, action: Paste }
@@ -183,3 +176,5 @@ key_bindings:
   - { key: Add, mods: Command, action: IncreaseFontSize }
   - { key: F, mods: Command, action: ToggleFullscreen }
   - { key: W, mods: Command, action: Quit }
+
+
