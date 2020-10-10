@@ -1,10 +1,28 @@
 #!/bin/bash
 
+# Install brew package
+# brew install coreutils curl gpg asdf zsh git tig tmux fd ripgrep nvim tree neofetch fzf reattach-to-user-namespace
+# brew cask install vlc joplin sublime-text visual-studio-code skype firefox google-chrome blender alacritty
+# echo "Install brew package done"
+
+# Setup python
+# pip install --upgrade pip
+# pip3 install --user pynvim neovim Send2Trash
+# echo 'python done!'
+
+# Setup npm
+# npm i -g prettier nodemon kill-port react-native browser-sync\
+#  create-react-app tldr neovim standard semistandard
+# echo 'npm done!'
+
+defaults write -g ApplePressAndHoldEnabled -bool false
+echo "repeat config key done!"
+
 # Setting link file
 mkdir -p ~/.config/nvim
 
-ln -sf ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
-ln -sf ~/dotfiles/vim/coc-settings.json ~/.config/nvim/coc-settings.json
+ln -sf ~/dotfiles/vimconf/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/vimconf/coc-settings.json ~/.config/nvim/coc-settings.json
 echo 'vim done!'
 
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
@@ -17,25 +35,8 @@ echo 'zsh done!'
 ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
 echo 'git done!'
 
-ln -sf ~/dotfiles/mycli/.myclirc ~/.myclirc
-echo 'mycli done!'
-
 ln -sf ~/dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
-# Install brew package
-brew install tig tmux bat fd ripgrep nvim tree neofetch fzf
-
-# Setup python
-python3 -m pip install --user --upgrade pynvim
-python2 -m pip install --user --upgrade pynvim
-pip3 install --user pynvim neovim Send2Trash
-pip2 install --user pynvim neovim Send2Trash
-echo 'python done!'
-
-# Setup npm
-npm i -g prettier nodemon kill-port react-native\
-  create-react-app yarn tldr neovim standard semistandard import-js
-echo 'npm done!'
-
 echo 'Sync success!'
+

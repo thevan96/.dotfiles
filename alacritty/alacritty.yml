@@ -1,4 +1,4 @@
-# Configuration for Alacritty, the GPU enhanced terminal emulator.
+# Co# Configuration for Alacritty, the GPU enhanced terminal emulator.
 env:
   TERM: screen-256color
 
@@ -41,24 +41,24 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Monaco
+    family: Cascadia Code
     style: Regular
 
   bold:
-    family: Monaco
+    family: Cascadia Code
     style: Bold
 
   italic:
-    family: Monaco
+    family: Cascadia Code
     style: Italic
 
   # Point size
-  size: 11.0
+  size: 10.5
 
   # Offset
   offset:
     x: 0
-    y: 0
+    y: 2
 
   # Glyph offset
   glyph_offset:
@@ -70,50 +70,23 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (Solarized Dark)
+# Colors (Jellybeans)
 colors:
   # Default colors
   primary:
-    background: "#002b36" # base03
-    foreground: "#839496" # base0
+    background: "#161616"
 
-  # Cursor colors
-  cursor:
-    text: "#002b36" # base03
-    cursor: "#839496" # base0
-
-  # Normal colors
-  normal:
-    black: "#073642" # base02
-    red: "#dc322f" # red
-    green: "#859900" # green
-    yellow: "#b58900" # yellow
-    blue: "#268bd2" # blue
-    magenta: "#d33682" # magenta
-    cyan: "#2aa198" # cyan
-    white: "#eee8d5" # base2
-
-  # Bright colors
-  bright:
-    black: "#002b36" # base03
-    red: "#cb4b16" # orange
-    green: "#586e75" # base01
-    yellow: "#657b83" # base00
-    blue: "#839496" # base0
-    magenta: "#6c71c4" # violet
-    cyan: "#93a1a1" # base1
-    white: "#fdf6e3" # base3
-  indexed_colors: []
+indexed_colors: []
 
 # Background opacity [0, 1]
-background_opacity: 0.96
+background_opacity: 1.0
 
 mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
 
 mouse:
-  double_click: { threshold: 300 }
-  triple_click: { threshold: 300 }
+  double_click: { threshold: 100 }
+  triple_click: { threshold: 100 }
   hide_when_typing: true
 
   url:
@@ -132,17 +105,12 @@ selection:
 # Allow terminal applications to change Alacritty's window title.
 window.dynamic_title: false
 
-cursor:
+curso:
   style: Block
   unfocused_hollow: true
 
 # Live config reload (changes require restart)
 live_config_reload: true
-
-shell:
-  program: /bin/zsh
-  args:
-    - --login
 
 # Startup directory
 working_directory: None
@@ -160,7 +128,6 @@ debug:
   ref_test: false
 
 key_bindings:
-  # Global keybind
   - { key: V, mods: Control|Shift, action: Paste }
   - { key: C, mods: Control|Shift, action: Copy }
   - { key: V, mods: Command, action: Paste }
@@ -175,4 +142,6 @@ key_bindings:
   - { key: Minus, mods: Command, action: DecreaseFontSize }
   - { key: Add, mods: Command, action: IncreaseFontSize }
   - { key: F, mods: Command, action: ToggleFullscreen }
+
   - { key: W, mods: Command, action: Quit }
+  - { key: Q, mods: Command, action: Quit }

@@ -1,7 +1,7 @@
 # dotfile
 
 - Terminal: Alacritty
-- Shell: zsh
-- Text editor: neovim
-- Terminal multiplexer: tmux
-- Theme terminal: jellybeans
+- Shell: Zsh
+- Text editor: Neovim
+- Terminal multiplexer: Tmux
+- Theme terminal: Jellybeans
