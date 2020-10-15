@@ -41,19 +41,19 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Cascadia Code
+    family: Monaco
     style: Regular
 
   bold:
-    family: Cascadia Code
+    family: Monaco
     style: Bold
 
   italic:
-    family: Cascadia Code
+    family: Monaco
     style: Italic
 
   # Point size
-  size: 10.5
+  size: 10
 
   # Offset
   offset:
@@ -70,11 +70,15 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (Jellybeans)
+# Colors
 colors:
   # Default colors
   primary:
-    background: "#161616"
+    background: "#111111"
+
+  # Cursor volors
+  cursor:
+    cursor: '#ffffff'
 
 indexed_colors: []
 

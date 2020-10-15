@@ -1,25 +1,20 @@
 " General setting
 syntax on
-set termguicolors
-set hlsearch ignorecase
+set termguicolors lazyredraw
+set hlsearch
 set nobackup noswapfile
 set splitbelow splitright
-set number nowrap
-set autoindent
+set number nowrap autoindent
+set mouse-=a
 set tabstop=2 shiftwidth=2 shiftround expandtab
-set mouse=a
-set laststatus=2
+set laststatus=2 showmode ruler
 set encoding=utf-8
-set updatetime=100
-set synmaxcol=200
+set updatetime=100 synmaxcol=200
 set clipboard+=unnamedplus
-set fillchars+=vert:\|
 set list listchars=tab:␣\ ,extends:▶,precedes:◀
-set signcolumn=yes:2
-set virtualedit=all
-set conceallevel=0
-set foldlevel=99
-set foldmethod=indent
+set fillchars+=vert:\|
+set signcolumn=yes:2 conceallevel=0
+set foldlevel=99 foldmethod=indent
 
 " Remap
 let mapleader = ' '
@@ -29,8 +24,9 @@ nnoremap <silent><leader>a <c-^>
 nnoremap <silent><leader>q :q<cr>
 nnoremap <silent><leader>Q :qa!<cr>
 nnoremap <silent><leader>d :bd!<cr>
+nnoremap <silent><leader><leader> <c-w><c-=><cr>
 
-" Fix missing block visual
+" Fix missing block
 nnoremap gv `[v`]
 
 " Better indent
@@ -40,6 +36,10 @@ xnoremap < <gv
 xnoremap > >gv
 xnoremap < <gv
 xnoremap > >gv
+
+" Move block
+xnoremap J :move '>+1<cr>gv=gv
+xnoremap K :move '<-2<cr>gv=gv
 
 " Delete without yank
 nnoremap <leader>dd "_dd
@@ -56,9 +56,6 @@ nnoremap <silent><esc> :nohlsearch<cr>
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
-" Treat <li> and <p> tags like the block tags they are
-let g:html_indent_tags = 'li\|p'
-
 " Save position cursor, load file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
@@ -72,6 +69,7 @@ map q <nop>
 map <F1> <nop>
 
 call plug#begin()
+
 " Text object
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -82,20 +80,13 @@ Plug 'kana/vim-textobj-indent'
 
 " Utils
 Plug 'tpope/vim-sleuth'
-Plug 'bronson/vim-visual-star-search'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
-Plug 'tpope/vim-fugitive'
-set statusline=\ %f\ %y%{FugitiveStatusline()}%m%r%=%l/%L\ %P\ |
-
-Plug 't9md/vim-choosewin'
-let g:choosewin_overlay_enable = 0
-nmap <silent><leader>ww :ChooseWin<cr>
-nmap <silent><leader>ws :ChooseWinSwap<cr>
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plug 'mhinz/vim-signify'
 nmap <silent>gl <plug>(signify-next-hunk)
@@ -105,16 +96,22 @@ Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 let g:user_emmet_mode='i'
 
+Plug 'tpope/vim-fugitive'
+set statusline=\ %f%m%r%=%y\ %{FugitiveStatusline()}\ %l/%L\ %P\ |
+
+Plug 't9md/vim-choosewin'
+let g:choosewin_overlay_enable = 0
+let g:choosewin_blink_on_land = 0
+nmap <silent><leader>wc :ChooseWin<cr>
+nmap <silent><leader>ws :ChooseWinSwap<cr>
+
 Plug 'diepm/vim-rest-console'
 let g:vrc_trigger = '<leader>r'
 
-Plug 'puremourning/vimspector'
-let g:vimspector_enable_mappings = 'HUMAN'
-
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
-let g:winresizer_vert_resize = 5
-let g:winresizer_horiz_resize = 5
+let g:winresizer_vert_resize = 3
+let g:winresizer_horiz_resize = 3
 
 Plug 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
@@ -126,8 +123,8 @@ nnoremap <silent><leader>i :Files<cr>
 nnoremap <silent><leader>o :Buffers<cr>
 nnoremap <silent><leader>s :Rg<cr>
 nnoremap <silent><leader>S :Rg <c-r><c-w><cr>
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+autocmd! FileType fzf set noshowmode
+\| autocmd BufLeave <buffer> set showmode
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions =
@@ -171,12 +168,12 @@ autocmd FileType defx call s:defx_my_settings()
 nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
       \ -split=vertical -winwidth=45 -direction=botright
       \ -columns=indent:icon:mark:git:filename
-      \ -show-ignored-files -listed
+      \ -show-ignored-files
       \ -resume -listed <cr>
 nnoremap <silent><leader>F :Defx
       \ -split=vertical -winwidth=45 -direction=botright
       \ -columns=indent:icon:mark:git:filename
-      \ -show-ignored-files -listed
+      \ -show-ignored-files
       \ -toggle -resume -listed <cr>
 
 function! s:defx_my_settings() abort
@@ -214,13 +211,13 @@ function! s:defx_my_settings() abort
         \ defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> rn
         \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> .
-        \ defx#do_action('toggle_select')
   nnoremap <silent><buffer><expr> *
         \ defx#do_action('toggle_select_all')
   nnoremap <silent><buffer><expr> a
+        \ defx#do_action('toggle_select')
+  nnoremap <silent><buffer><expr> A
         \ defx#do_action('toggle_select_visual')
-  nnoremap <silent><buffer><expr> <esc>
+  nnoremap <silent><buffer><expr> cl
         \ defx#do_action('clear_select_all')
   nnoremap <silent><buffer><expr> yp
         \ defx#do_action('yank_path')
@@ -244,17 +241,17 @@ let g:coc_node_path =  expand('$HOME/.asdf/shims/node')
 let g:node_host_prog = expand('$HOME/.asdf/shims/neovim-node-host')
 call plug#end()
 
-colorscheme desert
 set background=dark
+colorscheme desert
 highlight SignifySignAdd    guifg=#00ff00
 highlight SignifySignDelete guifg=#ff0000
 highlight SignifySignChange guifg=#ffff00
-highlight VertSplit         guibg=NONE     guifg=NONE
-highlight StatusLine        guibg=white    guifg=black
-highlight Normal            guibg=NONE
-highlight NonText           guibg=NONE
-highlight SignColumn        guibg=NONE
-highlight Pmenu             guibg=gray
-highlight LineNr            guifg=gray
-highlight comment           guifg=green
+highlight LineNr     ctermbg=NONE guibg=NONE guifg=gray
+highlight Normal     ctermbg=NONE guibg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit  guifg=NONE   guibg=NONE
+highlight StatusLine guibg=white  guifg=black
+highlight NonText    guibg=NONE
+highlight comment    guifg=green
+highlight Pmenu      guibg=gray
 

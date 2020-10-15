@@ -1,4 +1,5 @@
 # Set env variable
+ZSH_TMUX_AUTOSTART=true
 export LANG=en_US.UTF-8
 export KEYTIMEOUT=1
 export EDITOR=vi
@@ -34,8 +35,12 @@ alias kp="kill-port"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias vi='nvim'
 
-fix-git() {
-  ssh-add $HOME/.ssh/github $HOME/.ssh/gitlab
+fix-github() {
+  ssh-add $HOME/.ssh/github
+}
+
+fix-gitlab() {
+  ssh-add $HOME/.ssh/gitlab
 }
 
 bs () {
