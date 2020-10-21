@@ -1,6 +1,4 @@
-# Co# Configuration for Alacritty, the GPU enhanced terminal emulator.
-env:
-  TERM: screen-256color
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
 
 window:
   dimensions:
@@ -75,10 +73,22 @@ colors:
   # Default colors
   primary:
     background: "#111111"
+    foreground: "#ffffff"
 
   # Cursor volors
   cursor:
-    cursor: '#ffffff'
+    text: "#000000"
+    cursor: "#ffb472"
+
+  normal:
+    black: "#000000"
+    red: "#fa8072"
+    green: "#32cd32"
+    yellow: "#f0e68c"
+    blue: "#00bfff"
+    magenta: "#afeeee"
+    cyan: "#e0ffff"
+    white: "#000000"
 
 indexed_colors: []
 

@@ -38,5 +38,8 @@ echo 'git done!'
 ln -sf ~/dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
+/usr/local/opt/fzf/install
+echo 'fzf keybind done!'
+
 echo 'Sync success!'
 
