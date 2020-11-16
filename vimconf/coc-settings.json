@@ -3,6 +3,8 @@
   "diagnostic.warningSign": "W",
   "diagnostic.infoSign": "I",
   "diagnostic.hintSign": "H",
+  "suggest.noselect": false,
+  "suggest.keepCompleteopt": true,
   "suggest.autoTrigger": "none",
   "coc.preferences.extensionUpdateCheck": "daily"
 }

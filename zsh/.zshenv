@@ -1,13 +1,19 @@
 # Set env variable
 export ZSH="$HOME/.oh-my-zsh"
+export TERM="screen-256color"
 export LANG=en_US.UTF-8
 export KEYTIMEOUT=1
-export EDITOR=vi
-export TERM="screen-256color"
+export EDITOR=nvim
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type f -i -H -I \
-  --exclude .git --exclude node_modules --exclude vendor --exclude .idea'
+export FZF_DEFAULT_COMMAND="fd --type f -i -H -I \
+  --exclude .git \
+  --exclude .idea \
+  --exclude .vscode \
+  --exclude node_modules \
+  --exclude vendor \
+  --exclude composer \
+    "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Android
@@ -25,32 +31,25 @@ alias phone56="emulator @phone56"
 alias tabletc="emulator @tabletc"
 
 # Alias
+alias cl="clear"
 alias ex="exit"
-alias cl='clear'
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias vi='nvim'
-alias rm='rm -rf'
+alias vi="nvim"
+alias vim="nvim"
+alias github="ssh-add $HOME/.ssh/github"
+alias gitlab="ssh-add $HOME/.ssh/gitlab"
+alias pwdf="pwd | pbcopy" # pwd | xsel --clipboard # linux
+alias rp="scrcpy --turn-screen-off" # Mirrow phone
 
-# Mirrow phone
-alias rp="scrcpy --turn-screen-off"
-
-pwdc() {
-  pwd | pbcopy # macos
-  # pwd | xsel --clipboard # linux
-}
-
+# Live reload browser
 bs() {
   browser-sync start --server --files --files "**/*.*" --port ${1}
 }
 
-github() {
-  ssh-add $HOME/.ssh/github
-}
-
-gitlab() {
-  ssh-add $HOME/.ssh/gitlab
+pwds() {
+  echo "${PWD##*/}" | pbcopy
 }
 

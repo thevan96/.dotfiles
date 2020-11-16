@@ -5,14 +5,6 @@ window:
     columns: 80
     lines: 24
 
-  position:
-  x: 0
-  y: 0
-
-  padding:
-    x: 0
-    y: 0
-
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: false
 
@@ -26,7 +18,7 @@ window:
   title: ""
 
   # Window class (Linux only):
-  class: Alacritty
+  # class: Alacritty
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -39,19 +31,19 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Monaco
+    family: Source Code Pro
     style: Regular
 
   bold:
-    family: Monaco
+    family: Source Code Pro
     style: Bold
 
   italic:
-    family: Monaco
+    family: Source Code Pro
     style: Italic
 
   # Point size
-  size: 10
+  size: 11
 
   # Offset
   offset:
@@ -63,37 +55,50 @@ font:
     x: 0
     y: 0
 
-  use_thin_strokes: true
+  use_thin_strokes: false
 
 # If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors:
+  false
 
-# Colors
+  # Colors (Solarized Dark)
 colors:
   # Default colors
   primary:
-    background: "#111111"
-    foreground: "#ffffff"
+    background: "#00222b"
+    foreground: "#839496" # base0
 
-  # Cursor volors
+  # Cursor colors
   cursor:
-    text: "#000000"
-    cursor: "#ffb472"
+    text: "#00222b" # base03
+    cursor: "#839496" # base0
 
+  # Normal colors
   normal:
-    black: "#000000"
-    red: "#fa8072"
-    green: "#32cd32"
-    yellow: "#f0e68c"
-    blue: "#00bfff"
-    magenta: "#afeeee"
-    cyan: "#e0ffff"
-    white: "#000000"
+    black: "#073642" # base02
+    red: "#dc322f" # red
+    green: "#859900" # green
+    yellow: "#b58900" # yellow
+    blue: "#268bd2" # blue
+    magenta: "#d33682" # magenta
+    cyan: "#2aa198" # cyan
+    white: "#eee8d5" # base2
+
+  # Bright colors
+  bright:
+    black: "#00222b" # base03
+    red: "#cb4b16" # orange
+    green: "#586e75" # base01
+    yellow: "#657b83" # base00
+    blue: "#839496" # base0
+    magenta: "#6c71c4" # violet
+    cyan: "#93a1a1" # base1
+    white: "#fdf6e3" # base3
 
 indexed_colors: []
 
 # Background opacity [0, 1]
-background_opacity: 1.0
+background_opacity: 1
 
 mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
@@ -119,7 +124,7 @@ selection:
 # Allow terminal applications to change Alacritty's window title.
 window.dynamic_title: false
 
-curso:
+cursor:
   style: Block
   unfocused_hollow: true
 
@@ -130,9 +135,6 @@ live_config_reload: true
 working_directory: None
 
 enable_experimental_conpty_backend: false
-
-# Send ESC (\x1b) before characters when alt is pressed.
-alt_send_esc: false
 
 debug:
   render_timer: false
@@ -147,15 +149,11 @@ key_bindings:
   - { key: V, mods: Command, action: Paste }
   - { key: C, mods: Command, action: Copy }
 
-  - { key: Add, mods: Alt, action: IncreaseFontSize }
-  - { key: Key0, mods: Alt, action: ResetFontSize }
+  - { key: Plus, mods: Alt, action: IncreaseFontSize }
   - { key: Minus, mods: Alt, action: DecreaseFontSize }
-  - { key: Return, mods: Alt, action: ToggleFullscreen }
+  - { key: Key0, mods: Alt, action: ResetFontSize }
 
-  - { key: Key0, mods: Command, action: ResetFontSize }
+  - { key: Plus, mods: Command, action: IncreaseFontSize }
   - { key: Minus, mods: Command, action: DecreaseFontSize }
-  - { key: Add, mods: Command, action: IncreaseFontSize }
-  - { key: F, mods: Command, action: ToggleFullscreen }
+  - { key: Key0, mods: Command, action: ResetFontSize }
 
-  - { key: W, mods: Command, action: Quit }
-  - { key: Q, mods: Command, action: Quit }

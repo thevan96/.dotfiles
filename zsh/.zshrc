@@ -1,11 +1,9 @@
 # Config zsh
 ZSH_THEME="robbyrussell"
-
-# Option config
-ZSH_TMUX_AUTOSTART=true
+DISABLE_AUTO_TITLE="true"
 
 # Plugin
-plugins=(vi-mode zsh-z tmux)
+plugins=(vi-mode zsh-z)
 source $ZSH/oh-my-zsh.sh
 
 # Load asdf cli manager
@@ -13,3 +11,4 @@ source $ZSH/oh-my-zsh.sh
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
