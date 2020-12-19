@@ -32,7 +32,5 @@ echo 'git done!'
 ln -sf ~/dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
-ln -sf ~/dotfiles/UltiSnips ~/.config/nvim/
-echo 'UltiSnips done!'
-
 echo 'Sync success!'
+

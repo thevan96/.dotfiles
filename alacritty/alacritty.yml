@@ -15,7 +15,7 @@ window:
   startup_mode: Windowed
 
   # Window title
-  title: ""
+  title: ''
 
   # Window class (Linux only):
   # class: Alacritty
@@ -31,15 +31,15 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Source Code Pro
+    family: Monaco
     style: Regular
 
   bold:
-    family: Source Code Pro
+    family: Monaco
     style: Bold
 
   italic:
-    family: Source Code Pro
+    family: Monaco
     style: Italic
 
   # Point size
@@ -58,43 +58,36 @@ font:
   use_thin_strokes: false
 
 # If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors:
-  false
+draw_bold_text_with_bright_colors: false
 
-  # Colors (Solarized Dark)
+# Colors (iTerm 2 default theme)
 colors:
   # Default colors
   primary:
-    background: "#00222b"
-    foreground: "#839496" # base0
-
-  # Cursor colors
-  cursor:
-    text: "#00222b" # base03
-    cursor: "#839496" # base0
+    background: '#101010'
+    foreground: '#fffbf6'
 
   # Normal colors
   normal:
-    black: "#073642" # base02
-    red: "#dc322f" # red
-    green: "#859900" # green
-    yellow: "#b58900" # yellow
-    blue: "#268bd2" # blue
-    magenta: "#d33682" # magenta
-    cyan: "#2aa198" # cyan
-    white: "#eee8d5" # base2
+    black: '#2e2e2e'
+    red: '#eb4129'
+    green: '#abe047'
+    yellow: '#f6c744'
+    blue: '#47a0f3'
+    magenta: '#7b5cb0'
+    cyan: '#64dbed'
+    white: '#e5e9f0'
 
   # Bright colors
   bright:
-    black: "#00222b" # base03
-    red: "#cb4b16" # orange
-    green: "#586e75" # base01
-    yellow: "#657b83" # base00
-    blue: "#839496" # base0
-    magenta: "#6c71c4" # violet
-    cyan: "#93a1a1" # base1
-    white: "#fdf6e3" # base3
-
+    black: '#565656'
+    red: '#ec5357'
+    green: '#c0e17d'
+    yellow: '#f9da6a'
+    blue: '#49a4f8'
+    magenta: '#a47de9'
+    cyan: '#99faf2'
+    white: '#ffffff'
 indexed_colors: []
 
 # Background opacity [0, 1]
@@ -156,4 +149,13 @@ key_bindings:
   - { key: Plus, mods: Command, action: IncreaseFontSize }
   - { key: Minus, mods: Command, action: DecreaseFontSize }
   - { key: Key0, mods: Command, action: ResetFontSize }
+  - { key: F, mods: Command, action: ToggleFullscreen }
+  - { key: B, mods: Command, action: None }
 
+  # Fix macos tmux navigate
+  - { key: J, mods: Command, chars: "\x1bj" }
+  - { key: K, mods: Command, chars: "\x1bk" }
+  - { key: H, mods: Command, chars: "\x1bh" }
+  - { key: L, mods: Command, chars: "\x1bl" }
+  - { key: N, mods: Command, chars: "\x1bn" }
+  - { key: P, mods: Command, chars: "\x1bp" }

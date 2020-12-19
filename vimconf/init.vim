@@ -4,8 +4,6 @@
 
 "--- General setting ---"
 syntax on
-filetype on
-filetype indent on
 set encoding=utf-8
 
 set nobackup
@@ -25,7 +23,6 @@ set hidden
 set foldlevel=99
 set foldmethod=syntax
 
-set autoindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -33,26 +30,34 @@ set shiftround
 
 set nowrap
 set conceallevel=0
-set list listchars=tab:␣\ ,extends:▶,precedes:◀
 set backspace=indent,eol,start
+set list listchars=tab:␣\ ,extends:▶,precedes:◀
 
-set termguicolors
-set colorcolumn=80
-set textwidth=80
-set completeopt-=preview
-set signcolumn=yes
-set shortmess+=c
 set mouse=a
+set termguicolors
+set shortmess+=c
+set textwidth=80
+set signcolumn=yes:2
+set completeopt-=preview
+set inccommand=nosplit
 
 set updatetime=100
 set synmaxcol=320
 
 " Set keymap
 let mapleader = ' '
+
+" Customizer mapping
 map Y y$
-map <leader>y "+yy
-nnoremap gV `[v`]
+vnoremap p "0P
+nnoremap S <C-^>
+nnoremap gs `[v`]
+map <silent><leader>y "+yy
+nnoremap <leader>/ :grep<space>
 nnoremap <silent><leader>l :nohlsearch<cr>
+
+" Customize status line
+set statusline=\ %f%m%r\ %=%l/%c/%L\ %P\ %{FugitiveStatusline()}\ %y\ |
 
 " Better indent
 nnoremap < <<
@@ -66,18 +71,18 @@ nnoremap <silent>gn :cn<cr>
 nnoremap <silent>go :copen<cr>
 nnoremap <silent>gx :cclose<cr>
 
-" Disable netrw
+" Disable
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Autocmd
 augroup loadFile
-  autocmd BufRead,BufNewFile *.md set wrap
-  autocmd FileType qf wincmd J
-  autocmd FocusGained * :checktime
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif
-augroup end
+  autocmd FileType qf wincmd J
+  autocmd FocusGained * :checktime
+  autocmd FileType markdown setlocal wrap
+augroup END
 
 augroup workingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
@@ -102,10 +107,11 @@ function! QuickFormat()
       execute ":! ".prettier." --write ".fullpath." && "
             \ .phpcsfixer." fix --rules=@PSR2 ".fullpath." && rm .php_cs.cache"
     endif
+  elseif extension == "md"
+    execute ":e!"
   else
-    execute ":! ".prettier." --write ".fullpath
+    execute ":! ".prettier." --write --single-quote ".fullpath
   endif
-  execute ":e!"
 endfunction
 nnoremap <silent><leader>p :call QuickFormat()<cr>
 
@@ -118,37 +124,31 @@ augroup defxConfig
   autocmd BufWritePost * call defx#redraw()
   autocmd FileType defx call s:defx_my_settings()
 augroup end
-nnoremap <silent><leader>f :Defx -search=`expand('%:p')`
-      \ -split=vertical -winwidth=45 -direction=topleft
+nnoremap <silent><leader>f :Defx
       \ -columns=indent:icon:mark:filename
       \ -show-ignored-files
       \ -resume -listed<cr>
-nnoremap <silent><leader>F :Defx
-      \ -split=vertical -winwidth=45 -direction=topleft
+nnoremap <silent><leader>F :Defx -search=`expand('%:p')`
       \ -columns=indent:icon:mark:filename
       \ -show-ignored-files
-      \ -resume -listed -toggle<cr>
+      \ -resume -listed<cr>
 function! s:defx_my_settings() abort
   call defx#custom#column('icon', {
-        \ 'directory_icon': '●',
-        \ 'opened_icon': '○',
+        \ 'directory_icon': '▷',
+        \ 'opened_icon': '▼',
         \ })
   call defx#custom#column('filename', {
         \ 'min_width': 50,
         \ 'max_width': 50,
         \ })
   nnoremap <silent><buffer><expr> <cr>
-        \ defx#do_action('drop')
+        \ defx#do_action('open')
   nnoremap <silent><buffer><expr> u
         \ defx#do_action('cd', ['..'])
   nnoremap <silent><buffer><expr> o
         \ defx#do_action('open_or_close_tree')
   nnoremap <silent><buffer><expr> dd
         \ defx#do_action('remove_trash')
-  nnoremap <silent><buffer><expr> ss
-        \ defx#do_action('drop','split')
-  nnoremap <silent><buffer><expr> sv
-        \ defx#do_action('drop', 'vsplit')
   nnoremap <silent><buffer><expr> yy
         \ defx#do_action('copy')
   nnoremap <silent><buffer><expr> mv
@@ -175,8 +175,8 @@ function! s:defx_my_settings() abort
         \ defx#do_action('yank_path')
   nnoremap <silent><buffer><expr> i
         \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> r
-        \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> q
+        \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> j 'j'
   nnoremap <silent><buffer><expr> k 'k'
 endfunction
@@ -188,10 +188,11 @@ let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-tsserver',
       \ 'coc-css',
-      \ 'coc-python',
       \ 'coc-phpls',
-      \ 'coc-snippets',
+      \ 'coc-pyright',
+      \ 'coc-calc'
       \ ]
+
 " Remap <C-u> and <C-d> for scroll float windows/popups.
 nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
 nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
@@ -201,7 +202,7 @@ vnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(
 vnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 
 " Remap keys for gotos, refresh
-imap <silent><expr> <c-x><c-o> coc#refresh()
+imap <silent><expr> <c-space> coc#refresh()
 nmap <silent>gJ <Plug>(coc-float-jump)
 nmap <silent>gH <Plug>(coc-float-hide)
 nmap <silent>gj <Plug>(coc-diagnostic-next)
@@ -212,7 +213,7 @@ nmap <silent>gt <Plug>(coc-type-definition)
 nmap <silent>gi <Plug>(coc-implementation)
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>R <Plug>(coc-rename)
 
 " Use K to show documentation in preview window
 function! s:show_documentation()
@@ -224,20 +225,48 @@ function! s:show_documentation()
 endfunction
 nnoremap <silent>K :call <SID>show_documentation()<cr>
 
-"--- Snippet ---"
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
 "--- Debug ---"
 Plug 'puremourning/vimspector'
 
 "--- Git ---"
 Plug 'tpope/vim-fugitive'
-set statusline=\ %f%m%r\ %=%l/%c/%L\ %P\ %{FugitiveStatusline()}
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gs :Gstatus<cr>
 
-"--- Best search and replace ---"
+"--- Utils ---"
+
+Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <A-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <A-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <A-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <A-l> :TmuxNavigateRight<cr>
+
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['markdown', 'python']
+
+Plug 'ntpeters/vim-better-whitespace'
+let g:better_whitespace_filetypes_blacklist = []
+
+Plug 'simeji/winresizer'
+let g:winresizer_start_key='<leader>e'
+let g:winresizer_vert_resize = 3
+let g:winresizer_horiz_resize = 3
+
+Plug 'tpope/vim-sleuth'
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
+Plug 'junegunn/fzf.vim'
+set rtp+=/usr/local/opt/fzf
+nnoremap <silent><leader>i :Files<cr>
+nnoremap <silent><leader>o :Buffers<cr>
+nnoremap <silent><leader>r :Rg<cr>
+augroup customizeFzf
+  autocmd! FileType fzf set noshowmode noruler
+    \| autocmd BufLeave <buffer> set showmode ruler
+augroup END
+
 Plug 'stefandtw/quickfix-reflector.vim'
 set grepprg=rg\ --vimgrep\ --hidden\
       \ --glob\ '!.git'\
@@ -247,46 +276,20 @@ set grepprg=rg\ --vimgrep\ --hidden\
       \ --glob\ '!vendor'\
       \ --glob\ '!composer'
 
-"--- Utils ---"
-Plug 'mattn/emmet-vim'
-Plug 'tpope/vim-commentary'
-Plug 'machakann/vim-swap'
-omap is <Plug>(swap-textobject-i)
-xmap is <Plug>(swap-textobject-i)
-omap as <Plug>(swap-textobject-a)
-xmap as <Plug>(swap-textobject-a)
-
-Plug 'christoomey/vim-tmux-navigator'
-
-Plug 'sheerun/vim-polyglot'
-let g:polyglot_disabled = ['markdown']
-
-Plug 'simeji/winresizer'
-let g:winresizer_start_key = '<leader>e'
-let g:winresizer_vert_resize = 5
-let g:winresizer_horiz_resize = 5
-
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
-"--- Theme ---"
-Plug 'lifepillar/vim-solarized8'
-
 "--- Provider ---"
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:loaded_python_provider = 0
 let g:python3_host_prog = expand("$HOME/.asdf/shims/python3")
-let g:coc_node_path = expand("$HOME/.asdf/shims/node")
-let g:node_host_prog = expand("$HOME/.asdf/shims/neovim-node-host")
+let g:loaded_node_provider = 0
 call plug#end()
 
 "--- Customize theme ---"
 set background=dark
-colorscheme solarized8
-hi SignColumn        guifg=NONE      guibg=NONE
-hi Normal            guifg=NONE      guibg=NONE
-hi NonText           guifg=NONE      guibg=NONE
-hi VertSplit         guifg=NONE      guibg=NONE
-hi LineNr            guibg=NONE
+colorscheme default
+hi SignColumn            guifg=NONE guibg=NONE
+hi Normal                guifg=NONE guibg=NONE
+hi NonText               guifg=NONE guibg=NONE
+hi LineNr                guibg=NONE
+hi Pmenu                 guibg=#303030 guifg=NONE
 
