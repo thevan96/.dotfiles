@@ -41,22 +41,25 @@ alias tabletc="emulator @tabletc"
 # Alias
 alias ..="cd .."
 alias ..2="cd ../.."
-alias ..3="cd ../../.."
-alias ..4="cd ../../../.."
-alias ..5="cd ../../../../.."
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias vi="nvim"
+alias cl="clear"
 alias rp="scrcpy --turn-screen-off"
-alias note="cd $HOME/notes && vi"
+alias glo="git log --oneline --graph"
 
-bs () {
+ide() {
+  tmux split-window -v -p 25
+  tmux split-window -h -p 50
+}
+
+bs() {
   browser-sync start --server --files --files "**/*.*" --port ${1}
 }
 
-pf () {
+pf() {
   pwd | pbcopy
   # pwd | xsel --clipboard # linux
 }

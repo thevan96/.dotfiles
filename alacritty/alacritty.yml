@@ -9,37 +9,47 @@ window:
   dynamic_padding: false
 
   # Window decorations
+  #
+  # Values for `decorations`:
+  #     - full: Borders and title bar
+  #     - none: Neither borders nor title bar
+  #
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background and no title bar buttons
   decorations: full
 
   # Startup Mode (changes require restart)
+  # Values for `startup_mode`:
+  #   - Windowed
+  #   - Maximized
+  #   - Fullscreen
+  # Values for `startup_mode` (macOS only):
+  #   - SimpleFullscreen
   startup_mode: Windowed
 
   # Window title
   title: ''
 
-  # Window class (Linux only):
-  # class: Alacritty
-
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   history: 100000
 
-  # Number of lines the viewport will move for every line scrolled when
-  # scrollback is enabled (history > 0).
+  # Scrolling distance multiplier.
   multiplier: 3
 
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Monaco
+    family: Source Code Pro
     style: Regular
 
   bold:
-    family: Monaco
+    family: Source Code Pro
     style: Bold
 
   italic:
-    family: Monaco
+    family: Source Code Pro
     style: Italic
 
   # Point size
@@ -48,7 +58,7 @@ font:
   # Offset
   offset:
     x: 0
-    y: 2
+    y: 0
 
   # Glyph offset
   glyph_offset:
@@ -60,45 +70,21 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (iTerm 2 default theme)
 colors:
   # Default colors
   primary:
-    background: '#101010'
-    foreground: '#fffbf6'
+    background: '0x101010'
+    foreground: '0xd2d4de'
 
-  # Normal colors
-  normal:
-    black: '#2e2e2e'
-    red: '#eb4129'
-    green: '#abe047'
-    yellow: '#f6c744'
-    blue: '#47a0f3'
-    magenta: '#7b5cb0'
-    cyan: '#64dbed'
-    white: '#e5e9f0'
-
-  # Bright colors
-  bright:
-    black: '#565656'
-    red: '#ec5357'
-    green: '#c0e17d'
-    yellow: '#f9da6a'
-    blue: '#49a4f8'
-    magenta: '#a47de9'
-    cyan: '#99faf2'
-    white: '#ffffff'
-indexed_colors: []
+  # Cursor
+  cursor:
+    text: '0x181818'
+    cursor: '0xd8d8d8'
 
 # Background opacity [0, 1]
 background_opacity: 1
 
-mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
-
 mouse:
-  double_click: { threshold: 100 }
-  triple_click: { threshold: 100 }
   hide_when_typing: true
 
   url:
@@ -118,8 +104,8 @@ selection:
 window.dynamic_title: false
 
 cursor:
-  style: Block
-  unfocused_hollow: true
+  style:
+    shape: Block
 
 # Live config reload (changes require restart)
 live_config_reload: true
@@ -149,10 +135,12 @@ key_bindings:
   - { key: Plus, mods: Command, action: IncreaseFontSize }
   - { key: Minus, mods: Command, action: DecreaseFontSize }
   - { key: Key0, mods: Command, action: ResetFontSize }
-  - { key: F, mods: Command, action: ToggleFullscreen }
+  - { key: F, mods: Command, action: None }
   - { key: B, mods: Command, action: None }
+  - { key: N, mods: Command, action: None }
+  - { key: P, mods: Command, action: None }
 
-  # Fix macos tmux navigate
+  # Fix Alt + navigate macos
   - { key: J, mods: Command, chars: "\x1bj" }
   - { key: K, mods: Command, chars: "\x1bk" }
   - { key: H, mods: Command, chars: "\x1bh" }
