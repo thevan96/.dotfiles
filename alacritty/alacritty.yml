@@ -1,34 +1,25 @@
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
 
+# Window conf
 window:
   dimensions:
     columns: 80
     lines: 24
 
-  # Spread additional padding evenly around the terminal content.
-  dynamic_padding: false
+  position:
+    x: 0
+    y: 0
 
-  # Window decorations
-  #
-  # Values for `decorations`:
-  #     - full: Borders and title bar
-  #     - none: Neither borders nor title bar
-  #
-  # Values for `decorations` (macOS only):
-  #     - transparent: Title bar, transparent background and title bar buttons
-  #     - buttonless: Title bar, transparent background and no title bar buttons
+  dynamic_padding: true
+
+  padding:
+    x: 0
+    y: 0
+
   decorations: full
 
-  # Startup Mode (changes require restart)
-  # Values for `startup_mode`:
-  #   - Windowed
-  #   - Maximized
-  #   - Fullscreen
-  # Values for `startup_mode` (macOS only):
-  #   - SimpleFullscreen
   startup_mode: Windowed
 
-  # Window title
   title: ''
 
 scrolling:
@@ -37,6 +28,11 @@ scrolling:
 
   # Scrolling distance multiplier.
   multiplier: 3
+
+cursor:
+  # Cursor style
+  style:
+    shape: Block
 
 # Font configuration (changes require restart)
 font:
@@ -53,7 +49,7 @@ font:
     style: Italic
 
   # Point size
-  size: 11
+  size: 9
 
   # Offset
   offset:
@@ -65,34 +61,45 @@ font:
     x: 0
     y: 0
 
-  use_thin_strokes: false
+  use_thin_strokes: true
 
 # If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
+# Colors (Ayu Dark)
 colors:
   # Default colors
   primary:
-    background: '0x101010'
-    foreground: '0xd2d4de'
+    background: '#0A0E14'
+    foreground: '#B3B1AD'
 
-  # Cursor
-  cursor:
-    text: '0x181818'
-    cursor: '0xd8d8d8'
+  # Normal colors
+  normal:
+    black: '#01060E'
+    red: '#EA6C73'
+    green: '#91B362'
+    yellow: '#F9AF4F'
+    blue: '#53BDFA'
+    magenta: '#FAE994'
+    cyan: '#90E1C6'
+    white: '#C7C7C7'
+
+  # Bright colors
+  bright:
+    black: '#686868'
+    red: '#F07178'
+    green: '#C2D94C'
+    yellow: '#FFB454'
+    blue: '#59C2FF'
+    magenta: '#FFEE99'
+    cyan: '#95E6CB'
+    white: '#FFFFFF'
 
 # Background opacity [0, 1]
-background_opacity: 1
+background_opacity: 1.0
 
 mouse:
   hide_when_typing: true
-
-  url:
-    launcher:
-      program: xdg-open
-      args: []
-
-    modifiers: None
 
 selection:
   semantic_escape_chars: ',│`|:"'' ()[]{}<>'
@@ -102,10 +109,6 @@ selection:
 
 # Allow terminal applications to change Alacritty's window title.
 window.dynamic_title: false
-
-cursor:
-  style:
-    shape: Block
 
 # Live config reload (changes require restart)
 live_config_reload: true
@@ -135,15 +138,16 @@ key_bindings:
   - { key: Plus, mods: Command, action: IncreaseFontSize }
   - { key: Minus, mods: Command, action: DecreaseFontSize }
   - { key: Key0, mods: Command, action: ResetFontSize }
-  - { key: F, mods: Command, action: None }
+
+  - { key: F, mods: Alt, action: ToggleFullscreen }
+  - { key: F, mods: Command, action: ToggleFullscreen }
+  - { key: Q, mods: Control, action: Quit }
   - { key: B, mods: Command, action: None }
-  - { key: N, mods: Command, action: None }
-  - { key: P, mods: Command, action: None }
 
   # Fix Alt + navigate macos
-  - { key: J, mods: Command, chars: "\x1bj" }
   - { key: K, mods: Command, chars: "\x1bk" }
+  - { key: J, mods: Command, chars: "\x1bj" }
   - { key: H, mods: Command, chars: "\x1bh" }
   - { key: L, mods: Command, chars: "\x1bl" }
-  - { key: N, mods: Command, chars: "\x1bn" }
-  - { key: P, mods: Command, chars: "\x1bp" }
+  - { key: I, mods: Command, chars: "\x1bi" }
+  - { key: M, mods: Command, chars: "\x1bm" }

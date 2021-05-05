@@ -4,9 +4,11 @@
   "diagnostic.infoSign": "I",
   "diagnostic.errorSign": "E",
   "diagnostic.warningSign": "W",
-  "suggest.autoTrigger": "none",
   "diagnostic.enableMessage": "jump",
   "coc.preferences.colorSupport": false,
-  "coc.preferences.extensionUpdateCheck": "daily"
+  "suggest.autoTrigger": "none",
+  "solargraph.diagnostics": true,
+  "solargraph.useBundler": true,
+  "clangd.path": "/home/thevan96/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd"
 }
 
