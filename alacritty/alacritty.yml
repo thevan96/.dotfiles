@@ -16,40 +16,44 @@ window:
     x: 0
     y: 0
 
-  decorations: full
+  # decorations: none, full
+  decorations: none
 
-  startup_mode: Windowed
+  # startup_mode: windowed
+  startup_mode: fullscreen
 
-  title: ''
+  title: ""
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   history: 100000
 
   # Scrolling distance multiplier.
-  multiplier: 3
+  multiplier: 5
 
 cursor:
   # Cursor style
   style:
     shape: Block
+    blinking: Always
+  blink_interval: 500
 
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Source Code Pro
+    family: Ubuntu Mono
     style: Regular
 
   bold:
-    family: Source Code Pro
+    family: Ubuntu Mono
     style: Bold
 
   italic:
-    family: Source Code Pro
+    family: Ubuntu Mono
     style: Italic
 
   # Point size
-  size: 9
+  size: 11.0
 
   # Offset
   offset:
@@ -61,69 +65,31 @@ font:
     x: 0
     y: 0
 
-  use_thin_strokes: true
+  use_thin_strokes: false
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
-# Colors (Ayu Dark)
 colors:
   # Default colors
   primary:
-    background: '#0A0E14'
-    foreground: '#B3B1AD'
+    background: "#000000"
+    foreground: "#fffbf6"
 
-  # Normal colors
-  normal:
-    black: '#01060E'
-    red: '#EA6C73'
-    green: '#91B362'
-    yellow: '#F9AF4F'
-    blue: '#53BDFA'
-    magenta: '#FAE994'
-    cyan: '#90E1C6'
-    white: '#C7C7C7'
-
-  # Bright colors
-  bright:
-    black: '#686868'
-    red: '#F07178'
-    green: '#C2D94C'
-    yellow: '#FFB454'
-    blue: '#59C2FF'
-    magenta: '#FFEE99'
-    cyan: '#95E6CB'
-    white: '#FFFFFF'
+  # Cursor volors
+  cursor:
+    text: "#000000"
+    cursor: "#ffb472"
 
 # Background opacity [0, 1]
-background_opacity: 1.0
+background_opacity: 1
 
 mouse:
   hide_when_typing: true
 
 selection:
   semantic_escape_chars: ',│`|:"'' ()[]{}<>'
-
-  # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: true
-
-# Allow terminal applications to change Alacritty's window title.
-window.dynamic_title: false
-
-# Live config reload (changes require restart)
-live_config_reload: true
-
-# Startup directory
-working_directory: None
-
-enable_experimental_conpty_backend: false
-
-debug:
-  render_timer: false
-  persistent_logging: false
-  log_level: Warn
-  print_events: false
-  ref_test: false
 
 key_bindings:
   - { key: V, mods: Control|Shift, action: Paste }
@@ -143,11 +109,3 @@ key_bindings:
   - { key: F, mods: Command, action: ToggleFullscreen }
   - { key: Q, mods: Control, action: Quit }
   - { key: B, mods: Command, action: None }
-
-  # Fix Alt + navigate macos
-  - { key: K, mods: Command, chars: "\x1bk" }
-  - { key: J, mods: Command, chars: "\x1bj" }
-  - { key: H, mods: Command, chars: "\x1bh" }
-  - { key: L, mods: Command, chars: "\x1bl" }
-  - { key: I, mods: Command, chars: "\x1bi" }
-  - { key: M, mods: Command, chars: "\x1bm" }

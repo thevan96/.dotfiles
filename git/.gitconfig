@@ -4,6 +4,7 @@
 
 [core]
   editor = nvim
+  excludesfile = /home/thevan96/.gitignore_global
 
 [diff]
   tool = nvimdiff

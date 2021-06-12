@@ -101,4 +101,3 @@ hi Normal                   guifg=NONE    guibg=NONE
 hi NonText                  guifg=NONE    guibg=NONE
 hi VertSplit                guifg=NONE    guibg=NONE
 hi clear SignColumn
-

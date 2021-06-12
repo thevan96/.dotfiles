@@ -4,11 +4,13 @@ export ZSH="$HOME/.oh-my-zsh"
 export TERM="screen-256color"
 export LANG="en_US.UTF-8"
 export KEYTIMEOUT=1
-export EDITOR=nvim
+export EDITOR="nvim"
 export RUBYOPT="-W:no-deprecated"
 
 # Ibus config
+export CLUTTER_IM_MODULE=ibus
 export GTK_IM_MODULE=ibus
+export QT4_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 
@@ -21,7 +23,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # FZF
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND=" fdfind --type f -i -H -I \
+export FZF_DEFAULT_COMMAND="fdfind --type f -i -H -I \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -46,17 +48,16 @@ alias phone56="emulator @phone56"
 alias tabletc="emulator @tabletc"
 
 # Alias
-alias ..="cd .."
-alias ..2="cd ../.."
 alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias vi="nvim"
 alias cl="clear"
-alias lg="lazygit"
 alias rp="scrcpy --turn-screen-off"
 alias glo="git log --oneline --graph"
+alias rails_db="rails db:drop db:create db:migrate"
+alias brubocop="bundle exec rubocop"
 
 sys_update() {
   sudo  apt -y update \
@@ -77,23 +78,25 @@ asdf_update() {
   echo 'Asdf update done !'
 }
 
-ii() {
+ide() {
   tmux split-window -v -p 25
   tmux split-window -h -p 50
 }
 
-iii() {
+ssh_update() {
+  ssh-add ~/.ssh/github_personal
+}
+
+rails_ide() {
   SESSION=${1}
   RUN="run"
   EDITOR="editor"
   GIT="git"
   CONSOLE="console"
-  SHELL="shell"
   tmux rename-session $SESSION
   tmux new-window -t $SESSION:2 -n $RUN
-  tmux new-window -t $SESSION:3 -n $GIT
-  tmux new-window -t $SESSION:4 -n $EDITOR
-  tmux new-window -t $SESSION:5 -n $CONSOLE
-  tmux new-window -t $SESSION:6 -n $SHELL
+  tmux new-window -t $SESSION:3 -n $EDITOR
+  tmux new-window -t $SESSION:4 -n $CONSOLE
+  tmux new-window
   tmux kill-window -t 1
 }

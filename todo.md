@@ -1,0 +1,39 @@
+- google chrome
+- vscode
+- timeshift
+- gparted
+- alacritty
+- uget
+- transmission
+- peek
+- flameshot
+- gnome-tweak
+- gnome extension
+  - Top icon plus
+  - Color picker
+
+- tmux
+- neovim
+- git
+- zsh
+   - oh my zsh
+   - zsh z
+- curl
+- wget
+- g++
+- gcc
+- fd-find
+- ripgrep
+- make
+- cmake
+- gnome-keyring
+- ibus-bamboo
+- mycli
+- pgcli
+- postgrsql + pageadmin
+- mysql-server + mysql workbench
+- asdf
+  - nodejs
+  - rust
+  - ruby: https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+  - python
