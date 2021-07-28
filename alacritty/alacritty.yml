@@ -19,7 +19,7 @@ window:
   # decorations: none, full
   decorations: none
 
-  # startup_mode: windowed
+  # startup_mode: windowed, fullscreen
   startup_mode: fullscreen
 
   title: ""
@@ -35,25 +35,23 @@ cursor:
   # Cursor style
   style:
     shape: Block
-    blinking: Always
-  blink_interval: 500
 
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Ubuntu Mono
+    family: Monego
     style: Regular
 
   bold:
-    family: Ubuntu Mono
+    family: Monego
     style: Bold
 
   italic:
-    family: Ubuntu Mono
+    family: Monego
     style: Italic
 
   # Point size
-  size: 11.0
+  size: 9
 
   # Offset
   offset:
@@ -65,7 +63,7 @@ font:
     x: 0
     y: 0
 
-  use_thin_strokes: false
+  use_thin_strokes: true
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -74,12 +72,12 @@ colors:
   # Default colors
   primary:
     background: "#000000"
-    foreground: "#fffbf6"
+    foreground: "#ffffff"
 
   # Cursor volors
   cursor:
     text: "#000000"
-    cursor: "#ffb472"
+    cursor: "#ff80ff"
 
 # Background opacity [0, 1]
 background_opacity: 1

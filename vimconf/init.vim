@@ -1,110 +1,69 @@
 "--- General setting ---"
-syntax on
-
-set encoding=utf-8
 set termguicolors
+set encoding=utf-8
+
+filetype indent on
+filetype plugin on
+
+set autoread
+set autoindent
 
 set nobackup
 set noswapfile
 
-set splitbelow
-set splitright
-
 set hlsearch
 set incsearch
 
-set foldlevel=99
-set foldmethod=indent
-
-set backspace=2
 set tabstop=2 shiftwidth=2 expandtab | retab
 set list listchars=tab:␣\ ,extends:>,precedes:<
+set fillchars=vert:\|
 
-set ruler
-set number
 set hidden
+set nonumber
 set laststatus=1
 
-set mouse=a
-set signcolumn=yes:1
-set completeopt-=preview
-set diffopt+=vertical
-
-set wrap
-set conceallevel=0
-
 set showmatch
-set matchtime=2
+set matchtime=0
 
-set updatetime=100
-set synmaxcol=200
-
-set colorcolumn=+1
-set textwidth=79
+set mouse=a
+set signcolumn=yes
+set diffopt+=vertical
 
 " Set keymap
 let mapleader = ' '
 
+" Disable netrw
+let g:netrw_localcopydircmd = 'cp -r'
+
 " Customizer mapping
-vnoremap p "0P
+nnoremap Y y$
 nnoremap gV `[v`]
 nnoremap <tab> <C-^>
-nnoremap <silent><leader>D :Bdelete<cr>
-nnoremap <silent><leader>l :nohlsearch<cr>
+nnoremap <silent><C-l> :noh<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 " Mapping copy clipboard
-nnoremap <leader>y "+y
+nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
 
-" Better indent
-nnoremap < <<
-nnoremap > >>
-xnoremap < <gv
-xnoremap > >gv
-
-" Navigation split
-nnoremap <C-j> <C-w><C-j>
-nnoremap <C-k> <C-w><C-k>
-nnoremap <C-l> <C-w><C-l>
-nnoremap <C-h> <C-w><C-h>
-
 " Navigate quickfix
-nnoremap <silent>gp :cp<cr>
-nnoremap <silent>gn :cn<cr>
-nnoremap <silent>go :copen<cr>
-nnoremap <silent>gx :cclose<cr>
+nnoremap <silent>qp :cp<cr>
+nnoremap <silent>qn :cn<cr>
+nnoremap <silent>qo :copen<cr>
+nnoremap <silent>qx :cclose<cr>
 
-" Disable
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+" Shifting blocks
+xnoremap > >gv
+xnoremap < <gv
 
-" Record repeat in visual mode width q
-xnoremap Q :normal @q<cr>
-
-" Dot repeat in visual mode
-xnoremap . :normal .<cr>
-
-augroup loadFile
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
-        \ | exe "normal! g'\"" | endif
-  autocmd FileType qf wincmd J
-  autocmd FocusGained * :checktime
-  autocmd BufWritePost * :checktime
-  autocmd VimResized * wincmd =
-  autocmd BufWritePre * :%s/\s\+$//e
-augroup END
-
-augroup changeWorkingDirectory
-  autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
-  autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
-augroup END
-
+" ExecuteCode
 augroup executeCode
   autocmd FileType c nnoremap <leader>e
         \ :sp<cr>:term gcc % -o %< && ./%<<cr> :startinsert<cr>
+  autocmd FileType java nnoremap <leader>e
+        \ :sp<cr>:term javac % && java %<<cr> :startinsert<cr>
   autocmd FileType cpp nnoremap <leader>e
         \ :sp<cr>:term g++ -std=c++17 % -o %< && ./%<<cr> :startinsert<cr>
   autocmd FileType python nnoremap <leader>e
@@ -115,40 +74,67 @@ augroup executeCode
         \ :sp<cr>:term ruby %<cr> :startinsert<cr>
 augroup END
 
-" Config format
-function! QuickFormat()
-  silent! wall
-  let fullpath = expand('%:p')
-  let listExtension = split(expand('%t'), '\.')
-  let extension = listExtension[len(listExtension) - 1]
-  if extension == "rb"
-    if filereadable("Gemfile")
-      execute ":!bundle exec rubocop -a %"
-    else
-      execute ":!rubocop -a %"
-    endif
-  else
-    execute ":!prettier --write %"
-  endif
-  execute ":e %"
-endfunction
-nnoremap <silent><leader>p :call QuickFormat()<cr>
+" Disable split
+nnoremap <c-w>v <nop>
+nnoremap <c-w>s <nop>
 
-" Rename current file
-function! RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'), 'file')
-  if new_name != '' && new_name != old_name
-    exec ':saveas ' . new_name
-    exec ':silent !rm ' . old_name
-    redraw!
+" Auto create folder in path
+function s:Mkdir()
+  let dir = expand('%:p:h')
+
+  if dir =~ '://'
+    return
+  endif
+
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+    echo 'Created non-existing directory: '.dir
   endif
 endfunction
-nnoremap <leader>R :call RenameFile()<cr>
+
+" Relative path(insert mode)
+augroup changeWorkingDirectory
+  autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
+  autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
+augroup end
 
 call plug#begin()
+Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-commentary'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-"--- Navigate explore ---"
+Plug 'AndrewRadev/tagalong.vim'
+let g:tagalong_filetypes = ['xml', 'html', 'php', 'javascript', 'eruby']
+
+Plug 'dense-analysis/ale'
+let g:ale_disable_lsp = 1
+let g:ale_set_highlights = 0
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+      \   'ruby': ['rubocop'],
+      \}
+let g:ale_fixers = {
+      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \   'html': ['prettier'],
+      \   'css': ['prettier'],
+      \   'scss': ['prettier'],
+      \   'ruby': ['rubocop'],
+      \   'javascript': ['prettier'],
+      \}
+if filereadable('Gemfile') && match(readfile('Gemfile'), 'rubocop') > 0
+  let g:ale_ruby_rubocop_executable = 'bundle'
+endif
+
+if filereadable('.prettierrc') && match(readfile('package.json'), 'prettier') > 0
+  let g:ale_javascript_prettier_executable = 'prettier'
+  let g:ale_javascript_prettier_use_global = 1
+endif
+
+nmap <silent>gk <Plug>(ale_previous_wrap)
+nmap <silent>gj <Plug>(ale_next_wrap)
+nnoremap <silent><leader>p :ALEFix<cr>
+
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 augroup defxConfig
   autocmd FileType defx set nobuflisted
@@ -156,22 +142,16 @@ augroup defxConfig
   autocmd FileType defx call s:defx_my_settings()
 augroup end
 nnoremap <silent><leader>f :Defx
-      \ -split=vertical -winwidth=38 -direction=topleft
+      \ -split=vertical -winwidth=42 -direction=botright
       \ -columns=indent:indent:icon:mark:filename
       \ -show-ignored-files
       \ -resume -listed<cr><C-w>=
 nnoremap <silent><leader>F :Defx -search=`expand('%:p')`
-      \ -split=vertical -winwidth=38 -direction=topleft
+      \ -split=vertical -winwidth=42 -direction=topleft
       \ -columns=indent:indent:icon:mark:filename
       \ -show-ignored-files
       \ -resume -listed<cr><C-w>=
 function! s:defx_my_settings() abort
-  call defx#custom#column('icon', {
-      \ 'directory_icon': '+ ',
-      \ 'file_icon': '  ',
-      \ 'opened_icon': '- ',
-      \ 'root_icon': '  ',
-      \ })
   call defx#custom#column('filename', {
         \ 'min_width': 50,
         \ 'max_width': 50,
@@ -228,125 +208,66 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> k 'k'
 endfunction
 
-"--- Autocomplete ---"
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_global_extensions = [
-"       \ 'coc-css',
-"       \ 'coc-html',
-"       \ 'coc-json',
-"       \ 'coc-pyright',
-"       \ 'coc-tsserver',
-"       \ 'coc-cssmodules',
-"       \ 'coc-html-css-support',
-"       \ ]
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = [
+      \ 'coc-css',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-pyright',
+      \ 'coc-tsserver',
+      \ 'coc-cssmodules',
+      \ 'coc-html-css-support',
+      \ ]
 
-" " Trigger completion.
-" imap <silent><expr> <c-x><c-o> coc#refresh()
+" Trigger completion.
+imap <silent><expr> <c-x><c-o> coc#refresh()
+imap <silent><expr> <c-space> coc#refresh()
 
-" " Remap <C-u> and <C-d> for scroll float windows/popups.
-" nnoremap <silent><nowait><expr>
-"       \ <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-" nnoremap <silent><nowait><expr><C-u>
-"       \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
-" inoremap <silent><nowait><expr><C-d>
-"       \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-" inoremap <silent><nowait><expr><C-u>
-"       \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-" vnoremap <silent><nowait><expr><C-d>
-"       \ coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-" vnoremap <silent><nowait><expr><C-u>
-"       \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+" Remap <C-u> and <C-d> for scroll float windows/popups.
+nnoremap <silent><nowait><expr>
+      \ <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+nnoremap <silent><nowait><expr><C-u>
+      \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+inoremap <silent><nowait><expr><C-d>
+      \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <silent><nowait><expr><C-u>
+      \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr><C-d>
+      \ coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+vnoremap <silent><nowait><expr><C-u>
+      \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 
-" " Remap keys for gotos, refresh
+" Remap keys for gotos, refresh
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gr <Plug>(coc-references)
+nmap <silent>gJ <Plug>(coc-float-jump)
+nmap <silent>gH <Plug>(coc-float-hide)
 " nmap <silent>gk <Plug>(coc-diagnostic-prev)
 " nmap <silent>gj <Plug>(coc-diagnostic-next)
-" nmap <silent>gd <Plug>(coc-definition)
-" nmap <silent>gr <Plug>(coc-references)
-" nmap <silent>gJ <Plug>(coc-float-jump)
-" nmap <silent>gH <Plug>(coc-float-hide)
 
-" " Symbol renaming.
-" nmap <leader>r <Plug>(coc-rename)
+" Symbol renaming.
+nmap <leader>r <Plug>(coc-rename)
 
-" " Use K to show documentation in preview window
-" nnoremap <silent>K :call <SID>show_documentation()<cr>
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   elseif (coc#rpc#ready())
-"     call CocActionAsync('doHover')
-"   else
-"     execute '!' . &keywordprg . " " . expand('<cword>')
-"   endif
-" endfunction
+" Use K to show documentation in preview window
+nnoremap <silent>K :call <SID>show_documentation()<cr>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
-"--- Snippet ---"
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-"--- Text object ---"
-" Plug 'tpope/vim-repeat'
-" Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-
-" Plug 'machakann/vim-swap'
-" omap is <Plug>(swap-textobject-i)
-" xmap is <Plug>(swap-textobject-i)
-" omap as <Plug>(swap-textobject-a)
-" xmap as <Plug>(swap-textobject-a)
-
-"--- Git ---"
-Plug 'tpope/vim-fugitive'
-nnoremap <silent><leader>G :Git<cr>
-nnoremap <silent><leader>gd :Gdiffsplit<cr>
-nnoremap <silent><leader>gD :Gdiffsplit!<cr>
-nnoremap <silent><leader>gh :diffget //2<cr>
-nnoremap <silent><leader>gl :diffget //3<cr>
-
-"--- Other utils ---"
-" Plug 'tpope/vim-rails'
-" Plug 'mattn/emmet-vim'
-Plug 'pbrisbin/vim-mkdir'
-Plug 'wakatime/vim-wakatime'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 5
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_quickfix = 1
-
-" Plug 'vim-test/vim-test'
-" nmap <silent>tt :TestNearest<cr>
-" nmap <silent>tf :TestFile<cr>
-" nmap <silent>ts :TestSuite<cr>
-" nmap <silent>tl :TestLast<cr>
-" nmap <silent>tv :TestVisit<cr>
-
-" Plug 'simeji/winresizer'
-" let g:winresizer_vert_resize = 5
-" let g:winresizer_horiz_resize = 3
-
-" Plug 'editorconfig/editorconfig-vim'
-" let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
-" Plug 'AndrewRadev/tagalong.vim'
-" let g:tagalong_filetypes = ['xml', 'html', 'php', 'javascript', 'eruby']
-
-Plug 'stefandtw/quickfix-reflector.vim'
-if executable('rg')
-  set grepprg=rg\ --vimgrep\ --hidden\
-        \ --glob\ '!.git'\
-        \ --glob\ '!.idea'\
-        \ --glob\ '!.vscode'\
-        \ --glob\ '!node_modules'\
-        \ --glob\ '!vendor'\
-        \ --glob\ '!composer'
-endif
-
 Plug 'junegunn/fzf.vim'
 set rtp+=~/.fzf
+let g:fzf_layout = { 'down': '50%' }
 nnoremap <silent><leader>i :Files<cr>
 nnoremap <silent><leader>b :Buffers<cr>
 nnoremap <silent><leader>n :Rg<cr>
@@ -363,20 +284,32 @@ let g:loaded_node_provider = 0
 call plug#end()
 
 "--- Customize theme ---"
+syntax on
 set background=dark
-hi LineNr            guibg=NONE
-hi ColorColumn       guibg=#202020
-hi NormalFloat       guibg=#101010
-hi Pmenu             guibg=#101010
-hi CocUnderline      cterm=underline
-hi SignColumn        guifg=NONE    guibg=NONE
-hi Normal            guifg=NONE    guibg=NONE
-hi VertSplit         guibg=NONE    guifg=NONE gui=NONE
+hi clear LineNr
+hi clear SignColumn
+hi NormalFloat guibg=gray
+hi Pmenu guifg=black guibg=gray
+hi PmenuSel guifg=white guibg=darkgray gui=bold
+hi Visual guifg=black guibg=white
+hi CocUnderline cterm=underline
+
+" Run when load file
+augroup loadFile
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
+        \ | exe "normal! g'\"" | endif " save position cursor
+  autocmd FileType qf wincmd J " set position quickfix
+  autocmd VimResized * wincmd = " resize window
+  autocmd BufWritePre * :%s/\s\+$//e " trim space when save
+  autocmd BufWritePre * call s:Mkdir() " create file when folder is not exists
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+  autocmd FileType * set syntax= " Turn off color
+augroup end
 
 lua << EOF
   require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained",
-    highlight = { enable = true },
+    highlight = { enable = off },
     additional_vim_regex_highlighting = true
   }
 EOF

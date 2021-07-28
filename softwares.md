@@ -13,11 +13,12 @@
   - Color picker
 
 - tmux
+- vim
 - neovim
 - git
 - zsh
-   - oh my zsh
-   - zsh z
+   - oh-my-zsh
+   - zsh-z
 - curl
 - wget
 - g++
@@ -32,8 +33,8 @@
 - pgcli
 - postgrsql + pageadmin
 - mysql-server + mysql workbench
-- asdf
+- asdf(notice: depedencies)
   - nodejs
   - rust
-  - ruby: https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+  - ruby
   - python

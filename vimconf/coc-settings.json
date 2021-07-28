@@ -6,5 +6,6 @@
   "coc.preferences.colorSupport": false,
   "signature.target": "echo",
   "suggest.autoTrigger": "none",
-  "diagnostic.enableMessage": "jump"
+  "diagnostic.enableMessage": "jump",
+  "diagnostic.displayByAle": true
 }

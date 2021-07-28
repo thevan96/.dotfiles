@@ -3,8 +3,5 @@
   email = vothevan96@gmail.com
 
 [core]
-  editor = nvim
+  editor = vim
   excludesfile = /home/thevan96/.gitignore_global
-
-[diff]
-  tool = nvimdiff

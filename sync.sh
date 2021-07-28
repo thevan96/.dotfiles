@@ -42,6 +42,7 @@ ln -sf ~/.dotfiles/sql/config ~/.config/pgcli/config
 echo 'sql done!'
 
 ln -sf ~/.dotfiles/UltiSnips/ ~/.config/nvim/
+ln -sf ~/.dotfiles/UltiSnips/ ~/.vim/
 echo 'ultisnips done!'
 
 echo 'sync success!'

@@ -12,4 +12,3 @@ source $ZSH/oh-my-zsh.sh
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-

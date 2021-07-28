@@ -4,7 +4,7 @@ export ZSH="$HOME/.oh-my-zsh"
 export TERM="screen-256color"
 export LANG="en_US.UTF-8"
 export KEYTIMEOUT=1
-export EDITOR="nvim"
+export EDITOR="vim"
 export RUBYOPT="-W:no-deprecated"
 
 # Ibus config
@@ -41,8 +41,8 @@ alias github="ssh-add $HOME/.ssh/github"
 alias gitlab="ssh-add $HOME/.ssh/gitlab"
 
 # Emulator
-alias listSimulator="xcrun simctl list devices"
-alias listEmulator="emulator -list-avds"
+alias list_simulator="xcrun simctl list devices"
+alias list_emulator="emulator -list-avds"
 alias phone5="emulator @phone5"
 alias phone56="emulator @phone56"
 alias tabletc="emulator @tabletc"
@@ -52,15 +52,14 @@ alias hc="history -c"
 alias fp="sudo lsof -i -P -n"
 alias kp="kill-port"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias vi="nvim"
 alias cl="clear"
 alias rp="scrcpy --turn-screen-off"
 alias glo="git log --oneline --graph"
-alias rails_db="rails db:drop db:create db:migrate"
+alias rails_db="rails db:drop db:create db:migrate db:seed"
 alias brubocop="bundle exec rubocop"
 
 sys_update() {
-  sudo  apt -y update \
+  sudo apt -y update \
   && sudo apt -y upgrade \
   && sudo apt -y autoclean \
   && sudo apt -y autoremove
@@ -78,13 +77,13 @@ asdf_update() {
   echo 'Asdf update done !'
 }
 
+ssh_update() {
+  ssh-add ~/.ssh/github_personal
+}
+
 ide() {
   tmux split-window -v -p 25
   tmux split-window -h -p 50
-}
-
-ssh_update() {
-  ssh-add ~/.ssh/github_personal
 }
 
 rails_ide() {
