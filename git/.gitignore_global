@@ -1,0 +1,13 @@
+/.vim
+/.notes
+.Spotlight-V100
+.Trashes
+.DS_Store
+Desktop.ini
+Thumbs.db
+
+/* SCSS */
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
