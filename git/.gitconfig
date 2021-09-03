@@ -3,5 +3,8 @@
   email = vothevan96@gmail.com
 
 [core]
-  editor = vim
+  editor = nvim
   excludesfile = /home/thevan96/.gitignore_global
+
+[init]
+  defaultBranch = main

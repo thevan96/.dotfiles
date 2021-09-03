@@ -1,25 +1,12 @@
-snippet box "Eisenhower Box"
-1: Important, urgent
-
-2: Important, not urgent
-
-3: Not important, urgent
-
-4: Not important, not urgent
-$0
+# Date time
+snippet gdate "DD-MM-YYYY" i
+`!v strftime("%d-%m-%Y")`
 endsnippet
 
-#########
-# DATES #
-#########
-snippet date "YYYY-MM-DD"
-`!v strftime("%Y-%m-%d")`
-endsnippet
-
-snippet time "hh:mm:ss"
+snippet gtime "hh:mm:ss" i
 `!v strftime("%H:%M:%S")`
 endsnippet
 
-snippet datetime "YYYY-MM-DD hh:mm"
-`!v strftime("%Y-%m-%d %H:%M:%S")`
+snippet gdt "DD-MM-YYYY hh:mm" i
+`!v strftime("%d-%m-%Y %H:%M:%S")`
 endsnippet

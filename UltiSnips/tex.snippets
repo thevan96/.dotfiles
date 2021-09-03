@@ -1,0 +1,40 @@
+snippet base "Base latex" i
+\documentclass{article}
+\usepackage[utf8]{vietnam}
+\usepackage[unicode]{hyperref}
+
+\hypersetup{hidelinks}
+\linespread{1.25}
+\setlength{\parindent}{0pt}
+
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\pagenumbering{arabic}
+
+\end{document}
+endsnippet
+
+snippet center "Center" i
+\begin{center}
+${1}
+\end{center}
+endsnippet
+
+snippet list "List" i
+\begin{itemize}
+${1}
+\end{itemize}
+endsnippet
+
+snippet enum "Enumerate" i
+\begin{enumerate}
+${1}
+\end{enumerate}
+endsnippet

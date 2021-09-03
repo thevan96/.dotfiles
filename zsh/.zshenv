@@ -1,70 +1,42 @@
-#  Export path, env variable
-export PATH="$HOME/.local/bin:$PATH"
-export ZSH="$HOME/.oh-my-zsh"
-export TERM="screen-256color"
-export LANG="en_US.UTF-8"
-export KEYTIMEOUT=1
+#  Export env variable
 export EDITOR="nvim"
+export KEYTIMEOUT=1
+export NIXPKGS_ALLOW_UNFREE=1
 export RUBYOPT="-W:no-deprecated"
+export TERM="screen-256color"
+export ASDF_GOLANG_VERSION=1.17.7
 
-# Ibus config
-export CLUTTER_IM_MODULE=ibus
-export GTK_IM_MODULE=ibus
-export QT4_IM_MODULE=ibus
-export QT_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
+# DEFAULT EVIROMENT
+export ZSH="$HOME/.oh-my-zsh"
+export GOROOT="$HOME/.asdf/installs/golang/${ASDF_GOLANG_VERSION}/go"
+export ANDROID_HOME=$HOME/Android/Sdk
+# export ANDROID_HOME=$HOME/Library/Android/sdk
 
-# Android
-export ANDROID_HOME=$HOME/Library/Android/sdk
+# ADD PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:"$HOME/.asdf/installs/golang/${ASDF_GOLANG_VERSION}/packages/bin"
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-# FZF
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND="fd --type f -i -H -I \
-  --exclude .git \
-  --exclude .idea \
-  --exclude .vscode \
-  --exclude node_modules \
-  --exclude vendor \
-  --exclude composer \
-  --exclude tmp \
-  "
-
-zle -N fzf-cd-widget
-bindkey '^Y' fzf-cd-widget
-
-# Git
-alias github="ssh-add $HOME/.ssh/github"
-alias gitlab="ssh-add $HOME/.ssh/gitlab"
-
-# Emulator
-alias list_simulator="xcrun simctl list devices"
-alias list_emulator="emulator -list-avds"
-alias phone="emulator @phone"
-alias phone5="emulator @phone5"
-alias phone56="emulator @phone56"
-alias tabletc="emulator @tabletc"
-
 # Alias
-alias vi="nvim"
-alias hc="history -c"
-alias fp="sudo lsof -i -P -n"
-alias kp="kill-port"
-alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias cl="clear"
-alias rp="scrcpy --turn-screen-off"
-alias glo="git log --oneline --graph"
+alias vim="nvim"
+alias lg="lazygit"
+alias ld="lazydocker"
+alias hc="history -c"
+alias vimdiff="nvim -d"
+alias nnn="NNN_TRASH=1 nnn -doeH"
 alias rails_db="rails db:drop db:create db:migrate db:seed"
-alias brubocop="bundle exec rubocop"
+alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias music_coding="mpv --no-video 'https://www.youtube.com/watch?v=5yx6BWlEVcY' --volume=35"
 
 sys_update() {
   sudo apt -y update \
   && sudo apt -y upgrade \
   && sudo apt -y autoclean \
-  && sudo apt -y autoremove
+  && sudo apt -y autoremove \
 }
 
 bs() {
@@ -76,28 +48,15 @@ asdf_update() {
   asdf reshim python
   asdf reshim ruby
   asdf reshim rust
+  asdf reshim golang
   echo 'Asdf update done !'
 }
 
 ssh_update() {
-  ssh-add ~/.ssh/id_rsa_github
+  ssh-add ~/.ssh/github_personal
 }
 
 ide() {
   tmux split-window -v -p 25
   tmux split-window -h -p 50
-}
-
-rails_ide() {
-  SESSION=${1}
-  RUN="run"
-  EDITOR="editor"
-  GIT="git"
-  CONSOLE="console"
-  tmux rename-session $SESSION
-  tmux new-window -t $SESSION:2 -n $RUN
-  tmux new-window -t $SESSION:3 -n $EDITOR
-  tmux new-window -t $SESSION:4 -n $CONSOLE
-  tmux new-window
-  tmux kill-window -t 1
 }

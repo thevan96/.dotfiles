@@ -1,10 +1,33 @@
-snippet base
-#include <bits/stdc++.h>
-using namespace std;
+snippet base "Template c++" i
+// copyright
+// author: thevan96
+// created: `date '+%d-%m-%Y %H:%M:%S'`
+// reference:
+
+#include <iostream>
+#include <cstdint>
+#include <chrono>
+
+void solve() {
+  ${1}
+}
 
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  solve();
   return 0;
 }
+endsnippet
+
+snippet time "Caculator time" i
+auto start = std::chrono::high_resolution_clock::now();
+
+// Handle in here
+${1}
+
+auto stop = std::chrono::high_resolution_clock::now();
+auto duration =
+  std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+std::cout << "Time: " << duration.count() / 1000 << " seconds" << '\n';
 endsnippet
