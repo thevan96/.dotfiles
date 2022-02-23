@@ -1,65 +1,100 @@
-"--- General setting ---"
-set termguicolors
-set encoding=utf-8
-
-filetype indent on
-filetype plugin on
-
-set autoread
-set autoindent
-
+" General setting
 set nobackup
 set noswapfile
+set encoding=utf-8
 
 set hlsearch
 set incsearch
+set ignorecase
+set smartcase
 
+set autoindent
+set smartindent
+set completeopt=menu,preview
 set tabstop=2 shiftwidth=2 expandtab | retab
 set list listchars=tab:␣\ ,extends:>,precedes:<
-set fillchars=vert:\|
 
-set hidden
 set nonumber
-set laststatus=1
+set laststatus=2
+set signcolumn=yes
+set textwidth=80
 
 set showmatch
 set matchtime=0
 
 set mouse=a
-set signcolumn=yes
-set diffopt+=vertical
+syntax enable
+
+" Other
+filetype on
+filetype indent on
+let g:netrw_banner = 0
+let html_no_rendering = 1
 
 " Set keymap
 let mapleader = ' '
 
-" Disable netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+" Float terminal
+if has('nvim')
+  tmap <Esc> <C-\><C-n>
+endif
 
-" --- Customizer mapping ---"
+" Customizer mapping
 nnoremap Y y$
-nnoremap gV `[v`]
-nnoremap <silent><C-l> :noh<cr>
+nnoremap gm `[v`]
+nnoremap <silent><leader>D :bd<cr>
+nnoremap <silent><leader>L :set number!<cr>
+nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <silent><leader>C :execute 'set colorcolumn='
+                  \ . (&colorcolumn == '' ? '80' : '')<cr>
 
 " Mapping copy clipboard
-nnoremap <leader>y "+yy
+nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
 
-" Shifting blocks
-xnoremap > >gv
-xnoremap < <gv
-
 " Navigate quickfix
-nnoremap <silent>gp :cp<cr>
-nnoremap <silent>gn :cn<cr>
+nnoremap <silent>gp :cprev<cr>
+nnoremap <silent>gn :cnext<cr>
+nnoremap <silent>gN :cfirst<cr>
+nnoremap <silent>gP :clast<cr>
 nnoremap <silent>go :copen<cr>
 nnoremap <silent>gx :cclose<cr>
 
-" Auto create folder in path
-function s:Mkdir()
+" Execute Code
+function! ExecuteCode()
+  let l:languageSupport = {
+        \ 'js': ':below sp | term node %',
+        \ 'rb': ':below sp | term ruby %',
+        \ 'py': ':below sp | term pyton %',
+        \ 'cpp': ':below sp | term g++ -std=c++14 % -o %<',
+        \ 'rs': ':below sp | term rustc %',
+        \ }
+
+  let l:extension = expand('%:e')
+  if l:languageSupport->has_key(l:extension)
+    execute l:languageSupport[l:extension]
+  end
+endfunction
+nnoremap <silent><leader>R :call ExecuteCode()<cr>
+
+" Open in tab terminal(tmux/gnome terminal)
+function! OpenNewTab()
+  let dir = expand('%:p:h')
+
+  let command = ':!tmux new-window -c '.dir.' -a'
+  "Gnome terminal ':!gnome-terminal --tab --working-directory='.dir
+
+  if isdirectory(dir)
+    silent execute(command)
+  endif
+endfunction
+nnoremap <silent><leader>T :call OpenNewTab()<cr>
+
+" Auto create file/folder
+function! Mkdir()
   let dir = expand('%:p:h')
 
   if dir =~ '://'
@@ -72,82 +107,57 @@ function s:Mkdir()
   endif
 endfunction
 
-" Execute code
-augroup executeCode
-  autocmd FileType c nnoremap <silent><leader>e
-        \ :sp<cr>:term gcc % -o %< && ./%<<cr> :startinsert<cr>
-  autocmd FileType java nnoremap <silent><leader>e
-        \ :sp<cr>:term javac % && java %<<cr> :startinsert<cr>
-  autocmd FileType cpp nnoremap <silent><leader>e
-        \ :sp<cr>:term g++ -std=c++17 % -o %< && ./%<<cr> :startinsert<cr>
-  autocmd FileType python nnoremap <silent><leader>e
-        \ :sp<cr>:term python %<cr> :startinsert<cr>
-  autocmd FileType javascript nnoremap <silent><leader>e
-        \ :sp<cr>:term node %<cr> :startinsert<cr>
-  autocmd FileType ruby nnoremap <silent><leader>e
-        \ :sp<cr>:term ruby %<cr> :startinsert<cr>
-augroup END
-
-" Relative path (insert mode)
-augroup changeWorkingDirectory
-  autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
-  autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
-augroup end
-
-" --- Plugin ---"
 call plug#begin()
-Plug 'tpope/vim-rails'
 
-Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<c-t>'
+" Core plugins
+Plug 'neovim/nvim-lspconfig'
 
-Plug 'simeji/winresizer'
-let g:winresizer_start_key = '<leader>w'
-let g:winresizer_horiz_resize = 3
-let g:winresizer_vert_resize = 3
-
-Plug 'AndrewRadev/tagalong.vim'
-let g:tagalong_filetypes = ['xml', 'html', 'php', 'javascript', 'eruby']
-
-Plug 'vim-test/vim-test'
-nmap <silent> <leader>T :TestFile<cr>
-nmap <silent> <leader>L :TestLast<cr>
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
 augroup defxConfig
-  autocmd FileType defx set nobuflisted
-  autocmd FocusGained * call defx#redraw()
+  autocmd FileType defx set nobuflisted nonumber
   autocmd FileType defx call s:defx_my_settings()
+  autocmd BufWritePost * call defx#redraw()
 augroup end
-nnoremap <silent><leader>ff :Defx
+nnoremap <silent><leader>f :Defx
+      \ -resume
+      \ -sort=extension:filename
       \ -columns=indent:indent:icon:mark:filename
       \ -show-ignored-files
-      \ -resume -listed<cr><C-w>=
-nnoremap <silent><leader>fs :sp<cr>:Defx
+      \ -listed<cr><C-w>=
+nnoremap <silent><leader>F :Defx -search-recursive=`expand('%:p')`
+      \ -resume
+      \ -sort=extension:filename
       \ -columns=indent:indent:icon:mark:filename
       \ -show-ignored-files
-      \ -resume -listed<cr><C-w>=
-nnoremap <silent><leader>fv :vsp<cr>:Defx
-      \ -columns=indent:indent:icon:mark:filename
-      \ -show-ignored-files
-      \ -resume -listed<cr><C-w>=
-nnoremap <silent><leader>F :Defx -search=`expand('%:p')`
-      \ -columns=indent:indent:icon:mark:filename
-      \ -show-ignored-files
-      \ -resume -listed<cr><C-w>=
+      \ -listed<cr><C-w>=
 function! s:defx_my_settings() abort
-  call defx#custom#column('filename', {
-        \ 'min_width': 50,
-        \ 'max_width': 50,
+  call defx#custom#column('icon', {
+        \ 'directory_icon': '+',
+        \ 'opened_icon': '-',
+        \ 'file_icon': ' ',
+        \ 'root_icon': '',
         \ })
   nnoremap <silent><buffer><expr> <cr>
-        \ defx#is_binary() ?
-        \ defx#do_action('execute_system') :
         \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> sv
+        \ defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> ss
+        \ defx#do_action('open', 'split')
   nnoremap <silent><buffer><expr> u
         \ defx#do_action('cd', ['..'])
   nnoremap <silent><buffer><expr> o
-        \ defx#do_action('open_or_close_tree')
+        \ defx#do_action('open_tree', 'toggle')
+  nnoremap <silent><buffer><expr> P
+        \ defx#do_action('search',
+        \ fnamemodify(defx#get_candidate().action__path, ':h')
+        \ )
+  nnoremap <silent><buffer><expr> cd
+        \ defx#do_action('change_vim_cwd')
   nnoremap <silent><buffer><expr> dd
         \ defx#do_action('remove_trash')
   nnoremap <silent><buffer><expr> yy
@@ -164,156 +174,226 @@ function! s:defx_my_settings() abort
         \ defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> rn
         \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> *
-        \ defx#do_action('toggle_select_all')
   nnoremap <silent><buffer><expr> a
         \ defx#do_action('toggle_select')
   nnoremap <silent><buffer><expr> A
         \ defx#do_action('toggle_select_visual')
-  nnoremap <silent><buffer><expr> cl
+  nnoremap <silent><buffer><expr> L
         \ defx#do_action('clear_select_all')
   nnoremap <silent><buffer><expr> yp
         \ defx#do_action('yank_path')
   nnoremap <silent><buffer><expr> i
         \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> q
-        \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> rr
+  nnoremap <silent><buffer><expr> R
         \ defx#do_action('redraw')
   nnoremap <silent><buffer><expr> .
         \ defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> P defx#do_action('search',
-        \ fnamemodify(defx#get_candidate().action__path, ':h'))
+  nnoremap <silent><buffer><expr> q
+        \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <C-g>
+        \ defx#do_action('print')
   nnoremap <silent><buffer><expr> j 'j'
   nnoremap <silent><buffer><expr> k 'k'
 endfunction
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let g:coc_global_extensions = [
-      \ 'coc-css',
-      \ 'coc-html',
-      \ 'coc-json',
-      \ 'coc-pyright',
-      \ 'coc-tsserver',
-      \ 'coc-cssmodules',
-      \ 'coc-html-css-support',
-      \ ]
-
-" Trigger completion.
-imap <silent><expr> <c-space> coc#refresh()
-imap <silent><expr> <c-x><c-o> coc#refresh()
-
-" Remap <C-u> and <C-d> for scroll float windows/popups.
-nnoremap <silent><nowait><expr>
-      \ <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-nnoremap <silent><nowait><expr><C-u>
-      \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
-inoremap <silent><nowait><expr><C-d>
-      \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr><C-u>
-      \ coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr><C-d>
-      \ coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-vnoremap <silent><nowait><expr><C-u>
-      \ coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
-
-" Remap keys for gotos, refresh
-nmap <silent>gd <Plug>(coc-definition)
-nmap <silent>gr <Plug>(coc-references)
-nmap <silent>gJ <Plug>(coc-float-jump)
-nmap <silent>gH <Plug>(coc-float-hide)
-
-" Symbol renaming.
-nmap <leader>r <Plug>(coc-rename)
-
-" Use K to show documentation in preview window
-nnoremap <silent>K :call <SID>show_documentation()<cr>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-Plug 'dense-analysis/ale'
-let g:ale_lint_on_save = 0
-let g:ale_disable_lsp = 1
-let g:ale_set_highlights = 0
-let g:ale_linters_explicit = 1
-
-let g:ale_linters = {
-      \   'ruby': ['rubocop'],
-      \}
-let g:ale_fixers = {
-      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \   'html': ['prettier'],
-      \   'css': ['prettier'],
-      \   'scss': ['prettier'],
-      \   'ruby': ['rubocop'],
-      \   'javascript': ['prettier'],
-      \   'json': ['prettier'],
-      \}
-
-let g:ale_ruby_rubocop_auto_correct_all = 1
-if filereadable('Gemfile') && match(readfile('Gemfile'), 'rubocop') > 0
-  let g:ale_ruby_rubocop_executable = 'bundle'
-endif
-
-if filereadable('.prettierrc') && match(readfile('package.json'), 'prettier') > 0
-  let g:ale_javascript_prettier_executable = 'prettier'
-  let g:ale_javascript_prettier_use_global = 1
-endif
-
-nmap <silent>gk <Plug>(ale_previous_wrap)
-nmap <silent>gj <Plug>(ale_next_wrap)
-nnoremap <silent><leader>p :ALEFix<cr>
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-Plug 'junegunn/fzf.vim'
-set rtp+=~/.fzf
-let g:fzf_layout = { 'down': '50%' }
-nnoremap <silent><leader>i :Files<cr>
-nnoremap <silent><leader>b :Buffers<cr>
-nnoremap <silent><leader>n :Rg<cr>
-nnoremap <silent><leader>N :Rg <c-r><c-w><cr>
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=1 showmode ruler
+Plug 'dense-analysis/ale'
+let g:ale_disable_lsp = 1
+let g:ale_linters_explicit = 1
 
-"--- Provider ---"
+let g:ale_set_signs = 1
+let g:ale_set_highlights = 0
+
+let g:ale_open_list = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+let g:ale_sign_error = '~~'
+let g:ale_sign_infor = '--'
+let g:ale_sign_warning = '>>'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+let g:ale_cpp_cpplint_options = '--filter=-build/c++11,-whitespace/indent'
+
+if filereadable('.prettierrc.json')
+  if match(readfile('package.json'), 'prettier')
+    let g:ale_javascript_prettier_executable = 'npx prettier'
+    echo 'Prettier local active!'
+  else
+    echo 'Prettier local not found'
+  end
+endif
+
+let g:ale_linters = {
+      \ 'cpp': ['cpplint'],
+      \ }
+let g:ale_fixers = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'javascript': ['prettier'],
+      \ 'javascriptreact': ['prettier'],
+      \ 'html': ['prettier'],
+      \ 'json': ['prettier'],
+      \ 'css': ['prettier'],
+      \ 'scss': ['prettier'],
+      \ 'yaml': ['prettier'],
+      \ 'markdown': ['prettier'],
+      \ }
+
+nmap <silent><C-k> <Plug>(ale_previous_wrap)
+nmap <silent><C-j> <Plug>(ale_next_wrap)
+nnoremap <silent><leader>p :ALEFix<cr>
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+nnoremap <leader>o <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>i <cmd>lua require('telescope.builtin').find_files{
+      \ find_command = { 'fdfind', '--type', 'f', '--hidden', '--no-ignore' }
+      \ }<cr>
+nnoremap <leader>n <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>N <cmd>lua require('telescope.builtin').grep_string()<cr>
+nnoremap <leader>s
+      \ <cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>
+nnoremap <leader>S
+      \ <cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>
+
+Plug 'tpope/vim-fugitive'
+nnoremap <silent><leader>G :ToggleGStatus<cr>
+nnoremap <silent><leader>gd :Gdiffsplit<cr><C-w>x
+function! ToggleGStatus()
+    if buflisted(bufname('.git/index'))
+        bd .git/index
+    else
+        Git
+    endif
+endfunction
+command ToggleGStatus :call ToggleGStatus()
+
+Plug 'vim-test/vim-test'
+let test#strategy = 'basic'
+nmap <silent><leader>tf :TestFile<cr>
+nmap <silent><leader>tn :TestNearest<cr>
+nmap <silent><leader>tl :TestLast<cr>
+nmap <silent><leader>ts :TestSuite<cr>
+
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+" Other plugins
+Plug 'mattn/emmet-vim'
+Plug 'wakatime/vim-wakatime'
+Plug 'maxmellon/vim-jsx-pretty'
+
+Plug 'AndrewRadev/tagalong.vim'
+let g:tagalong_filetypes = ['xml', 'html', 'php', 'javascript', 'eruby']
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
+
+Plug 'simeji/winresizer'
+let g:winresizer_start_key = '<leader>e'
+let g:winresizer_vert_resize = 5
+let g:winresizer_horiz_resize = 3
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+augroup editorconfig
+  autocmd!
+  autocmd BufRead,BufNewFile,BufWrite .editorconf EditorConfigReload
+augroup end
+
+Plug 'stefandtw/quickfix-reflector.vim'
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --hidden\
+        \ --glob\ '!.git'\
+        \ --glob\ '!.idea'\
+        \ --glob\ '!.vscode'\
+        \ --glob\ '!node_modules'\
+        \ --glob\ '!vendor'\
+        \ --glob\ '!composer'\
+        \ --glob\ '!gems'\
+        \ --glob\ '!tmp'
+endif
+
+" Config Provider
 let g:loaded_perl_provider = 0
-let g:loaded_python_provider = 0
-let g:ruby_host_prog = expand('$HOME/.asdf/shims/neovim-ruby-host')
-let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 let g:loaded_node_provider = 0
+let g:loaded_python_provider = 0
+let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
+let g:ruby_host_prog = expand('$HOME/.asdf/shims/neovim-ruby-host')
 call plug#end()
 
-"--- Customize theme ---"
-syntax off
+" Customize theme
 set background=dark
-hi clear LineNr
 hi clear SignColumn
-hi NormalFloat guibg=gray
-hi Pmenu guifg=black guibg=gray
-hi PmenuSel guifg=white guibg=darkgray
-hi Visual guifg=black guibg=white
-hi CocUnderline cterm=underline
+hi clear VertSplit
+hi Underlined          ctermfg=none
+hi Normal              ctermfg=none       ctermbg=none
+hi ColorColumn         ctermfg=none       ctermbg=darkgray
+hi Pmenu               ctermfg=white      ctermbg=darkgray    cterm=none
+hi PmenuSel            ctermfg=black      ctermbg=blue        cterm=none
+
+hi Comment             ctermfg=none       ctermbg=none        cterm=none
+hi Constant            ctermfg=none       ctermbg=none        cterm=none
+hi String              ctermfg=none       ctermbg=none        cterm=none
+hi Character           ctermfg=none       ctermbg=none        cterm=none
+hi Number              ctermfg=none       ctermbg=none        cterm=none
+hi Float               ctermfg=none       ctermbg=none        cterm=none
+hi Boolean             ctermfg=none       ctermbg=none        cterm=none
+hi Identifier          ctermfg=none       ctermbg=none        cterm=none
+hi Function            ctermfg=none       ctermbg=none        cterm=none
+hi Statement           ctermfg=none       ctermbg=none        cterm=none
+hi Conditional         ctermfg=none       ctermbg=none        cterm=none
+hi Repeat              ctermfg=none       ctermbg=none        cterm=none
+hi Label               ctermfg=none       ctermbg=none        cterm=none
+hi Keyword             ctermfg=none       ctermbg=none        cterm=none
+hi Exception           ctermfg=none       ctermbg=none        cterm=none
+hi PreProc             ctermfg=none       ctermbg=none        cterm=none
+hi Include             ctermfg=none       ctermbg=none        cterm=none
+hi Define              ctermfg=none       ctermbg=none        cterm=none
+hi Macro               ctermfg=none       ctermbg=none        cterm=none
+hi PreCondit           ctermfg=none       ctermbg=none        cterm=none
+hi Type                ctermfg=none       ctermbg=none        cterm=none
+hi StorageClass        ctermfg=none       ctermbg=none        cterm=none
+hi Structure           ctermfg=none       ctermbg=none        cterm=none
+hi Typedef             ctermfg=none       ctermbg=none        cterm=none
+hi Special             ctermfg=none       ctermbg=none        cterm=none
+hi SpecialChar         ctermfg=none       ctermbg=none        cterm=none
+hi Tag                 ctermfg=none       ctermbg=none        cterm=none
+hi SpecialComment      ctermfg=none       ctermbg=none        cterm=none
+hi Debug               ctermfg=none       ctermbg=none        cterm=none
+
+hi DiagnosticError     ctermfg=none       ctermbg=none        cterm=none
+hi DiagnosticWarn      ctermfg=none       ctermbg=none        cterm=none
+hi DiagnosticInfo      ctermfg=none       ctermbg=none        cterm=none
+hi DiagnosticHint      ctermfg=none       ctermbg=none        cterm=none
+hi DiagnosticSignError ctermfg=red        ctermbg=none        cterm=none
+hi DiagnosticSignWarn  ctermfg=yellow     ctermbg=none        cterm=none
+hi DiagnosticSignInfo  ctermfg=blue       ctermbg=none        cterm=none
+hi DiagnosticSignHint  ctermfg=green      ctermbg=none        cterm=none
+hi ALEErrorSign        ctermbg=none       ctermfg=red         cterm=none
+hi ALEInforSign        ctermbg=none       ctermfg=blue        cterm=none
+hi ALEWarningSign      ctermbg=none       ctermfg=yellow      cterm=none
 
 " Run when load file
 augroup loadFile
   autocmd!
+  autocmd QuickFixCmdPost [^l]* cwindow
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
-  autocmd FileType qf wincmd J " set position quickfix bottom
-  autocmd FileType ruby setlocal suffixesadd+=.rb " gf open file require ruby
   autocmd VimResized * wincmd = " auto resize window
+
   autocmd BufWritePre * :%s/\s\+$//e " trim space when save
-  autocmd BufWritePre * call s:Mkdir() " create file when folder is not exists
-  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o " disable comment next line
+  autocmd BufWritePre * call Mkdir() " create file when folder is not exists
 augroup end
+
+lua << EOF
+  require 'module_lspconfig'
+  require 'module_telescope'
+  require 'module_cmp'
+EOF

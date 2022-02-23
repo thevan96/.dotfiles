@@ -1,66 +1,37 @@
-# Configuration for Alacritty, the GPU enhanced terminal emulator.
-
-# Window config
+# Window
 window:
   dimensions:
-    columns: 80
-    lines: 24
+    columns: 88
+    lines: 10000
 
   position:
     x: 0
     y: 0
 
+  title: ""
+  decorations: full
+  startup_mode: windowed
   dynamic_padding: true
 
-  padding:
-    x: 0
-    y: 0
-
-  # decorations: none, full
-  decorations: full
-
-  # startup_mode: windowed, fullscreen
-  startup_mode: fullscreen
-
-  title: ""
-
-scrolling:
-  history: 100000
-
-  multiplier: 5
-
-cursor:
-  style:
-    shape: Block
-
-# Font configuration (changes require restart)
+# Font
 font:
   normal:
-    family: Monego
+    family: Code New Roman
     style: Regular
 
   bold:
-    family: Monego
+    family: Code New Roman
     style: Bold
 
   italic:
-    family: Monego
+    family: Code New Roman
     style: Italic
 
-  size: 11
+  size: 10
 
   offset:
     x: 0
     y: 0
-
-  glyph_offset:
-    x: 0
-    y: 0
-
-  use_thin_strokes: true
-
-# If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors: true
 
 colors:
   primary:
@@ -69,32 +40,29 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#ff80ff"
-
-background_opacity: 1
+    cursor: "#ffffff"
 
 mouse:
   hide_when_typing: true
 
 selection:
-  semantic_escape_chars: ',│`|:"'' ()[]{}<>'
   save_to_clipboard: true
 
 key_bindings:
+  - { key: F11, action: ToggleFullscreen }
+
+  # Linux/window
   - { key: V, mods: Control|Shift, action: Paste }
   - { key: C, mods: Control|Shift, action: Copy }
-  - { key: V, mods: Command, action: Paste }
-  - { key: C, mods: Command, action: Copy }
 
   - { key: Plus, mods: Alt, action: IncreaseFontSize }
   - { key: Minus, mods: Alt, action: DecreaseFontSize }
   - { key: Key0, mods: Alt, action: ResetFontSize }
 
+  # Macos
+  - { key: V, mods: Command, action: Paste }
+  - { key: C, mods: Command, action: Copy }
+
   - { key: Plus, mods: Command, action: IncreaseFontSize }
   - { key: Minus, mods: Command, action: DecreaseFontSize }
   - { key: Key0, mods: Command, action: ResetFontSize }
-
-  - { key: F, mods: Alt, action: ToggleFullscreen }
-  - { key: F, mods: Command, action: ToggleFullscreen }
-  - { key: Q, mods: Control, action: Quit }
-  - { key: B, mods: Command, action: None }

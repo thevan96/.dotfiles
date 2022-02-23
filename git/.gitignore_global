@@ -1,7 +1,6 @@
-/.vim
-/.notes
-.Spotlight-V100
+/* Global */
 .Trashes
+.Spotlight-V100
 .DS_Store
 Desktop.ini
 Thumbs.db
