@@ -1,18 +1,14 @@
 snippet base "reset scss" i
+html {
+ box-sizing: border-box;
+}
+
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: inherit;
 }
 
-html {
-  font-size: 62.5%;
-}
-
-body {
-  line-height: 1.5;
-}
 endsnippet
-
