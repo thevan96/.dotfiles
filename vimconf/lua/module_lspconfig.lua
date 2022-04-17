@@ -25,13 +25,9 @@ local on_attach = function(client, bufnr)
 end
 
 local on_handlers = {
-  ['textDocument/publishDiagnostics'] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    signs = true,
-    underline = false,
-    virtual_text = false,
-    update_in_insert = true,
-  }),
+  ['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { signs = true, underline = false, virtual_text = false, update_in_insert = true, }),
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded', }),
+  ['textDocument/signatureHelp'] =  vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
 }
 
 local servers = {

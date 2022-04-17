@@ -42,7 +42,7 @@ endif
 " Customizer mapping
 nnoremap Y y$
 nnoremap gm `[v`]
-nnoremap <silent><leader>D :bd<cr>
+nnoremap <silent><leader>D :bd!<cr>
 nnoremap <silent><leader>L :set number!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -334,9 +334,8 @@ hi clear SignColumn
 hi clear VertSplit
 hi Underlined          ctermfg=none
 hi Normal              ctermfg=none       ctermbg=none
+hi NormalFloat         ctermfg=none       ctermbg=none
 hi ColorColumn         ctermfg=none       ctermbg=darkgray
-hi Pmenu               ctermfg=white      ctermbg=darkgray    cterm=none
-hi PmenuSel            ctermfg=black      ctermbg=blue        cterm=none
 
 hi Comment             ctermfg=none       ctermbg=none        cterm=none
 hi Constant            ctermfg=none       ctermbg=none        cterm=none
