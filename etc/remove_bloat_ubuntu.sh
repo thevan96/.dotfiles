@@ -2,8 +2,6 @@
 
 sudo apt remove \
   gnome-shell-extension-appindicator \
-  gnome-shell-extension-desktop-icons \
-  cheese \
   thunderbird \
   simple-scan \
   gnome-mines \
@@ -11,3 +9,7 @@ sudo apt remove \
   gnome-sudoku \
   gnome-mahjongg \
   aisleriot
+
+
+# gnome-shell-extension-desktop-icons \
+# gnome-shell-extension-ubuntu-dock \

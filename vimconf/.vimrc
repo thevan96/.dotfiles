@@ -13,14 +13,18 @@ set ignorecase
 set smartcase
 
 set autoindent
-set completeopt=menu,preview
+set smartindent
+set backspace=indent,eol,start
+set completeopt=menu,menuone,noselect
 set tabstop=2 shiftwidth=2 expandtab | retab
 set list listchars=tab:␣\ ,extends:>,precedes:<
 
+set nonumber
 set wildmenu
-set laststatus=2
+set laststatus=1
 set signcolumn=yes
 set textwidth=80
+set lazyredraw
 
 set showmatch
 set matchtime=0
