@@ -6,8 +6,6 @@ mkdir -p ~/.local/bin
 mkdir -p ~/.fonts
 
 # Gnome setup
-gsettings set org.gnome.desktop.background picture-options none
-gsettings set org.gnome.desktop.background primary-color '#08323e'
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
@@ -18,12 +16,9 @@ ln -sf ~/.dotfiles/vimconf/init.vim ~/.config/nvim/init.vim
 ln -sf ~/.dotfiles/vimconf/lua ~/.config/nvim/
 echo 'vim done!'
 
-ln -sf ~/.dotfiles/etc/.inputrc ~/.inputrc
-echo '.inputrc done!'
-
+ln -sf ~/.dotfiles/etc/postman.desktop ~/.local/share/applications/postman.desktop
 ln -sf ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
 ln -sf ~/.dotfiles/etc/ibus_tmux.sh ~/.local/bin/ibus_tmux
-ln -sf ~/.dotfiles/etc/z.sh ~/.local/bin/z
 echo 'tmux done!'
 
 ln -sf ~/.dotfiles/zsh/.zshrc ~/.zshrc

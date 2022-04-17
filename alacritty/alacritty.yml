@@ -1,8 +1,11 @@
 # Window
+env:
+  TERM: screen-256color
+
 window:
   dimensions:
-    columns: 88
-    lines: 10000
+    columns: 1366
+    lines: 768
 
   position:
     x: 0
@@ -10,21 +13,20 @@ window:
 
   title: ""
   decorations: full
-  startup_mode: windowed
-  dynamic_padding: true
+  startup_mode: fullscreen
 
 # Font
 font:
   normal:
-    family: Code New Roman
+    family: "Code New Roman"
     style: Regular
 
   bold:
-    family: Code New Roman
+    family: "Code New Roman"
     style: Bold
 
   italic:
-    family: Code New Roman
+    family: "Code New Roman"
     style: Italic
 
   size: 10
@@ -40,7 +42,11 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#ffffff"
+    cursor: "#00ff00"
+
+cursor:
+  style:
+    shape: Block
 
 mouse:
   hide_when_typing: true
@@ -49,6 +55,11 @@ selection:
   save_to_clipboard: true
 
 key_bindings:
+  # Disable vi-mode and search, trust only tmux
+  - { key: Space, mods: Shift|Control, mode: ~Search, action: none }
+  - { key: Space, mods: Shift|Control, mode: Vi|~Search, action: none }
+  - { key: B, mods: Shift|Control, action: none }
+
   - { key: F11, action: ToggleFullscreen }
 
   # Linux/window

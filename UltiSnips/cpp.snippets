@@ -4,7 +4,14 @@ snippet base "Template c++" i
 // created: `date '+%d-%m-%Y %H:%M:%S'`
 // reference:
 
+#include <chrono>
+#include <cstdint>
+#include <iomanip>
 #include <iostream>
+
+#define db(val) "["#val" = "<< (val) << "] "
+typedef std::int64_t ll
+typedef std::uint64_t ull
 
 void solve() {
   ${1}
@@ -13,19 +20,13 @@ void solve() {
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
+  auto start = std::chrono::high_resolution_clock::now();
   solve();
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration =
+    std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+  std::cout << "Time: " << std::setprecision(10)
+       << duration.count() * 1.0 / 1000 << " seconds" << '\n';
   return 0;
 }
-endsnippet
-
-snippet time "Caculator time" i
-auto start = std::chrono::high_resolution_clock::now();
-
-// Handle in here
-${1}
-
-auto stop = std::chrono::high_resolution_clock::now();
-auto duration =
-  std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-std::cout << "Time: " << duration.count() / 1000 << " seconds" << '\n';
 endsnippet

@@ -19,15 +19,15 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
   buf_set_keymap('n', 'gk', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
   buf_set_keymap('n', 'gj', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
-  buf_set_keymap('n', '<leader>do', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
   buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 end
 
 local on_handlers = {
-  ['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { signs = true, underline = false, virtual_text = false, update_in_insert = true, }),
-  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded', }),
-  ['textDocument/signatureHelp'] =  vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
+  ['textDocument/publishDiagnostics'] =
+    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
+      { signs = true, underline = false, virtual_text = false, update_in_insert = true }
+    ),
 }
 
 local servers = {
@@ -36,10 +36,10 @@ local servers = {
   'cssls',
   'jsonls',
   'pyright',
-  'solargraph',
   'texlab',
   'tsserver',
-  'rust_analyzer'
+  'rust_analyzer',
+  'gopls',
 }
 
 for _, lsp in ipairs(servers) do
