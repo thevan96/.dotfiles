@@ -35,6 +35,11 @@ font:
     x: 0
     y: 0
 
+  padding:
+    x: 0
+    y: 0
+  dynamic_padding: false
+
 colors:
   primary:
     background: "#000000"
@@ -42,11 +47,13 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#00ff00"
+    cursor: "#ff55ff"
 
 cursor:
   style:
     shape: Block
+    blinking: On
+  blink_interval: 600
 
 mouse:
   hide_when_typing: true

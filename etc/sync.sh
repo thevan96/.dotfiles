@@ -11,6 +11,9 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
 
 # Setting link file
+ln -sf ~/.dotfiles/etc/sync_note.sh ~/.local/bin/sync_note
+echo 'sync note done'
+
 ln -sf ~/.dotfiles/vimconf/.vimrc ~/.vimrc
 ln -sf ~/.dotfiles/vimconf/init.vim ~/.config/nvim/init.vim
 ln -sf ~/.dotfiles/vimconf/lua ~/.config/nvim/

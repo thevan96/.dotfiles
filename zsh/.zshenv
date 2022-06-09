@@ -30,13 +30,13 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Alias
 alias cl="clear"
 alias vim="nvim"
-alias lg="lazygit"
-alias ld="lazydocker"
-alias hc="history -c"
-alias vimdiff="nvim -d"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias phone="emulator @phone"
-alias cpwd="pwd | xclip -selection clipboard"
+alias cp_pwd="pwd | xclip -selection clipboard"
+
+mkdir_cd() {
+  mkdir $1 && cd $_
+}
 
 sys_update() {
   sudo apt -y update \
@@ -56,10 +56,6 @@ asdf_update() {
   asdf reshim golang
   asdf reshim java
   echo 'Asdf update done !'
-}
-
-ssh_update() {
-  ssh-add ~/.ssh/github_personal
 }
 
 ide() {

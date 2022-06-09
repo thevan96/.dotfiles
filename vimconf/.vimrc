@@ -13,18 +13,14 @@ set ignorecase
 set smartcase
 
 set autoindent
-set smartindent
 set backspace=indent,eol,start
-set completeopt=menu,menuone,noselect
+set completeopt=menu,menuone
 set tabstop=2 shiftwidth=2 expandtab | retab
-set list listchars=tab:␣\ ,extends:>,precedes:<
 
 set nonumber
-set wildmenu
-set laststatus=1
+set laststatus=2
 set signcolumn=yes
 set textwidth=80
-set lazyredraw
 
 set showmatch
 set matchtime=0
@@ -38,17 +34,11 @@ set ttymouse=sgr
 " Set keymap
 let mapleader = ' '
 
-" Float terminal
-if has('nvim')
-  tmap <Esc> <C-\><C-n>
-endif
-
 " Customizer mapping
 nnoremap Y y$
 nnoremap gm `[v`]
-nnoremap <silent><leader>X :bd<cr>
+nnoremap <silent><leader>D :bd!<cr>
 nnoremap <silent><leader>L :set number!<cr>
-nnoremap <silent><leader>so :source $MYVIMRC<CR>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -60,42 +50,9 @@ nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
 
-" Navigate quickfix
-nnoremap <silent>gp :cprev<cr>
-nnoremap <silent>gn :cnext<cr>
-nnoremap <silent>gN :cfirst<cr>
-nnoremap <silent>gP :clast<cr>
-nnoremap <silent>go :copen<cr>
-nnoremap <silent>gx :cclose<cr>
-
-" Execute Code
-function! ExecuteCode()
-  let l:languageSupport = {
-        \ 'js': ':below term node %',
-        \ 'rb': ':below term ruby %',
-        \ 'py': ':below term pyton %',
-        \ 'cpp': ':below term g++ -std=c++14 % -o %<',
-        \ 'rs': ':below term rustc %',
-        \ }
-
-  let l:extension = expand('%:e')
-  if l:languageSupport->has_key(l:extension)
-    execute l:languageSupport[l:extension]
-  end
-endfunction
-nnoremap <silent><leader>R :call ExecuteCode()<cr>
-
-" Open in tmux(tmux/gnome terminal)
-function! OpenNewTab()
-  let dir = expand('%:p:h')
-
-  let tmuxcommand = ':!tmux new-window -c '.dir
-  " ':!gnome-terminal --tab --working-directory='.dir
-  if isdirectory(dir)
-    silent execute(tmuxcommand)
-  endif
-endfunction
-nnoremap <silent><leader>T :call OpenNewTab()<cr>
+" Better indent, move
+xnoremap < <gv
+xnoremap > >gv
 
 " Auto create file/folder
 function! Mkdir()
@@ -122,12 +79,10 @@ syntax off
 set background=dark
 hi clear SignColumn
 hi clear VertSplit
+hi clear Error
 
-hi Title              ctermfg=none                    cterm=none
-hi Underlined         ctermfg=none                    cterm=none
-hi Pmenu               ctermfg=white      ctermbg=darkgray    cterm=none
-hi PmenuSel            ctermfg=black      ctermbg=blue        cterm=none
-hi Normal              ctermfg=none       ctermbg=none        cterm=none
+filetype on
+filetype indent on
 
 " Run when load file
 augroup loadFile
@@ -142,4 +97,3 @@ augroup loadFile
   autocmd BufWritePre * :%s/\s\+$//e " trim space when save
   autocmd BufWritePre * call Mkdir() " create file when folder is not exists
 augroup end
-

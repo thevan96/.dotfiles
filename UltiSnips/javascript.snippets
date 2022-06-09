@@ -1,31 +1,24 @@
-snippet imp "Import" i
-import $2 from '$1';
+snippet db "Debug" i
+\`[$1 = ${${1:variable}}]\`
 endsnippet
 
-snippet ff "Function"
-function $1($2) {
+snippet time "Time"
+const start = performance.now();
+const end = performance.now();
+console.log(`Time: ${(end - start) / 1000} seconds`);
+endsnippet
+
+snippet base "Template for js" i
+// copyright
+// author: thevan96
+// created: `date '+%d-%m-%Y %H:%M:%S'`
+// reference:
+
+function solve() {
 }
-endsnippet
 
-snippet fe "Express function"
-const $1 = function($2) {
-}
+const start = performance.now();
+solve();
+const end = performance.now();
+console.log(\`Time: ${(end - start) / 1000} milliseconds\`);
 endsnippet
-
-snippet fa "Arrow function"
-const $1 = $2 => {
-}
-endsnippet
-
-snippet cl "Console.log"
-console.log($1);
-endsnippet
-
-snippet tc "Try catch"
-try {
-  $1
-} catch(error) {
-  $2
-}
-endsnippet
-

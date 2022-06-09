@@ -8,7 +8,15 @@ require'nvim-treesitter.configs'.setup {
   },
   indent = {
     enable = true,
-    disable = {'yaml'},
+    disable = {
+      'yaml',
+      'cpp',
+      'c',
+      'lua',
+      'rust',
+      'css',
+      'scss',
+    },
     additional_vim_regex_highlighting = false,
   },
 }

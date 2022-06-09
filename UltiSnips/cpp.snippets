@@ -1,3 +1,7 @@
+snippet db "Debug in c++" i
+"[$1 = " << ${1:variable} << ']'
+endsnippet
+
 snippet base "Template c++" i
 // copyright
 // author: thevan96
@@ -6,27 +10,25 @@ snippet base "Template c++" i
 
 #include <chrono>
 #include <cstdint>
-#include <iomanip>
 #include <iostream>
 
-#define db(val) "["#val" = "<< (val) << "] "
-typedef std::int64_t ll
-typedef std::uint64_t ull
+#define db(val) "[" #val " = " << (val) << "] "
+typedef std::int64_t ll;
+typedef std::uint64_t ull;
 
 void solve() {
-  ${1}
 }
 
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
+
   auto start = std::chrono::high_resolution_clock::now();
   solve();
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration =
-    std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-  std::cout << "Time: " << std::setprecision(10)
-       << duration.count() * 1.0 / 1000 << " seconds" << '\n';
+    std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+  std::cout << "Time: " << duration.count() << " milliseconds" << '\n';
   return 0;
 }
 endsnippet
