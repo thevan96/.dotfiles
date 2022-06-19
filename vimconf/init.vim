@@ -11,8 +11,8 @@ set smartcase
 set showmatch
 set autoindent
 
-set number
-set relativenumber
+set nonumber
+set norelativenumber
 
 set list
 set laststatus=2
@@ -28,7 +28,6 @@ set matchtime=0
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 let html_no_rendering = 1
-inoremap <backspace> <nop>
 inoremap <C-n> <nop>
 inoremap <C-p> <nop>
 
@@ -106,36 +105,34 @@ augroup defxConfig
   autocmd BufWritePost * call defx#redraw()
 augroup end
 nnoremap <silent><leader>f :Defx
-      \ -resume
+      \ -new
       \ -sort=filename:extension
-      \ -columns=indent:indent:icon:mark:filename
-      \ -show-ignored-files
-      \ -listed<cr><C-w>=
-nnoremap <silent><leader>F :Defx -search-recursive=`expand('%:p')`
-      \ -resume
+      \ -columns=indent:mark:filename
+      \ -show-ignored-files<cr><C-w>=
+nnoremap <silent><leader>F :Defx `expand('%:h')`
+      \ -new
       \ -sort=filename:extension
-      \ -columns=indent:indent:icon:mark:filename
-      \ -show-ignored-files
-      \ -listed<cr><C-w>=
+      \ -columns=indent:mark:filename
+      \ -show-ignored-files<cr><C-w>=
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
         \ 'min_width': 50,
         \ 'max_width': 100,
         \ })
   call defx#custom#column('icon', {
-        \ 'directory_icon': ' >',
-        \ 'opened_icon': ' -',
-        \ 'file_icon': '  ',
+        \ 'directory_icon': '',
+        \ 'opened_icon': '',
+        \ 'file_icon': '',
         \ 'root_icon': '',
         \ })
   nnoremap <silent><buffer><expr> <cr>
-        \ defx#is_directory() ?
-        \ defx#do_action('open_tree') :
-        \ defx#do_action('multi', ['drop', 'quit'])
+        \ defx#do_action('open')
   nnoremap <silent><buffer><expr> l
-        \ defx#do_action('open_tree')
+        \ defx#is_directory() ?
+        \ defx#do_action('open_directory') :
+        \ defx#do_action('print')
   nnoremap <silent><buffer><expr> h
-        \ defx#do_action('close_tree')
+        \ defx#do_action('cd', ['..'])
   nnoremap <silent><buffer><expr> j 'j'
   nnoremap <silent><buffer><expr> k 'k'
   nnoremap <silent><buffer><expr> S
@@ -158,8 +155,8 @@ function! s:defx_my_settings() abort
         \ defx#do_action('new_file')
   nnoremap <silent><buffer><expr> T
         \ defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> <Space>
-        \ defx#do_action('toggle_select').'j'
+  nnoremap <silent><buffer><expr> *
+        \ defx#do_action('toggle_select')
   nnoremap <silent><buffer><expr> A
         \ defx#do_action('toggle_select_visual')
   nnoremap <silent><buffer><expr> U
@@ -205,6 +202,8 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
+let g:ale_cpp_cpplint_options = '--filter=-build/c++11'
+
 if filereadable('.prettierrc')
   if match(readfile('package.json'), 'prettier')
     let g:ale_javascript_prettier_executable = 'npx prettier'
@@ -214,7 +213,11 @@ if filereadable('.prettierrc')
   end
 endif
 
-let g:ale_linters = {}
+let g:ale_linters = {
+      \ 'cpp': ['cpplint'],
+      \ 'go': ['staticcheck'],
+      \}
+
 let g:ale_fixers = {
       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
       \ 'javascript': ['prettier'],
