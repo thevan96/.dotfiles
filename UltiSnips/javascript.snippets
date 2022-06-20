@@ -1,24 +1,19 @@
-snippet db "Debug" i
+snippet db "Debug"
 \`[$1 = ${${1:variable}}]\`
+endsnippet
+
+snippet cpr "Copy right"
+// copyright
+// author: thevan96
+// created: `date '+%d-%m-%Y %H:%M:%S'`
 endsnippet
 
 snippet time "Time"
 const start = performance.now();
 const end = performance.now();
-console.log(`Time: ${(end - start) / 1000} seconds`);
+console.log(\`Time: ${(end - start) / 1000} milliseconds\`);
 endsnippet
 
-snippet base "Template for js" i
-// copyright
-// author: thevan96
-// created: `date '+%d-%m-%Y %H:%M:%S'`
-// reference:
-
-function solve() {
-}
-
-const start = performance.now();
-solve();
-const end = performance.now();
-console.log(\`Time: ${(end - start) / 1000} milliseconds\`);
+snippet ret "Return statement"
+return ${VISUAL}$0`!p snip.rv = semi(snip)`
 endsnippet

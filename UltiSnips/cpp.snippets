@@ -1,30 +1,79 @@
-snippet db "Debug in c++" i
-"[$1 = " << ${1:variable} << ']'
+# Main =========================================================================
+snippet for "For standard"
+for (${1:init-statement}; ${2:condition}; ${3:inc-expression}) {
+	${4:statement}
+}
 endsnippet
 
-snippet base "Template c++" i
+snippet forr "For range"
+for (${1:range-declaration} : ${2:range-expression}) {
+	${3:statement}
+}
+endsnippet
+
+snippet while "While"
+while (${1:condition}) {
+	${2:statements}
+}
+endsnippet
+
+snippet dowhile "While"
+do {
+	${1:statements}
+}while (${1:expression})
+endsnippet
+
+snippet if "If"
+if (${1:condition}) {
+	${2:statement}
+}
+endsnippet
+
+snippet fnv "Function void"
+void ${1:name}(${2:paramaters}) {
+	${3:statement}
+}
+endsnippet
+
+snippet fnt "Function return"
+${1:type} ${2:name}(${3:paramaters}) {
+	return ${4:statement}
+}
+endsnippet
+
+snippet class "Class"
+class ${1:Name} {
+  public:
+};
+
+endsnippet
+
+# Etc ==========================================================================
+snippet db "Debug in c++"
+#define db(val) "["#val" = " << (val) << "] "
+endsnippet
+
+snippet time "Calc time"
+auto start = std::chrono::high_resolution_clock::now();
+auto stop = std::chrono::high_resolution_clock::now();
+auto duration =
+	std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+std::cout << "Time: " << duration.count() << " milliseconds" << '\n';
+endsnippet
+
+snippet cpr "Copyright"
 // copyright
 // author: thevan96
 // created: `date '+%d-%m-%Y %H:%M:%S'`
-// reference:
+endsnippet
 
-#include <chrono>
-#include <cstdint>
+snippet base "Template c++"
 #include <iostream>
 
-void solve() {
-}
-
 int main() {
-  std::ios::sync_with_stdio(false);
-  std::cin.tie(nullptr);
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(nullptr);
 
-  auto start = std::chrono::high_resolution_clock::now();
-  solve();
-  auto stop = std::chrono::high_resolution_clock::now();
-  auto duration =
-    std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-  std::cout << "Time: " << duration.count() << " milliseconds" << '\n';
-  return 0;
+	return 0;
 }
 endsnippet

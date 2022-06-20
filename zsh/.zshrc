@@ -3,7 +3,7 @@ ZSH_THEME="minimal"
 DISABLE_AUTO_TITLE="true"
 
 # Plugins
-plugins=(vi-mode)
+plugins=()
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 # Load zsh

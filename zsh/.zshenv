@@ -16,7 +16,7 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind --type f --type d -i -H -I \
+export FZF_DEFAULT_COMMAND="fdfind --type f --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -30,6 +30,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Alias
 alias cl="clear"
 alias vim="nvim"
+alias nnn="NNN_TRASH=1 nnn -eH"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias phone="emulator @phone"
 alias cp_pwd="pwd | xclip -selection clipboard"

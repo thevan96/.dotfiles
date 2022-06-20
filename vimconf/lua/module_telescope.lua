@@ -13,14 +13,19 @@ require('telescope').setup{
       '--smart-case'
     },
     file_ignore_patterns = {
-      '.git',
-      '.vscode',
-      '.idea',
-      'node_modules',
-      'vendor',
-      'tmp',
-      'composer',
-      'gems',
+      '.git/',
+      '.idea/',
+      '.vscode/',
+      'node_modules/',
+      'vendor/',
+      'tmp/',
+      'composer/',
+      'gems/',
     },
   },
+  pickers = {
+    find_files = {
+      hidden = true,
+    }
+  }
 }

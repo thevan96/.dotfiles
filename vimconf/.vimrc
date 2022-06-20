@@ -17,10 +17,14 @@ set backspace=indent,eol,start
 set completeopt=menu,menuone
 set tabstop=2 shiftwidth=2 expandtab | retab
 
-set nonumber
+set list
+set listchars=tab:>\ ,trail:-,nbsp:+
+
+set number
 set laststatus=2
 set signcolumn=yes
 set textwidth=80
+set colorcolumn=+1
 
 set showmatch
 set matchtime=0
@@ -77,12 +81,26 @@ augroup end
 " Customize theme
 syntax off
 set background=dark
+
 hi clear SignColumn
 hi clear VertSplit
 hi clear Error
 
 filetype on
 filetype indent on
+
+hi NonText                        ctermfg=none     ctermbg=none     cterm=none
+hi Normal                         ctermfg=none     ctermbg=none     cterm=none
+hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
+hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
+
+hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
+
+hi ColorColumn                    ctermfg=none     ctermbg=black
+hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
 
 " Run when load file
 augroup loadFile

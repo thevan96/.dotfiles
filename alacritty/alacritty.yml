@@ -46,14 +46,12 @@ colors:
     foreground: "#ffffff"
 
   cursor:
-    text: "#000000"
+    text: "#ffffff"
     cursor: "#ff55ff"
 
 cursor:
   style:
     shape: Block
-    blinking: On
-  blink_interval: 600
 
 mouse:
   hide_when_typing: true
