@@ -35,9 +35,8 @@ echo 'git done!'
 ln -sf ~/.dotfiles/alacritty ~/.config/
 echo 'alacritty done!'
 
-ln -sf ~/.dotfiles/sql/.myclirc ~/.myclirc
-ln -sf ~/.dotfiles/sql/.my.cnf ~/.my.cnf
-ln -sf ~/.dotfiles/sql/config ~/.config/pgcli/config
+ln -sf ~/.dotfiles/etc/.myclirc ~/.myclirc
+ln -sf ~/.dotfiles/etc/config ~/.config/pgcli/config
 echo 'sql done!'
 
 ln -sf ~/.dotfiles/UltiSnips/ ~/.config/nvim/

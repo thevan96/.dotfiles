@@ -1,9 +1,9 @@
 # Config zsh
-ZSH_THEME="minimal"
+ZSH_THEME='robbyrussell'
 DISABLE_AUTO_TITLE="true"
 
 # Plugins
-plugins=()
+plugins=(vi-mode)
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 # Load zsh

@@ -44,7 +44,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   wmctrl \
   xtrlock \
   vlc \
-  neovim \
   peek \
   obs-studio \
   ibus-bamboo \

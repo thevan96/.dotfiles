@@ -1,3 +1,21 @@
+snippet fn "Function declaration"
+function ${1:name}(${2:params}) {
+  ${3:statement}
+}
+endsnippet
+
+snippet fne "Function expression"
+const ${1:name} = function(${2:params}) {
+  ${3:statement}
+}
+endsnippet
+
+snippet fna "Arrow function"
+const ${1:name} = (${2:params}) => {
+  ${3:statement}
+}
+endsnippet
+
 snippet db "Debug"
 \`[$1 = ${${1:variable}}]\`
 endsnippet
@@ -12,8 +30,4 @@ snippet time "Time"
 const start = performance.now();
 const end = performance.now();
 console.log(\`Time: ${(end - start) / 1000} milliseconds\`);
-endsnippet
-
-snippet ret "Return statement"
-return ${VISUAL}$0`!p snip.rv = semi(snip)`
 endsnippet
