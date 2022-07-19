@@ -12,7 +12,7 @@ wider_completion_menu = False
 # this is set to True, then the end of the statements must have a semi-colon.
 # If this is set to False then sql statements can't be split into multiple
 # lines. End of line (return) is considered as the end of the statement.
-multi_line = true
+multi_line = False
 
 # If multi_line_mode is set to "psql", in multi-line mode, [Enter] will execute
 # the current input if the input ends in a semicolon.
@@ -94,7 +94,7 @@ table_format = psql
 # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
 # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
 # colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
-syntax_style = vim
+syntax_style = default
 
 # Keybindings:
 # When Vi mode is enabled you can use modal editing features offered by Vi in the REPL.
@@ -181,3 +181,7 @@ Token.Output.EvenRow = ""
 [data_formats]
 decimal = ""
 float = ""
+
+# Automatically open SSH tunnels for the matched hosts
+[ssh tunnels]
+# ^example.*\.host$ = myuser:mypasswd@my.tunnel.com:4000

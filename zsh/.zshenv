@@ -16,7 +16,7 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind --type f -i -H -I \
+export FZF_DEFAULT_COMMAND="fdfind --type f --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -27,19 +27,38 @@ export FZF_DEFAULT_COMMAND="fdfind --type f -i -H -I \
     "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-zle -N fzf-cd-widget
-bindkey '^Y' fzf-cd-widget
-
 # Alias
 alias cl="clear"
 alias vim="nvim"
-alias lg="lazygit"
-alias ld="lazydocker"
-alias hc="history -c"
-alias vimdiff="nvim -d"
+alias nnn="NNN_TRASH=1 nnn -eoH"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias phone="emulator @phone"
-alias cpwd="pwd | xclip -selection clipboard"
+alias cp_pwd="pwd | xclip -selection clipboard"
+
+poo() {
+  echo 'Pomodoro starting ...' \
+  && sleep 1500 \
+  && notify-send -u critical 'Notify' 'Pomodoro 25 minutes' \
+  && echo 'Pomodoro end'
+}
+
+pss() {
+  echo 'Short break starting ...' \
+  && sleep 300 \
+  && notify-send -u critical 'Notify' 'Short break 5 minutes' \
+  && echo 'Short break end'
+}
+
+pll() {
+  echo 'Long break starting ...' \
+  && sleep 600 \
+  && notify-send -u critical 'Notify' 'Long break 10 minutes' \
+  && echo 'Long break end'
+}
+
+mkdir_cd() {
+  mkdir $1 && cd $_
+}
 
 sys_update() {
   sudo apt -y update \
@@ -49,7 +68,7 @@ sys_update() {
 }
 
 bs() {
-  browser-sync start --server --files --files "**/*.*" --port ${1}
+  browser-sync start --server --files "**/*.*" --port ${1}
 }
 
 asdf_update() {
@@ -59,10 +78,6 @@ asdf_update() {
   asdf reshim golang
   asdf reshim java
   echo 'Asdf update done !'
-}
-
-ssh_update() {
-  ssh-add ~/.ssh/github_personal
 }
 
 ide() {
