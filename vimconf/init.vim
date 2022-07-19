@@ -22,7 +22,7 @@ set colorcolumn=+1
 
 set list
 set wildmenu
-set wildmode=full
+set wildmode=longest,list
 set completeopt=menu,preview
 
 " Status line
@@ -47,8 +47,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-nnoremap h <nop>
-nnoremap l <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -73,7 +71,7 @@ nnoremap <silent><leader>vi
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
-inoremap <C-D> <Esc>:call setline(".",substitute(getline(line(".")),'^\s*',
+inoremap <C-d> <esc>:call setline(".",substitute(getline(line(".")),'^\s*',
       \ matchstr(getline(line(".")-1),'^\s*'),''))<cr>I
 
 " Mapping copy clipboard and past
@@ -82,6 +80,12 @@ vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>p "+p
 vnoremap <leader>p "+p
+
+" Navigate window
+nnoremap <tab>j <C-w>j
+nnoremap <tab>k <C-w>k
+nnoremap <tab>h <C-w>h
+nnoremap <tab>l <C-w>l
 
 " Better indent, move
 xnoremap < <gv
@@ -122,7 +126,9 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'andersevenrud/cmp-tmux'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
+inoremap <C-x><C-o> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -148,14 +154,11 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 let g:ale_cpp_cpplint_options = '--filter=-build/c++11,-whitespace/indent'
-
-if filereadable('.prettierrc')
-  if match(readfile('package.json'), 'prettier')
+if filereadable('package.json')
+  if match(readfile('package.json'), 'prettier') > 0
     let g:ale_javascript_prettier_executable = 'npx prettier'
     echo 'Prettier local active!'
-  else
-    echo 'Prettier local not found'
-  end
+  endif
 endif
 
 let g:ale_linters = {
@@ -184,7 +187,13 @@ nmap <silent><C-j> <Plug>(ale_next_wrap)
 " Fuzzy search
 Plug 'junegunn/fzf.vim'
 set rtp+=~/.fzf
-let $FZF_DEFAULT_COMMAND = 'fdfind --type f -H
+
+let g:fzf_action = {
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \ }
+
+let ignoreDirectories = '
       \ --exclude .git
       \ --exclude .idea
       \ --exclude .vscode
@@ -193,17 +202,37 @@ let $FZF_DEFAULT_COMMAND = 'fdfind --type f -H
       \ --exclude composer
       \ --exclude gems'
 
-let g:fzf_layout = { 'down': '50%' }
+let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.ignoreDirectories
+
+function! HandleSink(line)
+  execute('cd '.a:line)
+endfunction
+
+command! -bang -nargs=* Rg call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=never
+      \   --hidden --smart-case -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview(), <bang>0)
+
+command! Directories call fzf#run(fzf#wrap({
+      \ 'source': 'fd --type d -H '.ignoreDirectories
+      \ }))
+command! Projects call fzf#run(fzf#wrap({
+      \ 'source': 'fd --type d -H '.ignoreDirectories,
+      \ 'dir': expand('$HOME/'),
+      \ 'sink': function('HandleSink')
+      \ }))
+
+let g:fzf_layout = { 'down': '40%' }
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
-nnoremap <silent><leader>i :Files<cr>
-nnoremap <silent><leader>o :Buffers<cr>
-nnoremap <silent><leader>s :Snippets<cr>
-nnoremap <silent><leader>n :Rg<cr>
-nnoremap <silent><leader>N :Rg <c-r><c-w><cr>
+nnoremap <leader>i :Files<cr>
+nnoremap <leader>I :Directories<cr>
+nnoremap <leader>P :Projects<cr>
+nnoremap <leader>s :Snippets<cr>
+nnoremap <leader>n :Rg<cr>
+nnoremap <leader>N :Rg <c-r><c-w><cr>
 
 " Itegrated git
 Plug 'tpope/vim-fugitive'
-nnoremap <leader>G :Git<cr>
 nnoremap <leader>h :diffget //2<cr>:diffupdate<cr>
 nnoremap <leader>l :diffget //3<cr>:diffupdate<cr>
 
@@ -251,6 +280,16 @@ augroup defxConfig
   autocmd FileType defx call s:defx_my_settings()
   autocmd FileChangedShellPost,BufWritePost * call defx#redraw()
 augroup end
+nnoremap <silent><leader>f :Defx
+      \ -new
+      \ -sort=filename:extension
+      \ -columns=indent:mark:filename
+      \ -show-ignored-files<cr>
+nnoremap <silent><leader>F :Defx `expand('%:p:h')` -search=`expand('%:p')`
+      \ -sort=filename:extension
+      \ -columns=indent:mark:filename
+      \ -show-ignored-files<cr>
+
 command! -nargs=? -complete=dir Explore silent execute 'Defx '.
       \ expand('%:p:h').
       \ ' -search='.expand('%:p').
@@ -266,6 +305,7 @@ command! -nargs=? -complete=dir Sexplore split | silent execute 'Defx '.
       \ ' -search='.expand('%:p').
       \ ' -new -sort=filename:extension -columns=indent:mark:filename'.
       \ ' -show-ignored-files'
+
 function! s:defx_my_settings() abort
   call defx#custom#column('filename', {
         \ 'min_width': 50,
@@ -279,6 +319,10 @@ function! s:defx_my_settings() abort
         \ })
   nnoremap <silent><buffer><expr> <cr>
         \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> v
+        \ defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> s
+        \ defx#do_action('open', 'split')
   nnoremap <silent><buffer><expr> -
         \ defx#do_action('cd', ['..'])
   nnoremap <silent><buffer><expr> D
@@ -319,6 +363,8 @@ endfunction
 Plug 'mattn/emmet-vim'
 Plug 'jbyuki/venn.nvim'
 Plug 'j-hui/fidget.nvim'
+Plug 'kylechui/nvim-surround'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'simeji/winresizer'
@@ -336,19 +382,9 @@ xnoremap <leader>rr :VtrSendLinesToRunner<cr>gv
 nnoremap <leader>rs :VtrSendCommandToRunner<cr>
 nnoremap <leader>ra :VtrAttachToPane<cr>
 nnoremap <leader>rd :VtrDetachRunner<cr>
-nnoremap <leader>rk :VtrKillRunner<cr>
+nnoremap <leader>rx :VtrKillRunner<cr>
 nnoremap <leader>ro :VtrOpenRunner<cr>
 nnoremap <leader>rc :VtrClearRunner<cr>
-
-Plug 'AndrewRadev/tagalong.vim'
-let g:tagalong_filetypes = [
-      \ 'xml',
-      \ 'html',
-      \ 'php',
-      \ 'eruby',
-      \ 'javascript',
-      \ 'javascriptreact'
-      \ ]
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -369,11 +405,6 @@ filetype plugin indent on
 hi clear SignColumn
 hi clear VertSplit
 hi clear Error
-
-hi clear DiffDelete
-hi clear DiffChange
-hi clear DiffText
-hi clear DiffAdd
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
@@ -469,9 +500,12 @@ augroup end
 lua << EOF
   require 'module_treesitter'
   require 'module_lspconfig'
-  require 'module_fidget'
   require 'module_cmp'
   require 'module_venn'
   require 'module_dap'
   require 'module_dapui'
+
+  -- Without config
+  require 'fidget'.setup()
+  require 'nvim-surround'.setup()
 EOF

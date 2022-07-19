@@ -11,10 +11,11 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<C-h>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({
@@ -66,6 +67,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+-- Add border for :LspInfo
 local win = require('lspconfig.ui.windows')
 local _default_opts = win.default_opts
 

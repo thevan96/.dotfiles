@@ -21,9 +21,9 @@ set completeopt=menu,preview
 
 set list
 set listchars=tab:>\ ,trail:-,nbsp:+
+
 set wildmenu
-set wildmode=full
-set diffopt=vertical
+set wildmode=longest,list
 
 set nonumber
 set laststatus=2
@@ -37,6 +37,7 @@ set ttimeoutlen=100
 " Other
 set mouse=a
 set ttymouse=sgr
+set diffopt=vertical
 packadd termdebug
 packadd matchit
 
@@ -69,6 +70,8 @@ endif
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
+nnoremap <silent><leader>f :e .<cr>
+nnoremap <silent><leader>F :e %:p:h<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>L :set number!<cr>
 nnoremap <silent><leader>vi
@@ -87,6 +90,12 @@ vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>p "+p
 vnoremap <leader>p "+p
+
+" Navigate window
+nnoremap <tab>j <C-w>j
+nnoremap <tab>k <C-w>k
+nnoremap <tab>h <C-w>h
+nnoremap <tab>l <C-w>l
 
 " Better indent, move
 xnoremap < <gv

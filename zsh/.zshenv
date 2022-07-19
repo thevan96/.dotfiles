@@ -24,12 +24,13 @@ export FZF_DEFAULT_COMMAND="fdfind --type f --type d -H \
   --exclude vendor \
   --exclude composer \
   --exclude gems \
-    "
+  "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Alias
 alias cl="clear"
 alias vim="nvim"
+alias fd="fdfind"
 alias nnn="NNN_TRASH=1 nnn -eoH"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias phone="emulator @phone"
