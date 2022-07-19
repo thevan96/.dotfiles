@@ -1,5 +1,5 @@
 # Config zsh
-ZSH_THEME="robbyrussell"
+ZSH_THEME='robbyrussell'
 DISABLE_AUTO_TITLE="true"
 
 # Plugins

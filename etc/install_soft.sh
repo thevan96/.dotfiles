@@ -44,11 +44,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   wmctrl \
   xtrlock \
   vlc \
-  neovim \
   peek \
   obs-studio \
   ibus-bamboo \
   chrome-gnome-shell \
+  vim-gtk \
 
   sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 fi

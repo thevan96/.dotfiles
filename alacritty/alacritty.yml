@@ -35,14 +35,19 @@ font:
     x: 0
     y: 0
 
+  padding:
+    x: 0
+    y: 0
+  dynamic_padding: false
+
 colors:
   primary:
     background: "#000000"
     foreground: "#ffffff"
 
   cursor:
-    text: "#000000"
-    cursor: "#00ff00"
+    text: "#ffffff"
+    cursor: "#ff55ff"
 
 cursor:
   style:

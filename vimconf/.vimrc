@@ -1,4 +1,4 @@
-" General setting
+"--- General setting ---"
 set nobackup
 set noswapfile
 set nocompatible
@@ -10,30 +10,53 @@ set autowrite
 set hlsearch
 set incsearch
 set ignorecase
-set smartcase
-
-set autoindent
-set smartindent
-set backspace=indent,eol,start
-set completeopt=menu,menuone,noselect
-set tabstop=2 shiftwidth=2 expandtab | retab
-set list listchars=tab:␣\ ,extends:>,precedes:<
-
-set nonumber
-set wildmenu
-set laststatus=1
-set signcolumn=yes
-set textwidth=80
-set lazyredraw
 
 set showmatch
 set matchtime=0
+set autoindent
+set smartindent
+
+set backspace=indent,eol,start
+set completeopt=menu,preview
+
+set list
+set listchars=tab:>\ ,trail:-,nbsp:+
+set wildmenu
+set wildmode=full
+set diffopt=vertical
+
+set nonumber
+set laststatus=2
+set signcolumn=yes
+set textwidth=80
+set colorcolumn=+1
 
 set ttimeout
 set ttimeoutlen=100
 
+" Other
 set mouse=a
 set ttymouse=sgr
+packadd termdebug
+packadd matchit
+
+" Netrw
+let g:netrw_banner = 0
+let g:netrw_cursor = 0
+let g:netrw_keepdir= 0
+let g:netrw_localcopydircmd = 'cp -r'
+
+" Disable
+let html_no_rendering = 1
+
+" Setting tab/space
+set tabstop=2 shiftwidth=2 expandtab | retab
+augroup settingTabSpace
+  autocmd!
+  autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
+  autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  autocmd FileType snippets setlocal tabstop=2 shiftwidth=2 expandtab | retab
+augroup end
 
 " Set keymap
 let mapleader = ' '
@@ -45,59 +68,81 @@ endif
 
 " Customizer mapping
 nnoremap Y y$
-nnoremap gm `[v`]
-nnoremap <silent><leader>X :bd<cr>
-nnoremap <silent><leader>L :set number!<cr>
-nnoremap <silent><leader>so :source $MYVIMRC<CR>
+nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <silent><leader>L :set number!<cr>
+nnoremap <silent><leader>vi
+      \ :source $MYVIMRC<cr>
+      \ :echo 'Reload vim config done!'<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-nnoremap <silent><leader>C :execute 'set colorcolumn='
-                  \ . (&colorcolumn == '' ? '80' : '')<cr>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+nnoremap <leader>o :ls<cr>:echo '----------------------------'<cr>:b<Space>
+inoremap <C-D> <Esc>:call setline(".",substitute(getline(line(".")),'^\s*',
+      \ matchstr(getline(line(".")-1),'^\s*'),''))<cr>I
 
 " Mapping copy clipboard
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
 
-" Navigate quickfix
-nnoremap <silent>gp :cprev<cr>
-nnoremap <silent>gn :cnext<cr>
-nnoremap <silent>gN :cfirst<cr>
-nnoremap <silent>gP :clast<cr>
-nnoremap <silent>go :copen<cr>
-nnoremap <silent>gx :cclose<cr>
+" Better indent, move
+xnoremap < <gv
+xnoremap > >gv
 
-" Execute Code
-function! ExecuteCode()
-  let l:languageSupport = {
-        \ 'js': ':below term node %',
-        \ 'rb': ':below term ruby %',
-        \ 'py': ':below term pyton %',
-        \ 'cpp': ':below term g++ -std=c++14 % -o %<',
-        \ 'rs': ':below term rustc %',
-        \ }
+" Navigate quickfix, buffers
+nnoremap [q :cprev<cr>
+nnoremap ]q :cnext<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap ]Q :clast<cr>
+nnoremap [b :bprevious<cr>
+nnoremap ]b :bnext<cr>
+nnoremap [B :bfirst<cr>
+nnoremap ]B :blast<cr>
 
-  let l:extension = expand('%:e')
-  if l:languageSupport->has_key(l:extension)
-    execute l:languageSupport[l:extension]
-  end
-endfunction
-nnoremap <silent><leader>R :call ExecuteCode()<cr>
+" Open in tab terminal(tmux/gnome terminal)
+function! OpenNew(mode)
+  let l:dir = expand('%:p:h')
+  let l:command = a:mode? ':!tmux split-window -h -c '.l:dir
+        \ : ':!tmux new-window -c '.l:dir.' -a'
 
-" Open in tmux(tmux/gnome terminal)
-function! OpenNewTab()
-  let dir = expand('%:p:h')
-
-  let tmuxcommand = ':!tmux new-window -c '.dir
-  " ':!gnome-terminal --tab --working-directory='.dir
-  if isdirectory(dir)
-    silent execute(tmuxcommand)
+  if isdirectory(l:dir)
+    silent execute(l:command)
   endif
 endfunction
-nnoremap <silent><leader>T :call OpenNewTab()<cr>
+nnoremap <silent><leader>% :call OpenNew(1)<cr>
+nnoremap <silent><leader>c :call OpenNew(0)<cr>
 
-" Auto create file/folder
+"--- Customize theme ---"
+syntax off
+set background=dark
+
+hi clear SignColumn
+hi clear VertSplit
+hi clear Error
+
+filetype on
+filetype indent on
+
+hi NonText                        ctermfg=none     ctermbg=none     cterm=none
+hi Normal                         ctermfg=none     ctermbg=none     cterm=none
+hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
+hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
+
+hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
+hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
+
+hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
+
+hi ColorColumn                    ctermfg=none     ctermbg=black
+hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
+
+"--- Etc ---"
 function! Mkdir()
   let dir = expand('%:p:h')
 
@@ -111,29 +156,24 @@ function! Mkdir()
   endif
 endfunction
 
-" Relative path(insert mode)
+function! NetrwSetting()
+  nnoremap <silent><buffer> u <nop>
+  nnoremap <silent><buffer> U <nop>
+  nnoremap <silent><buffer> <C-l> :nohl<cr>:e .<cr>
+  nnoremap <silent><buffer> mL :echo join(
+        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
+endfunction
+
 augroup changeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-" Customize theme
-syntax off
-set background=dark
-hi clear SignColumn
-hi clear VertSplit
-
-hi Title              ctermfg=none                    cterm=none
-hi Underlined         ctermfg=none                    cterm=none
-hi Pmenu               ctermfg=white      ctermbg=darkgray    cterm=none
-hi PmenuSel            ctermfg=black      ctermbg=blue        cterm=none
-hi Normal              ctermfg=none       ctermbg=none        cterm=none
-
 " Run when load file
 augroup loadFile
   autocmd!
-  runtime macros/matchit.vim " load matchit
-  autocmd FocusGained * checktime
+  autocmd FocusGained * redraw
+  autocmd BufEnter * silent! cd `=root_cwd`
   autocmd QuickFixCmdPost [^l]* cwindow
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
@@ -141,5 +181,6 @@ augroup loadFile
 
   autocmd BufWritePre * :%s/\s\+$//e " trim space when save
   autocmd BufWritePre * call Mkdir() " create file when folder is not exists
-augroup end
 
+  autocmd FileType netrw call NetrwSetting()
+augroup end
