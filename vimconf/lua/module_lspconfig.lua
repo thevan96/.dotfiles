@@ -5,25 +5,26 @@ vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', 'gj', vim.diagnostic.goto_next, opts)
 
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  -- vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<C-h>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({
   signs = true,
-  underline = false,
+  underline = true,
   severity_sort = true,
   virtual_text = false,
-  update_in_insert = false,
+  update_in_insert = true,
   float = {
     source = 'always',
     border = 'single'
@@ -31,7 +32,7 @@ vim.diagnostic.config({
 })
 
 local lsp_flags = {
-  debounce_text_changes = 150,
+  debounce_text_changes = 50,
 }
 
 local on_handlers =  {
@@ -51,6 +52,7 @@ local servers = {
   'tsserver',
   'rust_analyzer',
   'gopls',
+  'sumneko_lua',
 }
 
 local on_capabilities = require('cmp_nvim_lsp').update_capabilities(
@@ -67,12 +69,22 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+nvim_lsp.sumneko_lua.setup {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+}
+
 -- Add border for :LspInfo
 local win = require('lspconfig.ui.windows')
 local _default_opts = win.default_opts
 
 win.default_opts = function(options)
-  local opts = _default_opts(options)
-  opts.border = 'rounded'
-  return opts
+  local winopts = _default_opts(options)
+  winopts.border = 'rounded'
+  return winopts
 end

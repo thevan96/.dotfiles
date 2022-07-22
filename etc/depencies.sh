@@ -3,6 +3,7 @@
 pip install -U pynvim
 pip install -U Send2Trash
 pip install -U cpplint
+pip install -U httpie
 
 npm install -g neovim
 npm install -g prettier

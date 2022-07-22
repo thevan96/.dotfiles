@@ -3,8 +3,7 @@ ZSH_THEME='robbyrussell'
 DISABLE_AUTO_TITLE="true"
 
 # Plugins
-plugins=(vi-mode)
-VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+plugins=()
 
 # Load zsh
 source $ZSH/oh-my-zsh.sh

@@ -12,7 +12,7 @@ set smartcase
 set showmatch
 set autoindent
 
-set nonumber
+set number
 set norelativenumber
 
 set laststatus=2
@@ -21,98 +21,92 @@ set textwidth=80
 set colorcolumn=+1
 
 set list
+set listchars=tab:»\ ,trail:-,nbsp:+
+set fillchars=vert:\|
+
 set wildmenu
 set wildmode=longest,list
-set completeopt=menu,preview
-
-" Status line
-set statusline=
-set statusline+=%<%f\ %h%m%r
-set statusline+=%{FugitiveStatusline()}
-set statusline+=%=
-set statusline+=%-14.(%l,%c%V%)\ %P
+set completeopt=menu,menuone,noselect
 
 " Other
 set mouse=a
 set matchtime=0
 set nofoldenable
-set nocursorline
-set nrformats+=alpha
-set pumheight=25
+set cursorline
+set cursorlineopt=number
 set diffopt=vertical
+set pumheight=30
+set updatetime=100
 
 " Netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+let g:netrw_banner = 0
+let g:netrw_cursor = 0
+let g:netrw_keepdir= 0
+let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
 let html_no_rendering = 1
+nnoremap S <nop>
+inoremap <C-n> <nop>
+inoremap <C-p> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
-augroup settingTabSpace
-  autocmd!
-  autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
-  autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
-  autocmd FileType snippets setlocal tabstop=2 shiftwidth=2 expandtab | retab
-augroup end
 
 " Set keymap
 let mapleader = ' '
+let g:root_cwd = getcwd()
 
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap <silent><C-l> :nohl<cr>:redraw!<cr>
-nnoremap <silent><leader>L :set number!<cr>
-nnoremap <silent><leader>vi
-      \ :source $MYVIMRC<cr>
-      \ :echo 'Reload vim config done!'<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+nnoremap <silent><leader>D :bd!<cr>
+nnoremap <silent><C-l> :nohl<cr>:redraw!<cr>
+nnoremap <silent><leader>L :set relativenumber!<cr>
+
+nnoremap <leader>C :cd `=g:root_cwd`<cr>:echo 'Root: '.g:root_cwd<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-d> <esc>:call setline(".",substitute(getline(line(".")),'^\s*',
       \ matchstr(getline(line(".")-1),'^\s*'),''))<cr>I
+
+nnoremap <silent><leader>vi
+      \ :source $MYVIMRC<cr>
+      \ :echo 'Reload vim config done!'<cr>
+
+" File manager
+nnoremap <leader>f :e .<cr>
+nnoremap <leader>F :JumpFile<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y :%y+<cr>
-nnoremap <leader>p "+p
+nnoremap <leader>p o<esc>"+p
+nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
 
-" Navigate window
-nnoremap <tab>j <C-w>j
-nnoremap <tab>k <C-w>k
-nnoremap <tab>h <C-w>h
-nnoremap <tab>l <C-w>l
-
-" Better indent, move
+" Better indent
 xnoremap < <gv
 xnoremap > >gv
 
 " Navigate quickfix, buffers
-nnoremap [q :cprev<cr>
-nnoremap ]q :cnext<cr>
-nnoremap [Q :cfirst<cr>
-nnoremap ]Q :clast<cr>
-nnoremap [b :bprevious<cr>
-nnoremap ]b :bnext<cr>
-nnoremap [B :bfirst<cr>
-nnoremap ]B :blast<cr>
+nnoremap <tab>o :copen<cr>
+nnoremap <tab>x :cclose<cr>
+nnoremap <tab>k :cprev<cr>
+nnoremap <tab>j :cnext<cr>
+nnoremap <tab>H :cfirst<cr>
+nnoremap <tab>L :clast<cr>
 
-" Open in tab terminal(tmux/gnome terminal)
-function! OpenNew(mode)
-  let l:dir = expand('%:p:h')
-  let l:command = a:mode? ':!tmux split-window -h -c '.l:dir
-        \ : ':!tmux new-window -c '.l:dir.' -a'
-
-  if isdirectory(l:dir)
-    silent execute(l:command)
-  endif
-endfunction
-nnoremap <silent><leader>% :call OpenNew(1)<cr>
-nnoremap <silent><leader>c :call OpenNew(0)<cr>
+" Open in tab terminal
+nnoremap <leader>"
+      \ :silent exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>%
+      \ :silent exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>c
+      \ :silent exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 call plug#begin()
 
@@ -127,8 +121,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
-inoremap <C-x><C-o> <Cmd>lua require('cmp').complete()<cr>
+" inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -157,7 +150,6 @@ let g:ale_cpp_cpplint_options = '--filter=-build/c++11,-whitespace/indent'
 if filereadable('package.json')
   if match(readfile('package.json'), 'prettier') > 0
     let g:ale_javascript_prettier_executable = 'npx prettier'
-    echo 'Prettier local active!'
   endif
 endif
 
@@ -185,51 +177,22 @@ nmap <silent><C-k> <Plug>(ale_previous_wrap)
 nmap <silent><C-j> <Plug>(ale_next_wrap)
 
 " Fuzzy search
-Plug 'junegunn/fzf.vim'
-set rtp+=~/.fzf
-
-let g:fzf_action = {
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \ }
-
-let ignoreDirectories = '
-      \ --exclude .git
-      \ --exclude .idea
-      \ --exclude .vscode
-      \ --exclude node_modules
-      \ --exclude vendor
-      \ --exclude composer
-      \ --exclude gems'
-
-let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.ignoreDirectories
-
-function! HandleSink(line)
-  execute('cd '.a:line)
-endfunction
-
-command! -bang -nargs=* Rg call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=never
-      \   --hidden --smart-case -- '.shellescape(<q-args>), 1,
-      \   fzf#vim#with_preview(), <bang>0)
-
-command! Directories call fzf#run(fzf#wrap({
-      \ 'source': 'fd --type d -H '.ignoreDirectories
-      \ }))
-command! Projects call fzf#run(fzf#wrap({
-      \ 'source': 'fd --type d -H '.ignoreDirectories,
-      \ 'dir': expand('$HOME/'),
-      \ 'sink': function('HandleSink')
-      \ }))
-
-let g:fzf_layout = { 'down': '40%' }
-let g:fzf_preview_window = ['right:50%', 'ctrl-/']
-nnoremap <leader>i :Files<cr>
-nnoremap <leader>I :Directories<cr>
-nnoremap <leader>P :Projects<cr>
-nnoremap <leader>s :Snippets<cr>
-nnoremap <leader>n :Rg<cr>
-nnoremap <leader>N :Rg <c-r><c-w><cr>
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+nnoremap <leader>o <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>i <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>I <cmd>lua require('telescope.builtin').find_files({
+      \ prompt_title = 'Find directory',
+      \ find_command = { 'fdfind', '--type', 'd' },
+      \ cwd = vim.fn.getcwd(),
+      \ })<cr>
+nnoremap <leader>n <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>N <cmd>lua require('telescope.builtin').grep_string()<cr>
+nnoremap <leader>s
+      \ <cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>
+nnoremap <leader>S
+      \ <cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>
 
 " Itegrated git
 Plug 'tpope/vim-fugitive'
@@ -247,144 +210,36 @@ nmap <leader>ts :TestSuite<cr>
 " Generate document comment
 Plug 'kkoomen/vim-doge'
 let g:doge_enable_mappings= 1
-let g:doge_mapping = '<leader>D'
-
-" Debugger
-Plug 'rcarriga/nvim-dap-ui'
-Plug 'mfussenegger/nvim-dap'
-nnoremap <leader>dc <cmd>lua require'dap'.continue()<cr>
-nnoremap <leader>di <cmd>lua require'dap'.step_into()<cr>
-nnoremap <leader>do <cmd>lua require'dap'.step_over()<cr>
-nnoremap <leader>dO <cmd>lua require'dap'.step_out()<cr>
-nnoremap <leader>db <cmd>lua require'dap'.toggle_breakpoint()<cr>
-nnoremap <leader>dC
-      \ <cmd>lua require'dap'.set_breakpoint(
-      \   vim.fn.input('Breakpoint condition: ')
-      \ )<cr>
-nnoremap <leader>dl
-      \ <cmd>lua require'dap'.set_breakpoint(
-      \   nil, nil, vim.fn.input('Log point message: ')
-      \ )<cr>
-nnoremap <leader>dB <cmd>lua require'dap'.clear_breakpoints()<cr>
-nnoremap <leader>dr <cmd>lua require'dap'.repl.toggle()<cr>
-nnoremap <leader>dL <cmd>lua require'dap'.run_last()<cr>
-nnoremap <leader>dq <cmd>lua require'dap'.close()<cr>
-      \ :echo 'Close debugger'<cr>
-      \ <cmd>lua require'dapui'.close()<cr>
-nnoremap <leader>dt <cmd>lua require'dapui'.toggle()<cr>
-
-" File manager
-Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins'  }
-augroup defxConfig
-  autocmd FileType defx setlocal nonumber norelativenumber
-  autocmd FileType defx call s:defx_my_settings()
-  autocmd FileChangedShellPost,BufWritePost * call defx#redraw()
-augroup end
-nnoremap <silent><leader>f :Defx
-      \ -new
-      \ -sort=filename:extension
-      \ -columns=indent:mark:filename
-      \ -show-ignored-files<cr>
-nnoremap <silent><leader>F :Defx `expand('%:p:h')` -search=`expand('%:p')`
-      \ -sort=filename:extension
-      \ -columns=indent:mark:filename
-      \ -show-ignored-files<cr>
-
-command! -nargs=? -complete=dir Explore silent execute 'Defx '.
-      \ expand('%:p:h').
-      \ ' -search='.expand('%:p').
-      \ ' -new -sort=filename:extension -columns=indent:mark:filename'.
-      \ ' -show-ignored-files'
-command! -nargs=? -complete=dir Vexplore vsplit | silent execute 'Defx '.
-      \ expand('%:p:h').
-      \ ' -search='.expand('%:p').
-      \ ' -new -sort=filename:extension -columns=indent:mark:filename'.
-      \ ' -show-ignored-files'
-command! -nargs=? -complete=dir Sexplore split | silent execute 'Defx '.
-      \ expand('%:p:h').
-      \ ' -search='.expand('%:p').
-      \ ' -new -sort=filename:extension -columns=indent:mark:filename'.
-      \ ' -show-ignored-files'
-
-function! s:defx_my_settings() abort
-  call defx#custom#column('filename', {
-        \ 'min_width': 50,
-        \ 'max_width': 100,
-        \ })
-  call defx#custom#column('icon', {
-        \ 'directory_icon': '',
-        \ 'opened_icon': '',
-        \ 'file_icon': '',
-        \ 'root_icon': '',
-        \ })
-  nnoremap <silent><buffer><expr> <cr>
-        \ defx#do_action('open')
-  nnoremap <silent><buffer><expr> v
-        \ defx#do_action('open', 'vsplit')
-  nnoremap <silent><buffer><expr> s
-        \ defx#do_action('open', 'split')
-  nnoremap <silent><buffer><expr> -
-        \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> D
-        \ defx#do_action('remove_trash')
-  nnoremap <silent><buffer><expr> mc
-        \ defx#do_action('copy')
-  nnoremap <silent><buffer><expr> mm
-        \ defx#do_action('move')
-  nnoremap <silent><buffer><expr> mt
-        \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> R
-        \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> d
-        \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> %
-        \ defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> T
-        \ defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> mf
-        \ defx#do_action('toggle_select')
-  nnoremap <silent><buffer><expr> mF
-        \ defx#do_action('clear_select_all')
-  nnoremap <silent><buffer><expr> y
-        \ defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> gh
-        \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> q
-        \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> <C-l>
-        \ defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> <C-g>
-        \ defx#do_action('print')
-  nnoremap <silent><buffer><expr> cd
-        \ defx#do_action('change_vim_cwd')
-endfunction
+let g:doge_mapping = '<leader>d'
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
-Plug 'jbyuki/venn.nvim'
 Plug 'j-hui/fidget.nvim'
-Plug 'kylechui/nvim-surround'
-Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'simeji/winresizer'
-let g:winresizer_start_key = '<leader>e'
+Plug 'tyru/open-browser.vim'
+Plug 'weirongxu/plantuml-previewer.vim'
+let g:plantuml_previewer#debug_mode = 1
+let g:plantuml_previewer#plantuml_jar_path =
+      \ expand('$HOME/.config/plantuml/plantuml-1.2022.6.jar')
 
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_auto_header = 1
 let g:vimwiki_list = [{'path': '~/Workspace/Personal/notes/'}]
 
-Plug 'christoomey/vim-tmux-runner'
-let g:VtrPercentage = 50
-let g:VtrOrientation = 'h'
-nnoremap <leader>rr :VtrSendLinesToRunner<cr>
-xnoremap <leader>rr :VtrSendLinesToRunner<cr>gv
-nnoremap <leader>rs :VtrSendCommandToRunner<cr>
-nnoremap <leader>ra :VtrAttachToPane<cr>
-nnoremap <leader>rd :VtrDetachRunner<cr>
-nnoremap <leader>rx :VtrKillRunner<cr>
-nnoremap <leader>ro :VtrOpenRunner<cr>
-nnoremap <leader>rc :VtrClearRunner<cr>
+Plug 'preservim/vimux'
+let g:VimuxHeight = '50'
+let g:VimuxOrientation = "h"
+nnoremap <silent><leader>ro :VimuxOpenRunner<cr>
+nnoremap <silent><leader>rc :VimuxPromptCommand<cr>
+nnoremap <silent><leader>rx :VimuxCloseRunner<cr>
+nnoremap <silent><leader>rl :VimuxRunLastCommand<cr>
+nnoremap <silent><leader>rL :VimuxClearTerminalScreen<cr>
+vnoremap <silent><leader>rr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+nnoremap <silent><leader>rr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
+autocmd FileType sql
+      \ nnoremap <silent><leader>ri :call VimuxRunCommand('\i '.expand('%'))<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -413,14 +268,14 @@ hi FloatBorder                    ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
 hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=black
-hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
-
 hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr                   ctermfg=white    ctermbg=none     cterm=none
+
+hi ColorColumn                    ctermfg=none     ctermbg=black
+hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
 
 hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
 hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
@@ -435,14 +290,14 @@ hi DiagnosticSignWarn             ctermfg=yellow   ctermbg=none     cterm=none
 hi DiagnosticSignInfo             ctermfg=blue     ctermbg=none     cterm=none
 hi DiagnosticSignHint             ctermfg=green    ctermbg=none     cterm=none
 
-hi DiagnosticFloatingError        ctermfg=none     ctermbg=none     cterm=none
-hi DiagnosticFloatingWarning      ctermfg=none     ctermbg=none     cterm=none
-hi DiagnosticFloatingInformation  ctermfg=none     ctermbg=none     cterm=none
-hi DiagnosticFloatingHint         ctermfg=none     ctermbg=none     cterm=none
+hi DiagnosticFloatingError        ctermfg=red      ctermbg=none     cterm=none
+hi DiagnosticFloatingWarning      ctermfg=yellow   ctermbg=none     cterm=none
+hi DiagnosticFloatingInformation  ctermfg=blue     ctermbg=none     cterm=none
+hi DiagnosticFloatingHint         ctermfg=green    ctermbg=none     cterm=none
 
-hi ALEErrorSign                   ctermbg=none     ctermfg=red      cterm=none
-hi ALEInforSign                   ctermbg=none     ctermfg=blue     cterm=none
-hi ALEWarningSign                 ctermbg=none     ctermfg=yellow   cterm=none
+hi ALEErrorSign                   ctermfg=red      ctermbg=none     cterm=none
+hi ALEInforSign                   ctermfg=blue     ctermbg=none     cterm=none
+hi ALEWarningSign                 ctermfg=yellow   ctermbg=none     cterm=none
 
 "--- Etc ---
 function! Mkdir()
@@ -457,43 +312,62 @@ function! Mkdir()
   endif
 endfunction
 
-function! s:browse_check(path) abort
-  if bufnr('%') != expand('<abuf>')
-    return
-  endif
+function! JumpFile()
+  let file_name = expand('%:t')
+  e %:p:h
+  call search(file_name)
+endfunction
+command! JumpFile call JumpFile()
 
-  execute 'Defx
-        \ -new
-        \ -sort=filename:extension
-        \ -columns=indent:mark:filename
-        \ -show-ignored-files
-        \ ' a:path
+function! NetrwSetting()
+  autocmd BufLeave <buffer> cd `=g:root_cwd`
+  nnoremap <silent><buffer> u <nop>
+  nnoremap <silent><buffer> U <nop>
+  nnoremap <silent><buffer> s <nop>
+  nnoremap <silent><buffer> <C-l> :nohl<cr>:e .<cr>
+  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
+  nnoremap <silent><buffer> mL :echo join(
+        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
 endfunction
 
-augroup changeWorkingDirectory
+augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
+augroup settingTabSpace
+  autocmd!
+  autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
+  autocmd FileType snippets setlocal tabstop=2 shiftwidth=2 expandtab | retab
+augroup end
+
 augroup LoadFile
   autocmd!
-  autocmd FocusGained * redraw
-  autocmd VimResized * wincmd = " auto resize window
+  autocmd FocusGained * redraw!
+  autocmd VimResized * wincmd =
+  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
 
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
   autocmd BufWritePre * call Mkdir()
+
+  autocmd BufNew,BufRead *.uml set ft=uml
   autocmd BufNew,BufRead,BufWritePost .editorconfig :EditorConfigReload
   autocmd BufNew,BufRead,BufWritePost diary.wiki :VimwikiDiaryGenerateLinks
 
-  " Defx replace netrw
-  autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufRead,BufCreate
-        \ * if isdirectory(expand('<amatch>'))
-        \   | call s:browse_check(expand('<amatch>')) | endif
+  autocmd FileType netrw call NetrwSetting()
+augroup end
 
-  autocmd FileType vim-plug setlocal nocursorline
-  autocmd FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup RunFile
+  autocmd!
+  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
+  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
+  autocmd FileType javascriptreact vnoremap <leader>R :w !node<cr>
+  autocmd FileType javascriptreact nnoremap <leader>R :!node %<cr>
+  autocmd FileType python vnoremap <leader>R :w !python<cr>
+  autocmd FileType python nnoremap <leader>R :!python %<cr>
+  autocmd FileType cpp nnoremap <leader>R :!g++ % -o %:r && ./%:r<cr>
 augroup end
 
 "--- Load lua---
@@ -501,11 +375,8 @@ lua << EOF
   require 'module_treesitter'
   require 'module_lspconfig'
   require 'module_cmp'
-  require 'module_venn'
-  require 'module_dap'
-  require 'module_dapui'
+  require 'module_telescope'
 
   -- Without config
   require 'fidget'.setup()
-  require 'nvim-surround'.setup()
 EOF

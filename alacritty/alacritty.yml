@@ -46,8 +46,8 @@ colors:
     foreground: "#ffffff"
 
   cursor:
-    text: "#ffffff"
-    cursor: "#ff55ff"
+    text: "#000000"
+    cursor: "#ffffff"
 
 cursor:
   style:
@@ -65,7 +65,7 @@ key_bindings:
   - { key: Space, mods: Shift|Control, mode: Vi|~Search, action: none }
   - { key: B, mods: Shift|Control, action: none }
 
-  - { key: F11, action: ToggleFullscreen }
+  - { key: Return, mods: Control, action: ToggleFullscreen }
 
   # Linux/window
   - { key: V, mods: Control|Shift, action: Paste }

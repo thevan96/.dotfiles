@@ -2,17 +2,16 @@ local cmp = require('cmp')
 local cmp_ultisnips_mappings = require('cmp_nvim_ultisnips.mappings')
 
 local ELLIPSIS_CHAR = '…'
-local MAX_LABEL_WIDTH = 40
-local MIN_LABEL_WIDTH = 40
+local MAX_LABEL_WIDTH = 25
+local MIN_LABEL_WIDTH = 25
 
 cmp.setup({
   completion = {
     autocomplete = false,
-    completeopt = 'menu,preview',
-    -- keyword_length = 4,
+    -- keyword_length = 3,
   },
   formatting = {
-    format = function(entry, vim_item)
+    format = function(_, vim_item)
       local label = vim_item.abbr
       local truncated_label = vim.fn.strcharpart(label, 0, MAX_LABEL_WIDTH)
       if truncated_label ~= label then

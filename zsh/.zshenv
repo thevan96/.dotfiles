@@ -14,9 +14,21 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$HOME/.config/lua-language-server/bin:$PATH
+
+# Alias
+alias cl="clear"
+alias vim="nvim"
+alias tm="tmux"
+alias ta="tmux attach"
+alias nnn="NNN_TRASH=1 nnn -eoH"
+alias g++="g++ -std=c++14 -O2 -Wall -Wshadow"
+alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias phone="emulator @phone"
+alias cp_pwd="pwd | xclip -selection clipboard"
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind --type f --type d -H \
+export FZF_DEFAULT_COMMAND="fdfind . $HOME --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -27,41 +39,11 @@ export FZF_DEFAULT_COMMAND="fdfind --type f --type d -H \
   "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Alias
-alias cl="clear"
-alias vim="nvim"
-alias fd="fdfind"
-alias nnn="NNN_TRASH=1 nnn -eoH"
-alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias phone="emulator @phone"
-alias cp_pwd="pwd | xclip -selection clipboard"
-
-poo() {
-  echo 'Pomodoro starting ...' \
-  && sleep 1500 \
-  && notify-send -u critical 'Notify' 'Pomodoro 25 minutes' \
-  && echo 'Pomodoro end'
-}
-
-pss() {
-  echo 'Short break starting ...' \
-  && sleep 300 \
-  && notify-send -u critical 'Notify' 'Short break 5 minutes' \
-  && echo 'Short break end'
-}
-
-pll() {
-  echo 'Long break starting ...' \
-  && sleep 600 \
-  && notify-send -u critical 'Notify' 'Long break 10 minutes' \
-  && echo 'Long break end'
-}
-
-mkdir_cd() {
+cd_mkdir() {
   mkdir $1 && cd $_
 }
 
-sys_update() {
+update_sys() {
   sudo apt -y update \
   && sudo apt -y upgrade \
   && sudo apt -y autoclean \
@@ -72,7 +54,7 @@ bs() {
   browser-sync start --server --files "**/*.*" --port ${1}
 }
 
-asdf_update() {
+update_asdf() {
   asdf reshim nodejs
   asdf reshim python
   asdf reshim rust
