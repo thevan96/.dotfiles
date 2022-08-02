@@ -1,5 +1,14 @@
-require('telescope').setup{
+local telescope = require('telescope')
+local actions = require('telescope.actions')
+
+telescope.setup {
   defaults = {
+    mappings = {
+      i = {
+        ['<C-s>'] = actions.select_horizontal,
+        ['<C-v>'] = actions.select_vertical
+      }
+    },
     vimgrep_arguments = {
       'rg',
       '--hidden',
@@ -36,4 +45,4 @@ require('telescope').setup{
   }
 }
 
-require('telescope').load_extension('fzf')
+telescope.load_extension('fzf')

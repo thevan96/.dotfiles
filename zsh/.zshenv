@@ -22,7 +22,6 @@ alias vim="nvim"
 alias tm="tmux"
 alias ta="tmux attach"
 alias nnn="NNN_TRASH=1 nnn -eoH"
-alias g++="g++ -std=c++14 -O2 -Wall -Wshadow"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 alias phone="emulator @phone"
 alias cp_pwd="pwd | xclip -selection clipboard"
@@ -38,6 +37,10 @@ export FZF_DEFAULT_COMMAND="fdfind . $HOME --type d -H \
   --exclude gems \
   "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+exit() {
+  echo 'Use <C-d> instead!'
+}
 
 cd_mkdir() {
   mkdir $1 && cd $_

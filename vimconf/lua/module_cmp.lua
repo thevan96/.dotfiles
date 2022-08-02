@@ -1,14 +1,14 @@
 local cmp = require('cmp')
-local cmp_ultisnips_mappings = require('cmp_nvim_ultisnips.mappings')
 
 local ELLIPSIS_CHAR = '…'
-local MAX_LABEL_WIDTH = 25
-local MIN_LABEL_WIDTH = 25
+local MAX_LABEL_WIDTH = 30
+local MIN_LABEL_WIDTH = 30
 
 cmp.setup({
+  preselect = cmp.PreselectMode.None,
   completion = {
+    completeopt = 'menu,menuone,noselect',
     autocomplete = false,
-    -- keyword_length = 3,
   },
   formatting = {
     format = function(_, vim_item)
@@ -39,19 +39,6 @@ cmp.setup({
       i = cmp.mapping.abort(),
       n = cmp.mapping.close(),
     }),
-    ['<cr>'] = cmp.mapping.confirm({ select = true }),
-    ['<Tab>'] = cmp.mapping(
-      function(fallback)
-        cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-      end,
-      { 'i', 's', --[[ 'c' (to enable the mapping in command mode) ]] }
-    ),
-    ['<S-Tab>'] = cmp.mapping(
-      function(fallback)
-        cmp_ultisnips_mappings.jump_backwards(fallback)
-      end,
-      { 'i', 's', --[[ 'c' (to enable the mapping in command mode) ]] }
-    ),
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },

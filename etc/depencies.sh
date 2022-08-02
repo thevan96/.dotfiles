@@ -18,6 +18,7 @@ npm install -g typescript
 npm install -g typescript-language-server
 npm install -g vscode-langservers-extracted
 npm install -g vscode-css-languageservice
+npm install -g cssmodules-language-server
 npm install -g tree-sitter-cli
 npm install -g sass
 

@@ -2,9 +2,6 @@
 ZSH_THEME='robbyrussell'
 DISABLE_AUTO_TITLE="true"
 
-# Plugins
-plugins=()
-
 # Load zsh
 source $ZSH/oh-my-zsh.sh
 

@@ -47,7 +47,7 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#ffffff"
+    cursor: "#ff55ff"
 
 cursor:
   style:
@@ -64,21 +64,12 @@ key_bindings:
   - { key: Space, mods: Shift|Control, mode: ~Search, action: none }
   - { key: Space, mods: Shift|Control, mode: Vi|~Search, action: none }
   - { key: B, mods: Shift|Control, action: none }
-
   - { key: Return, mods: Control, action: ToggleFullscreen }
 
   # Linux/window
   - { key: V, mods: Control|Shift, action: Paste }
   - { key: C, mods: Control|Shift, action: Copy }
 
-  - { key: Plus, mods: Alt, action: IncreaseFontSize }
-  - { key: Minus, mods: Alt, action: DecreaseFontSize }
-  - { key: Key0, mods: Alt, action: ResetFontSize }
-
   # Macos
   - { key: V, mods: Command, action: Paste }
   - { key: C, mods: Command, action: Copy }
-
-  - { key: Plus, mods: Command, action: IncreaseFontSize }
-  - { key: Minus, mods: Command, action: DecreaseFontSize }
-  - { key: Key0, mods: Command, action: ResetFontSize }

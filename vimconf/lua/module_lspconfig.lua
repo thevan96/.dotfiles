@@ -1,12 +1,12 @@
 local nvim_lsp = require('lspconfig')
 
-local opts = { noremap=true, silent=true }
+local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', 'gj', vim.diagnostic.goto_next, opts)
 
 local on_attach = function(_, bufnr)
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
@@ -21,10 +21,9 @@ end
 
 vim.diagnostic.config({
   signs = true,
-  underline = true,
-  severity_sort = true,
+  underline = false,
   virtual_text = false,
-  update_in_insert = true,
+  update_in_insert = false,
   float = {
     source = 'always',
     border = 'single'
@@ -35,17 +34,18 @@ local lsp_flags = {
   debounce_text_changes = 50,
 }
 
-local on_handlers =  {
+local on_handlers = {
   ['textDocument/hover'] =
-    vim.lsp.with(vim.lsp.handlers.hover, {border = 'single'}),
+    vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
   ['textDocument/signatureHelp'] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'single'}),
+    vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' }),
 }
 
 local servers = {
   'html',
   'clangd',
   'cssls',
+  'cssmodules_ls',
   'jsonls',
   'pyright',
   'texlab',
@@ -59,6 +59,7 @@ local on_capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 on_capabilities.textDocument.completion.completionItem.snippetSupport = false
+on_capabilities.offsetEncoding = { 'utf-16' }
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
