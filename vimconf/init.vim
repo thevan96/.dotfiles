@@ -176,11 +176,18 @@ let g:doge_enable_mappings= 1
 let g:doge_mapping = '<leader>d'
 
 "--- Other plugins ---
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
-Plug 'stefandtw/quickfix-reflector.vim'
+" Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'takac/vim-hardtime'
+let g:hardtime_allow_different_key = 1
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_maxcount = 10
+let g:hardtime_ignore_buffer_patterns = ['git', 'txt']
 
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
@@ -194,7 +201,7 @@ let g:vimwiki_list = [{
       \   'path': '~/Workspace/Personal/notes/',
       \   'template_path': '~/.dotfiles/templates/',
       \   'template_default': 'template',
-      \   'template_ext': '.html'
+      \   'template_ext': '.html',
       \ }]
 
 Plug 'preservim/vimux'

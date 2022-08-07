@@ -6,15 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      html,
       body {
         font-size: 15px;
+        height: 100%;
+      }
+
+      pre {
+        font-size: 0.9em;
+        font-family: "Code New Roman";
+        padding: 20px;
       }
     </style>
   </head>
 
   <body>
-    <div class="content">%content%</div>
-    <p><small>Page created on %date%</small></p>
+    <main class="content">%content%</main>
+    <footer>
+      <p><small>Page created on %date%</small></p>
+    </footer>
   </body>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script

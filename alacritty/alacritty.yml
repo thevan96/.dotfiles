@@ -47,7 +47,7 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#ffffff"
+    cursor: "#ff55ff"
 
 cursor:
   style:
