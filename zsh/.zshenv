@@ -39,7 +39,7 @@ export FZF_DEFAULT_COMMAND="fdfind . $HOME --type d -H \
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 exit() {
-  echo 'Use <C-d> instead!'
+  echo "Use <C-d> instead!"
 }
 
 cd_mkdir() {

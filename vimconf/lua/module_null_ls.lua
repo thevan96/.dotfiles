@@ -54,7 +54,6 @@ null_ls.setup({
     null_ls.builtins.diagnostics.standardjs.with {
       condition = should_enable_standardjs,
     },
-    null_ls.builtins.diagnostics.cppcheck,
     null_ls.builtins.diagnostics.staticcheck,
     null_ls.builtins.diagnostics.tsc,
     null_ls.builtins.diagnostics.stylelint.with {

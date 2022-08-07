@@ -11,8 +11,13 @@ window:
     x: 0
     y: 0
 
+  padding:
+    x: 0
+    y: 0
+
   title: ""
   decorations: full
+  dynamic_padding: false
   startup_mode: fullscreen
 
 # Font
@@ -35,11 +40,6 @@ font:
     x: 0
     y: 0
 
-  padding:
-    x: 0
-    y: 0
-  dynamic_padding: false
-
 colors:
   primary:
     background: "#000000"
@@ -47,7 +47,7 @@ colors:
 
   cursor:
     text: "#000000"
-    cursor: "#ff55ff"
+    cursor: "#ffffff"
 
 cursor:
   style:

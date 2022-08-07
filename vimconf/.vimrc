@@ -51,8 +51,8 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-let html_no_rendering = 1
 nnoremap S <nop>
+let html_no_rendering = 1
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -82,9 +82,9 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " File manager netrw
-command! Ex execute 'JumpFile'
-command! Ve execute 'vsp+JumpFile'
-command! Se execute 'sp+JumpFile'
+cnoreabbrev silent Explore execute 'JumpFile'
+cnoreabbrev silent Vexplore execute 'vsp+JumpFile'
+cnoreabbrev silent Sexplore execute 'sp+JumpFile'
 command! Root execute 'cd ' fnameescape(g:root_cwd)
 
 " Mapping copy clipboard and past
@@ -136,6 +136,9 @@ hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
+hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
+hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
+
 hi ColorColumn                    ctermfg=none     ctermbg=black
 hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
@@ -156,7 +159,7 @@ endfunction
 
 function! JumpFile()
   let file_name = expand('%:t')
-  e %:p:h
+  Explore
   call search(file_name)
 endfunction
 command! JumpFile call JumpFile()
@@ -185,11 +188,14 @@ augroup ChangeWorkingDirectory
 augroup end
 
 augroup RunFile
+  autocmd!
+  autocmd FileType vimwiki nnoremap <leader>R :!node %<cr>
   autocmd FileType javascript vnoremap <leader>R :w !node<cr>
   autocmd FileType javascript nnoremap <leader>R :!node %<cr>
   autocmd FileType python vnoremap <leader>R :w !python<cr>
   autocmd FileType python nnoremap <leader>R :!python %<cr>
-  autocmd FileType cpp nnoremap <leader>R :!g++ % -o %:r && ./%:r<cr>
+  autocmd FileType cpp nnoremap <leader>R
+        \ :!g++ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
 augroup end
 
 augroup LoadFile

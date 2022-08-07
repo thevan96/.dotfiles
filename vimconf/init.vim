@@ -56,8 +56,8 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-let html_no_rendering = 1
 nnoremap S <nop>
+let html_no_rendering = 1
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -82,9 +82,9 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " File manager netrw
-command! Ex execute 'JumpFile'
-command! Ve execute 'vsp+JumpFile'
-command! Se execute 'sp+JumpFile'
+cnoreabbrev silent Explore execute 'JumpFile'
+cnoreabbrev silent Vexplore silent execute 'vsp+JumpFile'
+cnoreabbrev silent Sexplore execute 'sp+JumpFile'
 command! Root execute 'cd ' fnameescape(g:root_cwd)
 
 " Mapping copy clipboard and past
@@ -144,8 +144,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 nnoremap <leader>i :Root<cr><cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>N :Root<cr><cmd>lua require('telescope.builtin').grep_string()<cr>
 nnoremap <leader>n :Root<cr><cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>N :Root<cr><cmd>lua require('telescope.builtin').grep_string()<cr>
 nnoremap <leader>I :Root<cr><cmd>lua require('telescope.builtin').find_files({
       \ prompt_title = 'Find directory',
       \ find_command = { 'fdfind', '--type', 'd' },
@@ -176,10 +176,10 @@ let g:doge_enable_mappings= 1
 let g:doge_mapping = '<leader>d'
 
 "--- Other plugins ---
-" Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
-" Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'tyru/open-browser.vim'
@@ -232,6 +232,7 @@ hi clear VertSplit
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
+hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
 hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
 
@@ -243,6 +244,9 @@ hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 hi ColorColumn                    ctermfg=none     ctermbg=black
 hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
+
+hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
+hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
 
 hi DiagnosticError                ctermfg=red      ctermbg=none     cterm=none
 hi DiagnosticWarn                 ctermfg=yellow   ctermbg=none     cterm=none
@@ -274,7 +278,7 @@ endfunction
 
 function! JumpFile()
   let file_name = expand('%:t')
-  e %:p:h
+  Explore
   call search(file_name)
 endfunction
 command! JumpFile call JumpFile()
