@@ -52,6 +52,8 @@ let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
 nnoremap S <nop>
+nnoremap h <nop>
+nnoremap l <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -75,7 +77,7 @@ command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 nnoremap <silent><leader>D :bd!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>m m`:set norelativenumber!<cr>
+nnoremap <silent><leader>m m`:set relativenumber!<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 nnoremap <silent><leader>vi :source $MYVIMRC<cr>:echo 'Reload vim done!'<cr>
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
@@ -128,7 +130,7 @@ hi clear VertSplit
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
+hi Pmenu                          ctermfg=white    ctermbg=darkgray cterm=none
 hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
 
 hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
@@ -136,10 +138,7 @@ hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
-hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
-
-hi ColorColumn                    ctermfg=none     ctermbg=black
+hi ColorColumn                    ctermfg=none     ctermbg=darkgray
 hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
 

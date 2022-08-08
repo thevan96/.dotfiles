@@ -57,6 +57,8 @@ let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
 nnoremap S <nop>
+nnoremap h <nop>
+nnoremap l <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -124,11 +126,9 @@ Plug 'neovim/nvim-lspconfig'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -176,18 +176,10 @@ let g:doge_enable_mappings= 1
 let g:doge_mapping = '<leader>d'
 
 "--- Other plugins ---
-" Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
-" Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_allow_different_key = 1
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_maxcount = 10
-let g:hardtime_ignore_buffer_patterns = ['git', 'txt']
 
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
@@ -240,20 +232,17 @@ hi clear VertSplit
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=white    ctermbg=black    cterm=none
-hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
+hi Pmenu                          ctermfg=white    ctermbg=darkgray cterm=none
+hi PmenuSel                       ctermfg=darkgray ctermbg=blue     cterm=none
 
 hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=black
+hi ColorColumn                    ctermfg=none     ctermbg=darkgray
 hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
-
-hi StatusLine                     ctermfg=white    ctermbg=black    cterm=bold
-hi StatusLineNC                   ctermfg=white    ctermbg=black    cterm=none
 
 hi DiagnosticError                ctermfg=red      ctermbg=none     cterm=none
 hi DiagnosticWarn                 ctermfg=yellow   ctermbg=none     cterm=none

@@ -35,6 +35,7 @@ cmp.setup({
   mapping =  cmp.mapping.preset.insert({
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-x><C-o>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping({
       i = cmp.mapping.abort(),
       n = cmp.mapping.close(),
@@ -43,14 +44,6 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'ultisnips' },
-    {
-      name = 'buffer',
-      option = {
-        get_bufnrs = function()
-          return vim.api.nvim_list_bufs()
-        end
-      }
-    },
     { name = 'tmux' },
   })
 })

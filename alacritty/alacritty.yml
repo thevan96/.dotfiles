@@ -49,6 +49,16 @@ colors:
     text: "#000000"
     cursor: "#ff55ff"
 
+  normal:
+    white: "#ffffff"
+    black: "#000000"
+    red: "#cc6666"
+    green: "#b5bd68"
+    yellow: "#f0c674"
+    blue: "#81a2be"
+    magenta: "#b294bb"
+    cyan: "#8abeb7"
+
 cursor:
   style:
     shape: Block
