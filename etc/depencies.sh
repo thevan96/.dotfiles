@@ -15,14 +15,10 @@ npm install -g pyright
 npm install -g yarn
 npm install -g tree-sitter-cli
 npm install -g typescript
-npm install -g typescript-language-server
-npm install -g vscode-langservers-extracted
-npm install -g vscode-css-languageservice
-npm install -g cssmodules-language-server
+npm install -g pnpm
 npm install -g tree-sitter-cli
 npm install -g sass
 
-go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/jesseduffield/lazygit@latest
 go install github.com/jesseduffield/lazydocker@latest
 go install golang.org/x/tools/gopls@latest

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ `ibus engine | awk '{ print  }'` == 'BambooUs' ]]; then
+  echo 'US'
+else
+  echo 'VN'
+fi
