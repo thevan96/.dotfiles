@@ -43,5 +43,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   graphviz \
   vim-gtk \
   clang-format \
+  cppcheck \
   stow
 fi

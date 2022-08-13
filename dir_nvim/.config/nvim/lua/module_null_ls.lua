@@ -58,6 +58,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.stylelint.with {
       condition = should_enable_stylint,
     },
+    null_ls.builtins.diagnostics.cppcheck,
 
     -- Formating
     null_ls.builtins.formatting.eslint.with {

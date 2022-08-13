@@ -162,7 +162,7 @@ nnoremap <leader>L
 Plug 'tpope/vim-fugitive'
 nnoremap <leader>< :diffget //2<cr>:diffupdate<cr>
 nnoremap <leader>> :diffget //3<cr>:diffupdate<cr>
-command Glog Git log --oneline --graph
+command Glog Git log --all --graph --decorate --oneline
 
 " Test
 Plug 'vim-test/vim-test'
@@ -181,6 +181,7 @@ let g:doge_mapping = '<leader>d'
 Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'jbyuki/venn.nvim'
+Plug 'lukas-reineke/virt-column.nvim'
 
 Plug 'rmagatti/goto-preview'
 nnoremap gmd <cmd>lua require('goto-preview').goto_preview_definition()<cr>
@@ -276,6 +277,16 @@ function! Mkdir()
   endif
 endfunction
 
+" CreateFile
+function! CreateFile(path)
+  let date = strftime('%Y-%m-%d')
+  let path = a:path.date.'.txt'
+  execute ':e '. fnameescape(path)
+endfunction
+command! Diary call CreateFile('~/Workspace/Personal/todo-diary/diary/')
+command! Todo call CreateFile('~/Workspace/Personal/todo-diary/todo/')
+command! Note call CreateFile('~/Workspace/Personal/notes/')
+
 function! JumpFile()
   let file_name = expand('%:t')
   Explore
@@ -350,4 +361,5 @@ lua << EOF
   -- Without config
   require 'fidget'.setup()
   require 'goto-preview'.setup()
+  require 'virt-column'.setup()
 EOF

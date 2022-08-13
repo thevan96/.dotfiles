@@ -46,6 +46,16 @@ cd_mkdir() {
   mkdir $1 && cd $_
 }
 
+notes() {
+  cd ~/Workspace/Personal/notes/
+  vim .
+}
+
+tododiary() {
+  cd ~/Workspace/Personal/todo-diary/
+  vim .
+}
+
 update_sys() {
   sudo apt -y update \
   && sudo apt -y upgrade \
