@@ -42,7 +42,7 @@ set statusline+=%=
 set statusline+=%-14.(%l,%c%V%)\ %P
 
 " Other
-set mouse=nv
+set mouse-=a
 set showmatch
 set autoindent
 set matchtime=0
@@ -137,8 +137,47 @@ let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-" Linter and format
-Plug 'jose-elias-alvarez/null-ls.nvim'
+" Linter and format:
+" Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'dense-analysis/ale'
+let g:ale_fix_on_save = 1
+let g:ale_disable_lsp = 1
+let g:ale_linters_explicit = 1
+
+let g:ale_set_signs = 1
+let g:ale_set_highlights = 0
+
+let g:ale_open_list = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+let g:ale_linters = {
+    \ 'javascript': ['standard'],
+    \ 'javascriptreact': ['standard'],
+    \ 'cpp': ['cppcheck'],
+    \ 'go': ['staticcheck'],
+    \ }
+
+let g:ale_fixers = {
+    \ 'javascript': ['standard'],
+    \ 'javascriptreact': ['standard'],
+    \ 'html': ['prettier'],
+    \ 'json': ['prettier'],
+    \ 'css': ['prettier'],
+    \ 'scss': ['prettier'],
+    \ 'yaml': ['prettier'],
+    \ 'markdown': ['prettier'],
+    \ 'go': ['gofmt'],
+    \ 'rust': ['rustfmt'],
+    \ 'cpp': ['clang-format'],
+    \ }
+
+nmap <silent><C-k> <Plug>(ale_previous_wrap)
+nmap <silent><C-j> <Plug>(ale_next_wrap)
 
 " Fuzzy search
 Plug 'nvim-lua/plenary.nvim'
@@ -181,7 +220,6 @@ let g:doge_mapping = '<leader>d'
 Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'jbyuki/venn.nvim'
-Plug 'lukas-reineke/virt-column.nvim'
 
 Plug 'rmagatti/goto-preview'
 nnoremap gmd <cmd>lua require('goto-preview').goto_preview_definition()<cr>
@@ -200,7 +238,7 @@ let g:plantuml_previewer#plantuml_jar_path =
 
 Plug 'preservim/vimux'
 let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
+let g:VimuxOrientation = 'v'
 nnoremap <silent><leader>ro :VimuxOpenRunner<cr>
 nnoremap <silent><leader>rc :VimuxPromptCommand<cr>
 nnoremap <silent><leader>rx :VimuxCloseRunner<cr>
@@ -234,35 +272,39 @@ hi clear VertSplit
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=white    ctermbg=darkgray cterm=none
-hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
+hi Pmenu                          ctermfg=15       ctermbg=240      cterm=none
+hi PmenuSel                       ctermfg=0        ctermbg=33       cterm=none
 
-hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=darkgray
-hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
+hi ColorColumn                    ctermfg=none     ctermbg=233
+hi SpecialKey                     ctermfg=240      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=240      ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=black    ctermbg=white    cterm=bold
-hi StatusLineNC                   ctermfg=black    ctermbg=white    cterm=none
+hi StatusLine                     ctermfg=15       ctermbg=233      cterm=bold
+hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
 
-hi DiagnosticError                ctermfg=red      ctermbg=none     cterm=none
-hi DiagnosticWarn                 ctermfg=yellow   ctermbg=none     cterm=none
-hi DiagnosticInfo                 ctermfg=blue     ctermbg=none     cterm=none
-hi DiagnosticHint                 ctermfg=green    ctermbg=none     cterm=none
+hi DiagnosticError                ctermfg=160      ctermbg=none     cterm=none
+hi DiagnosticWarn                 ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticInfo                 ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticHint                 ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticSignError            ctermfg=red      ctermbg=none     cterm=none
-hi DiagnosticSignWarn             ctermfg=yellow   ctermbg=none     cterm=none
-hi DiagnosticSignInfo             ctermfg=blue     ctermbg=none     cterm=none
-hi DiagnosticSignHint             ctermfg=green    ctermbg=none     cterm=none
+hi DiagnosticSignError            ctermfg=160      ctermbg=none     cterm=none
+hi DiagnosticSignWarn             ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticSignInfo             ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticSignHint             ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticFloatingError        ctermfg=red      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarning      ctermfg=yellow   ctermbg=none     cterm=none
-hi DiagnosticFloatingInformation  ctermfg=blue     ctermbg=none     cterm=none
-hi DiagnosticFloatingHint         ctermfg=green    ctermbg=none     cterm=none
+hi DiagnosticFloatingError        ctermfg=160      ctermbg=none     cterm=none
+hi DiagnosticFloatingWarning      ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticFloatingInformation  ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticFloatingHint         ctermfg=34       ctermbg=none     cterm=none
+
+hi ALEErrorSign                   ctermfg=160      ctermbg=none     cterm=none
+hi ALEWarningSign                 ctermfg=190      ctermbg=none     cterm=none
+hi ALEInforSign                   ctermfg=33       ctermbg=none     cterm=none
 
 "--- Etc ---
 function! Mkdir()
@@ -353,7 +395,7 @@ lua << EOF
   require 'module_treesitter'
   require 'module_lspconfig'
   require 'module_telescope'
-  require 'module_null_ls'
+  -- require 'module_null_ls'
   require 'module_mason'
   require 'module_venn'
   require 'module_cmp'
@@ -361,5 +403,4 @@ lua << EOF
   -- Without config
   require 'fidget'.setup()
   require 'goto-preview'.setup()
-  require 'virt-column'.setup()
 EOF

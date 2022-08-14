@@ -35,7 +35,7 @@ set backspace=indent,eol,start
 set completeopt=menu,menuone,noselect
 
 " Other
-set mouse=nv
+set mouse-=a
 set showmatch
 set autoindent
 set matchtime=0
@@ -128,20 +128,20 @@ hi clear VertSplit
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=white    ctermbg=darkgray cterm=none
-hi PmenuSel                       ctermfg=black    ctermbg=blue     cterm=none
+hi Pmenu                          ctermfg=15       ctermbg=240      cterm=none
+hi PmenuSel                       ctermfg=0        ctermbg=21       cterm=none
 
-hi LineNr                         ctermfg=darkgray ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=darkgray ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=darkgray ctermbg=none     cterm=none
+hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=darkgray
-hi SpecialKey                     ctermfg=darkgray ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=darkgray ctermbg=none     cterm=none
+hi ColorColumn                    ctermfg=none     ctermbg=233
+hi SpecialKey                     ctermfg=240      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=240      ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=black    ctermbg=white    cterm=bold
-hi StatusLineNC                   ctermfg=black    ctermbg=white    cterm=none
+hi StatusLine                     ctermfg=15       ctermbg=233      cterm=bold
+hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
 
 "--- Etc ---"
 function! Mkdir()

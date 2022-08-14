@@ -1,17 +1,5 @@
 local null_ls = require('null-ls')
 
-local should_enable_eslint = function(utils)
-  return utils.root_has_file { 'node_modules/.bin/eslint' }
-end
-
-local should_enable_standardjs = function(utils)
-  return utils.root_has_file { 'node_modules/.bin/standard' }
-end
-
-local should_enable_stylint = function(utils)
-  return utils.root_has_file { 'node_modules/.bin/stylelint' }
-end
-
 local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 local async_formatting = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
@@ -45,32 +33,37 @@ local async_formatting = function(bufnr)
   )
 end
 
+local should_enable_stylint = function(utils)
+  return utils.root_has_file { 'node_modules/.bin/stylelint' }
+end
+
+local should_enable_standard = function(utils)
+  return utils.root_has_file { 'node_modules/.bin/standard' }
+end
+
+local should_enable_prettier = function(utils)
+  return utils.root_has_file { 'node_modules/.bin/prettier' }
+end
+
 null_ls.setup({
   sources = {
     -- Diagnotics
-    null_ls.builtins.diagnostics.eslint.with {
-      condition = should_enable_eslint,
-    },
-    null_ls.builtins.diagnostics.standardjs.with {
-      condition = should_enable_standardjs,
-    },
     null_ls.builtins.diagnostics.tsc,
-    null_ls.builtins.diagnostics.stylelint.with {
-      condition = should_enable_stylint,
-    },
     null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.standardjs,
+    null_ls.builtins.diagnostics.stylelint.with({
+      condition = should_enable_stylint,
+    }),
 
     -- Formating
-    null_ls.builtins.formatting.eslint.with {
-      condition = should_enable_eslint,
-    },
-    null_ls.builtins.formatting.standardjs.with {
-      condition = should_enable_standardjs,
-    },
-    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.gofmt,
     null_ls.builtins.formatting.rustfmt,
     null_ls.builtins.formatting.clang_format,
+    null_ls.builtins.formatting.standardjs,
+    null_ls.builtins.formatting.prettier.with({
+      -- disabled_filetypes = { 'javascript', 'reactjavascript' },
+      condition = should_enable_prettier,
+    }),
   },
   debug = false,
   on_attach = function(client, bufnr)
