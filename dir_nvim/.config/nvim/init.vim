@@ -16,7 +16,7 @@ set list
 set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set laststatus=2
@@ -42,7 +42,7 @@ set statusline+=%=
 set statusline+=%-14.(%l,%c%V%)\ %P
 
 " Other
-set mouse-=a
+set mouse=a
 set showmatch
 set autoindent
 set matchtime=0
@@ -72,20 +72,22 @@ nnoremap gp `[v`]
 tnoremap <esc> <C-\><C-n>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
-nnoremap <silent><C-l> :nohl<cr>:redraw!<cr>
+nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <silent><leader>n :set number!<cr>
 nnoremap <silent><leader>m m`:set relativenumber!<cr>
+
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
-nnoremap <silent><leader>so :source $MYVIMRC<cr>:echo 'Reload vim done!'<cr>
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " File manager netrw
-command Ex :JumpFile
-command Ve :vsp+JumpFile
-command Se :sp+JumpFile
-command Root execute 'cd ' fnameescape(g:root_cwd)
+nnoremap <leader>ff :JumpFile<cr>
+nnoremap <leader>fv :vsp+JumpFile<cr>
+nnoremap <leader>fs :sp+JumpFile<cr>
+nnoremap <leader>fr :e `=g:root_cwd`<cr>
+command! Root execute 'cd ' fnameescape(g:root_cwd)
+command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+y
@@ -126,10 +128,11 @@ Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-x><c-o> <cmd>lua require('cmp').complete()<cr>
+inoremap <C-n> <cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -138,9 +141,8 @@ let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " Linter and format:
-" Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'dense-analysis/ale'
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
 let g:ale_disable_lsp = 1
 let g:ale_linters_explicit = 1
 
@@ -178,14 +180,15 @@ let g:ale_fixers = {
 
 nmap <silent><C-k> <Plug>(ale_previous_wrap)
 nmap <silent><C-j> <Plug>(ale_next_wrap)
+nnoremap <silent><leader>fm :ALEFix<cr>
 
 " Fuzzy search
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 nnoremap <leader>i :Root<cr><cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>n :Root<cr><cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>N :Root<cr><cmd>lua require('telescope.builtin').grep_string()<cr>
+nnoremap <leader>s :Root<cr><cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>S :Root<cr><cmd>lua require('telescope.builtin').grep_string()<cr>
 nnoremap <leader>I :Root<cr><cmd>lua require('telescope.builtin').find_files({
       \ prompt_title = 'Find directory',
       \ find_command = { 'fdfind', '--type', 'd' },
@@ -201,7 +204,13 @@ nnoremap <leader>L
 Plug 'tpope/vim-fugitive'
 nnoremap <leader>< :diffget //2<cr>:diffupdate<cr>
 nnoremap <leader>> :diffget //3<cr>:diffupdate<cr>
-command Glog Git log --all --graph --decorate --oneline
+nnoremap <leader>gs :Git<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gd :Gdiffsplit<cr>
+nnoremap <leader>gg :Git pull<cr>
+nnoremap <leader>gp :Git push<cr>
+nnoremap <leader>gP :Git push -f<cr>
+nnoremap <leader>gl :Git log --all --graph --decorate --oneline<cr>
 
 " Test
 Plug 'vim-test/vim-test'
@@ -221,12 +230,6 @@ Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'jbyuki/venn.nvim'
 
-Plug 'rmagatti/goto-preview'
-nnoremap gmd <cmd>lua require('goto-preview').goto_preview_definition()<cr>
-nnoremap gmt <cmd>lua require('goto-preview').goto_preview_type_definition()<cr>
-nnoremap gM <cmd>lua require('goto-preview').close_all_win()<cr>
-nnoremap gmr <cmd>lua require('goto-preview').goto_preview_references()<cr>
-
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -239,14 +242,14 @@ let g:plantuml_previewer#plantuml_jar_path =
 Plug 'preservim/vimux'
 let g:VimuxHeight = '50'
 let g:VimuxOrientation = 'v'
-nnoremap <silent><leader>ro :VimuxOpenRunner<cr>
-nnoremap <silent><leader>rc :VimuxPromptCommand<cr>
-nnoremap <silent><leader>rx :VimuxCloseRunner<cr>
-nnoremap <silent><leader>rl :VimuxRunLastCommand<cr>
-nnoremap <silent><leader>rL :VimuxClearTerminalScreen<cr>
-vnoremap <silent><leader>rr "vy :call VimuxRunCommand(@v, 1)<cr>gv
-nnoremap <silent><leader>rr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-autocmd FileType sql nnoremap <silent><leader>ri
+nnoremap <silent><leader>vo :VimuxOpenRunner<cr>
+nnoremap <silent><leader>vc :VimuxPromptCommand<cr>
+nnoremap <silent><leader>vx :VimuxCloseRunner<cr>
+nnoremap <silent><leader>vl :VimuxRunLastCommand<cr>
+nnoremap <silent><leader>vL :VimuxClearTerminalScreen<cr>
+vnoremap <silent><leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+nnoremap <silent><leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
+autocmd FileType sql nnoremap <silent><leader>vi
       \ :call VimuxRunCommand('\i '.expand('%'))<cr>
 
 Plug 'editorconfig/editorconfig-vim'
@@ -271,9 +274,9 @@ hi clear VertSplit
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=15       ctermbg=240      cterm=none
-hi PmenuSel                       ctermfg=0        ctermbg=33       cterm=none
+hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
+hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
+hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
 hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
@@ -289,22 +292,22 @@ hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
 
 hi DiagnosticError                ctermfg=160      ctermbg=none     cterm=none
 hi DiagnosticWarn                 ctermfg=190      ctermbg=none     cterm=none
-hi DiagnosticInfo                 ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticInfo                 ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticHint                 ctermfg=34       ctermbg=none     cterm=none
 
 hi DiagnosticSignError            ctermfg=160      ctermbg=none     cterm=none
 hi DiagnosticSignWarn             ctermfg=190      ctermbg=none     cterm=none
-hi DiagnosticSignInfo             ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticSignInfo             ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticSignHint             ctermfg=34       ctermbg=none     cterm=none
 
 hi DiagnosticFloatingError        ctermfg=160      ctermbg=none     cterm=none
 hi DiagnosticFloatingWarning      ctermfg=190      ctermbg=none     cterm=none
-hi DiagnosticFloatingInformation  ctermfg=33       ctermbg=none     cterm=none
+hi DiagnosticFloatingInformation  ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticFloatingHint         ctermfg=34       ctermbg=none     cterm=none
 
 hi ALEErrorSign                   ctermfg=160      ctermbg=none     cterm=none
 hi ALEWarningSign                 ctermfg=190      ctermbg=none     cterm=none
-hi ALEInforSign                   ctermfg=33       ctermbg=none     cterm=none
+hi ALEInforSign                   ctermfg=39       ctermbg=none     cterm=none
 
 "--- Etc ---
 function! Mkdir()
@@ -336,6 +339,7 @@ function! JumpFile()
 endfunction
 command! JumpFile call JumpFile()
 
+command! JumpFile call JumpFile()
 function! NetrwSetting()
   autocmd BufLeave <buffer> cd `=g:root_cwd`
   nnoremap <silent><buffer> u <nop>
@@ -356,24 +360,24 @@ augroup SettingTabSpace
   autocmd!
   autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
   autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
-  autocmd FileType snippets setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
-  autocmd FileType python vnoremap <leader>R :w !python<cr>
-  autocmd FileType python nnoremap <leader>R :!python %<cr>
-  autocmd FileType cpp nnoremap <leader>R
-        \ :!g++ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
+  autocmd FileType javascript vnoremap <leader>rf :w !node<cr>
+  autocmd FileType javascript nnoremap <leader>rf :!node %<cr>
+  autocmd FileType python vnoremap <leader>rf :w !python<cr>
+  autocmd FileType python nnoremap <leader>rf :!python %<cr>
+  autocmd FileType go nnoremap <leader>rf :!go run %<cr>
+  autocmd FileType cpp nnoremap <leader>rf :!./%:r<cr>
+  autocmd FileType cpp nnoremap <leader>rb :!g++ -std=c++17
+        \ -O2 -Wall -Wshadow % -o %:r<cr>
 augroup end
 
 augroup LoadFile
   autocmd!
   autocmd FocusGained * redraw!
   autocmd VimResized * wincmd =
-  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
 
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
@@ -385,8 +389,6 @@ augroup LoadFile
 
   autocmd BufNew,BufRead *.uml set ft=uml
   autocmd BufNew,BufRead,BufWritePost .editorconfig :EditorConfigReload
-  autocmd BufNew,BufRead,BufWritePost diary.wiki :VimwikiDiaryGenerateLinks
-
   autocmd FileType netrw call NetrwSetting()
 augroup end
 
@@ -395,12 +397,10 @@ lua << EOF
   require 'module_treesitter'
   require 'module_lspconfig'
   require 'module_telescope'
-  -- require 'module_null_ls'
   require 'module_mason'
   require 'module_venn'
   require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()
-  require 'goto-preview'.setup()
 EOF

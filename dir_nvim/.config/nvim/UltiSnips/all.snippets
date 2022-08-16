@@ -1,13 +1,13 @@
 # Date time
-snippet gdate "DD-MM-YYYY"
+snippet date "DD-MM-YYYY"
 `!v strftime("%d-%m-%Y")`
 endsnippet
 
-snippet gtime "hh:mm:ss"
+snippet time "hh:mm:ss"
 `!v strftime("%H:%M:%S")`
 endsnippet
 
-snippet gdt "DD-MM-YYYY hh:mm"
+snippet dt "DD-MM-YYYY hh:mm"
 `!v strftime("%d-%m-%Y %H:%M:%S")`
 endsnippet
 
@@ -16,4 +16,72 @@ snippet box "Box"
 │ $1 │
 `!p snip.rv = '└' + '─' * (len(t[1]) + 2) + '┘'`
 $0
+endsnippet
+
+snippet line
+________________________________________________________________________________
+endsnippet
+
+snippet diary "DD-MM-YYYY hh:mm"
+`!v strftime("%d-%m-%Y %H:%M:%S")`
+endsnippet
+
+snippet floor "Floor"
+⌊$1⌋
+endsnippet
+
+snippet ceil "Ceil"
+⌈$1⌉
+endsnippet
+
+snippet fa "for all"
+∀
+endsnippet
+
+snippet io "is an element of"
+∈
+endsnippet
+
+snippet ino "is an element of"
+∉
+endsnippet
+
+snippet null "null (empty set)"
+∅
+endsnippet
+
+snippet sum "Summation"
+∑
+endsnippet
+
+snippet mul "Multiplication"
+∏
+endsnippet
+
+snippet as "add and sub" i
+±
+endsnippet
+
+snippet exist "Exist"
+∃
+endsnippet
+
+snippet nexist "Exist"
+∄
+endsnippet
+
+snippet sqrt "Sqrt" i
+√
+endsnippet
+
+snippet cbrt "cbrt" i
+∛
+endsnippet
+
+snippet inf "Infinity" i
+∞
+endsnippet
+
+snippet pi "PI" i
+π
 endsnippet

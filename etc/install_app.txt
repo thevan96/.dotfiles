@@ -8,5 +8,4 @@ skype
 android studio
 anki
 pomotroid
-colorpicker: https://github.com/Toinane/colorpicker
 jumpappa: https://github.com/mkropat/jumpapp

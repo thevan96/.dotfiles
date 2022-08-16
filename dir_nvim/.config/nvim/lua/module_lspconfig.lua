@@ -23,21 +23,10 @@ vim.diagnostic.config({
   underline = false,
   virtual_text = false,
   update_in_insert = false,
-  float = {
-    source = 'always',
-    border = 'single'
-  },
 })
 
 local lsp_flags = {
   debounce_text_changes = 50,
-}
-
-local on_handlers = {
-  ['textDocument/hover'] =
-    vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
-  ['textDocument/signatureHelp'] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' }),
 }
 
 local servers = {
@@ -65,7 +54,6 @@ for _, lsp in ipairs(servers) do
     on_attach = on_attach,
     capabilities = on_capabilities,
     flags = lsp_flags,
-    handlers = on_handlers
   }
 end
 
@@ -78,13 +66,3 @@ nvim_lsp.sumneko_lua.setup {
     }
   }
 }
-
--- Add border for :LspInfo
-local win = require('lspconfig.ui.windows')
-local _default_opts = win.default_opts
-
-win.default_opts = function(options)
-  local winopts = _default_opts(options)
-  winopts.border = 'rounded'
-  return winopts
-end

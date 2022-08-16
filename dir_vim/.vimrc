@@ -16,7 +16,7 @@ set list
 set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set laststatus=2
@@ -72,20 +72,22 @@ nnoremap gp `[v`]
 tnoremap <esc> <C-\><C-n>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <silent><leader>n :set number!<cr>
 nnoremap <silent><leader>m m`:set relativenumber!<cr>
+
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
-nnoremap <silent><leader>vi :source $MYVIMRC<cr>:echo 'Reload vim done!'<cr>
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " File manager netrw
-command Ex :JumpFile
-command Ve :vsp+JumpFile
-command Se :sp+JumpFile
-command Root execute 'cd ' fnameescape(g:root_cwd)
+nnoremap <leader>ff :JumpFile<cr>
+nnoremap <leader>fv :vsp+JumpFile<cr>
+nnoremap <leader>fs :sp+JumpFile<cr>
+nnoremap <leader>fr :e `=g:root_cwd`<cr>
+command! Root execute 'cd ' fnameescape(g:root_cwd)
+command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+y
@@ -127,9 +129,9 @@ hi clear VertSplit
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=15       ctermbg=240      cterm=none
-hi PmenuSel                       ctermfg=0        ctermbg=21       cterm=none
+hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
+hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
+hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
 hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
@@ -179,7 +181,6 @@ augroup SettingTabSpace
   autocmd!
   autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
   autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
-  autocmd FileType snippets setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup ChangeWorkingDirectory
@@ -189,18 +190,16 @@ augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
-  autocmd FileType python vnoremap <leader>R :w !python<cr>
-  autocmd FileType python nnoremap <leader>R :!python %<cr>
-  autocmd FileType cpp nnoremap <leader>R
-        \ :!g++ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
+  autocmd FileType javascript vnoremap <leader>rf :w !node<cr>
+  autocmd FileType javascript nnoremap <leader>rf :!node %<cr>
+  autocmd FileType python vnoremap <leader>rf :w !python<cr>
+  autocmd FileType python nnoremap <leader>rf :!python %<cr>
+  autocmd FileType go nnoremap <leader>rf :!go run %<cr>
 augroup end
 
 augroup LoadFile
   autocmd!
   autocmd FocusGained * redraw!
-  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
   autocmd VimResized * wincmd =

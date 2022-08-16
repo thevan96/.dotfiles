@@ -21,14 +21,14 @@ telescope.setup {
       '--smart-case'
     },
     file_ignore_patterns = {
-      '.git',
-      '.idea',
-      '.vscode',
-      'node_modules',
-      'vendor',
-      'tmp',
-      'composer',
-      'gems',
+      '.git/',
+      '.idea/',
+      '.vscode/',
+      'node_modules/',
+      'vendor/',
+      'tmp/',
+      'composer/',
+      'gems/',
     },
   },
   pickers = {

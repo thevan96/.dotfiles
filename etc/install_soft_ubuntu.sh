@@ -42,7 +42,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   chrome-gnome-shell \
   graphviz \
   vim-gtk \
+  vim-gtk \
+  postgresql-client \
+  mysql-client \
   clang-format \
   cppcheck \
+  gpick \
   stow
 fi

@@ -20,6 +20,8 @@ export PATH=$HOME/.config/lua-language-server/bin:$PATH
 # Alias
 alias cl="clear"
 alias vim="nvim"
+alias lzg="lazygit"
+alias lzd="lazydocker"
 alias tm="tmux"
 alias ta="tmux attach"
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
@@ -27,7 +29,7 @@ alias phone="emulator @phone"
 alias cp_pwd="pwd | xclip -selection clipboard"
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind . $HOME --type d -H \
+export FZF_DEFAULT_COMMAND="fdfind . $HOME --type f -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
