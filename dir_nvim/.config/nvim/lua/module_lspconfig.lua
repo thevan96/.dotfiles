@@ -23,6 +23,9 @@ vim.diagnostic.config({
   underline = false,
   virtual_text = false,
   update_in_insert = false,
+  float = {
+    source = 'always'
+  },
 })
 
 local lsp_flags = {

@@ -1,6 +1,6 @@
 # Config zsh
-ZSH_THEME='robbyrussell'
-DISABLE_AUTO_TITLE="true"
+ZSH_THEME='simple'
+DISABLE_AUTO_TITLE='true'
 
 # Load zsh
 source $ZSH/oh-my-zsh.sh

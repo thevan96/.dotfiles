@@ -48,5 +48,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   clang-format \
   cppcheck \
   gpick \
+  jq \
   stow
 fi

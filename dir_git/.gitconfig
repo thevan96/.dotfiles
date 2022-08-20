@@ -8,3 +8,10 @@
 
 [init]
   defaultBranch = main
+
+[merge]
+  tool = nvimdiff
+[mergetool]
+  keepBackup = false
+[color]
+  status = always

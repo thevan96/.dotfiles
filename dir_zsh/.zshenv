@@ -29,7 +29,16 @@ alias phone="emulator @phone"
 alias cp_pwd="pwd | xclip -selection clipboard"
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind . $HOME --type f -H \
+export FZF_DEFAULT_COMMAND="fdfind --type f -H \
+  --exclude .git \
+  --exclude .idea \
+  --exclude .vscode \
+  --exclude node_modules \
+  --exclude vendor \
+  --exclude composer \
+  --exclude gems \
+  "
+export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -40,6 +49,14 @@ export FZF_DEFAULT_COMMAND="fdfind . $HOME --type f -H \
   "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+wgl() {
+  watch -c -n1 -t git log --all --decorate --oneline --graph --color
+}
+
+wgs() {
+  watch -c -n1 -t git status
+}
+
 exit() {
   echo "Use <C-d> instead!"
 }
@@ -49,12 +66,12 @@ cd_mkdir() {
 }
 
 notes() {
-  cd ~/Workspace/Personal/notes/
+  cd ~/Personal/notes/
   vim .
 }
 
 tododiary() {
-  cd ~/Workspace/Personal/todo-diary/
+  cd ~/Personal/todo-diary/
   vim .
 }
 

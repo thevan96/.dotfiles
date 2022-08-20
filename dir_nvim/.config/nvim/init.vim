@@ -34,13 +34,6 @@ set cursorlineopt=number
 set backspace=indent,eol,start
 set completeopt=menu,menuone,noselect
 
-" Status line
-set statusline=
-set statusline+=%<%f\ %h%m%r
-set statusline+=%{FugitiveStatusline()}
-set statusline+=%=
-set statusline+=%-14.(%l,%c%V%)\ %P
-
 " Other
 set mouse=a
 set showmatch
@@ -109,6 +102,20 @@ nnoremap gl :cnext<cr>
 nnoremap g< :cfirst<cr>
 nnoremap g> :clast<cr>
 
+" Fix conflict git
+if &diff
+  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
+  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
+  nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
+
+  function! RemoveConflictMarkers() range
+    echom a:firstline.'-'.a:lastline
+    execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+  endfunction
+  command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+endif
+
 " Open in tab terminal
 nnoremap <leader>"
       \ :silent exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
@@ -142,7 +149,7 @@ let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " Linter and format:
 Plug 'dense-analysis/ale'
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
 let g:ale_disable_lsp = 1
 let g:ale_linters_explicit = 1
 
@@ -180,37 +187,24 @@ let g:ale_fixers = {
 
 nmap <silent><C-k> <Plug>(ale_previous_wrap)
 nmap <silent><C-j> <Plug>(ale_next_wrap)
-nnoremap <silent><leader>fm :ALEFix<cr>
 
 " Fuzzy search
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-nnoremap <leader>i :Root<cr><cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>s :Root<cr><cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>S :Root<cr><cmd>lua require('telescope.builtin').grep_string()<cr>
-nnoremap <leader>I :Root<cr><cmd>lua require('telescope.builtin').find_files({
+nnoremap <leader>i :Root<cr>:lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>s :Root<cr>:lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>S :Root<cr>:lua require('telescope.builtin').grep_string()<cr>
+nnoremap <leader>I :Root<cr>:lua require('telescope.builtin').find_files({
       \ prompt_title = 'Find directory',
       \ find_command = { 'fdfind', '--type', 'd' },
       \ cwd = vim.fn.getcwd(),
       \ })<cr>
-nnoremap <leader>o <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>l
-      \ :Root<cr><cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>
-nnoremap <leader>L
-      \ :Root<cr><cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>
-
-" Itegrated git
-Plug 'tpope/vim-fugitive'
-nnoremap <leader>< :diffget //2<cr>:diffupdate<cr>
-nnoremap <leader>> :diffget //3<cr>:diffupdate<cr>
-nnoremap <leader>gs :Git<cr>
-nnoremap <leader>gb :Git blame<cr>
-nnoremap <leader>gd :Gdiffsplit<cr>
-nnoremap <leader>gg :Git pull<cr>
-nnoremap <leader>gp :Git push<cr>
-nnoremap <leader>gP :Git push -f<cr>
-nnoremap <leader>gl :Git log --all --graph --decorate --oneline<cr>
+nnoremap <leader>o :lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>l :Root<cr>
+      \ :lua require('telescope.builtin').lsp_document_symbols()<cr>
+nnoremap <leader>L :Root<cr>
+      \ :lua require('telescope.builtin').lsp_workspace_symbols()<cr>
 
 " Test
 Plug 'vim-test/vim-test'
@@ -220,13 +214,7 @@ nmap <leader>tn :TestNearest<cr>
 nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
-" Generate document comment
-Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-let g:doge_enable_mappings= 1
-let g:doge_mapping = '<leader>d'
-
 "--- Other plugins ---
-Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'jbyuki/venn.nvim'
 
@@ -242,15 +230,15 @@ let g:plantuml_previewer#plantuml_jar_path =
 Plug 'preservim/vimux'
 let g:VimuxHeight = '50'
 let g:VimuxOrientation = 'v'
-nnoremap <silent><leader>vo :VimuxOpenRunner<cr>
-nnoremap <silent><leader>vc :VimuxPromptCommand<cr>
-nnoremap <silent><leader>vx :VimuxCloseRunner<cr>
-nnoremap <silent><leader>vl :VimuxRunLastCommand<cr>
-nnoremap <silent><leader>vL :VimuxClearTerminalScreen<cr>
-vnoremap <silent><leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
-nnoremap <silent><leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-autocmd FileType sql nnoremap <silent><leader>vi
-      \ :call VimuxRunCommand('\i '.expand('%'))<cr>
+nnoremap <leader>vo :VimuxOpenRunner<cr>
+nnoremap <leader>vc :VimuxPromptCommand<cr>
+nnoremap <leader>vx :VimuxCloseRunner<cr>
+nnoremap <leader>vl :VimuxRunLastCommand<cr>
+nnoremap <leader>vL :VimuxClearTerminalScreen<cr>
+vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
+autocmd FileType sql nnoremap <leader>vi :call
+      \ VimuxRunCommand('\i '.expand('%'))<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -328,9 +316,9 @@ function! CreateFile(path)
   let path = a:path.date.'.txt'
   execute ':e '. fnameescape(path)
 endfunction
-command! Diary call CreateFile('~/Workspace/Personal/todo-diary/diary/')
-command! Todo call CreateFile('~/Workspace/Personal/todo-diary/todo/')
-command! Note call CreateFile('~/Workspace/Personal/notes/')
+command! Diary call CreateFile('~/Personal/todo-diary/diary/')
+command! Todo call CreateFile('~/Personal/todo-diary/todo/')
+command! Note call CreateFile('~/Personal/notes/')
 
 function! JumpFile()
   let file_name = expand('%:t')
@@ -356,22 +344,15 @@ augroup ChangeWorkingDirectory
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup SettingTabSpace
-  autocmd!
-  autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
-  autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
-augroup end
-
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>rf :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>rf :!node %<cr>
-  autocmd FileType python vnoremap <leader>rf :w !python<cr>
-  autocmd FileType python nnoremap <leader>rf :!python %<cr>
-  autocmd FileType go nnoremap <leader>rf :!go run %<cr>
-  autocmd FileType cpp nnoremap <leader>rf :!./%:r<cr>
-  autocmd FileType cpp nnoremap <leader>rb :!g++ -std=c++17
-        \ -O2 -Wall -Wshadow % -o %:r<cr>
+  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
+  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
+  autocmd FileType python vnoremap <leader>R :w !python<cr>
+  autocmd FileType python nnoremap <leader>R :!python %<cr>
+  autocmd FileType go nnoremap <leader>R :!go run %<cr>
+  autocmd FileType cpp nnoremap <leader>R :!g++
+        \ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
 augroup end
 
 augroup LoadFile
@@ -382,11 +363,11 @@ augroup LoadFile
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
-  autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$## " trim endlines
   autocmd BufWritePre * silent! :%s/\s\+$//e " trim whitespace
   autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
 
+  autocmd BufWritePre * call Mkdir()
   autocmd BufNew,BufRead *.uml set ft=uml
   autocmd BufNew,BufRead,BufWritePost .editorconfig :EditorConfigReload
   autocmd FileType netrw call NetrwSetting()

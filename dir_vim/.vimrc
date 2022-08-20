@@ -109,6 +109,20 @@ nnoremap gl :cnext<cr>
 nnoremap g< :cfirst<cr>
 nnoremap g> :clast<cr>
 
+" Fix conflict git
+if &diff
+  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
+  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
+  nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
+
+  function! RemoveConflictMarkers() range
+    echom a:firstline.'-'.a:lastline
+    execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+  endfunction
+  command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+endif
+
 " Open in tab terminal
 nnoremap <leader>"
       \ :silent exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
@@ -177,12 +191,6 @@ function! NetrwSetting()
         \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
 endfunction
 
-augroup SettingTabSpace
-  autocmd!
-  autocmd FileType go setlocal tabstop=4 shiftwidth=4 noexpandtab | retab
-  autocmd FileType vim setlocal tabstop=2 shiftwidth=2 expandtab | retab
-augroup end
-
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
@@ -190,24 +198,27 @@ augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>rf :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>rf :!node %<cr>
-  autocmd FileType python vnoremap <leader>rf :w !python<cr>
-  autocmd FileType python nnoremap <leader>rf :!python %<cr>
-  autocmd FileType go nnoremap <leader>rf :!go run %<cr>
+  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
+  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
+  autocmd FileType python vnoremap <leader>R :w !python<cr>
+  autocmd FileType python nnoremap <leader>R :!python %<cr>
+  autocmd FileType go nnoremap <leader>R :!go run %<cr>
+  autocmd FileType cpp nnoremap <leader>R :!g++
+        \ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
 augroup end
 
 augroup LoadFile
   autocmd!
   autocmd FocusGained * redraw!
+  autocmd VimResized * wincmd =
+
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
-  autocmd VimResized * wincmd =
 
   autocmd BufWritePre * silent! :%s/\s\+$//e " trim whitespace
   autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$## " trim endlines
   autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
-  autocmd BufWritePre * call Mkdir() " create file when folder is not exists
 
+  autocmd BufWritePre * call Mkdir() "
   autocmd FileType netrw call NetrwSetting()
 augroup end

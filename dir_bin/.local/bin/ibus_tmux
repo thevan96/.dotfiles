@@ -1,7 +1,10 @@
 #!/bin/bash
 
-if [[ `ibus engine | awk -F":" '{ print $2 }'` == "us" ]]; then
-  echo 'US'
+source=$(ibus engine)
+vn="Bamboo::Us"
+
+if [[ "$source" = "$vn" ]]; then
+  echo 'vn'
 else
-  echo 'VN'
+  echo 'en'
 fi
