@@ -70,11 +70,6 @@ notes() {
   vim .
 }
 
-tododiary() {
-  cd ~/Personal/todo-diary/
-  vim .
-}
-
 update_sys() {
   sudo apt -y update \
   && sudo apt -y upgrade \

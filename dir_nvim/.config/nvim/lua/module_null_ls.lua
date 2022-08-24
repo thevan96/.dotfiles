@@ -59,9 +59,10 @@ null_ls.setup({
     null_ls.builtins.formatting.gofmt,
     null_ls.builtins.formatting.rustfmt,
     null_ls.builtins.formatting.clang_format,
-    null_ls.builtins.formatting.standardjs,
+    null_ls.builtins.formatting.standardjs.with({
+      condition = should_enable_standard,
+    }),
     null_ls.builtins.formatting.prettier.with({
-      -- disabled_filetypes = { 'javascript', 'reactjavascript' },
       condition = should_enable_prettier,
     }),
   },

@@ -1,4 +1,8 @@
 # Date time
+snippet monthyear "MM-YYYY"
+`!v strftime("%d-%m-%Y")`
+endsnippet
+
 snippet date "DD-MM-YYYY"
 `!v strftime("%d-%m-%Y")`
 endsnippet
@@ -7,7 +11,7 @@ snippet time "hh:mm:ss"
 `!v strftime("%H:%M:%S")`
 endsnippet
 
-snippet dt "DD-MM-YYYY hh:mm"
+snippet datetime "DD-MM-YYYY hh:mm"
 `!v strftime("%d-%m-%Y %H:%M:%S")`
 endsnippet
 
@@ -20,10 +24,6 @@ endsnippet
 
 snippet line
 ________________________________________________________________________________
-endsnippet
-
-snippet diary "DD-MM-YYYY hh:mm"
-`!v strftime("%d-%m-%Y %H:%M:%S")`
 endsnippet
 
 snippet floor "Floor"
