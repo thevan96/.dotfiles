@@ -17,17 +17,6 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$HOME/.config/lua-language-server/bin:$PATH
 
-# Alias
-alias cl="clear"
-alias vim="nvim"
-alias lzg="lazygit"
-alias lzd="lazydocker"
-alias tm="tmux"
-alias ta="tmux attach"
-alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-alias phone="emulator @phone"
-alias cp_pwd="pwd | xclip -selection clipboard"
-
 # FZF
 export FZF_DEFAULT_COMMAND="fdfind --type f -H \
   --exclude .git \
@@ -48,6 +37,13 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
   --exclude gems \
   "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Alias
+alias vim="nvim"
+alias lzg="lazygit"
+alias lzd="lazydocker"
+alias cp_pwd="pwd | xclip -selection clipboard"
+alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 wgl() {
   watch -c -n1 -t git log --all --decorate --oneline --graph --color
