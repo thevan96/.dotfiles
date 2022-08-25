@@ -22,4 +22,4 @@ function _G.Toggle_venn()
 end
 
 -- toggle keymappings for venn using <leader>V
-vim.api.nvim_set_keymap('n', '<leader>V', ':lua Toggle_venn()<cr>', { noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>D', ':lua Toggle_venn()<cr>', { noremap = true})

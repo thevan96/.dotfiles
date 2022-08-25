@@ -3,7 +3,7 @@
   email = vothevan96@gmail.com
 
 [core]
-  editor = nvim
+  editor = vim
   excludesfile = /home/thevan96/.gitignore_global
 
 [init]
@@ -11,7 +11,9 @@
 
 [merge]
   tool = nvimdiff
+
 [mergetool]
   keepBackup = false
+
 [color]
   status = always

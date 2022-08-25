@@ -16,7 +16,7 @@ set list
 set listchars=tab:\|\ ,trail:-
 set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set laststatus=2
@@ -90,9 +90,10 @@ command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
-nnoremap <leader>y "+y
+nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
-nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>Y vg_"+y
+nnoremap <leader>gy :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p

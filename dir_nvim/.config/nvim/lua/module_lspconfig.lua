@@ -29,7 +29,7 @@ vim.diagnostic.config({
 })
 
 local lsp_flags = {
-  debounce_text_changes = 50,
+  debounce_text_changes = 0
 }
 
 local servers = {

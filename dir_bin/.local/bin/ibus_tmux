@@ -4,7 +4,7 @@ source=$(ibus engine)
 vn="Bamboo::Us"
 
 if [[ "$source" = "$vn" ]]; then
-  echo 'vn'
+  echo 'VN'
 else
-  echo 'en'
+  echo 'EN'
 fi

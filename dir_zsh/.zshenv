@@ -1,5 +1,5 @@
 #  Export env variable
-export EDITOR="nvim"
+export EDITOR="vim"
 export KEYTIMEOUT=1
 export TERM="screen-256color"
 
@@ -39,7 +39,6 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Alias
-alias vim="nvim"
 alias lzg="lazygit"
 alias lzd="lazydocker"
 alias cp_pwd="pwd | xclip -selection clipboard"
@@ -55,10 +54,6 @@ wgs() {
 
 exit() {
   echo "Use <C-d> instead!"
-}
-
-cd_mkdir() {
-  mkdir $1 && cd $_
 }
 
 notes() {

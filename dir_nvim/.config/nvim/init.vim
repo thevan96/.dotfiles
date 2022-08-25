@@ -16,7 +16,7 @@ set list
 set listchars=tab:\|\ ,trail:-
 set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set laststatus=2
@@ -83,9 +83,10 @@ command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
-nnoremap <leader>y "+y
+nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
-nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>Y vg_"+y
+nnoremap <leader>gy :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
@@ -113,7 +114,8 @@ if &diff
     echom a:firstline.'-'.a:lastline
     execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
   endfunction
-  command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+  command! -range=% GremoveConflictMarkers <line1>,<line2>call
+        \ RemoveConflictMarkers()
 endif
 
 " Open in tab terminal
@@ -195,7 +197,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 nnoremap <leader>i :Root<cr>:lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>s :Root<cr>:lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>S :Root<cr>:lua require('telescope.builtin').grep_string()<cr>
-nnoremap <leader>I :Root<cr>:lua require('telescope.builtin').find_files({
+nnoremap <leader>d :Root<cr>:lua require('telescope.builtin').find_files({
       \ prompt_title = 'Find directory',
       \ find_command = { 'fdfind', '--type', 'd' },
       \ cwd = vim.fn.getcwd(),
@@ -216,8 +218,6 @@ nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
-Plug 'jbyuki/venn.nvim'
-
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -229,19 +229,16 @@ let g:plantuml_previewer#plantuml_jar_path =
 
 Plug 'preservim/vimux'
 let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'v'
+let g:VimuxOrientation = 'h'
 nnoremap <leader>vo :VimuxOpenRunner<cr>
-nnoremap <leader>vc :VimuxPromptCommand<cr>
+nnoremap <leader>vp :VimuxPromptCommand<cr>
 nnoremap <leader>vx :VimuxCloseRunner<cr>
 nnoremap <leader>vl :VimuxRunLastCommand<cr>
-nnoremap <leader>vL :VimuxClearTerminalScreen<cr>
-vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+nnoremap <leader>vc :VimuxClearTerminalScreen<cr>
+nnoremap <leader>vC :VimuxInterruptRunner<cr>
+nnoremap <leader>vD :call VimuxRunCommand('exit')<cr>
 nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-autocmd FileType sql nnoremap <leader>vi :call
-      \ VimuxRunCommand('\i '.expand('%'))<cr>
-
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+vnoremap <leader>vb "vy :call VimuxRunCommand(@v, 1)<cr>gv
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
@@ -310,16 +307,6 @@ function! Mkdir()
   endif
 endfunction
 
-" CreateFile
-function! CreateFile(path)
-  let date = strftime('%Y-%m-%d')
-  let path = a:path.date.'.txt'
-  execute ':e '. fnameescape(path)
-endfunction
-command! Diary call CreateFile('~/Personal/todo-diary/diary/')
-command! Todo call CreateFile('~/Personal/todo-diary/todo/')
-command! Note call CreateFile('~/Personal/notes/')
-
 function! JumpFile()
   let file_name = expand('%:t')
   Explore
@@ -346,13 +333,19 @@ augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
-  autocmd FileType python vnoremap <leader>R :w !python<cr>
-  autocmd FileType python nnoremap <leader>R :!python %<cr>
-  autocmd FileType go nnoremap <leader>R :!go run %<cr>
-  autocmd FileType cpp nnoremap <leader>R :!g++
-        \ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
+  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
+  autocmd FileType python vnoremap <leader>vf :w !python<cr>
+
+  autocmd FileType javascript nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('node '.expand('%'))<cr>
+  autocmd FileType python nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('python '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('go run '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vd :call
+        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
+  autocmd FileType sql nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
 
 augroup LoadFile

@@ -34,3 +34,5 @@ asdf reshim python
 asdf reshim rust
 asdf reshim golang
 asdf reshim java
+
+sudo ln -sf $(which nvim) /usr/local/bin/vim
