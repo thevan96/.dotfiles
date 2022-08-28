@@ -204,15 +204,12 @@ augroup RunFile
   autocmd FileType python vnoremap <leader>R :w !python<cr>
   autocmd FileType python nnoremap <leader>R :!python %<cr>
   autocmd FileType go nnoremap <leader>R :!go run %<cr>
-  autocmd FileType cpp nnoremap <leader>R :!g++
-        \ -std=c++17 -O2 -Wall -Wshadow % -o %:r<cr>
 augroup end
 
 augroup LoadFile
   autocmd!
   autocmd FocusGained * redraw!
   autocmd VimResized * wincmd =
-
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
 

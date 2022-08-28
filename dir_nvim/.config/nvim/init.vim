@@ -43,10 +43,8 @@ set nofoldenable
 set diffopt=vertical
 
 " Netrw
-let g:netrw_banner = 0
-let g:netrw_cursor = 0
-let g:netrw_keepdir= 0
-let g:netrw_localcopydircmd = 'cp -r'
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
 " Disable
 nnoremap S <nop>
@@ -57,12 +55,10 @@ set tabstop=2 shiftwidth=2 expandtab | retab
 
 " Set keymap
 let mapleader = ' '
-let g:root_cwd = getcwd()
 
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-tnoremap <esc> <C-\><C-n>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
@@ -78,8 +74,7 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
-nnoremap <leader>fr :e `=g:root_cwd`<cr>
-command! Root execute 'cd ' fnameescape(g:root_cwd)
+nnoremap <leader>fr :e .<cr>
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
@@ -100,8 +95,8 @@ nnoremap go :copen<cr>
 nnoremap gx :cclose<cr>
 nnoremap gh :cprev<cr>
 nnoremap gl :cnext<cr>
-nnoremap g< :cfirst<cr>
-nnoremap g> :clast<cr>
+nnoremap gH :cfirst<cr>
+nnoremap gL :clast<cr>
 
 " Fix conflict git
 if &diff
@@ -110,21 +105,20 @@ if &diff
   nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
   nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
 
-  function! RemoveConflictMarkers() range
-    echom a:firstline.'-'.a:lastline
+  function! GRemoveMarkers() range
+    " echom a:firstline.'-'.a:lastline
     execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
   endfunction
-  command! -range=% GremoveConflictMarkers <line1>,<line2>call
-        \ RemoveConflictMarkers()
+  command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 endif
 
 " Open in tab terminal
-nnoremap <leader>"
-      \ :silent exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>%
-      \ :silent exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>c
-      \ :silent exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
+nnoremap <leader>" :silent
+      \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>% :silent
+      \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>c :silent
+      \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 call plug#begin()
 
@@ -190,23 +184,68 @@ let g:ale_fixers = {
 nmap <silent><C-k> <Plug>(ale_previous_wrap)
 nmap <silent><C-j> <Plug>(ale_next_wrap)
 
-" Fuzzy search
+" File manager
+Plug 'tamago324/lir.nvim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-nnoremap <leader>i :Root<cr>:lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>s :Root<cr>:lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>S :Root<cr>:lua require('telescope.builtin').grep_string()<cr>
-nnoremap <leader>d :Root<cr>:lua require('telescope.builtin').find_files({
-      \ prompt_title = 'Find directory',
-      \ find_command = { 'fdfind', '--type', 'd' },
-      \ cwd = vim.fn.getcwd(),
-      \ })<cr>
-nnoremap <leader>o :lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>l :Root<cr>
-      \ :lua require('telescope.builtin').lsp_document_symbols()<cr>
-nnoremap <leader>L :Root<cr>
-      \ :lua require('telescope.builtin').lsp_workspace_symbols()<cr>
+
+" Fuzzy search
+set rtp+=~/.fzf
+Plug 'junegunn/fzf.vim'
+Plug 'gfanto/fzf-lsp.nvim'
+Plug 'nvim-lua/plenary.nvim'
+let g:fzf_action = {
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
+let g:fzf_layout = { 'down': '50%' }
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+let rgIgnoreDirectories = "
+      \ -g '!{*/.git/*,*/.idea/*, */.vscode/*}'
+      \ -g '!{*/node_modules/*,*/vendor/*, */composer/*,*/gems/*}'"
+
+let fdIgnoreDirectories = '
+      \ --exclude .git
+      \ --exclude .idea
+      \ --exclude .vscode
+      \ --exclude node_modules
+      \ --exclude vendor
+      \ --exclude composer
+      \ --exclude gems '
+
+let $FZF_DEFAULT_COMMAND = 'fdfind --type f -H '.fdIgnoreDirectories
+
+function! SwitchProject(line)
+  %bd | cd `=a:line`
+endfunction
+
+command! Projects call fzf#run(fzf#wrap({
+      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories,
+      \   'dir': expand('$HOME'),
+      \   'sink': function('SwitchProject')
+      \ }))
+
+command! Directories call fzf#run(fzf#wrap({
+      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories
+      \ }))
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --hidden --column --line-number --no-heading --color=always
+      \   --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
+      \   1, fzf#vim#with_preview(), <bang>0
+      \ )
+
+nnoremap <leader>i :Files<cr>
+nnoremap <leader>d :Directories<cr>
+nnoremap <leader>D :Projects<cr>
+nnoremap <leader>o :Buffers<cr>
+nnoremap <leader>s :Rg<cr>
+nnoremap <leader>S :Rg <c-r><c-w><cr>
+nnoremap <leader>l :DocumentSymbols<cr>
+nnoremap <leader>L :WorkspaceSymbols<cr>
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " Test
 Plug 'vim-test/vim-test'
@@ -217,9 +256,16 @@ nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
+Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'simeji/winresizer'
+let g:winresizer_start_key='<leader>e'
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
@@ -309,22 +355,10 @@ endfunction
 
 function! JumpFile()
   let file_name = expand('%:t')
-  Explore
+  e %:p:h
   call search(file_name)
 endfunction
 command! JumpFile call JumpFile()
-
-command! JumpFile call JumpFile()
-function! NetrwSetting()
-  autocmd BufLeave <buffer> cd `=g:root_cwd`
-  nnoremap <silent><buffer> u <nop>
-  nnoremap <silent><buffer> U <nop>
-  nnoremap <silent><buffer> s <nop>
-  nnoremap <silent><buffer> <C-l> :nohl<cr>:e .<cr>
-  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
-  nnoremap <silent><buffer> mL :echo join(
-        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
-endfunction
 
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
@@ -352,7 +386,6 @@ augroup LoadFile
   autocmd!
   autocmd FocusGained * redraw!
   autocmd VimResized * wincmd =
-
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
@@ -362,18 +395,15 @@ augroup LoadFile
 
   autocmd BufWritePre * call Mkdir()
   autocmd BufNew,BufRead *.uml set ft=uml
-  autocmd BufNew,BufRead,BufWritePost .editorconfig :EditorConfigReload
-  autocmd FileType netrw call NetrwSetting()
 augroup end
 
 "--- Load lua---
 lua << EOF
   require 'module_treesitter'
   require 'module_lspconfig'
-  require 'module_telescope'
   require 'module_mason'
-  require 'module_venn'
   require 'module_cmp'
+  require 'module_lir'
 
   -- Without config
   require 'fidget'.setup()
