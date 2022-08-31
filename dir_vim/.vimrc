@@ -117,20 +117,20 @@ if &diff
   nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
   nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
 
-  function! RemoveConflictMarkers() range
-    echom a:firstline.'-'.a:lastline
+  function! GRemoveMarkers() range
+    " echom a:firstline.'-'.a:lastline
     execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
   endfunction
-  command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+  command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 endif
 
 " Open in tab terminal
-nnoremap <leader>"
-      \ :silent exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>%
-      \ :silent exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>c
-      \ :silent exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
+nnoremap <leader>" :silent
+      \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>% :silent
+      \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>c :silent
+      \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 "--- Customize theme ---"
 
@@ -199,11 +199,11 @@ augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>R :w !node<cr>
-  autocmd FileType javascript nnoremap <leader>R :!node %<cr>
-  autocmd FileType python vnoremap <leader>R :w !python<cr>
-  autocmd FileType python nnoremap <leader>R :!python %<cr>
-  autocmd FileType go nnoremap <leader>R :!go run %<cr>
+  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
+  autocmd FileType python vnoremap <leader>vf :w !python<cr>
+  autocmd FileType python nnoremap <leader>vf :!clear && python %<cr>
+  autocmd FileType javascript nnoremap <leader>vf :!clear && node %<cr>
+  autocmd FileType go nnoremap <leader>vf :!clear && gofmt -w % && go run %<cr>
 augroup end
 
 augroup LoadFile
@@ -217,6 +217,6 @@ augroup LoadFile
   autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$## " trim endlines
   autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
 
-  autocmd BufWritePre * call Mkdir() "
+  autocmd BufWritePre * call Mkdir()
   autocmd FileType netrw call NetrwSetting()
 augroup end

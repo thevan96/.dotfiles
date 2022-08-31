@@ -34,12 +34,16 @@ set cursorlineopt=number
 set backspace=indent,eol,start
 set completeopt=menu,menuone,noselect
 
+set nofoldenable
+set foldlevelstart=99
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
 " Other
 set mouse=a
 set showmatch
 set autoindent
 set matchtime=0
-set nofoldenable
 set diffopt=vertical
 
 " Netrw
@@ -161,15 +165,13 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 let g:ale_linters = {
-    \ 'javascript': ['standard'],
-    \ 'javascriptreact': ['standard'],
     \ 'cpp': ['cppcheck'],
     \ 'go': ['staticcheck'],
     \ }
 
 let g:ale_fixers = {
-    \ 'javascript': ['standard'],
-    \ 'javascriptreact': ['standard'],
+    \ 'javascript': ['prettier'],
+    \ 'javascriptreact': ['prettier'],
     \ 'html': ['prettier'],
     \ 'json': ['prettier'],
     \ 'css': ['prettier'],
@@ -236,7 +238,8 @@ command! -bang -nargs=* Rg
       \   1, fzf#vim#with_preview(), <bang>0
       \ )
 
-nnoremap <leader>i :Files<cr>
+nnoremap <leader>i :GFiles<cr>
+nnoremap <leader>I :Files<cr>
 nnoremap <leader>d :Directories<cr>
 nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
@@ -399,11 +402,11 @@ augroup end
 
 "--- Load lua---
 lua << EOF
-  require 'module_treesitter'
   require 'module_lspconfig'
   require 'module_mason'
   require 'module_cmp'
   require 'module_lir'
+  require 'module_treesitter'
 
   -- Without config
   require 'fidget'.setup()
