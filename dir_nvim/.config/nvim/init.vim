@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-
+set listchars=tab:\|\ ,trail:-,precedes:<,extends:>
 set fillchars=vert:\|
 
 set number
@@ -94,13 +94,20 @@ vnoremap <leader>p "+p
 xnoremap < <gv
 xnoremap > >gv
 
-" Navigate quickfix, buffers
+" Navigate quickfix/loclist
 nnoremap go :copen<cr>
 nnoremap gx :cclose<cr>
 nnoremap gh :cprev<cr>
 nnoremap gl :cnext<cr>
 nnoremap gH :cfirst<cr>
 nnoremap gL :clast<cr>
+
+nnoremap zo :lopen<cr>
+nnoremap zx :lclose<cr>
+nnoremap zh :lprev<cr>
+nnoremap zl :lnext<cr>
+nnoremap zH :lfirst<cr>
+nnoremap zL :llast<cr>
 
 " Fix conflict git
 if &diff
@@ -110,7 +117,6 @@ if &diff
   nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
 
   function! GRemoveMarkers() range
-    " echom a:firstline.'-'.a:lastline
     execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
   endfunction
   command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
@@ -195,7 +201,15 @@ set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 Plug 'gfanto/fzf-lsp.nvim'
 Plug 'nvim-lua/plenary.nvim'
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
 let g:fzf_action = {
+      \ 'ctrl-q': function('s:build_quickfix_list'),
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
@@ -238,8 +252,7 @@ command! -bang -nargs=* Rg
       \   1, fzf#vim#with_preview(), <bang>0
       \ )
 
-nnoremap <leader>i :GFiles<cr>
-nnoremap <leader>I :Files<cr>
+nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
 nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
@@ -259,13 +272,13 @@ nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
-Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'simeji/winresizer'
-let g:winresizer_start_key='<leader>e'
+" Plug 'mattn/emmet-vim'
+" Plug 'simeji/winresizer'
+" let g:winresizer_start_key='<leader>e'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
@@ -363,6 +376,17 @@ function! JumpFile()
 endfunction
 command! JumpFile call JumpFile()
 
+function! HandleLocList()
+  lua vim.diagnostic.setloclist({ open = false })
+  let numberWindow = winnr()
+  if len(getloclist(numberWindow, {'all': 0}).items) > 0
+    lopen
+    ll
+  else
+    lclose
+  endif
+endfunction
+
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
@@ -387,8 +411,9 @@ augroup end
 
 augroup LoadFile
   autocmd!
-  autocmd FocusGained * redraw!
   autocmd VimResized * wincmd =
+  autocmd FocusGained * redraw!
+
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
@@ -397,7 +422,10 @@ augroup LoadFile
   autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
 
   autocmd BufWritePre * call Mkdir()
+  autocmd BufWritePre *.* call HandleLocList()
   autocmd BufNew,BufRead *.uml set ft=uml
+
+  autocmd FileType lir setlocal nonumber
 augroup end
 
 "--- Load lua---

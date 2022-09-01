@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-
+set listchars=tab:\|\ ,trail:-,precedes:<,extends:>
 set fillchars=vert:\|
 
 set number
@@ -102,13 +102,20 @@ vnoremap <leader>p "+p
 xnoremap < <gv
 xnoremap > >gv
 
-" Navigate quickfix, buffers
+" Navigate quickfix/loclist
 nnoremap go :copen<cr>
 nnoremap gx :cclose<cr>
 nnoremap gh :cprev<cr>
 nnoremap gl :cnext<cr>
-nnoremap g< :cfirst<cr>
-nnoremap g> :clast<cr>
+nnoremap gH :cfirst<cr>
+nnoremap gL :clast<cr>
+
+nnoremap zo :lopen<cr>
+nnoremap zx :lclose<cr>
+nnoremap zh :lprev<cr>
+nnoremap zl :lnext<cr>
+nnoremap zH :lfirst<cr>
+nnoremap zL :llast<cr>
 
 " Fix conflict git
 if &diff
@@ -208,8 +215,9 @@ augroup end
 
 augroup LoadFile
   autocmd!
-  autocmd FocusGained * redraw!
   autocmd VimResized * wincmd =
+  autocmd FocusGained * redraw!
+
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
 

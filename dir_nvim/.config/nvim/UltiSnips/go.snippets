@@ -1,14 +1,16 @@
 snippet base "Base template for go"
 package main
 
-import (
-  "fmt"
-)
+import "fmt"
 
 func main() {
 }
 endsnippet
 
-snippet fp "fmt.Println()"
+snippet fpn "fmt.Println()"
 fmt.Println($1)
+endsnippet
+
+snippet fps "fmt.Printf()"
+fmt.Printf($1)
 endsnippet

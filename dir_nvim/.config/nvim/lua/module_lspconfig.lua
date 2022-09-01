@@ -1,9 +1,8 @@
 local nvim_lsp = require('lspconfig')
 
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', 'gj', vim.diagnostic.goto_next, opts)
+-- local opts = { noremap = true, silent = true }
+-- vim.keymap.set('n', 'sk', vim.diagnostic.goto_prev, opts)
+-- vim.keymap.set('n', 'sj', vim.diagnostic.goto_next, opts)
 
 local on_attach = function(_, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -19,7 +18,7 @@ local on_attach = function(_, bufnr)
 end
 
 vim.diagnostic.config({
-  signs = true,
+  signs = false,
   underline = false,
   virtual_text = false,
   update_in_insert = false,
@@ -27,10 +26,6 @@ vim.diagnostic.config({
     source = 'always'
   },
 })
-
-local lsp_flags = {
-  debounce_text_changes = 0
-}
 
 local servers = {
   'html',
@@ -56,7 +51,6 @@ for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
     capabilities = on_capabilities,
-    flags = lsp_flags,
   }
 end
 
