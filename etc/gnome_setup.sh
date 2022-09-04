@@ -15,4 +15,13 @@ sudo apt remove \
   deja-dup \
   aisleriot
 
-sudo apt install gnome-shell-extensions
+sudo apt install gnome-shell-extensions\
+  transmission \
+  uget \
+  flameshot \
+  gparted \
+  mpv \
+  gnome-tweaks \
+  gnome-screensaver \
+  chrome-gnome-shell \
+  vim-gtk

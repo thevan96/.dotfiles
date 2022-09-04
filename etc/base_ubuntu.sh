@@ -19,35 +19,25 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   make \
   cmake \
   ccls \
-  transmission \
-  uget \
-  blender \
-  gimp \
-  inkscape \
-  flameshot \
   watchman \
-  gparted \
-  mpv \
   rar \
   unrar \
   zip \
   ibus \
   xsel \
   xclip \
-  gnome-tweaks \
-  gnome-screensaver \
   wmctrl \
-  xtrlock \
-  vlc \
-  chrome-gnome-shell \
   graphviz \
-  vim-gtk \
   vim-gtk \
   postgresql-client \
   mysql-client \
   clang-format \
   cppcheck \
+  stow \
+
+  vlc \
+  blender \
+  gimp \
   gpick \
-  jq \
-  stow
+  inkscape
 fi

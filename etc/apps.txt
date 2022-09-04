@@ -8,4 +8,5 @@ skype
 android studio
 anki
 pomotroid
+plantuml
 jumpappa: https://github.com/mkropat/jumpapp

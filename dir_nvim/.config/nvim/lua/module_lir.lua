@@ -16,7 +16,7 @@ require'lir'.setup {
     ['cd'] = actions.cd,
     ['yp'] = actions.yank_path,
     ['.'] = actions.toggle_show_hidden,
-    ['D'] = actions.delete,
+    ['D'] = actions.wipeout,
 
     ['mf'] = function()
       mark_actions.toggle_mark()
