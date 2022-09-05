@@ -28,16 +28,15 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   xclip \
   wmctrl \
   graphviz \
-  vim-gtk \
   postgresql-client \
   mysql-client \
   clang-format \
   cppcheck \
   stow \
-
   vlc \
   blender \
   gimp \
   gpick \
+  rofi \
   inkscape
 fi

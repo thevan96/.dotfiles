@@ -1,12 +1,11 @@
 chrome
 vscode
 nvim
-discord
-slack
 libreoffice
 skype
 android studio
 anki
 pomotroid
 plantuml
+postman
 jumpappa: https://github.com/mkropat/jumpapp

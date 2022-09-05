@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source=$(ibus engine)
+vn="Bamboo::Us"
+
+if [[ "$source" = "$vn" ]]; then
+  echo 'vn'
+else
+  echo 'en'
+fi

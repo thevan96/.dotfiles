@@ -8,7 +8,7 @@ asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
 asdf plugin-add rust https://github.com/code-lever/asdf-rust.git
 echo 'asdf done!'
 
-node_version=16.16.0
+node_version=16.17.0
 python_version=3.10.6
 java_version=openjdk-17.0.2
 golang_version=1.19

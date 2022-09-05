@@ -23,7 +23,6 @@ npm install -g sass
 
 go install github.com/jesseduffield/lazygit@latest
 go install github.com/jesseduffield/lazydocker@latest
-go install golang.org/x/tools/gopls@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 
