@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-,precedes:<,extends:>
+set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
 set nonumber
@@ -51,7 +51,6 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Disable
-nnoremap S <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -62,6 +61,7 @@ let mapleader = ' '
 
 " Customizer mapping
 nnoremap Y y$
+nnoremap S <C-6>
 nnoremap gp `[v`]
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -334,8 +334,8 @@ hi StatusLine                     ctermfg=15       ctermbg=233      cterm=bold
 hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
-hi SpecialKey                     ctermfg=240      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=240      ctermbg=none     cterm=none
+hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
 
 hi DiagnosticError                ctermfg=160      ctermbg=none     cterm=none
 hi DiagnosticWarn                 ctermfg=190      ctermbg=none     cterm=none

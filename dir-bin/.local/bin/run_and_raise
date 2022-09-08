@@ -1,0 +1,2 @@
+#!/bin/bash
+wmctrl -xa "$1" || $1

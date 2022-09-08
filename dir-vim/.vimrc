@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-,precedes:<,extends:>
+set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
 set number
@@ -51,7 +51,6 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-nnoremap S <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -68,6 +67,7 @@ endif
 
 " Customizer mapping
 nnoremap Y y$
+nnoremap S <C-6>
 nnoremap gp `[v`]
 tnoremap <esc> <C-\><C-n>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -161,8 +161,8 @@ hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
-hi SpecialKey                     ctermfg=240      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=240      ctermbg=none     cterm=none
+hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
 
 "--- Etc ---"
 function! Mkdir()

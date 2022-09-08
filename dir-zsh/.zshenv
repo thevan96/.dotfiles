@@ -39,9 +39,8 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Alias
-alias tma="tmux attach"
-alias tm="tmux new -s default"
 alias vim="nvim"
+alias view="nvim -R"
 alias lzg="lazygit"
 alias lzd="lazydocker"
 alias cp_pwd="pwd | xclip -selection clipboard"
