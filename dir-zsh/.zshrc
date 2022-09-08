@@ -1,5 +1,5 @@
 # Config zsh
-ZSH_THEME='simple'
+ZSH_THEME='myzsh'
 DISABLE_AUTO_TITLE='true'
 
 # Load zsh
