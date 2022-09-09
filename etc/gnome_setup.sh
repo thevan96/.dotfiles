@@ -16,12 +16,7 @@ sudo apt remove \
   aisleriot
 
 sudo apt install gnome-shell-extensions\
-  transmission \
-  uget \
-  flameshot \
-  gparted \
-  mpv \
   gnome-tweaks \
   gnome-screensaver \
   chrome-gnome-shell \
-  vim-gtk
+  gnome-shell-pomodoro

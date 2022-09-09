@@ -14,9 +14,8 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
-set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set laststatus=2
@@ -51,6 +50,7 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Disable
+nnoremap S <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -61,7 +61,6 @@ let mapleader = ' '
 
 " Customizer mapping
 nnoremap Y y$
-nnoremap S <C-6>
 nnoremap gp `[v`]
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -276,9 +275,9 @@ Plug 'j-hui/fidget.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Plug 'mattn/emmet-vim'
-" Plug 'simeji/winresizer'
-" let g:winresizer_start_key='<leader>e'
+Plug 'mattn/emmet-vim'
+Plug 'simeji/winresizer'
+let g:winresizer_start_key='<leader>e'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1

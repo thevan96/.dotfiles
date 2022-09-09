@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source=$(ibus engine)
-vn="Bamboo::Us"
+vn="Bamboo"
 
 if [[ "$source" = "$vn" ]]; then
   echo 'vn'

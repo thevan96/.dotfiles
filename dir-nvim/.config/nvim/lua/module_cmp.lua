@@ -11,16 +11,17 @@ cmp.setup({
     end,
   },
   mapping =  cmp.mapping.preset.insert({
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<cr>'] = cmp.mapping.confirm({ select = true }),
     ['<C-e>'] = cmp.mapping({
       i = cmp.mapping.abort(),
       n = cmp.mapping.close(),
     }),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<CR>'] = cmp.mapping.confirm({ select = true })
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    { name = 'ultisnips' },
     {
       name = 'buffer',
       option = {
@@ -29,7 +30,6 @@ cmp.setup({
         end
       }
     },
-    { name = 'ultisnips' },
     { name = 'tmux' },
   })
 })

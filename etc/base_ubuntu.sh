@@ -33,10 +33,17 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   clang-format \
   cppcheck \
   stow \
+  rofi \
+  fonts-noto-color-emoji \
   vlc \
   blender \
   gimp \
   gpick \
-  rofi \
-  inkscape
+  inkscape \
+  uget \
+  flameshot \
+  gparted \
+  mpv \
+  vim-gtk \
+  transmission
 fi

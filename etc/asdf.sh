@@ -11,7 +11,7 @@ echo 'asdf done!'
 node_version=16.17.0
 python_version=3.10.6
 java_version=openjdk-17.0.2
-golang_version=1.19
+golang_version=1.19.1
 rust_version=1.63.0
 
 asdf install nodejs $node_version
