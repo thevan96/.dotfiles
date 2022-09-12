@@ -2,7 +2,7 @@
 window:
   title: ""
   decorations: full
-  startup_mode: fullscreen
+  startup_mode: windowed
 
 # Font
 font:
