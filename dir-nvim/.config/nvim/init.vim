@@ -332,9 +332,9 @@ hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 hi StatusLine                     ctermfg=15       ctermbg=233      cterm=bold
 hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=233
-hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
+hi ColorColumn                    ctermfg=none     ctermbg=232
+hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
 
 hi DiagnosticError                ctermfg=160      ctermbg=none     cterm=none
 hi DiagnosticWarn                 ctermfg=190      ctermbg=none     cterm=none

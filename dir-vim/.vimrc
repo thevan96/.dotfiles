@@ -160,9 +160,9 @@ hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=233
-hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
+hi ColorColumn                    ctermfg=none     ctermbg=232
+hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
 
 "--- Etc ---"
 function! Mkdir()

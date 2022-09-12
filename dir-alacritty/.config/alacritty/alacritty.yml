@@ -1,6 +1,6 @@
 # Window
 window:
-  title: ""
+  title: "Alacritty"
   decorations: full
   startup_mode: windowed
 
