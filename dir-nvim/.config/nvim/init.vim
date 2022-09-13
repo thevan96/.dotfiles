@@ -188,8 +188,8 @@ let g:ale_fixers = {
     \ 'cpp': ['clang-format'],
     \ }
 
-nmap <silent><C-k> <Plug>(ale_previous_wrap)
-nmap <silent><C-j> <Plug>(ale_next_wrap)
+nmap <silent>gK <Plug>(ale_previous_wrap)
+nmap <silent>gJ <Plug>(ale_next_wrap)
 
 " File manager
 Plug 'tamago324/lir.nvim'
@@ -336,23 +336,28 @@ hi ColorColumn                    ctermfg=none     ctermbg=232
 hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
 
-hi DiagnosticError                ctermfg=160      ctermbg=none     cterm=none
-hi DiagnosticWarn                 ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticError                ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticWarn                 ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticInfo                 ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticHint                 ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticSignError            ctermfg=160      ctermbg=none     cterm=none
-hi DiagnosticSignWarn             ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticSignError            ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticSignWarn             ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticSignInfo             ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticSignHint             ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticFloatingError        ctermfg=160      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarning      ctermfg=190      ctermbg=none     cterm=none
+hi DiagnosticUnderlineError       ctermfg=196      ctermbg=none     cterm=underline
+hi DiagnosticUnderlineWarn        ctermfg=226      ctermbg=none     cterm=underline
+hi DiagnosticUnderlineInfo        ctermfg=39       ctermbg=none     cterm=underline
+hi DiagnosticUnderlineHint        ctermfg=34       ctermbg=none     cterm=underline
+
+hi DiagnosticFloatingError        ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticFloatingWarning      ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticFloatingInformation  ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticFloatingHint         ctermfg=34       ctermbg=none     cterm=none
 
-hi ALEErrorSign                   ctermfg=160      ctermbg=none     cterm=none
-hi ALEWarningSign                 ctermfg=190      ctermbg=none     cterm=none
+hi ALEErrorSign                   ctermfg=196      ctermbg=none     cterm=none
+hi ALEWarningSign                 ctermfg=226      ctermbg=none     cterm=none
 hi ALEInforSign                   ctermfg=39       ctermbg=none     cterm=none
 
 "--- Etc ---
