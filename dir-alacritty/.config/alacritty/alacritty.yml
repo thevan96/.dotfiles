@@ -2,7 +2,7 @@
 window:
   title: "Alacritty"
   decorations: full
-  startup_mode: windowed
+  startup_mode: fullscreen
 
 # Font
 font:
