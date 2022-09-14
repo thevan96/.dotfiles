@@ -1,4 +1,0 @@
-#!/bin/bash
-
-dropbox &
-cap_to_esc &

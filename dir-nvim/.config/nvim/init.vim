@@ -140,11 +140,9 @@ Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-n> <cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -277,7 +275,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'mattn/emmet-vim'
 Plug 'simeji/winresizer'
-let g:winresizer_start_key='<leader>e'
+let g:winresizer_start_key='<leader>w'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
@@ -299,7 +297,7 @@ nnoremap <leader>vc :VimuxInterruptRunner<cr>
 nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
 nnoremap <leader>vD :call VimuxRunCommand('exit')<cr>
 nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-vnoremap <leader>vb "vy :call VimuxRunCommand(@v, 1)<cr>gv
+vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
@@ -318,47 +316,47 @@ hi clear Error
 hi clear SignColumn
 hi clear VertSplit
 
-hi NonText                        ctermfg=none     ctermbg=none     cterm=none
-hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
-hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
-hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
+hi NonText                   ctermfg=none     ctermbg=none     cterm=none
+hi Normal                    ctermfg=none     ctermbg=none     cterm=none
+hi NormalFloat               ctermfg=none     ctermbg=234      cterm=none
+hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
+hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
+hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=15       ctermbg=233      cterm=bold
-hi StatusLineNC                   ctermfg=15       ctermbg=233      cterm=none
+hi StatusLine                ctermfg=15       ctermbg=233      cterm=bold
+hi StatusLineNC              ctermfg=15       ctermbg=233      cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=232
-hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
+hi ColorColumn               ctermfg=none     ctermbg=233
+hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
+hi Whitespace                ctermfg=234      ctermbg=none     cterm=none
 
-hi DiagnosticError                ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticWarn                 ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticInfo                 ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticHint                 ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticHint            ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticSignError            ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticSignWarn             ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticSignInfo             ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticSignHint             ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticSignError       ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticUnderlineError       ctermfg=196      ctermbg=none     cterm=underline
-hi DiagnosticUnderlineWarn        ctermfg=226      ctermbg=none     cterm=underline
-hi DiagnosticUnderlineInfo        ctermfg=39       ctermbg=none     cterm=underline
-hi DiagnosticUnderlineHint        ctermfg=34       ctermbg=none     cterm=underline
+hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
 
-hi DiagnosticFloatingError        ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarning      ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticFloatingInformation  ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticFloatingHint         ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
 
-hi ALEErrorSign                   ctermfg=196      ctermbg=none     cterm=none
-hi ALEWarningSign                 ctermfg=226      ctermbg=none     cterm=none
-hi ALEInforSign                   ctermfg=39       ctermbg=none     cterm=none
+hi ALEErrorSign              ctermfg=196      ctermbg=none     cterm=none
+hi ALEWarningSign            ctermfg=226      ctermbg=none     cterm=none
+hi ALEInforSign              ctermfg=39       ctermbg=none     cterm=none
 
 "--- Etc ---
 function! Mkdir()
@@ -398,6 +396,8 @@ augroup RunFile
         \ VimuxRunCommand('go run '.expand('%'))<cr>
   autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
         \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
+        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
   autocmd FileType sql nnoremap <silent><leader>vf :call
         \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
