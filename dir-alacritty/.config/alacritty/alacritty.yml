@@ -7,18 +7,18 @@ window:
 # Font
 font:
   normal:
-    family: "Code New Roman"
-    style: Regular
+    family: "Sauce Code Pro Nerd Font"
+    style: Medium
 
   bold:
-    family: "Code New Roman"
+    family: "Sauce Code Pro Nerd Font"
     style: Bold
 
   italic:
-    family: "Code New Roman"
+    family: "Sauce Code Pro Nerd Font"
     style: Italic
 
-  size: 10
+  size: 9
 
   offset:
     x: 0

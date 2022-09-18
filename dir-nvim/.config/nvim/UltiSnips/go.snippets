@@ -29,3 +29,26 @@ func maxInt(a, b int) int {
 	return b
 }
 endsnippet
+
+snippet cp "template competive programing"
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+var (
+	reader = bufio.NewReader(os.Stdin)
+	writer = bufio.NewWriter(os.Stdout)
+)
+
+func scanf(format string, a ...any) {
+	fmt.Fscanf(reader, format, a...)
+}
+
+func main() {
+	writer.Flush()
+}
+endsnippet

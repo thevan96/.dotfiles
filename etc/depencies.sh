@@ -24,6 +24,7 @@ npm install -g sass
 go install github.com/jesseduffield/lazygit@latest
 go install github.com/jesseduffield/lazydocker@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
+go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 
 rustup component add rustfmt

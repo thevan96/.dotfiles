@@ -141,8 +141,6 @@ Plug 'williamboman/mason-lspconfig.nvim'
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'andersevenrud/cmp-tmux'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -172,6 +170,7 @@ let g:ale_linters = {
     \ 'go': ['staticcheck'],
     \ }
 
+let g:ale_go_golines_options = "-m 80"
 let g:ale_fixers = {
     \ 'javascript': ['prettier'],
     \ 'javascriptreact': ['prettier'],
@@ -181,7 +180,7 @@ let g:ale_fixers = {
     \ 'scss': ['prettier'],
     \ 'yaml': ['prettier'],
     \ 'markdown': ['prettier'],
-    \ 'go': ['gofmt'],
+    \ 'go': ['gofmt', 'golines'],
     \ 'rust': ['rustfmt'],
     \ 'cpp': ['clang-format'],
     \ }
@@ -270,6 +269,7 @@ nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
+Plug 'onsails/lspkind.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -325,7 +325,7 @@ hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=blue     ctermbg=none     cterm=bold
 
 hi StatusLine                ctermfg=15       ctermbg=233      cterm=bold
 hi StatusLineNC              ctermfg=15       ctermbg=233      cterm=none
