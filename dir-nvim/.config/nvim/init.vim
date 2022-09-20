@@ -50,7 +50,9 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Disable
-nnoremap S <nop>
+nnoremap h <nop>
+nnoremap l <nop>
+nnoremap <C-^> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -62,6 +64,7 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
+nnoremap S :b#<cr>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 

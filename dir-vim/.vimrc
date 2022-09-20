@@ -51,7 +51,9 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-nnoremap S <nop>
+nnoremap h <nop>
+nnoremap l <nop>
+nnoremap <C-^> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -69,6 +71,7 @@ endif
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
+nnoremap S :b#<cr>
 tnoremap <esc> <C-\><C-n>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')

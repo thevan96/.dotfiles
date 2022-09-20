@@ -37,6 +37,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 var (
@@ -44,8 +45,10 @@ var (
 	writer = bufio.NewWriter(os.Stdout)
 )
 
-func scanf(format string, a ...any) {
-	fmt.Fscanf(reader, format, a...)
+func getline() string {
+	str, _ := reader.ReadString('\n')
+	str = strings.TrimRight('\n')
+	return str
 }
 
 func main() {
