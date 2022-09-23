@@ -382,6 +382,10 @@ function! JumpFile()
 endfunction
 command! JumpFile call JumpFile()
 
+augroup ConfigStyleTabOrSpace
+  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+augroup end
+
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
