@@ -8,23 +8,19 @@ asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
 asdf plugin-add rust https://github.com/code-lever/asdf-rust.git
 echo 'asdf done!'
 
-node_version=16.17.0
-python_version=3.10.6
 java_version=openjdk-17.0.2
-golang_version=1.19.1
-rust_version=1.63.0
 
-asdf install nodejs $node_version
-asdf global nodejs $node_version
+asdf install nodejs lts
+asdf global nodejs lts
 
-asdf install python $python_version
-asdf global python $python_version
+asdf install python latest
+asdf global python latest
 
 asdf install java $java_version
 asdf global java $java_version
 
-asdf install golang $golang_version
-asdf global golang $golang_version
+asdf install golang latest
+asdf global golang latest
 
-asdf install rust $rust_version
-asdf global rust $rust_version
+asdf install rust latest
+asdf global rust latest

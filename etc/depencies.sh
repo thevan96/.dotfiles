@@ -27,12 +27,8 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 
-rustup component add rustfmt
-
 asdf reshim nodejs
 asdf reshim python
 asdf reshim rust
 asdf reshim golang
 asdf reshim java
-
-sudo ln -sf $(which nvim) /usr/local/bin/vim

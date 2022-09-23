@@ -70,8 +70,7 @@ nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number!<cr>
-nnoremap <silent><leader>m m`:set relativenumber!<cr>
+nnoremap <silent><leader>n :set relativenumber!<cr>
 
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
@@ -429,6 +428,7 @@ augroup LoadFile
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
 
   autocmd FileType lir setlocal nonumber
+  autocmd CursorMoved * set norelativenumber
 augroup end
 
 "--- Load lua---
