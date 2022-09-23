@@ -38,6 +38,7 @@ set completeopt=menu,menuone,noselect
 set mouse-=a
 set showmatch
 set autoindent
+set scrolloff=3
 set matchtime=0
 set nofoldenable
 set diffopt=vertical
@@ -158,9 +159,9 @@ hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
 hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNr                         ctermfg=238      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=238      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=238      ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=blue     ctermbg=none     cterm=bold
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
