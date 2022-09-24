@@ -7,11 +7,12 @@ vim.keymap.set('n', 'gj', "<cmd>lua vim.diagnostic.goto_next({float = false})<cr
 
 local on_attach = function(_, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', 'gS', ":sp<cr>:lua vim.lsp.buf.definition()<cr>", bufopts)
+  vim.keymap.set('n', 'gV', ":vsp<cr>:lua vim.lsp.buf.definition()<cr>", bufopts)
   vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', 'K',  vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
@@ -26,7 +27,8 @@ vim.diagnostic.config({
     source = 'always'
   },
   float = {
-    source = 'always'
+    source = 'always',
+    border = 'single'
   },
 })
 
@@ -50,10 +52,18 @@ local on_capabilities = require('cmp_nvim_lsp').update_capabilities(
 on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.offsetEncoding = { 'utf-16' }
 
+local on_handlers =  {
+  ['textDocument/hover'] =
+    vim.lsp.with(vim.lsp.handlers.hover, {border = 'single'}),
+  ['textDocument/signatureHelp'] =
+    vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'single' }),
+}
+
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
     capabilities = on_capabilities,
+    handlers = on_handlers
   }
 end
 

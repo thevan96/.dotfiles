@@ -45,6 +45,7 @@ set autoindent
 set scrolloff=3
 set matchtime=0
 set diffopt=vertical
+set complete=
 
 " Netrw
 let g:loaded_netrw = 1
@@ -65,23 +66,22 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap S :b#<cr>
-nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
-nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
+nnoremap <silent>S :b#<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>n :set relativenumber!<cr>
 
+command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
-" File manager netrw
-nnoremap <leader>ff :JumpFile<cr>
-nnoremap <leader>fv :vsp+JumpFile<cr>
-nnoremap <leader>fs :sp+JumpFile<cr>
-nnoremap <leader>fr :e .<cr>
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
+" Navigate wrap
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Store relative line number jumps in the jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -173,7 +173,8 @@ let g:ale_linters = {
     \ 'go': ['staticcheck'],
     \ }
 
-let g:ale_go_golines_options = "-m 80"
+let g:ale_go_golines_options = '-m 80'
+let g:ale_go_gofmt_option = 'goimports'
 let g:ale_fixers = {
     \ 'javascript': ['prettier'],
     \ 'javascriptreact': ['prettier'],
@@ -192,8 +193,9 @@ nmap <silent>gK <Plug>(ale_previous_wrap)
 nmap <silent>gJ <Plug>(ale_next_wrap)
 
 " File manager
-Plug 'tamago324/lir.nvim'
-Plug 'nvim-lua/plenary.nvim'
+Plug 'luukvbaal/nnn.nvim'
+nnoremap <leader>f :e .<cr>
+nnoremap <leader>F :NnnPicker %<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -212,7 +214,7 @@ let g:fzf_action = {
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
-let g:fzf_layout = { 'down': '50%' }
+let g:fzf_layout = { 'down': '40%' }
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 
 let rgIgnoreDirectories = "
@@ -271,14 +273,11 @@ nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
+Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'onsails/lspkind.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-Plug 'mattn/emmet-vim'
-Plug 'simeji/winresizer'
-let g:winresizer_start_key='<leader>w'
 
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
@@ -288,19 +287,6 @@ Plug 'weirongxu/plantuml-previewer.vim'
 let g:plantuml_previewer#debug_mode = 1
 let g:plantuml_previewer#plantuml_jar_path =
       \ expand('$HOME/.config/plantuml/plantuml.jar')
-
-Plug 'preservim/vimux'
-let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
-nnoremap <leader>vo :VimuxOpenRunner<cr>
-nnoremap <leader>vp :VimuxPromptCommand<cr>
-nnoremap <leader>vx :VimuxCloseRunner<cr>
-nnoremap <leader>vl :VimuxRunLastCommand<cr>
-nnoremap <leader>vc :VimuxInterruptRunner<cr>
-nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
-nnoremap <leader>vD :call VimuxRunCommand('exit')<cr>
-nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
@@ -321,17 +307,15 @@ hi clear VertSplit
 
 hi NonText                   ctermfg=none     ctermbg=none     cterm=none
 hi Normal                    ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat               ctermfg=none     ctermbg=234      cterm=none
+hi NormalFloat               ctermfg=none     ctermbg=232      cterm=none
 hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
 hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=blue     ctermbg=none     cterm=bold
-
-hi StatusLine                ctermfg=15       ctermbg=233      cterm=bold
-hi StatusLineNC              ctermfg=15       ctermbg=233      cterm=none
+hi CursorLine                ctermfg=yellow   ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=yellow   ctermbg=none     cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
@@ -374,13 +358,6 @@ function! Mkdir()
   endif
 endfunction
 
-function! JumpFile()
-  let file_name = expand('%:t')
-  e %:p:h
-  call search(file_name)
-endfunction
-command! JumpFile call JumpFile()
-
 augroup ConfigStyleTabOrSpace
   autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
 augroup end
@@ -388,25 +365,6 @@ augroup end
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
-augroup end
-
-augroup RunFile
-  autocmd!
-  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
-  autocmd FileType python vnoremap <leader>vf :w !python<cr>
-
-  autocmd FileType javascript nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('node '.expand('%'))<cr>
-  autocmd FileType python nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('python '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('go run '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
-        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
-        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
-  autocmd FileType sql nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
 
 augroup LoadFile
@@ -424,20 +382,18 @@ augroup LoadFile
   autocmd BufWritePre * call Mkdir()
   autocmd BufNew,BufRead *.uml set ft=uml
 
-  autocmd InsertEnter *.* lua vim.diagnostic.disable()
-  autocmd BufWritePre *.* lua vim.diagnostic.enable()
-
-  autocmd FileType lir setlocal nonumber
   autocmd CursorMoved * set norelativenumber
+  autocmd BufWritePre * lua vim.diagnostic.enable()
+  autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
 
 "--- Load lua---
 lua << EOF
   require 'module_lspconfig'
-  require 'module_mason'
-  require 'module_cmp'
-  require 'module_lir'
   require 'module_treesitter'
+  require 'module_mason'
+  require 'module_nnn'
+  -- require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()

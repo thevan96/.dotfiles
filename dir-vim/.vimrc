@@ -64,34 +64,32 @@ set tabstop=2 shiftwidth=2 expandtab | retab
 let mapleader = ' '
 let g:root_cwd = getcwd()
 
-" Float terminal
-if has('nvim')
-  tmap <Esc> <C-\><C-n>
-endif
-
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap S :b#<cr>
-tnoremap <esc> <C-\><C-n>
-nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
-nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
+nnoremap <silent>S :b#<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number!<cr>
-nnoremap <silent><leader>m m`:set relativenumber!<cr>
+nnoremap <silent><leader>n :set relativenumber!<cr>
 
+command! Root execute 'cd ' fnameescape(g:root_cwd)
+command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
+
+" Navigate wrap
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Store relative line number jumps in the jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " File manager netrw
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
 nnoremap <leader>fr :e `=g:root_cwd`<cr>
-command! Root execute 'cd ' fnameescape(g:root_cwd)
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -162,7 +160,8 @@ hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                         ctermfg=238      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=238      ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=blue     ctermbg=none     cterm=bold
+hi CursorLine                     ctermfg=yellow   ctermbg=none     cterm=none
+hi CursorLineNr                   ctermfg=yellow   ctermbg=none     cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none

@@ -40,6 +40,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Alias
 alias vim="nvim"
+alias nnn="NNN_TRASH=2 nnn -deH"
 alias view="nvim -R"
 alias lzg="lazygit"
 alias lzd="lazydocker"
