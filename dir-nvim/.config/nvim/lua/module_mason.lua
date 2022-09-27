@@ -9,7 +9,7 @@ require 'mason-lspconfig'.setup({
     'cssmodules_ls',
     'jsonls',
     'pyright',
-    'textlab',
+    'texlab',
     'tsserver',
     'gopls',
   }

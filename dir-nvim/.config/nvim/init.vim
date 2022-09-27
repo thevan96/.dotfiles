@@ -45,7 +45,6 @@ set autoindent
 set scrolloff=3
 set matchtime=0
 set diffopt=vertical
-set complete=
 
 " Netrw
 let g:loaded_netrw = 1
@@ -151,47 +150,6 @@ let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-" Linter and format:
-Plug 'dense-analysis/ale'
-let g:ale_fix_on_save = 1
-let g:ale_disable_lsp = 1
-let g:ale_linters_explicit = 1
-
-let g:ale_set_signs = 1
-let g:ale_set_highlights = 0
-
-let g:ale_open_list = 0
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-
-let g:ale_linters = {
-    \ 'cpp': ['cppcheck'],
-    \ 'go': ['staticcheck'],
-    \ }
-
-let g:ale_go_golines_options = '-m 80'
-let g:ale_go_gofmt_option = 'goimports'
-let g:ale_fixers = {
-    \ 'javascript': ['prettier'],
-    \ 'javascriptreact': ['prettier'],
-    \ 'html': ['prettier'],
-    \ 'json': ['prettier'],
-    \ 'css': ['prettier'],
-    \ 'scss': ['prettier'],
-    \ 'yaml': ['prettier'],
-    \ 'markdown': ['prettier'],
-    \ 'go': ['gofmt', 'golines'],
-    \ 'rust': ['rustfmt'],
-    \ 'cpp': ['clang-format'],
-    \ }
-
-nmap <silent>gK <Plug>(ale_previous_wrap)
-nmap <silent>gJ <Plug>(ale_next_wrap)
-
 " File manager
 Plug 'luukvbaal/nnn.nvim'
 nnoremap <leader>f :e .<cr>
@@ -200,8 +158,6 @@ nnoremap <leader>F :NnnPicker %<cr>
 " Fuzzy search
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
-Plug 'gfanto/fzf-lsp.nvim'
-Plug 'nvim-lua/plenary.nvim'
 
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -259,8 +215,6 @@ nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
-nnoremap <leader>l :DocumentSymbols<cr>
-nnoremap <leader>L :WorkspaceSymbols<cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
@@ -276,7 +230,10 @@ nmap <leader>ts :TestSuite<cr>
 Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
 Plug 'onsails/lspkind.nvim'
+Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'lambdalisue/suda.vim'
@@ -393,8 +350,8 @@ lua << EOF
   require 'module_treesitter'
   require 'module_mason'
   require 'module_nnn'
-  -- require 'module_cmp'
+  require 'module_null_ls'
+  require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()
-EOF

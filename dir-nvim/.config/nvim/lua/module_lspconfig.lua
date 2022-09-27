@@ -5,16 +5,22 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', 'gk', "<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>", opts)
 vim.keymap.set('n', 'gj', "<cmd>lua vim.diagnostic.goto_next({float = false})<cr>", opts)
 
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  client.resolved_capabilities.document_formatting = false
+  client.server_capabilities.documentFormattingProvider = false
+  client.resolved_capabilities.document_range_formatting = false
+
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gS', ":sp<cr>:lua vim.lsp.buf.definition()<cr>", bufopts)
   vim.keymap.set('n', 'gV', ":vsp<cr>:lua vim.lsp.buf.definition()<cr>", bufopts)
   vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', 'K',  vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', '<space>l', vim.lsp.buf.document_symbol, bufopts)
+  vim.keymap.set('n', '<space>L', vim.lsp.buf.workspace_symbol, bufopts)
+  vim.keymap.set('n', '<space>R', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>A', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<C-h>', vim.lsp.buf.signature_help, bufopts)
 end
@@ -24,6 +30,7 @@ vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
   virtual_text = {
+    prefix = '●',
     source = 'always'
   },
   float = {
@@ -56,7 +63,7 @@ local on_handlers =  {
   ['textDocument/hover'] =
     vim.lsp.with(vim.lsp.handlers.hover, {border = 'single'}),
   ['textDocument/signatureHelp'] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'single' }),
+    vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'single'}),
 }
 
 for _, lsp in ipairs(servers) do

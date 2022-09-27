@@ -47,7 +47,7 @@ var (
 
 func getline() string {
 	str, _ := reader.ReadString('\n')
-	str = strings.TrimRight('\n')
+	str = strings.TrimSuffix(str, "\n")
 	return str
 }
 
