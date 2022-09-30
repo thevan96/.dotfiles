@@ -16,6 +16,7 @@ sudo apt remove \
   aisleriot
 
 sudo apt install gnome-shell-extensions\
+  gnome-clocks \
   gnome-tweaks \
   gnome-screensaver \
   chrome-gnome-shell \

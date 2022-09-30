@@ -51,9 +51,6 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Disable
-nnoremap h <nop>
-nnoremap l <nop>
-nnoremap <C-^> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -65,7 +62,6 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap <silent>S :b#<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>n :set relativenumber!<cr>
 
@@ -143,6 +139,7 @@ Plug 'williamboman/mason-lspconfig.nvim'
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -236,6 +233,31 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+Plug 'preservim/vimux'
+let g:VimuxHeight = '50'
+let g:VimuxOrientation = 'h'
+nnoremap <leader>vo :VimuxOpenRunner<cr>
+nnoremap <leader>vp :VimuxPromptCommand<cr>
+nnoremap <leader>vx :VimuxCloseRunner<cr>
+nnoremap <leader>vl :VimuxRunLastCommand<cr>
+nnoremap <leader>vc :VimuxInterruptRunner<cr>
+nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
+nnoremap <leader>vD :call VimuxRunCommand('exit')<cr>
+nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
+vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+
+Plug 'simeji/winresizer'
+let g:winresizer_start_key = '<space>w'
+
+Plug 'takac/vim-hardtime'
+let g:hardtime_maxcount = 10
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:hardtime_motion_with_count_resets = 1
+let g:hardtime_ignore_buffer_patterns = ['*.txt']
+nnoremap <leader>h :HardTimeToggle<cr>
+
 Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
@@ -268,15 +290,18 @@ hi NormalFloat               ctermfg=none     ctermbg=232      cterm=none
 hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
-hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
-hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
+hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
 hi CursorLine                ctermfg=yellow   ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=yellow   ctermbg=none     cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=234      ctermbg=none     cterm=none
+
+hi StatusLine                ctermfg=none     ctermbg=233     cterm=none
+hi StatusLineNC              ctermfg=none     ctermbg=233     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -324,10 +349,31 @@ augroup ChangeWorkingDirectory
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
+augroup RunFile
+  autocmd!
+  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
+  autocmd FileType python vnoremap <leader>vf :w !python<cr>
+
+  autocmd FileType javascript nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('node '.expand('%'))<cr>
+  autocmd FileType python nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('python '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('go run '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
+        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
+        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
+  autocmd FileType sql nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('\ir '.expand('%'))<cr>
+augroup end
+
 augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
   autocmd FocusGained * redraw!
+
+  autocmd BufNew,BufRead *.uml set ft=uml
 
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
@@ -337,11 +383,7 @@ augroup LoadFile
   autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
 
   autocmd BufWritePre * call Mkdir()
-  autocmd BufNew,BufRead *.uml set ft=uml
-
   autocmd CursorMoved * set norelativenumber
-  autocmd BufWritePre * lua vim.diagnostic.enable()
-  autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
 
 "--- Load lua---
@@ -355,3 +397,4 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+EOF

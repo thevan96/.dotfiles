@@ -3,6 +3,7 @@ ZSH_THEME='myzsh'
 DISABLE_AUTO_TITLE='true'
 
 # Load zsh
+plugins=(vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 # Load fzf

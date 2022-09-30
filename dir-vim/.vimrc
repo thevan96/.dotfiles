@@ -52,9 +52,6 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-nnoremap h <nop>
-nnoremap l <nop>
-nnoremap <C-^> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -67,7 +64,6 @@ let g:root_cwd = getcwd()
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap <silent>S :b#<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>n :set relativenumber!<cr>
 
@@ -157,9 +153,9 @@ hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
 hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                         ctermfg=238      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=238      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=238      ctermbg=none     cterm=none
+hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLine                     ctermfg=yellow   ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=yellow   ctermbg=none     cterm=none
 
