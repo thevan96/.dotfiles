@@ -7,9 +7,9 @@ vim.keymap.set('n', 'gj', "<cmd>lua vim.diagnostic.goto_next({float = false})<cr
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  client.resolved_capabilities.document_formatting = false
+  client.server_capabilities.document_formatting = false
+  client.server_capabilities.document_range_formatting = false
   client.server_capabilities.documentFormattingProvider = false
-  client.resolved_capabilities.document_range_formatting = false
 
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gS', ":sp<cr>:lua vim.lsp.buf.definition()<cr>", bufopts)

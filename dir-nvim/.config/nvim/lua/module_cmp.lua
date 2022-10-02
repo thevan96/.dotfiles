@@ -1,15 +1,22 @@
 local cmp = require('cmp')
-local lspkind = require('lspkind')
+
+local ELLIPSIS_CHAR = '…'
+local MAX_LABEL_WIDTH = 25
+local MIN_LABEL_WIDTH = 10
 
 cmp.setup({
   formatting = {
-    format = lspkind.cmp_format({
-      mode = 'symbol_text',
-      maxwidth = 50,
-      before = function (_, vim_item)
-        return vim_item
+    format = function(_, vim_item)
+      local label = vim_item.abbr
+      local truncated_label = vim.fn.strcharpart(label, 0, MAX_LABEL_WIDTH)
+      if truncated_label ~= label then
+        vim_item.abbr = truncated_label .. ELLIPSIS_CHAR
+      elseif string.len(label) < MIN_LABEL_WIDTH then
+        local padding = string.rep(' ', MIN_LABEL_WIDTH - string.len(label))
+        vim_item.abbr = label .. padding
       end
-    })
+      return vim_item
+    end,
   },
   preselect = cmp.PreselectMode.None,
   completion = {

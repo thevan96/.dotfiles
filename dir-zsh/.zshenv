@@ -1,13 +1,13 @@
 #  Export env variable
-export EDITOR="vim"
+export EDITOR=vim
 export KEYTIMEOUT=1
-export TERM="screen-256color"
+export TERM=screen-256color
 
 # DEFAULT EVIROMENT
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
+export XDG_CONFIG_HOME=$HOME/.config
 export ANDROID_HOME=$HOME/Android/Sdk
-export XDG_CONFIG_HOME="$HOME/.config"
-# export ANDROID_HOME=$HOME/Library/Android/sdk
+# macos export ANDROID_HOME=$HOME/Library/Android/sdk
 
 # ADD PATH
 export PATH=$HOME/.local/bin:$PATH
@@ -15,7 +15,6 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$HOME/.config/lua-language-server/bin:$PATH
 
 # FZF
 export FZF_DEFAULT_COMMAND="fdfind --type f -H \
@@ -36,46 +35,37 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
   --exclude composer \
   --exclude gems \
   "
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
-alias vim="nvim"
-alias nnn="NNN_TRASH=2 nnn -deH"
-alias view="nvim -R"
-alias lzg="lazygit"
-alias lzd="lazydocker"
-alias cp_pwd="pwd | xclip -selection clipboard"
+alias vim='nvim'
+alias nnn='NNN_TRASH=2 nnn -deoH'
+alias view='nvim -R'
+alias lzg='lazygit'
+alias lzd='lazydocker'
+alias pwdcp='pwd | xclip -selection clipboard'
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
-wgl() {
+glw() {
   watch -c -n1 -t git log --all --decorate --oneline --graph --color
 }
 
-wgs() {
+gsw() {
   watch -c -n1 -t git status
 }
 
 exit() {
-  echo "Use <C-d> instead!"
+  echo 'Use <C-d> instead!'
 }
 
-notes() {
-  cd ~/Personal/notes/
-  vim .
-}
-
-update_sys() {
+sys_update() {
   sudo apt -y update \
   && sudo apt -y upgrade \
   && sudo apt -y autoclean \
   && sudo apt -y autoremove
 }
 
-bs() {
-  browser-sync start --server --files "**/*.*" --port ${1}
-}
-
-update_asdf() {
+asdf_update() {
   asdf reshim nodejs
   asdf reshim python
   asdf reshim rust
@@ -84,7 +74,6 @@ update_asdf() {
   echo 'Asdf update done !'
 }
 
-ide() {
-  tmux split-window -v -p 25
-  tmux split-window -h -p 50
+bs() {
+  browser-sync start --server --files '**/*.*' --port ${1}
 }

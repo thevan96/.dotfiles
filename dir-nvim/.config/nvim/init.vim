@@ -156,14 +156,7 @@ nnoremap <leader>F :NnnPicker %<cr>
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
 let g:fzf_action = {
-      \ 'ctrl-q': function('s:build_quickfix_list'),
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
@@ -185,18 +178,23 @@ let fdIgnoreDirectories = '
 
 let $FZF_DEFAULT_COMMAND = 'fdfind --type f -H '.fdIgnoreDirectories
 
-function! SwitchProject(line)
+function! SinkSwitchProjects(line)
   %bd | cd `=a:line`
+endfunction
+
+function! SinkSwitchDirectories(line)
+  e `=a:line`
 endfunction
 
 command! Projects call fzf#run(fzf#wrap({
       \   'source': 'fdfind --type d -H '.fdIgnoreDirectories,
       \   'dir': expand('$HOME'),
-      \   'sink': function('SwitchProject')
+      \   'sink': function('SinkSwitchProjects')
       \ }))
 
 command! Directories call fzf#run(fzf#wrap({
-      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories
+      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories,
+      \   'sink': function('SinkSwitchDirectories')
       \ }))
 
 command! -bang -nargs=* Rg
@@ -226,12 +224,14 @@ nmap <leader>ts :TestSuite<cr>
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
 Plug 'j-hui/fidget.nvim'
-Plug 'onsails/lspkind.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'wellle/tmux-complete.vim'
+let g:tmuxcomplete#trigger = 'omnifunc'
 
 Plug 'preservim/vimux'
 let g:VimuxHeight = '50'
@@ -384,6 +384,8 @@ augroup LoadFile
 
   autocmd BufWritePre * call Mkdir()
   autocmd CursorMoved * set norelativenumber
+  autocmd BufWritePre * lua vim.diagnostic.enable()
+  autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
 
 "--- Load lua---
