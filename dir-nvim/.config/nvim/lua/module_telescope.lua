@@ -1,14 +1,14 @@
 local telescope = require('telescope')
 local actions = require('telescope.actions')
 
-telescope.setup {
+telescope.setup({
   defaults = {
-    borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
     mappings = {
       i = {
         ['<C-s>'] = actions.select_horizontal,
-        ['<C-v>'] = actions.select_vertical
-      }
+        ['<C-v>'] = actions.select_vertical,
+      },
     },
     vimgrep_arguments = {
       'rg',
@@ -18,7 +18,7 @@ telescope.setup {
       '--with-filename',
       '--line-number',
       '--column',
-      '--smart-case'
+      '--smart-case',
     },
     file_ignore_patterns = {
       '.git/',
@@ -34,7 +34,7 @@ telescope.setup {
   pickers = {
     find_files = {
       hidden = true,
-    }
+    },
   },
   extensions = {
     fzf = {
@@ -42,8 +42,8 @@ telescope.setup {
       override_generic_sorter = true,
       override_file_sorter = true,
       case_mode = 'smart_case',
-    }
-  }
-}
+    },
+  },
+})
 
 telescope.load_extension('fzf')

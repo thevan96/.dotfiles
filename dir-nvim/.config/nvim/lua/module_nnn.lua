@@ -8,13 +8,13 @@ require('nnn').setup({
       height = 0.8,
       xoffset = 0.5,
       yoffset = 0.5,
-      border = 'single'
+      border = 'single',
     },
-    session = 'shared'
+    session = 'shared',
   },
   mappings = {
     { '<C-w>s', builtin.open_in_split },
     { '<C-w>v', builtin.open_in_vsplit },
   },
-  replace_netrw = 'picker'
+  replace_netrw = 'picker',
 })

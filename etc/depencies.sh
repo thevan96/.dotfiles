@@ -20,6 +20,7 @@ npm install -g typescript
 npm install -g pnpm
 npm install -g tree-sitter-cli
 npm install -g sass
+npm install -g eslint_d
 
 go install github.com/jesseduffield/lazygit@latest
 go install github.com/jesseduffield/lazydocker@latest
@@ -27,6 +28,8 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install golang.org/x/tools/cmd/goimports@latest
+
+cargo install stylua
 
 asdf reshim nodejs
 asdf reshim python

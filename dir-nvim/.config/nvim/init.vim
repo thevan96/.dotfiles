@@ -156,10 +156,19 @@ nnoremap <leader>F :NnnPicker %<cr>
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
+" Send to quickfix
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
 let g:fzf_action = {
+      \ 'ctrl-q': function('s:build_quickfix_list'),
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit'
       \ }
+
 let g:fzf_layout = { 'down': '40%' }
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 
@@ -229,6 +238,9 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 Plug 'wellle/tmux-complete.vim'
 let g:tmuxcomplete#trigger = 'omnifunc'
@@ -340,6 +352,16 @@ function! Mkdir()
   endif
 endfunction
 
+function! TrimAllFile()
+  let pwd = getcwd()
+  let file = expand('%:p:h')
+  if stridx(file, pwd) >= 0
+    silent! %s#\($\n\s*\)\+\%$## " trim endlines
+    silent! %s/\s\+$//e " trim whitespace
+    silent! g/^\_$\n\_^$/d " single blank line
+  endif
+endfunction
+
 augroup ConfigStyleTabOrSpace
   autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
 augroup end
@@ -353,7 +375,6 @@ augroup RunFile
   autocmd!
   autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
   autocmd FileType python vnoremap <leader>vf :w !python<cr>
-
   autocmd FileType javascript nnoremap <silent><leader>vf :call
         \ VimuxRunCommand('node '.expand('%'))<cr>
   autocmd FileType python nnoremap <silent><leader>vf :call
@@ -365,7 +386,7 @@ augroup RunFile
   autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
         \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
   autocmd FileType sql nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('\ir '.expand('%'))<cr>
+        \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
 
 augroup LoadFile
@@ -378,11 +399,8 @@ augroup LoadFile
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
-  autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$## " trim endlines
-  autocmd BufWritePre * silent! :%s/\s\+$//e " trim whitespace
-  autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
-
   autocmd BufWritePre * call Mkdir()
+  autocmd BufWritePre * call TrimAllFile()
   autocmd CursorMoved * set norelativenumber
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()

@@ -1,7 +1,7 @@
-require'nvim-treesitter.configs'.setup {
+require('nvim-treesitter.configs').setup({
   ignore_install = {},
   sync_install = {},
-  ensure_installed =  {
+  ensure_installed = {
     'javascript',
     'typescript',
     'tsx',
@@ -20,5 +20,5 @@ require'nvim-treesitter.configs'.setup {
   indent = {
     enable = true,
     additional_vim_regex_highlighting = false,
-  }
-}
+  },
+})

@@ -20,14 +20,14 @@ cmp.setup({
   },
   preselect = cmp.PreselectMode.None,
   completion = {
-    autocomplete = false
+    autocomplete = false,
   },
   snippet = {
     expand = function(args)
       vim.fn['UltiSnips#Anon'](args.body)
     end,
   },
-  mapping =  cmp.mapping.preset.insert({
+  mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -39,6 +39,6 @@ cmp.setup({
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
-    { name = "ultisnips" }
-  })
+    { name = 'ultisnips' },
+  }),
 })
