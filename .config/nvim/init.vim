@@ -352,7 +352,7 @@ function! Mkdir()
   endif
 endfunction
 
-function! TrimAllFile()
+function! Trim()
   let pwd = getcwd()
   let file = expand('%:p:h')
   if stridx(file, pwd) >= 0
@@ -400,7 +400,7 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save position cursor
 
   autocmd BufWritePre * call Mkdir()
-  autocmd BufWritePre * call TrimAllFile()
+  autocmd BufWritePre * call Trim()
   autocmd CursorMoved * set norelativenumber
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()

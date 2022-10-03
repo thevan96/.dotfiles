@@ -34,6 +34,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   cppcheck \
   stow \
   rofi \
+  xtrclock \
   fonts-noto-color-emoji \
   vlc \
   blender \

@@ -64,6 +64,7 @@ let g:root_cwd = getcwd()
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
+nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>n :set relativenumber!<cr>
 
@@ -177,6 +178,16 @@ function! Mkdir()
   endif
 endfunction
 
+function! Trim()
+  let pwd = getcwd()
+  let file = expand('%:p:h')
+  if stridx(file, pwd) >= 0
+    silent! %s#\($\n\s*\)\+\%$## " trim endlines
+    silent! %s/\s\+$//e " trim whitespace
+    silent! g/^\_$\n\_^$/d " single blank line
+  endif
+endfunction
+
 function! JumpFile()
   let file_name = expand('%:t')
   Explore
@@ -217,10 +228,7 @@ augroup LoadFile
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
 
-  autocmd BufWritePre * silent! :%s/\s\+$//e " trim whitespace
-  autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$## " trim endlines
-  autocmd BufWritePre * silent! :g/^\_$\n\_^$/d " single blank line
-
+  autocmd BufWritePre * call Trim()
   autocmd BufWritePre * call Mkdir()
   autocmd FileType netrw call NetrwSetting()
 augroup end
