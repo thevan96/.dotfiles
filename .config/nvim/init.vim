@@ -42,7 +42,6 @@ set foldexpr=nvim_treesitter#foldexpr()
 set mouse=a
 set showmatch
 set autoindent
-set scrolloff=3
 set matchtime=0
 set diffopt=vertical
 
@@ -239,6 +238,9 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+Plug 'wellle/context.vim'
+let g:context_border_char = '-'
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
@@ -312,8 +314,8 @@ hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=234      ctermbg=none     cterm=none
 
-hi StatusLine                ctermfg=none     ctermbg=233     cterm=none
-hi StatusLineNC              ctermfg=none     ctermbg=233     cterm=none
+hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
+hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
