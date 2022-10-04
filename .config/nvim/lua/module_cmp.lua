@@ -21,6 +21,7 @@ cmp.setup({
   preselect = cmp.PreselectMode.None,
   completion = {
     autocomplete = false,
+    completeopt = 'menu,menuone',
   },
   snippet = {
     expand = function(args)

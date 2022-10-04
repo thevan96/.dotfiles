@@ -1,13 +1,10 @@
-# Config zsh
-ZSH_THEME='myzsh'
-DISABLE_AUTO_TITLE='true'
-
-# Load zsh
-source $ZSH/oh-my-zsh.sh
+NEWLINE=$'\n'
+PROMPT="%F{green}%n@%m:%F{cyan}%~${NEWLINE}%F{reset_color}> "
 
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Load asdf cli manager
 . $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+fpath=(${ASDF_DIR}/completions $fpath)
+autoload -Uz compinit && compinit

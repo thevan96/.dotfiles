@@ -46,6 +46,12 @@ alias lzd='lazydocker'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
+# Some more ls aliases
+alias ls='ls --color'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 git_switch() {
   git checkout $(git branch -a | fzf)
 }

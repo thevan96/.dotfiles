@@ -31,7 +31,7 @@ set cursorline
 set cursorlineopt=number
 
 set backspace=indent,eol,start
-set completeopt=menu,menuone,noselect
+set completeopt=menu,menuone
 
 set nofoldenable
 set foldlevelstart=99
@@ -235,11 +235,10 @@ Plug 'j-hui/fidget.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'wellle/context.vim'
-let g:context_border_char = '-'
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -271,15 +270,6 @@ let g:hardtime_allow_different_key = 1
 let g:hardtime_motion_with_count_resets = 1
 let g:hardtime_ignore_buffer_patterns = ['*.txt']
 nnoremap <leader>h :HardTimeToggle<cr>
-
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
-
-Plug 'tyru/open-browser.vim'
-Plug 'weirongxu/plantuml-previewer.vim'
-let g:plantuml_previewer#debug_mode = 1
-let g:plantuml_previewer#plantuml_jar_path =
-      \ expand('$HOME/.config/plantuml/plantuml.jar')
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
