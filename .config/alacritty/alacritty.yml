@@ -49,6 +49,9 @@ key_bindings:
   - { key: Space, mods: Shift|Control, mode: Vi|~Search, action: none }
   - { key: B, mods: Shift|Control, action: none }
   - { key: F11, action: ToggleFullscreen }
+
+  - { key: Back, action: none }
+  - { key: Back, mods: control, action: none }
   - { key: LBracket, mods: Control, action: none }
 
   # Linux/window

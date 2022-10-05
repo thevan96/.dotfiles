@@ -1,5 +1,5 @@
 #  Export env variable
-export EDITOR=vim
+export EDITOR=vi
 export KEYTIMEOUT=1
 export TERM=screen-256color
 
@@ -38,9 +38,9 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
-alias vim='nvim'
+alias vi='nvim'
 alias nnn='NNN_TRASH=2 nnn -deoH'
-alias view='nvim -R'
+alias view='vi -R'
 alias lzg='lazygit'
 alias lzd='lazydocker'
 alias pwdcp='pwd | xclip -selection clipboard'
@@ -51,6 +51,19 @@ alias ls='ls --color'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# Utils
+indicator_git() {
+  branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
+  if [[ $branch != '' ]]; then
+    out=$(git status --short)
+    if [[ $out != '' ]]; then
+      echo "(%F{red}$branch%F{cyan}%F{yellow}*%F{cyan})"
+    else
+      echo "(%F{red}$branch%F{cyan})"
+    fi
+  fi
+}
 
 git_switch() {
   git checkout $(git branch -a | fzf)

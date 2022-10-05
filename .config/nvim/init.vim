@@ -14,15 +14,14 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
+set fillchars=stl:_,stlnc:_
 
 set number
 set norelativenumber
 
+set ruler
 set laststatus=2
 set signcolumn=yes
-
-set wildmenu
-set wildmode=longest,list
 
 set textwidth=80
 set colorcolumn=+1
@@ -30,7 +29,8 @@ set colorcolumn=+1
 set cursorline
 set cursorlineopt=number
 
-set backspace=indent,eol,start
+set complete=
+set backspace=
 set completeopt=menu,menuone
 
 set nofoldenable
@@ -51,6 +51,8 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+nnoremap <C-f> <nop>
+nnoremap <C-b> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -59,10 +61,8 @@ set tabstop=2 shiftwidth=2 expandtab | retab
 let mapleader = ' '
 
 " Customizer mapping
-nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set relativenumber!<cr>
 
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -85,10 +85,6 @@ nnoremap <leader>gy :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
-
-" Better indent
-xnoremap < <gv
-xnoremap > >gv
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -218,16 +214,9 @@ nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
+
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
-" Test
-Plug 'vim-test/vim-test'
-let test#strategy = 'basic'
-nmap <leader>tf :TestFile<cr>
-nmap <leader>tn :TestNearest<cr>
-nmap <leader>tl :TestLast<cr>
-nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
@@ -237,39 +226,20 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
-
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
-Plug 'wellle/tmux-complete.vim'
-let g:tmuxcomplete#trigger = 'omnifunc'
-
-Plug 'preservim/vimux'
-let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
-nnoremap <leader>vo :VimuxOpenRunner<cr>
-nnoremap <leader>vp :VimuxPromptCommand<cr>
-nnoremap <leader>vx :VimuxCloseRunner<cr>
-nnoremap <leader>vl :VimuxRunLastCommand<cr>
-nnoremap <leader>vc :VimuxInterruptRunner<cr>
-nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
-nnoremap <leader>vD :call VimuxRunCommand('exit')<cr>
-nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
-
-Plug 'simeji/winresizer'
-let g:winresizer_start_key = '<space>w'
-
 Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 10
+let g:hardtime_maxcount = 9
 let g:hardtime_default_on = 1
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
 let g:hardtime_motion_with_count_resets = 1
 let g:hardtime_ignore_buffer_patterns = ['*.txt']
 nnoremap <leader>h :HardTimeToggle<cr>
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
@@ -304,8 +274,8 @@ hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=234      ctermbg=none     cterm=none
 
-hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
-hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
+hi StatusLine                ctermfg=none     ctermbg=none     cterm=bold
+hi StatusLineNC              ctermfg=248      ctermbg=none     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -363,37 +333,16 @@ augroup ChangeWorkingDirectory
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup RunFile
-  autocmd!
-  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
-  autocmd FileType python vnoremap <leader>vf :w !python<cr>
-  autocmd FileType javascript nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('node '.expand('%'))<cr>
-  autocmd FileType python nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('python '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('go run '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
-        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
-        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
-  autocmd FileType sql nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('\i '.expand('%'))<cr>
-augroup end
-
 augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
   autocmd FocusGained * redraw!
-
-  autocmd BufNew,BufRead *.uml set ft=uml
 
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * call Trim()
-  autocmd CursorMoved * set norelativenumber
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end

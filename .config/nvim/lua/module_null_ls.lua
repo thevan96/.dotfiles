@@ -85,6 +85,7 @@ null_ls.setup({
         'markdown.mdx',
         'graphql',
       },
+      condition = is_in_current_folder,
     }),
   },
   debug = false,

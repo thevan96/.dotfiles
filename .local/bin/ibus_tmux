@@ -1,9 +1,9 @@
 #!/bin/bash
 
 source=$(ibus engine)
-vn="Bamboo::Us"
+vn='Bamboo::Us'
 
-if [[ "$source" = "$vn" ]]; then
+if [[ $source = $vn ]]; then
   echo 'vn'
 else
   echo 'en'

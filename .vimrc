@@ -14,16 +14,14 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
-set fillchars=vert:\|
+set fillchars=vert:\|,stl:_,stlnc:=
 
 set number
 set norelativenumber
 
+set ruler
 set laststatus=2
 set signcolumn=yes
-
-set wildmenu
-set wildmode=longest,list
 
 set textwidth=80
 set colorcolumn=+1
@@ -31,8 +29,8 @@ set colorcolumn=+1
 set cursorline
 set cursorlineopt=number
 
-set backspace=indent,eol,start
-set completeopt=menu,menuone,noselect
+set backspace=
+set completeopt=menu,menuone
 
 " Other
 set mouse-=a
@@ -52,6 +50,7 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
+nnoremap <C-h> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -96,10 +95,6 @@ nnoremap <leader>gy :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
-
-" Better indent, move
-xnoremap < <gv
-xnoremap > >gv
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -163,6 +158,9 @@ hi CursorLineNr                   ctermfg=yellow   ctermbg=none     cterm=none
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
+
+hi StatusLine                     ctermfg=none     ctermbg=none     cterm=bold
+hi StatusLineNC                   ctermfg=248      ctermbg=none     cterm=none
 
 "--- Etc ---"
 function! Mkdir()

@@ -36,8 +36,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>L', vim.lsp.buf.workspace_symbol, bufopts)
   vim.keymap.set('n', '<space>R', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<space>A', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<C-h>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({

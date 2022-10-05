@@ -6,6 +6,8 @@ pip install -U Send2Trash
 pip install -U cpplint
 pip install -U httpie
 
+gem install vimgolf
+
 npm install -g npm@latest
 npm install -g neovim
 npm install -g prettier
@@ -33,6 +35,7 @@ cargo install stylua
 
 asdf reshim nodejs
 asdf reshim python
+asdf reshim ruby
 asdf reshim rust
 asdf reshim golang
 asdf reshim java

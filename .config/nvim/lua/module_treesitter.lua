@@ -6,12 +6,6 @@ require('nvim-treesitter.configs').setup({
     'typescript',
     'tsx',
     'vue',
-    'sql',
-    'go',
-    'rust',
-    'sql',
-    'css',
-    'scss',
   },
   highlight = {
     enable = false,
