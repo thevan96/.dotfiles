@@ -30,7 +30,7 @@ colors:
     foreground: "#ffffff"
 
   cursor:
-    text: "#000000"
+    text: "#ffffff"
     cursor: "#ff4f00"
 
 cursor:

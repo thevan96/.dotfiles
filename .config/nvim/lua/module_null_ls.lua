@@ -45,7 +45,7 @@ null_ls.setup({
     null_ls.builtins.formatting.rustfmt.with({
       condition = is_in_current_folder,
     }),
-    null_ls.builtins.formatting.goimports.with({
+    null_ls.builtins.formatting.gofmt.with({
       condition = is_in_current_folder,
     }),
     null_ls.builtins.formatting.golines.with({

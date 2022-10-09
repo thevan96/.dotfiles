@@ -14,7 +14,6 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
-set fillchars=vert:\|,stl:_,stlnc:=
 
 set number
 set norelativenumber
@@ -29,18 +28,22 @@ set colorcolumn=+1
 set cursorline
 set cursorlineopt=number
 
-set backspace=
+set wildmenu
+set wildmode=longest,list
+
+set complete=
 set completeopt=menu,menuone
 
 " Other
 set mouse-=a
 set showmatch
+set backspace=
 set autoindent
-set scrolloff=3
-set matchtime=0
+set matchtime=1
 set nofoldenable
 set diffopt=vertical
 set ttymouse=sgr
+set clipboard=unnamed,unnamedplus
 packadd matchit
 
 " Netrw
@@ -65,7 +68,8 @@ nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set relativenumber!<cr>
+nnoremap <silent><leader>n :set number!<cr>
+nnoremap <silent><leader>m :set relativenumber!<cr>
 
 command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
@@ -77,24 +81,11 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
-" Store relative line number jumps in the jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
-
 " File manager netrw
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
 nnoremap <leader>fr :e `=g:root_cwd`<cr>
-
-" Mapping copy clipboard and past
-nnoremap <leader>y "+yy
-vnoremap <leader>y "+y
-nnoremap <leader>Y vg_"+y
-nnoremap <leader>gy :%y+<cr>
-nnoremap <leader>p o<esc>"+p
-nnoremap <leader>P O<esc>"+p
-vnoremap <leader>p "+p
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -159,9 +150,6 @@ hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=234      ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=none     ctermbg=none     cterm=bold
-hi StatusLineNC                   ctermfg=248      ctermbg=none     cterm=none
-
 "--- Etc ---"
 function! Mkdir()
   let dir = expand('%:p:h')
@@ -180,7 +168,7 @@ function! Trim()
   let pwd = getcwd()
   let file = expand('%:p:h')
   if stridx(file, pwd) >= 0
-    silent! %s#\($\n\s*\)\+\%$## " trim endlines
+    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
   endif

@@ -14,9 +14,8 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
-set fillchars=stl:_,stlnc:_
 
-set number
+set nonumber
 set norelativenumber
 
 set ruler
@@ -29,8 +28,10 @@ set colorcolumn=+1
 set cursorline
 set cursorlineopt=number
 
+set wildmenu
+set wildmode=longest,list
+
 set complete=
-set backspace=
 set completeopt=menu,menuone
 
 set nofoldenable
@@ -40,10 +41,12 @@ set foldexpr=nvim_treesitter#foldexpr()
 
 " Other
 set mouse=a
+set backspace=
 set showmatch
 set autoindent
-set matchtime=0
+set matchtime=1
 set diffopt=vertical
+set clipboard=unnamed,unnamedplus
 
 " Netrw
 let g:loaded_netrw = 1
@@ -51,6 +54,8 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+nnoremap h <nop>
+nnoremap l <nop>
 nnoremap <C-f> <nop>
 nnoremap <C-b> <nop>
 
@@ -63,6 +68,8 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <silent><leader>n :set number!<cr>
+nnoremap <silent><leader>m :set relativenumber!<cr>
 
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -72,19 +79,6 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
-" Store relative line number jumps in the jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
-
-" Mapping copy clipboard and past
-nnoremap <leader>y "+yy
-vnoremap <leader>y "+y
-nnoremap <leader>Y vg_"+y
-nnoremap <leader>gy :%y+<cr>
-nnoremap <leader>p o<esc>"+p
-nnoremap <leader>P O<esc>"+p
-vnoremap <leader>p "+p
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -142,10 +136,10 @@ let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-" File manager
-Plug 'luukvbaal/nnn.nvim'
-nnoremap <leader>f :e .<cr>
-nnoremap <leader>F :NnnPicker %<cr>
+Plug 'vifm/vifm.vim'
+let g:vifm_replace_netrw = 1
+nnoremap <leader>f :Vifm .<cr>
+nnoremap <leader>F :Vifm %:p:h<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -219,27 +213,18 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 "--- Other plugins ---
-Plug 'mattn/emmet-vim'
-Plug 'j-hui/fidget.nvim'
+" Plug 'mattn/emmet-vim'
+" Plug 'AndrewRadev/tagalong.vim'
+
 Plug 'nvim-lua/plenary.nvim'
-Plug 'AndrewRadev/tagalong.vim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
+
+Plug 'j-hui/fidget.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 9
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_allow_different_key = 1
-let g:hardtime_motion_with_count_resets = 1
-let g:hardtime_ignore_buffer_patterns = ['*.txt']
-nnoremap <leader>h :HardTimeToggle<cr>
-
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+call plug#end()
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
@@ -247,7 +232,6 @@ let g:loaded_node_provider = 0
 let g:loaded_python_provider = 0
 let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
-call plug#end()
 
 "--- Customize theme ---
 syntax off
@@ -273,9 +257,6 @@ hi CursorLineNr              ctermfg=yellow   ctermbg=none     cterm=none
 hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=234      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=234      ctermbg=none     cterm=none
-
-hi StatusLine                ctermfg=none     ctermbg=none     cterm=bold
-hi StatusLineNC              ctermfg=248      ctermbg=none     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -318,7 +299,7 @@ function! Trim()
   let pwd = getcwd()
   let file = expand('%:p:h')
   if stridx(file, pwd) >= 0
-    silent! %s#\($\n\s*\)\+\%$## " trim endlines
+    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
   endif
@@ -352,7 +333,6 @@ lua << EOF
   require 'module_lspconfig'
   require 'module_treesitter'
   require 'module_mason'
-  require 'module_nnn'
   require 'module_null_ls'
   require 'module_cmp'
 
