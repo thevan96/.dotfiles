@@ -39,6 +39,8 @@ export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
 alias vi='nvim'
+alias watch='watch -c'
+alias diff='diff --color'
 alias nnn='NNN_TRASH=2 nnn -deoH'
 alias view='vi -R'
 alias lzg='lazygit'
@@ -70,11 +72,11 @@ git_switch() {
 }
 
 git_log() {
-  watch -c -n1 -t git log --all --decorate --oneline --graph --color
+  watch -n1 -t git log --all --decorate --oneline --graph --color
 }
 
 git_status() {
-  watch -c -n1 -t git status
+  watch -n1 -t git status
 }
 
 exit() {
@@ -94,6 +96,7 @@ asdf_update() {
   asdf reshim rust
   asdf reshim golang
   asdf reshim java
+  asdf reshim ruby
   echo 'Asdf update done !'
 }
 

@@ -54,10 +54,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-nnoremap h <nop>
-nnoremap l <nop>
-nnoremap <C-f> <nop>
-nnoremap <C-b> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -68,8 +64,8 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number!<cr>
-nnoremap <silent><leader>m :set relativenumber!<cr>
+nnoremap <silent><leader>N :set number!<cr>
+nnoremap <silent><leader>n :set relativenumber!<cr>
 
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -79,6 +75,10 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Store relative line number jumps in the jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -136,10 +136,10 @@ let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-Plug 'vifm/vifm.vim'
-let g:vifm_replace_netrw = 1
-nnoremap <leader>f :Vifm .<cr>
-nnoremap <leader>F :Vifm %:p:h<cr>
+" File manager
+Plug 'luukvbaal/nnn.nvim'
+nnoremap <leader>f :e .<cr>
+nnoremap <leader>F :NnnPicker %<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -324,6 +324,7 @@ augroup LoadFile
 
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * call Trim()
+  autocmd CursorMoved * set norelativenumber
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
@@ -335,6 +336,7 @@ lua << EOF
   require 'module_mason'
   require 'module_null_ls'
   require 'module_cmp'
+  require 'module_nnn'
 
   -- Without config
   require 'fidget'.setup()

@@ -10,7 +10,7 @@ export HISTFILESIZE=10000
 export HISTFILE=~/.zsh_history
 
 PROMPT='%F{green}%n@%m:%F{cyan}%~ $(indicator_git)%F{reset_color}
-$ '
+> '
 
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

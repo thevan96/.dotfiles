@@ -35,7 +35,7 @@ set complete=
 set completeopt=menu,menuone
 
 " Other
-set mouse-=a
+set mouse=a
 set showmatch
 set backspace=
 set autoindent
@@ -53,7 +53,6 @@ let g:netrw_keepdir= 0
 let g:netrw_localcopydircmd = 'cp -r'
 
 " Disable
-nnoremap <C-h> <nop>
 let html_no_rendering = 1
 
 " Setting tab/space
@@ -68,8 +67,8 @@ nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number!<cr>
-nnoremap <silent><leader>m :set relativenumber!<cr>
+nnoremap <silent><leader>N :set number!<cr>
+nnoremap <silent><leader>n :set relativenumber!<cr>
 
 command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
@@ -80,6 +79,10 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Store relative line number jumps in the jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " File manager netrw
 nnoremap <leader>ff :JumpFile<cr>
@@ -192,18 +195,13 @@ function! NetrwSetting()
         \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
 endfunction
 
+augroup ConfigStyleTabOrSpace
+  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+augroup end
+
 augroup ChangeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
-augroup end
-
-augroup RunFile
-  autocmd!
-  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
-  autocmd FileType python vnoremap <leader>vf :w !python<cr>
-  autocmd FileType python nnoremap <leader>vf :!clear && python %<cr>
-  autocmd FileType javascript nnoremap <leader>vf :!clear && node %<cr>
-  autocmd FileType go nnoremap <leader>vf :!clear && gofmt -w % && go run %<cr>
 augroup end
 
 augroup LoadFile
@@ -216,5 +214,6 @@ augroup LoadFile
 
   autocmd BufWritePre * call Trim()
   autocmd BufWritePre * call Mkdir()
+  autocmd CursorMoved * set norelativenumber
   autocmd FileType netrw call NetrwSetting()
 augroup end
