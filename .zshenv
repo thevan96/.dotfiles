@@ -54,6 +54,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+if [ $(command -v rlwrap) ] ; then
+  alias node='env NODE_NO_READLINE=1 rlwrap node'
+fi
+
 # Utils
 indicator_git() {
   branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
