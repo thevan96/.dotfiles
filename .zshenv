@@ -64,9 +64,9 @@ indicator_git() {
   if [[ $branch != '' ]]; then
     out=$(git status --short)
     if [[ $out != '' ]]; then
-      echo "(%F{red}$branch%F{cyan}%F{yellow}*%F{cyan})"
+      echo "[%F{red}$branch%F{cyan}%F{yellow}*%F{cyan}]"
     else
-      echo "(%F{red}$branch%F{cyan})"
+      echo "[%F{red}$branch%F{cyan}]"
     fi
   fi
 }

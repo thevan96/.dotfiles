@@ -5,6 +5,7 @@ pip install -U pynvim
 pip install -U Send2Trash
 pip install -U cpplint
 pip install -U httpie
+pip install -U sqlfluff
 
 gem install vimgolf
 

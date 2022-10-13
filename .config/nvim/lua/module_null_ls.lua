@@ -35,6 +35,9 @@ null_ls.setup({
     }),
     null_ls.builtins.diagnostics.cpplint,
     null_ls.builtins.diagnostics.staticcheck,
+    null_ls.builtins.diagnostics.sqlfluff.with({
+      extra_args = { '--dialect', 'postgres' },
+    }),
 
     -- Code actions
     null_ls.builtins.code_actions.eslint_d.with({
@@ -86,6 +89,9 @@ null_ls.setup({
         'graphql',
       },
       condition = is_in_current_folder,
+    }),
+    null_ls.builtins.formatting.sqlfluff.with({
+      extra_args = { '--dialect', 'postgres' },
     }),
   },
   debug = false,

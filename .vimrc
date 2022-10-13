@@ -153,6 +153,9 @@ hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
 
+hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
+hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
+
 "--- Etc ---"
 function! Mkdir()
   let dir = expand('%:p:h')

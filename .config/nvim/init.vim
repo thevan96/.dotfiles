@@ -14,9 +14,10 @@ set smartcase
 
 set list
 set listchars=tab:>\ ,trail:-
+set fillchars=vert:\|
 
 set nonumber
-set norelativenumber
+set relativenumber
 
 set ruler
 set laststatus=2
@@ -64,8 +65,7 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>N :set number!<cr>
-nnoremap <silent><leader>n :set relativenumber!<cr>
+nnoremap <silent><leader>n :set number! relativenumber!<cr>
 
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -244,7 +244,7 @@ hi clear VertSplit
 
 hi NonText                   ctermfg=none     ctermbg=none     cterm=none
 hi Normal                    ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat               ctermfg=none     ctermbg=232      cterm=none
+hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
@@ -257,6 +257,9 @@ hi CursorLineNr              ctermfg=yellow   ctermbg=none     cterm=none
 hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
+
+hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
+hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -324,7 +327,6 @@ augroup LoadFile
 
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * call Trim()
-  autocmd CursorMoved * set norelativenumber
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
