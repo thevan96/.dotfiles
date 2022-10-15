@@ -1,7 +1,5 @@
 local null_ls = require('null-ls')
 
-local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-
 local is_in_current_folder = function()
   local file = vim.fn.expand('%:p:h')
   local pwd = vim.fn.getcwd()
@@ -94,17 +92,4 @@ null_ls.setup({
       extra_args = { '--dialect', 'postgres' },
     }),
   },
-  debug = false,
-  on_attach = function(client, bufnr)
-    if client.supports_method('textDocument/formatting') then
-      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = augroup,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format()
-        end,
-      })
-    end
-  end,
 })

@@ -21,21 +21,27 @@ local on_attach = function(client, bufnr)
   client.server_capabilities.document_range_formatting = false
   client.server_capabilities.documentFormattingProvider = false
 
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'gS', ':sp<cr>:lua vim.lsp.buf.definition()<cr>', bufopts)
+  vim.keymap.set(
+    'n',
+    '<leader>P',
+    ':call Trim()<cr>:lua vim.lsp.buf.format()<cr>',
+    opts
+  )
   vim.keymap.set(
     'n',
     'gV',
     ':vsp<cr>:lua vim.lsp.buf.definition()<cr>',
     bufopts
   )
+  vim.keymap.set('n', 'gS', ':sp<cr>:lua vim.lsp.buf.definition()<cr>', bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', '<space>l', vim.lsp.buf.document_symbol, bufopts)
   vim.keymap.set('n', '<space>L', vim.lsp.buf.workspace_symbol, bufopts)
-  vim.keymap.set('n', '<space>R', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>A', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end
@@ -68,7 +74,7 @@ local servers = {
   'sumneko_lua',
 }
 
-local on_capabilities = require('cmp_nvim_lsp').update_capabilities(
+local on_capabilities = require('cmp_nvim_lsp').default_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 on_capabilities.textDocument.completion.completionItem.snippetSupport = true

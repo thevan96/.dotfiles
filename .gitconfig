@@ -10,7 +10,7 @@
   defaultBranch = main
 
 [merge]
-  tool = nvimdiff
+  tool = vimdiff
 
 [mergetool]
   keepBackup = false

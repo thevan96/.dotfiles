@@ -66,6 +66,7 @@ let g:root_cwd = getcwd()
 nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>o :ls<cr>:b<space>
+nnoremap <leader>P :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>N :set number!<cr>
 nnoremap <silent><leader>n :set relativenumber!<cr>
@@ -110,13 +111,8 @@ if &diff
   nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
   nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
   nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
-  nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
-
-  function! GRemoveMarkers() range
-    " echom a:firstline.'-'.a:lastline
-    execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
-  endfunction
-  command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
+  nnoremap <leader><cr> :diffupdate<cr>
+  vnoremap <leader>= :GremoveMarkers<cr><gv>
 endif
 
 " Open in tab terminal
@@ -170,6 +166,12 @@ function! Mkdir()
   endif
 endfunction
 
+function! GRemoveMarkers() range
+  " echom a:firstline.'-'.a:lastline
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+endfunction
+command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
+
 function! Trim()
   let pwd = getcwd()
   let file = expand('%:p:h')
@@ -215,7 +217,6 @@ augroup LoadFile
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
 
-  autocmd BufWritePre * call Trim()
   autocmd BufWritePre * call Mkdir()
   autocmd CursorMoved * set norelativenumber
   autocmd FileType netrw call NetrwSetting()

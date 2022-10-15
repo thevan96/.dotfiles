@@ -95,19 +95,6 @@ nnoremap zl :lnext<cr>
 nnoremap zH :lfirst<cr>
 nnoremap zL :llast<cr>
 
-" Fix conflict git
-if &diff
-  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
-  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
-  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
-  nnoremap <leader><cr> :diffupdate<cr>:diffupdate<cr>
-
-  function! GRemoveMarkers() range
-    execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
-  endfunction
-  command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
-endif
-
 " Open in tab terminal
 nnoremap <leader>" :silent
       \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
@@ -204,7 +191,7 @@ command! -bang -nargs=* Rg
 
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>D :Projects<cr>
+nnoremap <leader>p :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
@@ -212,12 +199,41 @@ nnoremap <leader>S :Rg <c-r><c-w><cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
+"--- Git ---
+Plug 'tpope/vim-fugitive'
+nnoremap <leader>1 :diffget //2<cr>:diffupdate<cr>
+nnoremap <leader>2 :diffget //3<cr>:diffupdate<cr>
+nnoremap <leader><cr> :diffupdate<cr>
+vnoremap <leader>= :GremoveMarkers<cr><gv>
+command Glog Git log --all --decorate --oneline --graph --color
+
+" Test
+Plug 'vim-test/vim-test'
+let test#strategy = 'basic'
+nmap <leader>tf :TestFile<cr>
+nmap <leader>tn :TestNearest<cr>
+nmap <leader>tl :TestLast<cr>
+nmap <leader>ts :TestSuite<cr>
+
+" Generate document comment
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+let g:doge_enable_mappings= 1
+let g:doge_mapping = '<leader>D'
+
 "--- Other plugins ---
-" Plug 'mattn/emmet-vim'
-" Plug 'AndrewRadev/tagalong.vim'
+Plug 'mattn/emmet-vim'
+Plug 'rlue/vim-barbaric'
+Plug 'AndrewRadev/tagalong.vim'
+
+Plug 'ferrine/md-img-paste.vim'
+let g:mdip_imgdir = 'images'
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
+let g:mkdp_theme = 'light'
+nnoremap <leader>m :MarkdownPreviewToggle<cr>
 
 Plug 'j-hui/fidget.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -285,7 +301,7 @@ hi ALEErrorSign              ctermfg=196      ctermbg=none     cterm=none
 hi ALEWarningSign            ctermfg=226      ctermbg=none     cterm=none
 hi ALEInforSign              ctermfg=39       ctermbg=none     cterm=none
 
-"--- Etc ---
+"--- Function utils ---
 function! Mkdir()
   let dir = expand('%:p:h')
   if dir =~ '://'
@@ -297,6 +313,23 @@ function! Mkdir()
     echo 'Created non-existing directory: '.dir
   endif
 endfunction
+
+function! GRemoveMarkers() range
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+endfunction
+command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
+
+function! Notes()
+  let curline = getline('.')
+  let name = tolower(input('Enter file name: '))
+  if name != ''
+    let path = join(split(name), '_'). '.md'
+    let str = name . ' [' . name . '](' . path .')'
+    call setline('.', curline . '' . str)
+    exe(':sp '.expand('%:p:h'). '/' . path)
+  endif
+endfunction
+nnoremap <leader>N :call Notes()<cr>
 
 function! Trim()
   let pwd = getcwd()
@@ -326,9 +359,15 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save position cursor
 
   autocmd BufWritePre * call Mkdir()
-  autocmd BufWritePre * call Trim()
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
+  autocmd TermOpen * setlocal nonumber norelativenumber
+
+  autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
+  autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
+  autocmd FileType markdown,tex
+        \ nmap <buffer><silent> <leader>p
+        \ :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
 "--- Load lua---
