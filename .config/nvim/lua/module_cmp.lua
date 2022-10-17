@@ -1,8 +1,8 @@
 local cmp = require('cmp')
 
 local ELLIPSIS_CHAR = '…'
-local MAX_LABEL_WIDTH = 25
-local MIN_LABEL_WIDTH = 10
+local MAX_LABEL_WIDTH = 50
+local MIN_LABEL_WIDTH = 25
 
 cmp.setup({
   formatting = {

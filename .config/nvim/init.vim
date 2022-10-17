@@ -16,8 +16,8 @@ set list
 set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
-set nonumber
-set relativenumber
+set number
+set norelativenumber
 
 set ruler
 set laststatus=2
@@ -42,9 +42,9 @@ set foldexpr=nvim_treesitter#foldexpr()
 
 " Other
 set mouse=a
-set backspace=
 set showmatch
 set autoindent
+set backspace=2
 set matchtime=1
 set diffopt=vertical
 set clipboard=unnamed,unnamedplus
@@ -65,7 +65,6 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number! relativenumber!<cr>
 
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -75,10 +74,6 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
-" Store relative line number jumps in the jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -94,6 +89,15 @@ nnoremap zh :lprev<cr>
 nnoremap zl :lnext<cr>
 nnoremap zH :lfirst<cr>
 nnoremap zL :llast<cr>
+
+" Fix conflict git
+if &diff
+  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
+  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
+  nnoremap <leader><cr> :diffupdate<cr>
+  vnoremap <leader>= :GremoveMarkers<cr><gv>
+endif
 
 " Open in tab terminal
 nnoremap <leader>" :silent
@@ -125,8 +129,8 @@ let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " File manager
 Plug 'luukvbaal/nnn.nvim'
-nnoremap <leader>f :e .<cr>
-nnoremap <leader>F :NnnPicker %<cr>
+nnoremap <leader>e :e .<cr>
+nnoremap <leader>E :NnnPicker %<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -149,8 +153,8 @@ let g:fzf_layout = { 'down': '40%' }
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 
 let rgIgnoreDirectories = "
-      \ -g '!{*/.git/*,*/.idea/*, */.vscode/*}'
-      \ -g '!{*/node_modules/*,*/vendor/*, */composer/*,*/gems/*}'"
+      \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
+      \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
 
 let fdIgnoreDirectories = '
       \ --exclude .git
@@ -199,14 +203,6 @@ nnoremap <leader>S :Rg <c-r><c-w><cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-"--- Git ---
-Plug 'tpope/vim-fugitive'
-nnoremap <leader>1 :diffget //2<cr>:diffupdate<cr>
-nnoremap <leader>2 :diffget //3<cr>:diffupdate<cr>
-nnoremap <leader><cr> :diffupdate<cr>
-vnoremap <leader>= :GremoveMarkers<cr><gv>
-command Glog Git log --all --decorate --oneline --graph --color
-
 " Test
 Plug 'vim-test/vim-test'
 let test#strategy = 'basic'
@@ -214,11 +210,6 @@ nmap <leader>tf :TestFile<cr>
 nmap <leader>tn :TestNearest<cr>
 nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
-
-" Generate document comment
-Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-let g:doge_enable_mappings= 1
-let g:doge_mapping = '<leader>D'
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
@@ -274,9 +265,6 @@ hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
 
-hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
-hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
-
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
@@ -331,15 +319,22 @@ function! Notes()
 endfunction
 nnoremap <leader>N :call Notes()<cr>
 
-function! Trim()
+function! IsInCurrentProject()
   let pwd = getcwd()
   let file = expand('%:p:h')
-  if stridx(file, pwd) >= 0
-    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
-    silent! %s/\s\+$//e " trim whitespace
-    silent! g/^\_$\n\_^$/d " single blank line
-  endif
+
+  return stridx(file, pwd) >= 0
 endfunction
+
+function! Trim()
+  silent! %s#\($\n\s*\)\+\%$## " trim end newlines
+  silent! %s/\s\+$//e " trim whitespace
+  silent! g/^\_$\n\_^$/d " single blank line
+endfunction
+
+if IsInCurrentProject()
+  nnoremap <leader>f :call Trim()<cr>:lua vim.lsp.buf.format()<cr>
+endif
 
 augroup ConfigStyleTabOrSpace
   autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
@@ -361,12 +356,11 @@ augroup LoadFile
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
-  autocmd TermOpen * setlocal nonumber norelativenumber
 
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown,tex
-        \ nmap <buffer><silent> <leader>p
+        \ nmap <buffer><silent> <leader>P
         \ :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
@@ -374,8 +368,8 @@ augroup end
 lua << EOF
   require 'module_lspconfig'
   require 'module_treesitter'
-  require 'module_mason'
   require 'module_null_ls'
+  require 'module_mason'
   require 'module_cmp'
   require 'module_nnn'
 

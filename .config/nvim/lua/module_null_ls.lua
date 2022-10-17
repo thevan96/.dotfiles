@@ -23,13 +23,14 @@ local enable_prettier = function(utils)
 end
 
 null_ls.setup({
+  debug = true,
   sources = {
     -- Diagnotics
     null_ls.builtins.diagnostics.eslint_d.with({
-      condition = enable_eslint,
+      runtime_condition = enable_eslint,
     }),
     null_ls.builtins.diagnostics.standardjs.with({
-      condition = enable_standardjs,
+      runtime_condition = enable_standardjs,
     }),
     null_ls.builtins.diagnostics.cpplint,
     null_ls.builtins.diagnostics.staticcheck,
@@ -39,29 +40,29 @@ null_ls.setup({
 
     -- Code actions
     null_ls.builtins.code_actions.eslint_d.with({
-      condition = enable_eslint,
+      runtime_condition = enable_eslint,
     }),
 
     -- Formating
     null_ls.builtins.formatting.rustfmt.with({
-      condition = is_in_current_folder,
+      runtime_condition = is_in_current_folder,
     }),
     null_ls.builtins.formatting.gofmt.with({
-      condition = is_in_current_folder,
+      runtime_condition = is_in_current_folder,
     }),
     null_ls.builtins.formatting.golines.with({
       extra_args = { '-m', '80' },
-      condition = is_in_current_folder,
+      runtime_condition = is_in_current_folder,
     }),
     null_ls.builtins.formatting.clang_format.with({
-      condition = is_in_current_folder,
+      runtime_condition = is_in_current_folder,
     }),
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.eslint_d.with({
-      condition = enable_eslint,
+      runtime_condition = enable_eslint,
     }),
     null_ls.builtins.formatting.standardjs.with({
-      condition = enable_standardjs,
+      runtime_condition = enable_standardjs,
     }),
     null_ls.builtins.formatting.prettier.with({
       filetypes = {
@@ -71,7 +72,7 @@ null_ls.setup({
         'typescriptreact',
         'vue',
       },
-      condition = enable_prettier,
+      runtime_condition = enable_prettier,
     }),
     null_ls.builtins.formatting.prettier.with({
       filetypes = {
@@ -82,11 +83,17 @@ null_ls.setup({
         'json',
         'jsonc',
         'yaml',
-        'markdown',
-        'markdown.mdx',
         'graphql',
       },
-      condition = is_in_current_folder,
+      runtime_condition = is_in_current_folder,
+    }),
+    null_ls.builtins.formatting.prettier.with({
+      filetypes = {
+        'markdown',
+        'markdown.mdx',
+      },
+      runtime_condition = is_in_current_folder,
+      extra_args = { '--prose-wrap', 'always' },
     }),
     null_ls.builtins.formatting.sqlfluff.with({
       extra_args = { '--dialect', 'postgres' },

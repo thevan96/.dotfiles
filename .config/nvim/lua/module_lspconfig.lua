@@ -1,7 +1,7 @@
 local nvim_lsp = require('lspconfig')
 
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<leader>D', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
   'gk',
@@ -23,12 +23,6 @@ local on_attach = function(client, bufnr)
 
   vim.keymap.set(
     'n',
-    '<leader>P',
-    ':call Trim()<cr>:lua vim.lsp.buf.format()<cr>',
-    opts
-  )
-  vim.keymap.set(
-    'n',
     'gV',
     ':vsp<cr>:lua vim.lsp.buf.definition()<cr>',
     bufopts
@@ -41,7 +35,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>l', vim.lsp.buf.document_symbol, bufopts)
   vim.keymap.set('n', '<space>L', vim.lsp.buf.workspace_symbol, bufopts)
   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end

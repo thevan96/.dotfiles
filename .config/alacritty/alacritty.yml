@@ -3,6 +3,7 @@ window:
   title: "Alacritty"
   decorations: full
   startup_mode: fullscreen
+  opacity: 1.0
 
 # Font
 font:

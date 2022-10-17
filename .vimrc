@@ -24,6 +24,7 @@ set signcolumn=yes
 
 set textwidth=80
 set colorcolumn=+1
+set formatoptions+=a
 
 set cursorline
 set cursorlineopt=number
@@ -37,8 +38,8 @@ set completeopt=menu,menuone
 " Other
 set mouse=a
 set showmatch
-set backspace=
 set autoindent
+set backspace=2
 set matchtime=1
 set nofoldenable
 set diffopt=vertical
@@ -68,8 +69,6 @@ nnoremap gp `[v`]
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>P :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>N :set number!<cr>
-nnoremap <silent><leader>n :set relativenumber!<cr>
 
 command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufCurOnly execute '%bdelete|edit#|bdelete#'
@@ -81,15 +80,9 @@ inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
-" Store relative line number jumps in the jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
-
 " File manager netrw
-nnoremap <leader>ff :JumpFile<cr>
-nnoremap <leader>fv :vsp+JumpFile<cr>
-nnoremap <leader>fs :sp+JumpFile<cr>
-nnoremap <leader>fr :e `=g:root_cwd`<cr>
+nnoremap <leader>E :JumpFile<cr>
+nnoremap <leader>e :e `=g:root_cwd`<cr>
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -148,9 +141,6 @@ hi CursorLineNr                   ctermfg=yellow   ctermbg=none     cterm=none
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
-
-hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
-hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
 
 "--- Etc ---"
 function! Mkdir()
@@ -218,6 +208,5 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save late position cursor
 
   autocmd BufWritePre * call Mkdir()
-  autocmd CursorMoved * set norelativenumber
   autocmd FileType netrw call NetrwSetting()
 augroup end
