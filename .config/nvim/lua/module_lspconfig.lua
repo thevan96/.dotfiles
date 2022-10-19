@@ -1,19 +1,8 @@
 local nvim_lsp = require('lspconfig')
 
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<leader>D', vim.diagnostic.open_float, opts)
-vim.keymap.set(
-  'n',
-  'gk',
-  '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>',
-  opts
-)
-vim.keymap.set(
-  'n',
-  'gj',
-  '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>',
-  opts
-)
+vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', 'gj', vim.diagnostic.goto_next, opts)
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -41,13 +30,10 @@ local on_attach = function(client, bufnr)
 end
 
 vim.diagnostic.config({
-  signs = false,
+  signs = true,
   underline = true,
   update_in_insert = false,
-  virtual_text = {
-    prefix = '●',
-    source = 'always',
-  },
+  virtual_text = false,
   float = {
     source = 'always',
     border = 'single',
@@ -85,16 +71,11 @@ local on_handlers = {
   ),
 }
 
-local lsp_flags = {
-  debounce_text_changes = 150,
-}
-
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
     capabilities = on_capabilities,
     handlers = on_handlers,
-    flags = lsp_flags,
   })
 end
 

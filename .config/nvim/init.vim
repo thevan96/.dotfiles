@@ -16,7 +16,7 @@ set list
 set listchars=tab:>\ ,trail:-
 set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set ruler
@@ -55,6 +55,10 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+nnoremap f <nop>
+nnoremap F <nop>
+nnoremap t <nop>
+nnoremap T <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -65,8 +69,10 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <silent><leader>n :set number!<cr>
 
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
+command! BufCurOnly exe '%bdelete|edit#|bdelete#'
+command! W exe 'w|e'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
       \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
@@ -212,15 +218,15 @@ nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
 "--- Other plugins ---
+Plug 'nvim-lua/plenary.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
 Plug 'AndrewRadev/tagalong.vim'
 
 Plug 'ferrine/md-img-paste.vim'
 let g:mdip_imgdir = 'images'
-
-Plug 'nvim-lua/plenary.nvim'
-Plug 'jose-elias-alvarez/null-ls.nvim'
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
@@ -258,8 +264,8 @@ hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=yellow   ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=yellow   ctermbg=none     cterm=none
+hi CursorLine                ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
@@ -284,10 +290,6 @@ hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
-
-hi ALEErrorSign              ctermfg=196      ctermbg=none     cterm=none
-hi ALEWarningSign            ctermfg=226      ctermbg=none     cterm=none
-hi ALEInforSign              ctermfg=39       ctermbg=none     cterm=none
 
 "--- Function utils ---
 function! Mkdir()
@@ -332,15 +334,57 @@ function! Trim()
   silent! g/^\_$\n\_^$/d " single blank line
 endfunction
 
-if IsInCurrentProject()
-  nnoremap <leader>f :call Trim()<cr>:lua vim.lsp.buf.format()<cr>
-endif
+function! Format()
+  if !IsInCurrentProject()
+    return
+  endif
+
+  if filereadable('format_linter.sh')
+    echo 'Run file format_linter.sh instead!'
+    return
+  endif
+
+  if filereadable('format.sh')
+    echo 'Run file format.sh instead!'
+    return
+  endif
+
+  if filereadable('linter.sh')
+    echo 'Run file linter.sh instead!'
+    return
+  endif
+
+  let extension = expand('%:e')
+  call Trim()
+  if extension == 'go'
+    !gofmt -w %
+    !golines -m 80 -w %
+  elseif extension == 'rs'
+    !rufmt %
+  elseif extension == 'lua'
+    !stylua %
+  elseif extension == 'sql'
+    !sqlfluff fix --dialect postgres -f %
+  elseif extension == 'md'
+    !prettier --prose-wrap always -w %
+  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
+    !prettier -w %
+  endif
+endfunction
+nnoremap <expr>
+      \ <leader>f IsInCurrentProject() ?
+      \ ":call Trim()<cr>:lua vim.lsp.buf.format({async = false})<cr>
+      \ :echo 'Format done!'<cr>"
+      \ : '<esc>'
 
 augroup ConfigStyleTabOrSpace
+  autocmd!
   autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+  autocmd FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup ChangeWorkingDirectory
+  autocmd!
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
@@ -348,14 +392,13 @@ augroup end
 augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
-  autocmd FocusGained * redraw!
-
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save position cursor
 
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
+  autocmd BufWritePre .editorconfig bufdo execute 'EditorConfigReload'|write
 
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
@@ -368,10 +411,10 @@ augroup end
 lua << EOF
   require 'module_lspconfig'
   require 'module_treesitter'
-  require 'module_null_ls'
   require 'module_mason'
   require 'module_cmp'
   require 'module_nnn'
+  require 'module_null_ls'
 
   -- Without config
   require 'fidget'.setup()

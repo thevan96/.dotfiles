@@ -135,8 +135,8 @@ hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                     ctermfg=yellow   ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=yellow   ctermbg=none     cterm=none
+hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
