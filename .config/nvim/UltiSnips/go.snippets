@@ -22,11 +22,11 @@ endsnippet
 
 snippet maxInt "Max integer"
 func maxInt(a, b int) int {
-	if a > b {
-		return a
-	}
+  if a > b {
+    return a
+  }
 
-	return b
+  return b
 }
 endsnippet
 
@@ -34,24 +34,24 @@ snippet cp "template competive programing"
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
+  "bufio"
+  "fmt"
+  "os"
+  "strings"
 )
 
 var (
-	reader = bufio.NewReader(os.Stdin)
-	writer = bufio.NewWriter(os.Stdout)
+  reader = bufio.NewReader(os.Stdin)
+  writer = bufio.NewWriter(os.Stdout)
 )
 
 func getline() string {
-	str, _ := reader.ReadString('\n')
-	str = strings.TrimSuffix(str, "\n")
-	return str
+  str, _ := reader.ReadString('\n')
+  str = strings.TrimSuffix(str, "\n")
+  return str
 }
 
 func main() {
-	writer.Flush()
+  writer.Flush()
 }
 endsnippet

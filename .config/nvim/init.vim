@@ -36,8 +36,8 @@ set complete=
 set completeopt=menu,menuone
 
 set nofoldenable
-set foldlevelstart=99
 set foldmethod=expr
+set foldlevelstart=99
 set foldexpr=nvim_treesitter#foldexpr()
 
 " Other
@@ -67,6 +67,7 @@ set tabstop=2 shiftwidth=2 expandtab | retab
 let mapleader = ' '
 
 " Customizer mapping
+xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 nnoremap <silent><leader>n :set number!<cr>
@@ -402,8 +403,7 @@ augroup LoadFile
 
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
-  autocmd FileType markdown,tex
-        \ nmap <buffer><silent> <leader>P
+  autocmd FileType markdown,tex nmap <buf><silent><leader>P
         \ :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
