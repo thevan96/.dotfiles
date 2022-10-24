@@ -1,5 +1,5 @@
 #  Export env variable
-export EDITOR=vi
+export EDITOR=nvim
 export KEYTIMEOUT=1
 export TERM=screen-256color
 
@@ -42,7 +42,7 @@ alias vi='nvim'
 alias watch='watch -c'
 alias diff='diff --color'
 alias nnn='NNN_TRASH=2 nnn -deoH'
-alias view='vi -R'
+alias view='nvim -R'
 alias lzg='lazygit'
 alias lzd='lazydocker'
 alias pwdcp='pwd | xclip -selection clipboard'

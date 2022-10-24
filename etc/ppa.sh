@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 sudo add-apt-repository ppa:peek-developers/stable
 sudo add-apt-repository ppa:bamboo-engine/ibus-bamboo

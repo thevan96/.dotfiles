@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:>\ ,trail:-
+set listchars=tab:\|\ ,trail:-
 
 set number
 set norelativenumber
@@ -31,15 +31,13 @@ set cursorlineopt=number
 
 set wildmenu
 set wildmode=longest,list
-
-set complete=
 set completeopt=menu,menuone
 
 " Other
 set mouse=a
 set showmatch
 set autoindent
-set backspace=2
+set backspace=0
 set matchtime=1
 set nofoldenable
 set diffopt=vertical
@@ -71,10 +69,8 @@ nnoremap <leader>P :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 
 command! Root execute 'cd ' fnameescape(g:root_cwd)
-command! BufCurOnly execute '%bdelete|edit#|bdelete#'
+command! BufOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
-inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
-      \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')

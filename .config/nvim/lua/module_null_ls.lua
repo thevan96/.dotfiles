@@ -23,6 +23,10 @@ local enable_prettier = function()
   return is_exist('node_modules/.bin/prettier') and is_in_current_project
 end
 
+local enable_editorconfig = function()
+  return is_exist('./.editorconfig') and is_in_current_project
+end
+
 local sources = {}
 if enable_eslint() then
   table.insert(sources, null_ls.builtins.diagnostics.eslint_d)
@@ -39,9 +43,12 @@ if enable_prettier() then
   table.insert(sources, null_ls.builtins.formatting.prettier)
 end
 
+if enable_editorconfig() then
+  table.insert(sources, null_ls.builtins.diagnostics.editorconfig_checker)
+end
+
 local diagnostics_formats = {
   -- Diagnostic
-  null_ls.builtins.diagnostics.editorconfig_checker,
   null_ls.builtins.diagnostics.cpplint,
   null_ls.builtins.diagnostics.staticcheck,
   null_ls.builtins.diagnostics.sqlfluff.with({
@@ -56,6 +63,9 @@ local diagnostics_formats = {
   }),
   null_ls.builtins.formatting.clang_format,
   null_ls.builtins.formatting.stylua,
+  null_ls.builtins.formatting.prettier.with({
+    filetypes = { 'yaml' },
+  }),
   null_ls.builtins.formatting.prettier.with({
     filetypes = {
       'markdown',

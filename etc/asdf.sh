@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Asdf install plugin
 asdf plugin add nodejs

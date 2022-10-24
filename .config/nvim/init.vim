@@ -13,10 +13,10 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:>\ ,trail:-
+set listchars=tab:\|\ ,trail:-
 set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set ruler
@@ -31,8 +31,6 @@ set cursorlineopt=number
 
 set wildmenu
 set wildmode=longest,list
-
-set complete=
 set completeopt=menu,menuone
 
 set nofoldenable
@@ -44,7 +42,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 set mouse=a
 set showmatch
 set autoindent
-set backspace=2
+set backspace=0
 set matchtime=1
 set diffopt=vertical
 set clipboard=unnamed,unnamedplus
@@ -55,10 +53,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-nnoremap f <nop>
-nnoremap F <nop>
-nnoremap t <nop>
-nnoremap T <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -69,14 +63,9 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gp `[v`]
-nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
-nnoremap <silent><leader>n :set number!<cr>
 
-command! BufCurOnly exe '%bdelete|edit#|bdelete#'
-command! W exe 'w|e'
+command! BufOnly exe '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
-inoremap <C-d> <esc>:call setline('.',substitute(getline(line('.')),'^\s*',
-      \ matchstr(getline(line('.')-1),'^\s*'),''))<cr>I
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -127,6 +116,7 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -136,8 +126,7 @@ let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " File manager
 Plug 'luukvbaal/nnn.nvim'
-nnoremap <leader>e :e .<cr>
-nnoremap <leader>E :NnnPicker %<cr>
+command! E exe 'NnnPicker %'
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -218,13 +207,24 @@ nmap <leader>tn :TestNearest<cr>
 nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
+Plug 'preservim/vimux'
+let g:VimuxHeight = '50'
+let g:VimuxOrientation = 'h'
+nnoremap <leader>vo :VimuxOpenRunner<cr>
+nnoremap <leader>vp :VimuxPromptCommand<cr>
+nnoremap <leader>vx :VimuxCloseRunner<cr>
+nnoremap <leader>vl :VimuxRunLastCommand<cr>
+nnoremap <leader>vc :VimuxInterruptRunner<cr>
+nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
+nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
+vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
+
 "--- Other plugins ---
 Plug 'nvim-lua/plenary.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 
-Plug 'mattn/emmet-vim'
-Plug 'rlue/vim-barbaric'
 Plug 'AndrewRadev/tagalong.vim'
+Plug 'rlue/vim-barbaric'
 
 Plug 'ferrine/md-img-paste.vim'
 let g:mdip_imgdir = 'images'
@@ -265,12 +265,12 @@ hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=none     ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
+hi CursorLine                ctermfg=11       ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=11       ctermbg=none     cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233
-hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
+hi SpecialKey                ctermfg=240      ctermbg=none     cterm=none
+hi Whitespace                ctermfg=240      ctermbg=none     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -282,15 +282,15 @@ hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
-
 hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
 hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
+
+hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
 
 "--- Function utils ---
 function! Mkdir()
@@ -384,6 +384,24 @@ augroup ConfigStyleTabOrSpace
   autocmd FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
+augroup RunFile
+  autocmd!
+  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
+  autocmd FileType python vnoremap <leader>vf :w !python<cr>
+  autocmd FileType javascript nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('node '.expand('%'))<cr>
+  autocmd FileType python nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('python '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('go run '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
+        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
+  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
+        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
+  autocmd FileType sql nnoremap <silent><leader>vf :call
+        \ VimuxRunCommand('\i '.expand('%'))<cr>
+augroup end
+
 augroup ChangeWorkingDirectory
   autocmd!
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
@@ -399,7 +417,6 @@ augroup LoadFile
   autocmd BufWritePre * call Mkdir()
   autocmd BufWritePre * lua vim.diagnostic.enable()
   autocmd InsertEnter * lua vim.diagnostic.disable()
-  autocmd BufWritePre .editorconfig bufdo execute 'EditorConfigReload'|write
 
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'

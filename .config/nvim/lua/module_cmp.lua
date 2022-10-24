@@ -18,7 +18,6 @@ cmp.setup({
       return vim_item
     end,
   },
-  preselect = cmp.PreselectMode.None,
   completion = {
     autocomplete = false,
     completeopt = 'menu,menuone',
@@ -29,7 +28,6 @@ cmp.setup({
     end,
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<cr>'] = cmp.mapping.confirm({ select = true }),

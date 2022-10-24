@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 pip install --upgrade pip
 pip install -U pynvim
@@ -6,6 +6,7 @@ pip install -U Send2Trash
 pip install -U cpplint
 pip install -U httpie
 pip install -U sqlfluff
+pip install -U editorconfig-checker
 
 gem install vimgolf
 
@@ -21,7 +22,6 @@ npm install -g yarn
 npm install -g tree-sitter-cli
 npm install -g typescript
 npm install -g pnpm
-npm install -g tree-sitter-cli
 npm install -g sass
 npm install -g eslint_d
 

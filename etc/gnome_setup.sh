@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Gnome setup
 gsettings set org.gnome.desktop.interface show-battery-percentage true
