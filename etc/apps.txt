@@ -5,6 +5,6 @@ libreoffice
 skype
 android studio
 anki
-plantuml
 postman
 docker
+etcher

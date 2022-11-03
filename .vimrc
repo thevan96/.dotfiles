@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-
+set listchars=tab:>\ ,trail:-
 
 set number
 set norelativenumber
@@ -24,7 +24,6 @@ set signcolumn=yes
 
 set textwidth=80
 set colorcolumn=+1
-set formatoptions+=a
 
 set cursorline
 set cursorlineopt=number
@@ -64,8 +63,10 @@ let g:root_cwd = getcwd()
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
+nnoremap <leader>y :%y<cr>
+nnoremap <leader>n :set number!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>P :call Trim()<cr>
+nnoremap <leader>f :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 
 command! Root execute 'cd ' fnameescape(g:root_cwd)
@@ -124,15 +125,15 @@ hi clear VertSplit
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat                    ctermfg=none     ctermbg=234      cterm=none
+hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
 hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
 hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
+hi CursorLine                     ctermfg=11       ctermbg=none     cterm=none
+hi CursorLineNr                   ctermfg=11       ctermbg=none     cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
@@ -187,7 +188,11 @@ function! NetrwSetting()
 endfunction
 
 augroup ConfigStyleTabOrSpace
-  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+  autocmd!
+  autocmd BufNewFile,BufRead,BufWrite *.go
+        \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+  autocmd BufNewFile,BufRead,Bufwrite *.md
+        \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup ChangeWorkingDirectory

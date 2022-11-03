@@ -9,8 +9,20 @@ export HISTSIZE=10000
 export HISTFILESIZE=10000
 export HISTFILE=~/.zsh_history
 
-PROMPT='%F{green}%n@%m:%F{cyan}%~ $(indicator_git)%F{reset_color}
-> '
+indicator_git() {
+  branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
+  if [[ $branch != '' ]]; then
+    out=$(git status --short)
+    if [[ $out != '' ]]; then
+      echo "[$branch*]"
+    else
+      echo "[$branch]"
+    fi
+  fi
+}
+
+PROMPT='%n@%m:%~$(indicator_git)
+$ '
 
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -27,14 +27,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   xsel \
   xclip \
   wmctrl \
-  graphviz \
   postgresql-client \
   mysql-client \
   clang-format \
   cppcheck \
   stow \
   rofi \
-  xtrclock \
   fonts-noto-color-emoji \
   vlc \
   blender \
@@ -46,5 +44,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   gparted \
   mpv \
   vim-gtk \
+  simplescreenrecorder \
+  vifm \
   transmission
 fi

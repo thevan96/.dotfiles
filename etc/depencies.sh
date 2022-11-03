@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 pip install --upgrade pip
 pip install -U pynvim
@@ -30,6 +30,8 @@ go install github.com/jesseduffield/lazydocker@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
+go install golang.org/x/tools/cmd/goimports@latest
+go install golang.org/x/tools/gopls@latest
 
 cargo install stylua
 

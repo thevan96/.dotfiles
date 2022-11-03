@@ -52,12 +52,21 @@ local diagnostics_formats = {
   null_ls.builtins.diagnostics.cpplint,
   null_ls.builtins.diagnostics.staticcheck,
   null_ls.builtins.diagnostics.sqlfluff.with({
+    args = {
+      'lint',
+      '-f',
+      'github-annotation',
+      '-n',
+      '--disable-progress-bar',
+      '$FILENAME',
+    },
     extra_args = { '--dialect', 'postgres' },
   }),
 
   -- Format
   null_ls.builtins.formatting.rustfmt,
-  null_ls.builtins.formatting.gofmt,
+  -- null_ls.builtins.formatting.gofmt,
+  null_ls.builtins.formatting.goimports,
   null_ls.builtins.formatting.golines.with({
     extra_args = { '-m', '80' },
   }),
@@ -74,11 +83,12 @@ local diagnostics_formats = {
     extra_args = { '--prose-wrap', 'always' },
   }),
   null_ls.builtins.formatting.sqlfluff.with({
+    args = { 'fix', '--disable-progress-bar', '-f', '-n', '-' },
     extra_args = { '--dialect', 'postgres' },
   }),
 }
 
-for i = 0, #(diagnostics_formats) do
+for i = 0, #diagnostics_formats do
   if is_in_current_project() then
     table.insert(sources, diagnostics_formats[i])
   end

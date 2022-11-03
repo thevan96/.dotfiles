@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:\|\ ,trail:-
+set listchars=tab:>-,trail:-
 set fillchars=vert:\|
 
 set number
@@ -63,7 +63,10 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gp `[v`]
-
+nnoremap <leader>y :%y<cr>
+nnoremap <leader>n :set number!<cr>
+nnoremap <leader>r :EditorConfigReload<cr>
+nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
@@ -116,7 +119,6 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -125,8 +127,12 @@ let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " File manager
-Plug 'luukvbaal/nnn.nvim'
-command! E exe 'NnnPicker %'
+Plug 'vifm/vifm.vim'
+let g:vifm_replace_netrw = 1
+nnoremap <leader>ee :e .<cr>
+nnoremap <leader>ev :VsplitVifm<cr>
+nnoremap <leader>es :SplitVifm<cr>
+nnoremap <leader>E :Vifm<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -195,9 +201,6 @@ nnoremap <leader>p :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
-
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " Test
 Plug 'vim-test/vim-test'
@@ -269,8 +272,8 @@ hi CursorLine                ctermfg=11       ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=11       ctermbg=none     cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233
-hi SpecialKey                ctermfg=240      ctermbg=none     cterm=none
-hi Whitespace                ctermfg=240      ctermbg=none     cterm=none
+hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
+hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -379,9 +382,13 @@ nnoremap <expr>
       \ : '<esc>'
 
 augroup ConfigStyleTabOrSpace
-  autocmd!
-  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
-  autocmd FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  if filereadable('.editorconfig') == 0
+    autocmd!
+    autocmd BufNewFile,BufRead,BufWrite *.go
+          \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+    autocmd BufNewFile,BufRead,Bufwrite *.md
+          \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  endif
 augroup end
 
 augroup RunFile
@@ -394,10 +401,6 @@ augroup RunFile
         \ VimuxRunCommand('python '.expand('%'))<cr>
   autocmd FileType go nnoremap <silent><leader>vf :call
         \ VimuxRunCommand('go run '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vd :set number<cr>:call
-        \ VimuxRunCommand('dlv debug '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vb :set number<cr>:call
-        \ VimuxRunCommand('break ' .expand('%').':'.line('.'))<cr>
   autocmd FileType sql nnoremap <silent><leader>vf :call
         \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
@@ -415,9 +418,6 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save position cursor
 
   autocmd BufWritePre * call Mkdir()
-  autocmd BufWritePre * lua vim.diagnostic.enable()
-  autocmd InsertEnter * lua vim.diagnostic.disable()
-
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown,tex nmap <buf><silent><leader>P
@@ -430,7 +430,6 @@ lua << EOF
   require 'module_treesitter'
   require 'module_mason'
   require 'module_cmp'
-  require 'module_nnn'
   require 'module_null_ls'
 
   -- Without config

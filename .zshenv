@@ -4,7 +4,6 @@ export KEYTIMEOUT=1
 export TERM=screen-256color
 
 # DEFAULT EVIROMENT
-export ZSH=$HOME/.oh-my-zsh
 export XDG_CONFIG_HOME=$HOME/.config
 export ANDROID_HOME=$HOME/Android/Sdk
 # macos export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -43,8 +42,8 @@ alias watch='watch -c'
 alias diff='diff --color'
 alias nnn='NNN_TRASH=2 nnn -deoH'
 alias view='nvim -R'
-alias lzg='lazygit'
-alias lzd='lazydocker'
+alias lg='lazygit'
+alias ld='lazydocker'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
@@ -59,18 +58,6 @@ if [ $(command -v rlwrap) ] ; then
 fi
 
 # Utils
-indicator_git() {
-  branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
-  if [[ $branch != '' ]]; then
-    out=$(git status --short)
-    if [[ $out != '' ]]; then
-      echo "[%F{red}$branch%F{cyan}%F{yellow}*%F{cyan}]"
-    else
-      echo "[%F{red}$branch%F{cyan}]"
-    fi
-  fi
-}
-
 git_switch() {
   git checkout $(git branch -a | fzf)
 }
