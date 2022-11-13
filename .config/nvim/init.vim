@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:>-,trail:-
+set listchars=tab:>-
 set fillchars=vert:\|
 
 set number
@@ -294,6 +294,7 @@ hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
+hi ExtraWhitespace           ctermbg=196
 
 "--- Function utils ---
 function! Mkdir()
@@ -389,6 +390,12 @@ augroup ConfigStyleTabOrSpace
     autocmd BufNewFile,BufRead,Bufwrite *.md
           \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
   endif
+augroup end
+
+augroup ShowExtraWhitespace
+  autocmd!
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup RunFile

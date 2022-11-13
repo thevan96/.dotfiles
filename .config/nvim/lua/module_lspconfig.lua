@@ -1,8 +1,18 @@
 local nvim_lsp = require('lspconfig')
 
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', 'gj', vim.diagnostic.goto_next, opts)
+vim.keymap.set(
+  'n',
+  'gk',
+  ':lua vim.diagnostic.goto_prev({ float = false })<cr>',
+  opts
+)
+vim.keymap.set(
+  'n',
+  'gj',
+  ':lua vim.diagnostic.goto_next({ float = false })<cr>',
+  opts
+)
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
