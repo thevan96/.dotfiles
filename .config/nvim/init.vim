@@ -13,10 +13,10 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:>-
+set listchars=tab:→\ |
 set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set ruler
@@ -129,10 +129,10 @@ let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 " File manager
 Plug 'vifm/vifm.vim'
 let g:vifm_replace_netrw = 1
-nnoremap <leader>ee :e .<cr>
-nnoremap <leader>ev :VsplitVifm<cr>
-nnoremap <leader>es :SplitVifm<cr>
-nnoremap <leader>E :Vifm<cr>
+nnoremap <leader>ff :e .<cr>
+nnoremap <leader>fv :VsplitVifm<cr>
+nnoremap <leader>fs :SplitVifm<cr>
+nnoremap <leader>F :Vifm<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -197,7 +197,7 @@ command! -bang -nargs=* Rg
 
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>p :Projects<cr>
+nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
@@ -339,45 +339,8 @@ function! Trim()
   silent! g/^\_$\n\_^$/d " single blank line
 endfunction
 
-function! Format()
-  if !IsInCurrentProject()
-    return
-  endif
-
-  if filereadable('format_linter.sh')
-    echo 'Run file format_linter.sh instead!'
-    return
-  endif
-
-  if filereadable('format.sh')
-    echo 'Run file format.sh instead!'
-    return
-  endif
-
-  if filereadable('linter.sh')
-    echo 'Run file linter.sh instead!'
-    return
-  endif
-
-  let extension = expand('%:e')
-  call Trim()
-  if extension == 'go'
-    !gofmt -w %
-    !golines -m 80 -w %
-  elseif extension == 'rs'
-    !rufmt %
-  elseif extension == 'lua'
-    !stylua %
-  elseif extension == 'sql'
-    !sqlfluff fix --dialect postgres -f %
-  elseif extension == 'md'
-    !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
-    !prettier -w %
-  endif
-endfunction
 nnoremap <expr>
-      \ <leader>f IsInCurrentProject() ?
+      \ <leader>p IsInCurrentProject() ?
       \ ":call Trim()<cr>:lua vim.lsp.buf.format({async = false})<cr>
       \ :echo 'Format done!'<cr>"
       \ : '<esc>'
@@ -429,6 +392,9 @@ augroup LoadFile
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown,tex nmap <buf><silent><leader>P
         \ :call mdip#MarkdownClipboardImage()<cr>
+
+  autocmd BufWritePre * lua vim.diagnostic.enable()
+  autocmd InsertEnter * lua vim.diagnostic.disable()
 augroup end
 
 "--- Load lua---

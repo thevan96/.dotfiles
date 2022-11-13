@@ -13,9 +13,10 @@ set ignorecase
 set smartcase
 
 set list
-set listchars=tab:>\ ,trail:-
+set listchars=tab:>\ |
+set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set ruler
@@ -45,10 +46,8 @@ set clipboard=unnamed,unnamedplus
 packadd matchit
 
 " Netrw
-let g:netrw_banner = 0
-let g:netrw_cursor = 0
-let g:netrw_keepdir= 0
-let g:netrw_localcopydircmd = 'cp -r'
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
@@ -58,7 +57,6 @@ set tabstop=2 shiftwidth=2 expandtab | retab
 
 " Set keymap
 let mapleader = ' '
-let g:root_cwd = getcwd()
 
 " Customizer mapping
 nnoremap Y y$
@@ -66,20 +64,15 @@ nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>n :set number!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>f :call Trim()<cr>
+nnoremap <leader>p :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 
-command! Root execute 'cd ' fnameescape(g:root_cwd)
 command! BufOnly execute '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
-" File manager netrw
-nnoremap <leader>E :JumpFile<cr>
-nnoremap <leader>e :e `=g:root_cwd`<cr>
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -138,6 +131,7 @@ hi CursorLineNr                   ctermfg=11       ctermbg=none     cterm=none
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
+hi ExtraWhitespace                ctermbg=196
 
 "--- Etc ---"
 function! Mkdir()
@@ -159,6 +153,44 @@ function! GRemoveMarkers() range
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 
+function! Format()
+  if !IsInCurrentProject()
+    return
+  endif
+
+  if filereadable('format_linter.sh')
+    echo 'Run file format_linter.sh instead!'
+    return
+  endif
+
+  if filereadable('format.sh')
+    echo 'Run file format.sh instead!'
+    return
+  endif
+
+  if filereadable('linter.sh')
+    echo 'Run file linter.sh instead!'
+    return
+  endif
+
+  let extension = expand('%:e')
+  call Trim()
+  if extension == 'go'
+    !gofmt -w %
+    !golines -m 80 -w %
+  elseif extension == 'rs'
+    !rufmt %
+  elseif extension == 'lua'
+    !stylua %
+  elseif extension == 'sql'
+    !sqlfluff fix --dialect postgres -f %
+  elseif extension == 'md'
+    !prettier --prose-wrap always -w %
+  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
+    !prettier -w %
+  endif
+endfunction
+
 function! Trim()
   let pwd = getcwd()
   let file = expand('%:p:h')
@@ -169,30 +201,18 @@ function! Trim()
   endif
 endfunction
 
-function! JumpFile()
-  let file_name = expand('%:t')
-  Explore
-  call search(file_name)
-endfunction
-command! JumpFile call JumpFile()
-
-function! NetrwSetting()
-  autocmd BufLeave <buffer> cd `=g:root_cwd`
-  nnoremap <silent><buffer> u <nop>
-  nnoremap <silent><buffer> U <nop>
-  nnoremap <silent><buffer> s <nop>
-  nnoremap <silent><buffer> <C-l> :nohl<cr>:e .<cr>
-  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
-  nnoremap <silent><buffer> mL :echo join(
-        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
-endfunction
-
 augroup ConfigStyleTabOrSpace
   autocmd!
   autocmd BufNewFile,BufRead,BufWrite *.go
         \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
   autocmd BufNewFile,BufRead,Bufwrite *.md
         \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+augroup end
+
+augroup ShowExtraWhitespace
+  autocmd!
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup ChangeWorkingDirectory
@@ -209,5 +229,4 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save late position cursor
 
   autocmd BufWritePre * call Mkdir()
-  autocmd FileType netrw call NetrwSetting()
 augroup end

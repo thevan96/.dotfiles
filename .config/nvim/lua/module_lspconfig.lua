@@ -1,6 +1,7 @@
 local nvim_lsp = require('lspconfig')
 
 local opts = { noremap = true, silent = true }
+vim.keymap.set('n', '<space><enter>', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
   'gk',
@@ -96,7 +97,7 @@ nvim_lsp.sumneko_lua.setup({
   settings = {
     Lua = {
       diagnostics = {
-        globals = { 'vim' },
+        globals = { 'vim', 'awesome', 'client', 'root', 'screen' },
       },
     },
   },
