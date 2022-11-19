@@ -1,8 +1,8 @@
 # Window
 window:
   title: "Alacritty"
-  decorations: none
-  startup_mode: maximized
+  decorations: full
+  startup_mode: fullscreen
   opacity: 1.0
 
 # Font

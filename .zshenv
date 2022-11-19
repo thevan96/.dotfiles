@@ -94,3 +94,7 @@ asdf_update() {
 bs() {
   browser-sync start --server --files '**/*.*' --port ${1}
 }
+
+ssh_setup() {
+  eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa_github_personal
+}
