@@ -2,6 +2,7 @@
 export EDITOR=nvim
 export KEYTIMEOUT=1
 export TERM=screen-256color
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
