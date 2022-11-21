@@ -213,6 +213,7 @@ augroup ShowExtraWhitespace
   autocmd!
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
   autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd TerminalOpen * match none
 augroup end
 
 augroup ChangeWorkingDirectory

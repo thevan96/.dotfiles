@@ -46,5 +46,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   vim-gtk \
   simplescreenrecorder \
   vifm \
+  timeshift \
   transmission
+
+  chsh -s $(which zsh)
 fi

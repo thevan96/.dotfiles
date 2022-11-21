@@ -1,5 +1,5 @@
 "--- General setting ---
-set nocompatible
+set termguicolors
 set nobackup
 set noswapfile
 set encoding=utf-8
@@ -223,6 +223,12 @@ nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
 vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
 
 "--- Other plugins ---
+Plug 'mattn/emmet-vim'
+Plug 'norcalli/nvim-colorizer.lua'
+
+Plug 'simeji/winresizer'
+let g:winresizer_start_key = '<leader>e'
+
 Plug 'nvim-lua/plenary.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 
@@ -259,42 +265,42 @@ hi clear Error
 hi clear SignColumn
 hi clear VertSplit
 
-hi NonText                   ctermfg=none     ctermbg=none     cterm=none
-hi Normal                    ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
-hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
+hi NonText                   guifg=none     guibg=none     gui=none
+hi Normal                    guifg=none     guibg=none     gui=none
+hi NormalFloat               guifg=none     guibg=none     gui=none
+hi Pmenu                     guifg=#ffffff  guibg=#303030  gui=none
+hi PmenuSel                  guifg=#000000  guibg=#00afff  gui=none
 
-hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=11       ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=11       ctermbg=none     cterm=none
+hi LineNr                    guifg=#585858  guibg=none     gui=none
+hi LineNrAbove               guifg=#585858  guibg=none     gui=none
+hi LineNrBelow               guifg=#585858  guibg=none     gui=none
+hi CursorLine                guifg=#ffff00  guibg=none     gui=none
+hi CursorLineNr              guifg=#ffff00  guibg=none     gui=none
 
-hi ColorColumn               ctermfg=none     ctermbg=233
-hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
+hi ColorColumn               guifg=none     guibg=#121212
+hi SpecialKey                guifg=#303030  guibg=none     gui=none
+hi Whitespace                guifg=#303030  guibg=none     gui=none
 
-hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticHint            ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticError           guifg=#ff0000  guibg=none     gui=none
+hi DiagnosticWarn            guifg=#ffff00  guibg=none     gui=none
+hi DiagnosticInfo            guifg=#00afff  guibg=none     gui=none
+hi DiagnosticHint            guifg=#00af00  guibg=none     gui=none
 
-hi DiagnosticSignError       ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticSignError       guifg=#ff0000  guibg=none     gui=none
+hi DiagnosticSignWarn        guifg=#ffff00  guibg=none     gui=none
+hi DiagnosticSignInfo        guifg=#00afff  guibg=none     gui=none
+hi DiagnosticSignHint        guifg=#00af00  guibg=none     gui=none
 
-hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticFloatingError   guifg=#ff0000  guibg=none     gui=none
+hi DiagnosticFloatingWarn    guifg=#ffff00  guibg=none     gui=none
+hi DiagnosticFloatingInfo    guifg=#00afff  guibg=none     gui=none
+hi DiagnosticFloatingHint    guifg=#00af00  guibg=none     gui=none
 
-hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
-hi ExtraWhitespace           ctermbg=196
+hi DiagnosticUnderlineError  guifg=none     guibg=none     gui=underline
+hi DiagnosticUnderlineWarn   guifg=none     guibg=none     gui=underline
+hi DiagnosticUnderlineInfo   guifg=none     guibg=none     gui=underline
+hi DiagnosticUnderlineHint   guifg=none     guibg=none     gui=underline
+hi ExtraWhitespace           guibg=#ff0000
 
 "--- Function utils ---
 function! Mkdir()
@@ -359,6 +365,7 @@ augroup ShowExtraWhitespace
   autocmd!
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
   autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd TermOpen * match none
 augroup end
 
 augroup RunFile
@@ -407,4 +414,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+  require 'colorizer'.setup()
 EOF

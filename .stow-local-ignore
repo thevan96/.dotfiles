@@ -1,6 +1,11 @@
 \.git
 \.gitignore
 \.stylua.toml
+\.editorconfig
+\.Xresources
+README.md
+
 etc
 docker
-README.md
+.config/i3
+.config/i3status

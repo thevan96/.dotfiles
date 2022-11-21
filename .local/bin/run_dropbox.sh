@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sh ~/.dropbox-dist/dropboxd
+~/.dropbox-dist/dropboxd

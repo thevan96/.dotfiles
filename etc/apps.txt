@@ -8,3 +8,5 @@ anki
 postman
 docker
 etcher
+timeshift
+dropbox

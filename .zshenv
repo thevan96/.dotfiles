@@ -2,7 +2,6 @@
 export EDITOR=nvim
 export KEYTIMEOUT=1
 export TERM=screen-256color
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
@@ -49,6 +48,14 @@ alias pwdcp='pwd | xclip -selection clipboard'
 alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Some more ls aliases
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
 alias ls='ls --color'
 alias ll='ls -alF'
 alias la='ls -A'
@@ -94,8 +101,4 @@ asdf_update() {
 
 bs() {
   browser-sync start --server --files '**/*.*' --port ${1}
-}
-
-ssh_setup() {
-  eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa_github_personal
 }
