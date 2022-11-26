@@ -65,6 +65,7 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>n :set number!<cr>
+nnoremap <leader>x :bd!<cr>
 nnoremap <leader>r :EditorConfigReload<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -365,7 +366,7 @@ augroup ShowExtraWhitespace
   autocmd!
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
   autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-  autocmd TermOpen * match none
+  autocmd TermOpen,TermEnter * match none
 augroup end
 
 augroup RunFile

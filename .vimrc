@@ -63,6 +63,7 @@ nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>n :set number!<cr>
+nnoremap <leader>x :bd!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>p :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>

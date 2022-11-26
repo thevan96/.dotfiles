@@ -3,6 +3,7 @@
 \.stylua.toml
 \.editorconfig
 \.Xresources
+\.zprofile
 README.md
 
 etc

@@ -24,6 +24,9 @@ indicator_git() {
 PROMPT='%n@%m:%~$(indicator_git)
 $ '
 
+# Enable vi mode
+bindkey -v
+
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

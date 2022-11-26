@@ -13,9 +13,6 @@ for_window [class="^.*"] border pixel 1
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# Start a terminal
-bindsym $mod+Return exec --no-startup-id alacritty
-
 # Kill focused window
 bindsym $mod+Shift+q kill
 
@@ -152,6 +149,7 @@ bindsym $mod+Shift+c exec --no-startup-id flameshot gui
 bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/fast_open.sh
 bindsym $mod+Shift+p exec --no-startup-id gpick -p
 bindsym $mod+Shift+x exec --no-startup-id i3lock-fancy
+# bindsym $mod+Return exec --no-startup-id alacritty
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
