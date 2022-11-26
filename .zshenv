@@ -82,14 +82,14 @@ exit() {
   echo 'Use <C-d> instead!'
 }
 
-sys_update() {
+update_sys() {
   sudo apt -y update \
   && sudo apt -y upgrade \
   && sudo apt -y autoclean \
   && sudo apt -y autoremove
 }
 
-asdf_update() {
+update_asdf() {
   asdf reshim nodejs
   asdf reshim python
   asdf reshim rust
@@ -99,6 +99,6 @@ asdf_update() {
   echo 'Asdf update done !'
 }
 
-bs() {
+live_server() {
   browser-sync start --server --files '**/*.*' --port ${1}
 }

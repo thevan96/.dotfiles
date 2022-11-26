@@ -3,10 +3,15 @@
 sudo apt install i3 \
   autorandr \
   caffeine \
-  lxappearance \
-  pavucontrol \
+  feh \
   i3lock-fancy \
   light \
-  feh
+  lxappearance \
+  nm-applet \
+  pavucontrol \
+  picom \
+  rofi \
+  xss-lock
+
 sudo chmod +s $(which light)
 

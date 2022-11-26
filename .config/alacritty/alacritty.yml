@@ -62,3 +62,9 @@ key_bindings:
   # Macos
   - { key: V, mods: Command, action: Paste }
   - { key: C, mods: Command, action: Copy }
+  - { key: J, mods: Alt, chars: "\x1bj" }
+  - { key: K, mods: Alt, chars: "\x1bk" }
+  - { key: H, mods: Alt, chars: "\x1bh" }
+  - { key: L, mods: Alt, chars: "\x1bl" }
+  - { key: S, mods: Alt, chars: "\x1bs" }
+  - { key: V, mods: Alt, chars: "\x1bv" }

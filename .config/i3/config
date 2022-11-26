@@ -34,19 +34,19 @@ bindsym $mod+Shift+v split h
 # split in vertical orientation
 bindsym $mod+Shift+s split v
 
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+w layout tabbed
 bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
 
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+o floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+o focus mode_toggle
 
 # Define workspaces
 set $ws1 "1"
@@ -87,7 +87,6 @@ bindsym $alt+Shift+0 move container to workspace number $ws10
 # Assign app
 for_window [class="Alacritty"] move to workspace number $ws1
 for_window [class="Google-chrome"] move to workspace number $ws2
-for_window [class="Nautilus"] move to workspace number $ws3
 for_window [class="Skype"] move to workspace number $ws8
 for_window [class="discord"] move to workspace number $ws8
 for_window [class="Anki"] move to workspace number $ws9
@@ -95,13 +94,16 @@ for_window [class="Gnome-pomodoro"] move to workspace number $ws10
 
 # Forcing float
 for_window [class="Pavucontrol"] floating enable
+for_window [class="Nautilus"] floating enable
 for_window [class="Gnome-pomodoro"] floating enable
+for_window [class="Eog"] floating enable
 
 # reload the configuration file
 # bindsym $mod+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+# bindsym $mod+Shift+r restart
+bindsym $mod+BackSpace restart
 
 # Set shut down, restart and locking features
 bindsym $mod+Shift+e mode "$mode_system"
@@ -137,19 +139,25 @@ bar {
 }
 
 # Run startup
-exec --no-startup-id ~/.config/i3/i3_starup.sh
-exec_always --no-startup-id autorandr --change
-exec_always --no-startup-id setxkbmap -option caps:escape
+exec_always --no-startup-id ~/.config/i3/i3_startup.sh
+
+# Lock
+exec --no-startup-id xautolock -time 10 -locker i3lock-fancy
+exec --no-startup-id xss-lock --transfer-sleep-lock i3lock-fancy
 
 # Utils
 bindsym Print exec --no-startup-id flameshot gui
-bindsym $mod+d exec --no-startup-id rofi -show drun
-bindsym $mod+Shift+d exec --no-startup-id rofi -show run
+bindsym $mod+Shift+d exec --no-startup-id rofi -modi drun -show drun
+bindsym $mod+Shift+f exec --no-startup-id ~/.local/bin/fast_open.sh
+bindsym $mod+Shift+w exec --no-startup-id rofi -show window
+bindsym $mod+Shift+r exec --no-startup-id rofi -show run
 bindsym $mod+Shift+c exec --no-startup-id flameshot gui
-bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/fast_open.sh
 bindsym $mod+Shift+p exec --no-startup-id gpick -p
 bindsym $mod+Shift+x exec --no-startup-id i3lock-fancy
-# bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Return exec --no-startup-id alacritty
+
+bindsym $mod+n scratchpad show
+bindsym $mod+Shift+n move scratchpad
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status

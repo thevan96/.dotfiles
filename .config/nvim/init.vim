@@ -16,12 +16,12 @@ set list
 set listchars=tab:→\ |
 set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set ruler
 set laststatus=2
-set signcolumn=yes
+set signcolumn=number
 
 set textwidth=80
 set colorcolumn=+1
@@ -45,7 +45,6 @@ set autoindent
 set backspace=0
 set matchtime=1
 set diffopt=vertical
-set clipboard=unnamed,unnamedplus
 
 " Netrw
 let g:loaded_netrw = 1
@@ -75,6 +74,15 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
+" Mapping copy clipboard and past
+nnoremap <leader>y "+yy
+vnoremap <leader>y "+y
+nnoremap <leader>Y vg_"+y
+nnoremap <leader>gy :%y+<cr>
+nnoremap <leader>p o<esc>"+p
+nnoremap <leader>P O<esc>"+p
+vnoremap <leader>p "+p
+
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
 nnoremap gx :cclose<cr>
@@ -89,15 +97,6 @@ nnoremap zh :lprev<cr>
 nnoremap zl :lnext<cr>
 nnoremap zH :lfirst<cr>
 nnoremap zL :llast<cr>
-
-" Fix conflict git
-if &diff
-  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
-  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
-  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
-  nnoremap <leader><cr> :diffupdate<cr>
-  vnoremap <leader>= :GremoveMarkers<cr><gv>
-endif
 
 " Open in tab terminal
 nnoremap <leader>" :silent
@@ -131,8 +130,6 @@ let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 Plug 'vifm/vifm.vim'
 let g:vifm_replace_netrw = 1
 nnoremap <leader>ff :e .<cr>
-nnoremap <leader>fv :VsplitVifm<cr>
-nnoremap <leader>fs :SplitVifm<cr>
 nnoremap <leader>F :Vifm<cr>
 
 " Fuzzy search
@@ -202,6 +199,8 @@ nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " Test
 Plug 'vim-test/vim-test'
@@ -211,21 +210,10 @@ nmap <leader>tn :TestNearest<cr>
 nmap <leader>tl :TestLast<cr>
 nmap <leader>ts :TestSuite<cr>
 
-Plug 'preservim/vimux'
-let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
-nnoremap <leader>vo :VimuxOpenRunner<cr>
-nnoremap <leader>vp :VimuxPromptCommand<cr>
-nnoremap <leader>vx :VimuxCloseRunner<cr>
-nnoremap <leader>vl :VimuxRunLastCommand<cr>
-nnoremap <leader>vc :VimuxInterruptRunner<cr>
-nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
-nnoremap <leader>vr :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-vnoremap <leader>vr "vy :call VimuxRunCommand(@v, 1)<cr>gv
-
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
-Plug 'norcalli/nvim-colorizer.lua'
+Plug 'tpope/vim-fugitive'
+Plug 'kylechui/nvim-surround'
 
 Plug 'simeji/winresizer'
 let g:winresizer_start_key = '<leader>e'
@@ -268,7 +256,7 @@ hi clear VertSplit
 
 hi NonText                   guifg=none     guibg=none     gui=none
 hi Normal                    guifg=none     guibg=none     gui=none
-hi NormalFloat               guifg=none     guibg=none     gui=none
+hi NormalFloat               guifg=none     guibg=#121212  gui=none
 hi Pmenu                     guifg=#ffffff  guibg=#303030  gui=none
 hi PmenuSel                  guifg=#000000  guibg=#00afff  gui=none
 
@@ -346,8 +334,7 @@ function! Trim()
   silent! g/^\_$\n\_^$/d " single blank line
 endfunction
 
-nnoremap <expr>
-      \ <leader>p IsInCurrentProject() ?
+nnoremap <expr><leader><leader> IsInCurrentProject() ?
       \ ":call Trim()<cr>:lua vim.lsp.buf.format({async = false})<cr>
       \ :echo 'Format done!'<cr>"
       \ : '<esc>'
@@ -364,23 +351,15 @@ augroup end
 
 augroup ShowExtraWhitespace
   autocmd!
+  autocmd TermOpen,TermEnter * match none
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
   autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-  autocmd TermOpen,TermEnter * match none
 augroup end
 
 augroup RunFile
   autocmd!
   autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
   autocmd FileType python vnoremap <leader>vf :w !python<cr>
-  autocmd FileType javascript nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('node '.expand('%'))<cr>
-  autocmd FileType python nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('python '.expand('%'))<cr>
-  autocmd FileType go nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('go run '.expand('%'))<cr>
-  autocmd FileType sql nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
 
 augroup ChangeWorkingDirectory
@@ -415,5 +394,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
-  require 'colorizer'.setup()
+  require 'nvim-surround'.setup()
 EOF

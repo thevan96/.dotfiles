@@ -32,3 +32,9 @@ bindkey -v
 
 # Load asdf cli manager
 . $HOME/.asdf/asdf.sh
+
+# Setup ssh
+if [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
+  eval `keychain --eval --agents ssh id_rsa_github_personal`
+  clear
+fi

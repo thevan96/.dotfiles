@@ -54,15 +54,22 @@ echo ""
 echo "Switch to zsh ..."
 chsh -s $(which zsh)
 
-DIR_FZF="$HOME/.fzf/"
-if [ ! -d "$DIR_FZF" ]; then
+dir_fzf="$HOME/.fzf/"
+if [ ! -d "$dir_fzf" ]; then
   echo "Installing fzf ..."
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install
 fi
 
-DIR_ASDF="$HOME/.asdf/"
-if [ ! -d "$DIR_ASDF" ]; then
+dir_asdf="$HOME/.asdf/"
+if [ ! -d "$dir_asdf" ]; then
   echo "Installing asdf ..."
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+fi
+
+dir_vimplug="$HOME/.local/share/nvim/"
+if [ ! -d "$dir_vimplug" ]; then
+  echo "Installing vimplug ..."
+  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi

@@ -2,11 +2,6 @@
 \.gitignore
 \.stylua.toml
 \.editorconfig
-\.Xresources
-\.zprofile
 README.md
 
 etc
-docker
-.config/i3
-.config/i3status

@@ -16,12 +16,12 @@ set list
 set listchars=tab:>\ |
 set fillchars=vert:\|
 
-set nonumber
+set number
 set norelativenumber
 
 set ruler
 set laststatus=2
-set signcolumn=yes
+set signcolumn=number
 
 set textwidth=80
 set colorcolumn=+1

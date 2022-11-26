@@ -1,0 +1,129 @@
+[custom0]
+binding='<Alt>1'
+command='wmctrl -s 0'
+name='Workspace 1'
+
+[custom1]
+binding='<Alt>2'
+command='wmctrl -s 1'
+name='Workspace 2'
+
+[custom10]
+binding='<Shift><Super>p'
+command='gpick -p'
+name='Pick color'
+
+[custom11]
+binding='<Shift><Super>c'
+command='flameshot gui'
+name='Screenshot'
+
+[custom12]
+binding='<Shift><Super>d'
+command='rofi -show drun'
+name='Dmenu'
+
+[custom13]
+binding='<Shift><Super>r'
+command='rofi -show run'
+name='Run'
+
+[custom14]
+binding='<Shift><Super>q'
+command='wmctrl -c :ACTIVE:'
+name='Close window (without alt-f4)'
+
+[custom15]
+binding='<Shift><Super>f'
+command='fast_open.sh'
+name='Fast open file'
+
+[custom16]
+binding='<Shift><Alt>exclam'
+command='wmctrl -r :ACTIVE: -t 0'
+name='Move to workspace 1'
+
+[custom17]
+binding='<Shift><Alt>at'
+command='wmctrl -r :ACTIVE: -t 1'
+name='Move to workspace 2'
+
+[custom18]
+binding='<Shift><Alt>numbersign'
+command='wmctrl -r :ACTIVE: -t 2'
+name='Move to workspace 3'
+
+[custom19]
+binding='<Shift><Alt>dollar'
+command='wmctrl -r :ACTIVE: -t 3'
+name='Move to workspace 4'
+
+[custom2]
+binding='<Alt>3'
+command='wmctrl -s 2'
+name='Workspace 3'
+
+[custom20]
+binding='<Shift><Alt>percent'
+command='wmctrl -r :ACTIVE: -t 4'
+name='Move to workspace 5'
+
+[custom21]
+binding='<Shift><Alt>asciicircum'
+command='wmctrl -r :ACTIVE: -t 5'
+name='Move to workspace 6'
+
+[custom22]
+binding='<Shift><Alt>ampersand'
+command='wmctrl -r :ACTIVE: -t 6'
+name='Move to workspace 7'
+
+[custom23]
+binding='<Shift><Alt>asterisk'
+command='wmctrl -r :ACTIVE: -t 7'
+name='Move to workspace 8'
+
+[custom24]
+binding='<Shift><Alt>parenleft'
+command='wmctrl -r :ACTIVE: -t 8'
+name='Move to workspace 9'
+
+[custom25]
+binding='<Shift><Alt>parenright'
+command='wmctrl -r :ACTIVE: -t 9'
+name='Move to workspace 10'
+
+[custom3]
+binding='<Alt>4'
+command='wmctrl -s 3'
+name='Workspace 4'
+
+[custom4]
+binding='<Alt>5'
+command='wmctrl -s 4'
+name='Workspace 5'
+
+[custom5]
+binding='<Alt>6'
+command='wmctrl -s 5'
+name='Workspace 6'
+
+[custom6]
+binding='<Alt>7'
+command='wmctrl -s 6'
+name='Workspace 7'
+
+[custom7]
+binding='<Alt>8'
+command='wmctrl -s 7'
+name='Workspace 8'
+
+[custom8]
+binding='<Alt>9'
+command='wmctrl -s 8'
+name='Workspace 9'
+
+[custom9]
+binding='<Alt>0'
+command='wmctrl -s 9'
+name='Workspace 10'
