@@ -1,4 +1,4 @@
-local null_ls = require('null-ls')
+local null_ls = require 'null-ls'
 
 local is_in_current_project = function()
   local file = vim.fn.expand('%:p:h')
@@ -12,19 +12,15 @@ local is_exist = function(file)
 end
 
 local enable_eslint = function()
-  return is_exist('node_modules/.bin/eslint') and is_in_current_project
+  return is_exist('node_modules/.bin/eslint') and is_in_current_project()
 end
 
 local enable_standardjs = function()
-  return is_exist('node_modules/.bin/standard') and is_in_current_project
+  return is_exist('node_modules/.bin/standard') and is_in_current_project()
 end
 
 local enable_prettier = function()
-  return is_exist('node_modules/.bin/prettier') and is_in_current_project
-end
-
-local enable_editorconfig = function()
-  return is_exist('./.editorconfig') and is_in_current_project
+  return is_exist('node_modules/.bin/prettier') and is_in_current_project()
 end
 
 local sources = {}
@@ -41,10 +37,6 @@ end
 
 if enable_prettier() then
   table.insert(sources, null_ls.builtins.formatting.prettier)
-end
-
-if enable_editorconfig() then
-  table.insert(sources, null_ls.builtins.diagnostics.editorconfig_checker)
 end
 
 local diagnostics_formats = {

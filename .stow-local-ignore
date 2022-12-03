@@ -2,6 +2,8 @@
 \.gitignore
 \.stylua.toml
 \.editorconfig
-README.md
 
+.config/vifm
 etc
+
+README.md

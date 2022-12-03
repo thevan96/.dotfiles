@@ -44,9 +44,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   gparted \
   mpv \
   vim-gtk \
+  screenkey \
   simplescreenrecorder \
   vifm \
   timeshift \
+  tig \
+  sxhkd \
   transmission
 fi
 

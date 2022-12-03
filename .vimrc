@@ -10,7 +10,6 @@ set autowrite
 set hlsearch
 set incsearch
 set ignorecase
-set smartcase
 
 set list
 set listchars=tab:>\ |
@@ -21,7 +20,7 @@ set norelativenumber
 
 set ruler
 set laststatus=2
-set signcolumn=number
+set signcolumn=yes
 
 set textwidth=80
 set colorcolumn=+1
@@ -42,7 +41,7 @@ set matchtime=1
 set nofoldenable
 set diffopt=vertical
 set ttymouse=sgr
-set clipboard=unnamed,unnamedplus
+
 packadd matchit
 
 " Netrw
@@ -51,6 +50,7 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+inoremap <tab> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -62,18 +62,28 @@ let mapleader = ' '
 nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
-nnoremap <leader>n :set number!<cr>
+nnoremap <leader>n :set relativenumber!<cr>
 nnoremap <leader>x :bd!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>p :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
-command! BufOnly execute '%bdelete|edit#|bdelete#'
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+" Buffer only
+command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Mapping copy clipboard and past
+nnoremap <leader>y "+yy
+vnoremap <leader>y "+y
+nnoremap <leader>_y vg_"+y
+nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>p o<esc>"+p
+nnoremap <leader>P O<esc>"+p
+vnoremap <leader>p "+p
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -108,10 +118,9 @@ nnoremap <leader>c :silent
       \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 "--- Customize theme ---"
-
 syntax off
 set background=dark
-filetype plugin indent on
+filetype indent off
 
 hi clear Error
 hi clear SignColumn
@@ -123,15 +132,19 @@ hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                         ctermfg=240      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                     ctermfg=11       ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=11       ctermbg=none     cterm=none
+hi LineNr                         ctermfg=238      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=238      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=238      ctermbg=none     cterm=none
+hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
 hi ColorColumn                    ctermfg=none     ctermbg=233
 hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
+
+hi TabLine                        ctermfg=none     ctermbg=none     cterm=none
+hi TabLineFill                    ctermfg=none     ctermbg=none     cterm=none
+hi TabLineSel                     ctermfg=0        ctermbg=39       cterm=none
 hi ExtraWhitespace                ctermbg=196
 
 "--- Etc ---"
@@ -231,4 +244,5 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif " save late position cursor
 
   autocmd BufWritePre * call Mkdir()
+  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
 augroup end

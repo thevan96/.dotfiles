@@ -29,6 +29,7 @@ cmp.setup({
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-x><C-o>'] = cmp.mapping.complete(),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<cr>'] = cmp.mapping.confirm({ select = true }),

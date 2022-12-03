@@ -1,39 +1,40 @@
 general {
   colors = true
   interval = 5
+  separator = "|"
 }
 
-order += "wireless _first_"
-order += "ethernet _first_"
 order += "cpu_usage"
 order += "memory"
+# order += "wireless _first_"
+# order += "ethernet _first_"
 order += "volume master"
 order += "battery 0"
 order += "tztime local"
 
-wireless _first_ {
-  format_up = "W: (%quality at %essid, %bitrate) %ip"
-  format_down = "W: down"
-}
-
-ethernet _first_ {
-  format_up = "E: %ip (%speed)"
-  format_down = "E: down"
-}
+# wireless _first_ {
+#   format_up = "W (%quality at %essid, %bitrate) %ip"
+#   format_down = "W down"
+# }
+#
+# ethernet _first_ {
+#   format_up = "E %ip (%speed)"
+#   format_down = "E down"
+# }
 
 cpu_usage {
-  format = "CPU: %usage"
+  format = "CPU %usage"
 }
 
 memory {
-  format = "M: %used"
+  format = "MEM %used %percentage_used"
   threshold_degraded = "10%"
-  format_degraded = "MEMORY: %free"
+  format_degraded = "MEM %free"
 }
 
 volume master {
-  format = "♪: %volume"
-  format_muted = "♪: muted (%volume)"
+  format = "VOL %volume"
+  format_muted = "VOL %volume muted"
   device = "default"
   mixer = "Master"
   mixer_idx = 0
@@ -51,5 +52,5 @@ battery 0 {
 }
 
 tztime local {
-  format = "%a %d/%m/%Y %H:%M"
+  format = "%a %d/%m/%Y %H:%M:%S"
 }

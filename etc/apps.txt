@@ -10,3 +10,4 @@ docker
 etcher
 timeshift
 dropbox
+discord

@@ -1,19 +1,20 @@
 local nvim_lsp = require('lspconfig')
 
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<space><enter>', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
-  'gk',
+  '<leader>k',
   ':lua vim.diagnostic.goto_prev({ float = false })<cr>',
   opts
 )
 vim.keymap.set(
   'n',
-  'gj',
+  '<leader>j',
   ':lua vim.diagnostic.goto_next({ float = false })<cr>',
   opts
 )
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -29,15 +30,15 @@ local on_attach = function(client, bufnr)
   )
   vim.keymap.set('n', 'gS', ':sp<cr>:lua vim.lsp.buf.definition()<cr>', bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', '<space>l', vim.lsp.buf.document_symbol, bufopts)
-  vim.keymap.set('n', '<space>L', vim.lsp.buf.workspace_symbol, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, bufopts)
+  vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, bufopts)
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({

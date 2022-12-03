@@ -36,16 +36,21 @@ export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
   "
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
+# ibus
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT4_IM_MODULE=ibus
+export CLUTTER_IM_MODULE=ibus
+export GLFW_IM_MODULE=ibus
+
 # Alias
 alias vi='nvim'
+alias view='nvim -R'
 alias watch='watch -c'
 alias diff='diff --color'
-alias nnn='NNN_TRASH=2 nnn -deoH'
-alias view='nvim -R'
-alias lg='lazygit'
-alias ld='lazydocker'
 alias pwdcp='pwd | xclip -selection clipboard'
-alias rl=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+alias rl_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Some more ls aliases
 alias ls='ls --color=auto'
@@ -66,10 +71,6 @@ if [ $(command -v rlwrap) ] ; then
 fi
 
 # Utils
-git_switch() {
-  git checkout $(git branch -a | fzf)
-}
-
 git_log() {
   watch -n1 -t git log --all --decorate --oneline --graph --color
 }

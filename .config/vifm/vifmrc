@@ -449,6 +449,8 @@ nnoremap A cw
 nnoremap t :tree! depth=1<cr>
 nnoremap T :tree!<cr>
 nnoremap q :q<cr>
+nnoremap <C-t> :touch<space>
+nnoremap <C-d> :mkdir<space>
 
 " Open editor to edit vifmrc and apply settings after returning to vifm
 nnoremap ,c :write | edit $MYVIFMRC | restart full<cr>

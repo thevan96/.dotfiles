@@ -11,7 +11,8 @@ sudo apt install i3 \
   pavucontrol \
   picom \
   rofi \
+  hsetroot \
+  feh \
   xss-lock
 
 sudo chmod +s $(which light)
-

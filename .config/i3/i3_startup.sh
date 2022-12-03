@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-xset r rate 200 80
-xrdb -merge ~/.Xresources
-feh --bg-scale ~/Dropbox/Pictures/Morskie\ Oko.jpg
-xinput set-prop "Synaptics TM3096-001" "libinput Tapping Enabled" 1
-autorandr --change &
+xset r rate 200 80&
+autorandr --change&
+xrdb -merge ~/.Xresources&
 
-caffeine &
-nm-applet &
-ibus-daemon -drxR &
-picom --vsync &
+# hsetroot -solid #000&
+feh --bg-scale ~/Dropbox/Pictures/matrix.png
 
-~/.local/bin/run_dropbox.sh &
+xinput set-prop "Synaptics TM3096-001" "libinput Tapping Enabled" 1&
+/usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11&
 
-# Remap caplock to esc
-# sudo vi /usr/share/X11/xkb/symbols/pc
-# ~/.local/bin/caplock_to_esc.sh &
+nm-applet&
+ibus-daemon -drxR&
+picom&
+flameshot&
+
+# Dropbox
+~/.local/bin/run_dropbox.sh&

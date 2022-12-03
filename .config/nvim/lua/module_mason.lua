@@ -1,5 +1,5 @@
-require('mason').setup()
-require('mason-lspconfig').setup({
+require 'mason'.setup()
+require 'mason-lspconfig'.setup({
   ensure_installed = {
     'sumneko_lua',
     'rust_analyzer',
@@ -9,7 +9,6 @@ require('mason-lspconfig').setup({
     'cssmodules_ls',
     'jsonls',
     'pyright',
-    'texlab',
     'tsserver',
     'gopls',
   },

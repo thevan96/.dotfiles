@@ -9,23 +9,20 @@ export HISTSIZE=10000
 export HISTFILESIZE=10000
 export HISTFILE=~/.zsh_history
 
-indicator_git() {
-  branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
-  if [[ $branch != '' ]]; then
-    out=$(git status --short)
-    if [[ $out != '' ]]; then
-      echo "[$branch*]"
-    else
-      echo "[$branch]"
-    fi
-  fi
+# Load version control information
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '~'
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:git:*' formats '[%b%u%c]'
+zstyle ':vcs_info:git:*' actionformats '[%b%a%u%c]'
+precmd() {
+    vcs_info
 }
 
-PROMPT='%n@%m:%~$(indicator_git)
+PROMPT='%~ ${vcs_info_msg_0_}
 $ '
-
-# Enable vi mode
-bindkey -v
 
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -34,7 +31,7 @@ bindkey -v
 . $HOME/.asdf/asdf.sh
 
 # Setup ssh
-if [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
-  eval `keychain --eval --agents ssh id_rsa_github_personal`
+if [[ $XDG_CURRENT_DESKTOP == 'i3' || $XDG_CURRENT_DESKTOP == '' ]]; then
+  eval `keychain --eval --agents ssh id_rsa_github_personal --quick --quiet`
   clear
 fi
