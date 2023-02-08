@@ -37,8 +37,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, bufopts)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({
@@ -66,7 +66,7 @@ local servers = {
   'tsserver',
   'rust_analyzer',
   'gopls',
-  'sumneko_lua',
+  'lua_ls',
 }
 
 local on_capabilities = require('cmp_nvim_lsp').default_capabilities(
@@ -94,7 +94,7 @@ for _, lsp in ipairs(servers) do
   })
 end
 
-nvim_lsp.sumneko_lua.setup({
+nvim_lsp.lua_ls.setup({
   settings = {
     Lua = {
       diagnostics = {

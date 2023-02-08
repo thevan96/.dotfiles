@@ -50,6 +50,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   timeshift \
   tig \
   sxhkd \
+  rofi \
   transmission
 fi
 

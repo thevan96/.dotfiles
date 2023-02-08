@@ -7,10 +7,8 @@ sudo apt install i3 \
   i3lock-fancy \
   light \
   lxappearance \
-  nm-applet \
   pavucontrol \
   picom \
-  rofi \
   hsetroot \
   feh \
   xss-lock

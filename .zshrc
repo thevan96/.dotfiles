@@ -17,6 +17,7 @@ zstyle ':vcs_info:*' unstagedstr '~'
 zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:git:*' formats '[%b%u%c]'
 zstyle ':vcs_info:git:*' actionformats '[%b%a%u%c]'
+
 precmd() {
     vcs_info
 }
@@ -29,9 +30,3 @@ $ '
 
 # Load asdf cli manager
 . $HOME/.asdf/asdf.sh
-
-# Setup ssh
-if [[ $XDG_CURRENT_DESKTOP == 'i3' || $XDG_CURRENT_DESKTOP == '' ]]; then
-  eval `keychain --eval --agents ssh id_rsa_github_personal --quick --quiet`
-  clear
-fi

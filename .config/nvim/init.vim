@@ -219,6 +219,7 @@ nmap <leader>ts :TestSuite<cr>
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 Plug 'wellle/targets.vim'
+Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
@@ -277,11 +278,11 @@ hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=none     ctermbg=none     cterm=none
+hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
 
-hi StatusLine                ctermfg=none     ctermbg=233      cterm=none
-hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=bold
+hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
+hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
@@ -412,4 +413,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+  require 'nvim-surround'.setup()
 EOF
