@@ -16,11 +16,11 @@
 # super + 0
 #   gnome-pomodoro
 
-super + {1-9, 0}
-  wmctrl -s {0-8,9}
-
-super + shift + {1-9, 0}
-  wmctrl -r :ACTIVE: -t {0-8, 9}
+# super + {1-9, 0}
+#   wmctrl -s {0-8,9}
+#
+# super + shift + {1-9, 0}
+#   wmctrl -r :ACTIVE: -t {0-8, 9}
 
 super + shift + q
   wmctrl -c :ACTIVE:

@@ -279,7 +279,7 @@ hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
 hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=none
+hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=bold
 
 hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
 hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none

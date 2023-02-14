@@ -4,6 +4,7 @@ pip install -U pynvim
 pip install -U cpplint
 pip install -U httpie
 pip install -U sqlfluff
+pip install -U httpie
 pip install -U editorconfig-checker
 
 gem install vimgolf

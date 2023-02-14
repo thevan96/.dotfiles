@@ -4,6 +4,7 @@ sudo apt install i3 \
   autorandr \
   caffeine \
   feh \
+  keychain \
   i3lock-fancy \
   light \
   lxappearance \
