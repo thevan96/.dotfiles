@@ -218,13 +218,11 @@ nmap <leader>ts :TestSuite<cr>
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
-Plug 'wellle/targets.vim'
 Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
 Plug 'preservim/vimux'
@@ -240,7 +238,6 @@ nnoremap <leader>vv :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
 vnoremap <leader>vv "vy :call VimuxRunCommand(@v, 1)<cr>gv
 
 Plug 'AndrewRadev/tagalong.vim'
-Plug 'rlue/vim-barbaric'
 
 Plug 'ferrine/md-img-paste.vim'
 let g:mdip_imgdir = 'images'
@@ -347,12 +344,7 @@ function! Trim()
   silent! %s/\s\+$//e " trim whitespace
   silent! g/^\_$\n\_^$/d " single blank line
 endfunction
-
-nnoremap <expr><leader>= IsInCurrentProject() ?
-      \ ":call Trim()<cr>
-      \ :lua vim.lsp.buf.format({async = false})<cr>
-      \ :echo 'Format done!'<cr>"
-      \ :'<esc>'
+command! Trim exe 'call Trim()'
 
 augroup ConfigStyleTabOrSpace
   autocmd!
@@ -408,7 +400,6 @@ lua << EOF
   require 'module_lspconfig'
   require 'module_mason'
   require 'module_cmp'
-  require 'module_null_ls'
   require 'module_oil'
 
   -- Without config

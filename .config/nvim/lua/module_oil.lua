@@ -5,6 +5,9 @@ require 'oil'.setup({
     -- 'size',
     -- 'mtime',
   },
+  buf_options = {
+    buflisted = false,
+  },
   win_options = {
     wrap = false,
     signcolumn = 'no',
