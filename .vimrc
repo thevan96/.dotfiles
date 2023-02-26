@@ -50,6 +50,7 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+inoremap <BS> <nop>
 inoremap <tab> <nop>
 
 " Setting tab/space
@@ -64,6 +65,7 @@ nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>n :set relativenumber!<cr>
 nnoremap <leader>x :bd!<cr>
+nnoremap <leader>= :Format<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>p :call Trim()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
@@ -204,6 +206,7 @@ function! Format()
     !prettier -w %
   endif
 endfunction
+command! Format :call Format()
 
 function! Trim()
   let pwd = getcwd()

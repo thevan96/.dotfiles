@@ -46,7 +46,16 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+inoremap <BS> <nop>
 inoremap <tab> <nop>
+nnoremap <Up> <nop>
+nnoremap <Down> <nop>
+nnoremap <Left> <nop>
+nnoremap <Right> <nop>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -59,6 +68,7 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>x :bd!<cr>
+nnoremap <leader>= :Format<cr>
 nnoremap <leader>n :set relativenumber!<cr>
 nnoremap <leader>N :call ToggleScrollOff()<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
@@ -218,6 +228,7 @@ nmap <leader>ts :TestSuite<cr>
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
+Plug 'rlue/vim-barbaric'
 Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
@@ -344,7 +355,34 @@ function! Trim()
   silent! %s/\s\+$//e " trim whitespace
   silent! g/^\_$\n\_^$/d " single blank line
 endfunction
-command! Trim exe 'call Trim()'
+command! Trim :call Trim()
+
+function! Format()
+  if !IsInCurrentProject()
+    return
+  endif
+
+  let extension = expand('%:e')
+  call Trim()
+  if extension == 'go'
+    !gofmt -w % && golines -m 80 -w %
+  elseif extension == 'rs'
+    !rufmt %
+  elseif extension == 'lua'
+    !stylua %
+  elseif extension == 'sql'
+    !sqlfluff fix --dialect postgres -f %
+  elseif extension == 'md'
+    !prettier --prose-wrap always -w %
+  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
+    if filereadable('node_modules/.bin/prettier')
+      !npx prettier -w %
+    else
+      !prettier -w %
+    endif
+  endif
+endfunction
+command! Format :call Format()
 
 augroup ConfigStyleTabOrSpace
   autocmd!

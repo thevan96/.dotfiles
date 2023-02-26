@@ -3,10 +3,6 @@
 \.stylua.toml
 \.editorconfig
 
-.config/vifm
-.config/i3
-.config/i3blocks
-.config/i3status
 etc
 
 README.md
