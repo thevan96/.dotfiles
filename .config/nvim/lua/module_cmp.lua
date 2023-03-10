@@ -18,28 +18,33 @@ cmp.setup({
       return vim_item
     end,
   },
+  preselect = cmp.PreselectMode.None,
   completion = {
     autocomplete = false,
-    completeopt = 'menu,menuone',
   },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-x><C-o>'] = cmp.mapping.complete(),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  }),
   snippet = {
     expand = function(args)
       vim.fn['UltiSnips#Anon'](args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-x><C-o>'] = cmp.mapping.complete(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<cr>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-e>'] = cmp.mapping({
-      i = cmp.mapping.abort(),
-      n = cmp.mapping.close(),
-    }),
-  }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    { name = 'path' },
     { name = 'ultisnips' },
+    {
+      name = 'buffer',
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end,
+      },
+    },
   }),
 })

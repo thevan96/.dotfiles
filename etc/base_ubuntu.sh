@@ -18,8 +18,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   nano \
   make \
   cmake \
-  ccls \
-  watchman \
   rar \
   unrar \
   zip \
@@ -49,7 +47,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   vifm \
   timeshift \
   tig \
-  sxhkd \
   rofi \
   transmission
 fi

@@ -46,39 +46,10 @@ export GLFW_IM_MODULE=ibus
 
 # Alias
 alias vi='nvim'
-alias view='nvim -R'
-alias watch='watch -c'
-alias diff='diff --color'
 alias pwdcp='pwd | xclip -selection clipboard'
-alias rl_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-
-# Some more ls aliases
-alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-alias ls='ls --color'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-if [ $(command -v rlwrap) ] ; then
-  alias node='env NODE_NO_READLINE=1 rlwrap node'
-fi
+alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 # Utils
-git_log() {
-  watch -n1 -t git log --all --decorate --oneline --graph --color
-}
-
-git_status() {
-  watch -n1 -t git status
-}
-
 exit() {
   echo 'Use <C-d> instead!'
 }
@@ -97,7 +68,7 @@ update_asdf() {
   asdf reshim golang
   asdf reshim java
   asdf reshim ruby
-  echo 'Asdf update done !'
+  echo 'Asdf update done!'
 }
 
 live_server() {

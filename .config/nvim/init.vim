@@ -47,7 +47,7 @@ let g:loaded_netrwPlugin = 1
 " Disable
 let html_no_rendering = 1
 inoremap <BS> <nop>
-inoremap <tab> <nop>
+inoremap <Tab> <nop>
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
 nnoremap <Left> <nop>
@@ -77,6 +77,9 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
+" Current path to clipboard
+command! CopyPath let @+ = expand('%')
+
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -84,7 +87,7 @@ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
-nnoremap <leader>_y vg_"+y
+nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
@@ -133,6 +136,8 @@ Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
@@ -218,40 +223,21 @@ nnoremap <leader>S :Rg <c-r><c-w><cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-" Test
-Plug 'vim-test/vim-test'
-let test#strategy = 'basic'
-nmap <leader>tf :TestFile<cr>
-nmap <leader>tn :TestNearest<cr>
-nmap <leader>tl :TestLast<cr>
-nmap <leader>ts :TestSuite<cr>
-
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
+Plug 'wellle/targets.vim'
 Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
-Plug 'preservim/vimux'
-let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
-nnoremap <leader>vo :VimuxOpenRunner<cr>
-nnoremap <leader>vp :VimuxPromptCommand<cr>
-nnoremap <leader>vx :VimuxCloseRunner<cr>
-nnoremap <leader>vl :VimuxRunLastCommand<cr>
-nnoremap <leader>vc :VimuxInterruptRunner<cr>
-nnoremap <leader>vC :VimuxClearTerminalScreen<cr>
-nnoremap <leader>vv :call VimuxRunCommand(getline('.') . "\n", 1)<cr>
-vnoremap <leader>vv "vy :call VimuxRunCommand(@v, 1)<cr>gv
-
-Plug 'AndrewRadev/tagalong.vim'
-
-Plug 'ferrine/md-img-paste.vim'
-let g:mdip_imgdir = 'images'
+Plug 'jpalardy/vim-slime'
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
@@ -288,9 +274,6 @@ hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
 hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=bold
-
-hi StatusLine                ctermfg=none     ctermbg=233      cterm=bold
-hi StatusLineNC              ctermfg=none     ctermbg=233      cterm=none
 
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
@@ -396,8 +379,6 @@ augroup RunFile
   autocmd!
   autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
   autocmd FileType python vnoremap <leader>vf :w !python<cr>
-  autocmd FileType sql nnoremap <silent><leader>vf :call
-        \ VimuxRunCommand('\i '.expand('%'))<cr>
 augroup end
 
 augroup ShowExtraWhitespace
@@ -425,6 +406,7 @@ augroup LoadFile
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif
 
+  autocmd FileType oil setlocal nonumber
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown,tex nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 

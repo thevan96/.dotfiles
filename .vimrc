@@ -74,6 +74,9 @@ nnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
+" Current path to clipboard
+command! CopyPath let @+ = expand('%')
+
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -81,7 +84,7 @@ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
-nnoremap <leader>_y vg_"+y
+nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
