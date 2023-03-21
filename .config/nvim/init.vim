@@ -46,7 +46,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-inoremap <BS> <nop>
 inoremap <Tab> <nop>
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
@@ -225,9 +224,7 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
-Plug 'rlue/vim-barbaric'
 Plug 'wellle/targets.vim'
-Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
@@ -236,8 +233,8 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
 Plug 'jpalardy/vim-slime'
-let g:slime_target = "tmux"
-let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+let g:slime_target = 'tmux'
+let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
@@ -424,5 +421,4 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
-  require 'nvim-surround'.setup()
 EOF

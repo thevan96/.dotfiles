@@ -50,7 +50,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-inoremap <BS> <nop>
 inoremap <tab> <nop>
 
 " Setting tab/space
