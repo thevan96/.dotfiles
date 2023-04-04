@@ -30,6 +30,11 @@ set wildmenu
 set wildmode=longest,list
 set completeopt=menu,menuone
 
+if has('persistent_undo')
+  set undofile
+  set undodir=/tmp/undo
+endif
+
 " Other
 set mouse=a
 set showmatch
@@ -150,6 +155,10 @@ Plug 'stevearc/oil.nvim'
 nnoremap <leader>ff :Oil<cr>
 nnoremap <leader>fv :vsp+Oil<cr>
 nnoremap <leader>fs :sp+Oil<cr>
+
+Plug 'obaland/vfiler.vim'
+nnoremap <leader>vv :VFiler<cr>
+nnoremap <leader>vf :VFiler -find-file<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -414,6 +423,7 @@ augroup end
 "--- Load lua---
 lua << EOF
   require 'module_lspconfig'
+  require 'module_vfiler'
   require 'module_mason'
   require 'module_cmp'
   require 'module_oil'

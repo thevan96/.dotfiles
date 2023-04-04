@@ -32,6 +32,11 @@ set wildmenu
 set wildmode=longest,list
 set completeopt=menu,menuone
 
+if has('persistent_undo')
+  set undofile
+  set undodir=/tmp/undo
+endif
+
 " Other
 set mouse=a
 set showmatch
