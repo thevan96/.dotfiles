@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 xdg-open $(
-  fdfind . $HOME --type d -H \
+  fd . $HOME --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \

@@ -235,7 +235,7 @@ augroup ShowExtraWhitespace
   autocmd TerminalOpen * match none
 augroup end
 
-augroup ChangeWorkingDirectory
+augroup RelativeWorkingDirectory
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end

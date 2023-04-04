@@ -16,7 +16,7 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # FZF
-export FZF_DEFAULT_COMMAND="fdfind --type f -H \
+export FZF_DEFAULT_COMMAND="fd --type f -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -25,7 +25,7 @@ export FZF_DEFAULT_COMMAND="fdfind --type f -H \
   --exclude composer \
   --exclude gems \
   "
-export FZF_ALT_C_COMMAND="fdfind . $HOME --type d -H \
+export FZF_ALT_C_COMMAND="fd . $HOME --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
@@ -45,7 +45,6 @@ export CLUTTER_IM_MODULE=ibus
 export GLFW_IM_MODULE=ibus
 
 # Alias
-alias vi='nvim'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 

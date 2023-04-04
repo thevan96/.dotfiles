@@ -135,9 +135,8 @@ Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " Snippets
@@ -185,7 +184,7 @@ let fdIgnoreDirectories = '
       \ --exclude composer
       \ --exclude gems '
 
-let $FZF_DEFAULT_COMMAND = 'fdfind --type f -H '.fdIgnoreDirectories
+let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.fdIgnoreDirectories
 
 function! SinkSwitchProjects(line)
   %bd | cd `=a:line`
@@ -196,13 +195,13 @@ function! SinkSwitchDirectories(line)
 endfunction
 
 command! Projects call fzf#run(fzf#wrap({
-      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories,
+      \   'source': 'fd --type d -H '.fdIgnoreDirectories,
       \   'dir': expand('$HOME'),
       \   'sink': function('SinkSwitchProjects')
       \ }))
 
 command! Directories call fzf#run(fzf#wrap({
-      \   'source': 'fdfind --type d -H '.fdIgnoreDirectories,
+      \   'source': 'fd --type d -H '.fdIgnoreDirectories,
       \   'sink': function('SinkSwitchDirectories')
       \ }))
 
@@ -390,7 +389,7 @@ augroup RunFile
   autocmd FileType python vnoremap <leader>vf :w !python<cr>
 augroup end
 
-augroup ChangeWorkingDirectory
+augroup RelativeWorkingDirectory
   autocmd!
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
