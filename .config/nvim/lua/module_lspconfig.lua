@@ -37,6 +37,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, bufopts)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set({ 'n', 'v' }, '<space>ac', vim.lsp.buf.code_action, opts)
   vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end

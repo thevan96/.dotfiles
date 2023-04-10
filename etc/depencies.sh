@@ -7,8 +7,6 @@ pip install -U sqlfluff
 pip install -U httpie
 pip install -U editorconfig-checker
 
-gem install vimgolf
-
 npm install -g npm@latest
 npm install -g neovim
 npm install -g prettier
@@ -39,4 +37,3 @@ asdf reshim python
 asdf reshim rust
 asdf reshim golang
 asdf reshim java
-asdf reshim ruby

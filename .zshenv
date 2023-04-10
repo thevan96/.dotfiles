@@ -36,15 +36,8 @@ export FZF_ALT_C_COMMAND="fd . $HOME --type d -H \
   "
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
-# ibus
-export GTK_IM_MODULE=ibus
-export QT_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export QT4_IM_MODULE=ibus
-export CLUTTER_IM_MODULE=ibus
-export GLFW_IM_MODULE=ibus
-
 # Alias
+alias ls="ls --color=auto"
 alias pwdcp='pwd | xclip -selection clipboard'
 alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
@@ -53,20 +46,12 @@ exit() {
   echo 'Use <C-d> instead!'
 }
 
-update_sys() {
-  sudo apt -y update \
-  && sudo apt -y upgrade \
-  && sudo apt -y autoclean \
-  && sudo apt -y autoremove
-}
-
 update_asdf() {
   asdf reshim nodejs
   asdf reshim python
   asdf reshim rust
   asdf reshim golang
   asdf reshim java
-  asdf reshim ruby
   echo 'Asdf update done!'
 }
 

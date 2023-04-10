@@ -3,7 +3,10 @@
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # Update/upgrade/install
-  sudo dnf -y update && sudo dnf -y upgrade && sudo dnf -y install \
+  sudo dnf -y update && sudo dnf -y upgrade && sudo dnf install \
+    util-linux-user \
+    pgcli \
+    mycli \
     gcc \
     g++ \
     tree \
@@ -20,18 +23,18 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     nano \
     make \
     cmake \
-    rar \
     unrar \
     zip \
     ibus \
     xsel \
     xclip \
     wmctrl \
-    postgresql-client \
-    mysql-client \
+    postgresql \
+    mysql \
     stow \
+    neovim \
+    alacritty \
     rofi \
-    fonts-noto-color-emoji \
     vlc \
     blender \
     gimp \
@@ -40,17 +43,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     uget \
     flameshot \
     gparted \
-    vim-gtk \
     screenkey \
     simplescreenrecorder \
     timeshift \
-    rofi \
     transmission \
-    gnome-shell-extensions\
+    gnome-extensions-app \
     gnome-clocks \
     gnome-tweaks \
-    chrome-gnome-shell \
-    gnome-shell-pomodoro
+    gnome-pomodoro
 fi
 
 # Change shell
@@ -59,10 +59,6 @@ echo "Switch to zsh ..."
 chsh -s $(which zsh)
 
 # Make alias
-if [ ! -f "fdfind" ]; then
-  sudo ln -sf $(which fdfind) /usr/local/bin/fd
-fi
-
 if [ ! -f "nvim" ]; then
   sudo ln -sf $(which nvim) /usr/local/bin/vi
 fi
@@ -91,7 +87,8 @@ if [ ! -d "$dir_vimplug" ]; then
 fi
 
 # Gnome setup
-gsettings reset org.gnome.mutter overlay-key
+# gsettings reset org.gnome.mutter overlay-key
+gsettings set org.gnome.mutter overlay-key ''
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true

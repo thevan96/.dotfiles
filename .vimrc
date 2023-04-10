@@ -34,7 +34,7 @@ set completeopt=menu,menuone
 
 if has('persistent_undo')
   set undofile
-  set undodir=/tmp/undo
+  set undodir=$HOME/.vim/undo
 endif
 
 " Other

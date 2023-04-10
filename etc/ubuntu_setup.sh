@@ -14,7 +14,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     aisleriot
 
   # Update/upgrade/install
-  sudo apt -y update && sudo apt -y upgrade && sudo apt -y install \
+  sudo apt -y update && sudo apt -y upgrade && sudo apt install \
     gcc \
     g++ \
     tree \
@@ -102,7 +102,8 @@ if [ ! -d "$dir_vimplug" ]; then
 fi
 
 # Gnome setup
-gsettings reset org.gnome.mutter overlay-key
+# gsettings reset org.gnome.mutter overlay-key
+gsettings set org.gnome.mutter overlay-key ''
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
