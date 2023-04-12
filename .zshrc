@@ -21,7 +21,7 @@ autoload -Uz compinit && compinit
 zstyle ':vcs_info:*' enable git svn
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr ' /-'
-zstyle ':vcs_info:*' stagedstr ' /-'
+zstyle ':vcs_info:*' stagedstr ' /+'
 zstyle ':vcs_info:git:*' formats '[%b%u%c]'
 zstyle ':vcs_info:git:*' actionformats '[%b%a%u%c]'
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
