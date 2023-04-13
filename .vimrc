@@ -63,6 +63,7 @@ nnoremap Y y$
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>n :set relativenumber!<cr>
+nnoremap <leader>N :set number!<cr>
 nnoremap <leader>x :bd!<cr>
 nnoremap <leader>= :Format<cr>
 nnoremap <leader>o :ls<cr>:b<space>

@@ -69,7 +69,7 @@ nnoremap <leader>y :%y<cr>
 nnoremap <leader>x :bd!<cr>
 nnoremap <leader>= :Format<cr>
 nnoremap <leader>n :set relativenumber!<cr>
-nnoremap <leader>N :call ToggleScrollOff()<cr>
+nnoremap <leader>N :set number!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
@@ -317,14 +317,6 @@ function! GRemoveMarkers() range
   execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
-
-function! ToggleScrollOff()
-  if &scrolloff == 0
-    set scrolloff=999
-  else
-    set scrolloff=0
-  endif
-endfunction
 
 function! IsInCurrentProject()
   let pwd = getcwd()

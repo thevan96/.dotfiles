@@ -7,6 +7,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     util-linux-user \
     pgcli \
     mycli \
+    postgresql \
+    mysql \
     gcc \
     g++ \
     tree \
@@ -29,8 +31,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     xsel \
     xclip \
     wmctrl \
-    postgresql \
-    mysql \
     stow \
     neovim \
     alacritty \
@@ -47,6 +47,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     simplescreenrecorder \
     timeshift \
     transmission \
+    peek \
+    obs-studio \
     gnome-extensions-app \
     gnome-clocks \
     gnome-tweaks \
