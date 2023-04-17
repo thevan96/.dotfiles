@@ -67,7 +67,6 @@ local servers = {
   'tsserver',
   'rust_analyzer',
   'gopls',
-  'lua_ls',
 }
 
 local on_capabilities = require('cmp_nvim_lsp').default_capabilities(

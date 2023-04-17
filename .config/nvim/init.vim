@@ -235,6 +235,9 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
+Plug 'img-paste-devs/img-paste.vim'
+let g:mdip_imgdir = 'images'
+
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_auto_header = 1
 let g:vimwiki_markdown_link_ext = 1
@@ -425,6 +428,10 @@ augroup LoadFile
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
   autocmd InsertEnter *.* lua vim.diagnostic.disable()
+
+  autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
+  autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
+  autocmd FileType markdown,tex nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
 "--- Load lua---
