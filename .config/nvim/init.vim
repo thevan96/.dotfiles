@@ -235,13 +235,36 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_auto_header = 1
+let g:vimwiki_markdown_link_ext = 1
+let g:vimwiki_key_mappings =
+  \ {
+  \   'all_maps': 1,
+  \   'global': 1,
+  \   'headers': 1,
+  \   'text_objs': 1,
+  \   'table_format': 1,
+  \   'table_mappings': 1,
+  \   'lists': 1,
+  \   'links': 1,
+  \   'html': 0,
+  \   'mouse': 0,
+  \ }
+
+let g:vimwiki_list = [{
+  \   'path': '~/Personal/notes/',
+  \   'syntax': 'markdown', 'ext': '.md',
+  \   'links_space_char': '_',
+  \ }]
+
 Plug 'jpalardy/vim-slime'
 let g:slime_target = 'tmux'
 let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
-nnoremap <leader>m :MarkdownPreviewToggle<cr>
+nnoremap <leader>M :MarkdownPreviewToggle<cr>
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -399,9 +422,6 @@ augroup LoadFile
         \ | exe "normal! g'\"" | endif
 
   autocmd FileType oil setlocal nonumber
-  autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
-  autocmd FileType markdown,tex nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
-
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
   autocmd InsertEnter *.* lua vim.diagnostic.disable()
