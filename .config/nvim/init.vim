@@ -228,6 +228,8 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 Plug 'wellle/targets.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
@@ -423,12 +425,12 @@ augroup LoadFile
   autocmd BufWritePre * call Mkdir()
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif
-
-  autocmd FileType oil setlocal nonumber
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
+
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
   autocmd InsertEnter *.* lua vim.diagnostic.disable()
 
+  autocmd FileType oil setlocal nonumber
   autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown,tex nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
@@ -444,4 +446,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+  require 'nvim-surround'.setup()
 EOF
