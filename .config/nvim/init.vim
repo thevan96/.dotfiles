@@ -46,7 +46,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-inoremap <Tab> <nop>
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
 nnoremap <Left> <nop>
@@ -142,9 +141,9 @@ inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger='<C-j>'
-let g:UltiSnipsJumpForwardTrigger='<C-j>'
-let g:UltiSnipsJumpBackwardTrigger='<C-k>'
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " File manager
 Plug 'stevearc/oil.nvim'
@@ -251,7 +250,7 @@ let g:vimwiki_key_mappings =
   \   'headers': 1,
   \   'text_objs': 1,
   \   'table_format': 1,
-  \   'table_mappings': 1,
+  \   'table_mappings': 0,
   \   'lists': 1,
   \   'links': 1,
   \   'html': 0,
