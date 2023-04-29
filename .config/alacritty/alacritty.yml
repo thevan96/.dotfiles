@@ -1,7 +1,7 @@
 # Window
 window:
   title: ''
-  decorations: none
+  decorations: full
   startup_mode: maximized
   opacity: 1.0
 
