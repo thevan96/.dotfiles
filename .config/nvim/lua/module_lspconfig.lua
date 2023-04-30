@@ -4,13 +4,13 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
-  '<leader>k',
+  '<C-k>',
   ':lua vim.diagnostic.goto_prev({ float = false })<cr>',
   opts
 )
 vim.keymap.set(
   'n',
-  '<leader>j',
+  '<C-j>',
   ':lua vim.diagnostic.goto_next({ float = false })<cr>',
   opts
 )
@@ -38,8 +38,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set({ 'n', 'v' }, '<space>ac', vim.lsp.buf.code_action, opts)
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, bufopts)
 end
 
 vim.diagnostic.config({

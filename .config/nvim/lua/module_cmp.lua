@@ -18,7 +18,7 @@ cmp.setup({
       return vim_item
     end,
   },
-  preselect = cmp.PreselectMode.None,
+  preselect = cmp.PreselectMode.Item,
   completion = {
     autocomplete = false,
   },
@@ -27,6 +27,10 @@ cmp.setup({
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      n = cmp.mapping.close(),
+    }),
   }),
   snippet = {
     expand = function(args)
