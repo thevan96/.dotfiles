@@ -66,9 +66,7 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
 nnoremap <leader>x :bd!<cr>
-nnoremap <leader>= :Format<cr>
 nnoremap <leader>n :set relativenumber!<cr>
-nnoremap <leader>N :set number!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
@@ -227,9 +225,6 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
-Plug 'wellle/targets.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
@@ -271,8 +266,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
 nnoremap <leader>M :MarkdownPreviewToggle<cr>
 
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 call plug#end()
 
 "--- Config Provider ---
@@ -360,33 +353,6 @@ function! Trim()
 endfunction
 command! Trim :call Trim()
 
-function! Format()
-  if !IsInCurrentProject()
-    return
-  endif
-
-  let extension = expand('%:e')
-  call Trim()
-  if extension == 'go'
-    !gofmt -w % && golines -m 80 -w %
-  elseif extension == 'rs'
-    !rufmt %
-  elseif extension == 'lua'
-    !stylua %
-  elseif extension == 'sql'
-    !sqlfluff fix --dialect postgres -f %
-  elseif extension == 'md'
-    !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
-    if filereadable('node_modules/.bin/prettier')
-      !npx prettier -w %
-    else
-      !prettier -w %
-    endif
-  endif
-endfunction
-command! Format :call Format()
-
 augroup ConfigStyleTabOrSpace
   autocmd!
   autocmd BufNewFile,BufRead,BufWrite *.go
@@ -446,5 +412,4 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
-  require 'nvim-surround'.setup()
 EOF

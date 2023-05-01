@@ -93,13 +93,3 @@ for _, lsp in ipairs(servers) do
     handlers = on_handlers,
   })
 end
-
-nvim_lsp.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim', 'awesome', 'client', 'root', 'screen' },
-      },
-    },
-  },
-})
