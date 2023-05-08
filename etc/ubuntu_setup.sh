@@ -38,6 +38,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     xsel \
     xclip \
     wmctrl \
+    pgcli \
+    mycli \
     postgresql-client \
     mysql-client \
     stow \
@@ -71,11 +73,11 @@ chsh -s $(which zsh)
 
 # Make alias
 if [ ! -f "fdfind" ]; then
-  sudo ln -sf $(which fdfind) /usr/local/bin/fd
+  sudo ln -sf $(which fdfind) ~/.local/bin/fd
 fi
 
 if [ ! -f "nvim" ]; then
-  sudo ln -sf $(which nvim) /usr/local/bin/vi
+  sudo ln -sf $(which nvim) ~/.local/bin/vi
 fi
 
 # Install fzf

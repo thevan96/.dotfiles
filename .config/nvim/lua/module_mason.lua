@@ -10,5 +10,6 @@ require 'mason-lspconfig'.setup({
     'pyright',
     'tsserver',
     'gopls',
+    'lua_ls',
   },
 })

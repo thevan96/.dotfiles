@@ -8,10 +8,14 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.snippets]
+[{.git/**,.fonts/**}]
+charset = unset
 indent_size = unset
 indent_style = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
 
-[vifmrc]
+[*.snippets]
 indent_size = unset
 indent_style = unset

@@ -2,7 +2,7 @@
 window:
   title: ''
   decorations: full
-  startup_mode: maximized
+  startup_mode: fullscreen
   opacity: 1.0
 
 # Font

@@ -76,6 +76,9 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
 
+" Remap diary vimwiki
+command! Diary VimwikiDiaryIndex
+
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -112,15 +115,6 @@ nnoremap <leader>% :silent
 nnoremap <leader>c :silent
       \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
-" Fix conflict git
-if &diff
-  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
-  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
-  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
-  nnoremap <leader><cr> :diffupdate<cr>
-  vnoremap <leader>= :GremoveMarkers<cr><gv>
-endif
-
 call plug#begin()
 
 "--- Core plugins ---
@@ -139,9 +133,9 @@ inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger='<tab>'
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
+let g:UltiSnipsExpandTrigger='<C-j>'
+let g:UltiSnipsJumpForwardTrigger='<C-j>'
+let g:UltiSnipsJumpBackwardTrigger='<C-k>'
 
 " File manager
 Plug 'stevearc/oil.nvim'
@@ -225,6 +219,13 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
+Plug 'kylechui/nvim-surround'
+
+Plug 'tpope/vim-fugitive'
+nnoremap <leader>g :Git<space>
+nnoremap <leader>1 :diffget //2<cr>:diffupdate<cr>
+nnoremap <leader>2 :diffget //3<cr>:diffupdate<cr>
+nnoremap <leader><cr> :diffupdate<cr>
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
@@ -232,10 +233,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
-Plug 'img-paste-devs/img-paste.vim'
-let g:mdip_imgdir = 'images'
-
 Plug 'vimwiki/vimwiki'
+let g:vimwiki_global_ext = 0
 let g:vimwiki_auto_header = 1
 let g:vimwiki_markdown_link_ext = 1
 let g:vimwiki_key_mappings =
@@ -245,7 +244,7 @@ let g:vimwiki_key_mappings =
   \   'headers': 1,
   \   'text_objs': 1,
   \   'table_format': 1,
-  \   'table_mappings': 0,
+  \   'table_mappings': 1,
   \   'lists': 1,
   \   'links': 1,
   \   'html': 0,
@@ -266,13 +265,16 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
 nnoremap <leader>M :MarkdownPreviewToggle<cr>
 
+Plug 'img-paste-devs/img-paste.vim'
+let g:mdip_imgdir = 'images'
+
 call plug#end()
 
 "--- Config Provider ---
 let g:loaded_perl_provider = 0
 let g:loaded_node_provider = 0
-let g:loaded_python_provider = 0
 let g:loaded_ruby_provider = 0
+let g:loaded_python_provider = 0
 let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 
 "--- Customize theme ---
@@ -339,13 +341,6 @@ function! GRemoveMarkers() range
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 
-function! IsInCurrentProject()
-  let pwd = getcwd()
-  let file = expand('%:p:h')
-
-  return stridx(file, pwd) >= 0
-endfunction
-
 function! Trim()
   silent! %s#\($\n\s*\)\+\%$## " trim end newlines
   silent! %s/\s\+$//e " trim whitespace
@@ -385,6 +380,11 @@ augroup RelativeWorkingDirectory
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
+augroup vimwikigroup
+  autocmd!
+  autocmd BufRead,BufNewFile diary.md VimwikiDiaryGenerateLinks
+augroup end
+
 augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
@@ -396,10 +396,10 @@ augroup LoadFile
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
   autocmd InsertEnter *.* lua vim.diagnostic.disable()
 
-  autocmd FileType oil setlocal nonumber
-  autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
+  autocmd FileType oil,git setlocal nonumber
+
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
-  autocmd FileType markdown,tex nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
+  autocmd FileType markdown nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
 "--- Load lua---
@@ -412,4 +412,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+  require 'nvim-surround'.setup()
 EOF

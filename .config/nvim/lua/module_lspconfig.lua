@@ -4,13 +4,13 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
-  '<C-k>',
+  '<leader>k',
   ':lua vim.diagnostic.goto_prev({ float = false })<cr>',
   opts
 )
 vim.keymap.set(
   'n',
-  '<C-j>',
+  '<leader>j',
   ':lua vim.diagnostic.goto_next({ float = false })<cr>',
   opts
 )
@@ -21,6 +21,7 @@ local on_attach = function(client, bufnr)
   client.server_capabilities.document_formatting = false
   client.server_capabilities.document_range_formatting = false
   client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.semanticTokensProvider = nil
 
   vim.keymap.set(
     'n',
