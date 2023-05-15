@@ -1,8 +1,8 @@
 # Window
 window:
-  title: ''
+  title: ""
   decorations: full
-  startup_mode: fullscreen
+  startup_mode: maximized
   opacity: 1.0
 
 # Font

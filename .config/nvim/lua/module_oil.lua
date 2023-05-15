@@ -1,25 +1,4 @@
-require 'oil'.setup({
-  columns = {
-    'icon',
-    -- 'permissions',
-    -- 'size',
-    -- 'mtime',
-  },
-  buf_options = {
-    buflisted = false,
-  },
-  win_options = {
-    wrap = false,
-    signcolumn = 'no',
-    cursorcolumn = false,
-    foldcolumn = '0',
-    spell = false,
-    list = false,
-    conceallevel = 3,
-    concealcursor = 'n',
-  },
-  restore_win_options = true,
-  skip_confirm_for_simple_edits = false,
+require('oil').setup({
   keymaps = {
     ['g?'] = 'actions.show_help',
     ['<CR>'] = 'actions.select',
@@ -35,16 +14,16 @@ require 'oil'.setup({
     ['g.'] = 'actions.toggle_hidden',
   },
   use_default_keymaps = true,
+  delete_to_trash = true,
+  trash_command = 'trash-put',
   view_options = {
     show_hidden = true,
   },
-  float = {
-    padding = 2,
-    max_width = 0,
-    max_height = 0,
-    border = 'rounded',
-    win_options = {
-      winblend = 10,
-    },
-  },
 })
+
+vim.keymap.set(
+  'n',
+  '<leader><BS>',
+  require('oil').open,
+  { desc = 'Open parent directory' }
+)

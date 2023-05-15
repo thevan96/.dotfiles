@@ -57,6 +57,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     screenkey \
     simplescreenrecorder \
     timeshift \
+    trash-cli \
     rofi \
     transmission \
     gnome-shell-extensions\

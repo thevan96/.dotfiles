@@ -11,7 +11,7 @@ set incsearch
 set ignorecase
 
 set list
-set listchars=tab:→\ |
+set listchars=tab:\|\ ,leadmultispace:\|\.,multispace:.,trail:-
 
 set number
 set norelativenumber
@@ -55,6 +55,12 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
+" Undo
+if has('persistent_undo')
+  set undofile
+  set undodir=$HOME/.vim/undo
+endif
+
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
 
@@ -75,6 +81,11 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
+
+" Utils command
+command! Date let @+ = strftime("%d-%m-%Y")
+command! Time let @+ = strftime("%H:%M:%S")
+command! DateTime let @+ = strftime("%d-%m-%Y %H:%M:%S")
 
 " Remap diary vimwiki
 command! Diary VimwikiDiaryIndex
@@ -109,11 +120,11 @@ nnoremap zL :llast<cr>
 
 " Open in tab terminal
 nnoremap <leader>" :silent
-      \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
+  \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
 nnoremap <leader>% :silent
-      \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
+  \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
 nnoremap <leader>c :silent
-      \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
+  \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 call plug#begin()
 
@@ -129,7 +140,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-inoremap <C-n> <Cmd>lua require('cmp').complete()<cr>
+inoremap <C-Space> <Cmd>lua require('cmp').complete()<cr>
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -159,26 +170,23 @@ function! s:build_quickfix_list(lines)
 endfunction
 
 let g:fzf_action = {
-      \ 'ctrl-q': function('s:build_quickfix_list'),
-      \ 'ctrl-s': 'split',
-      \ 'ctrl-v': 'vsplit'
-      \ }
-
-let g:fzf_layout = { 'down': '40%' }
-let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \ }
 
 let rgIgnoreDirectories = "
-      \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
-      \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
+  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
+  \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
 
 let fdIgnoreDirectories = '
-      \ --exclude .git
-      \ --exclude .idea
-      \ --exclude .vscode
-      \ --exclude node_modules
-      \ --exclude vendor
-      \ --exclude composer
-      \ --exclude gems '
+  \ --exclude .git
+  \ --exclude .idea
+  \ --exclude .vscode
+  \ --exclude node_modules
+  \ --exclude vendor
+  \ --exclude composer
+  \ --exclude gems '
 
 let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.fdIgnoreDirectories
 
@@ -191,22 +199,22 @@ function! SinkSwitchDirectories(line)
 endfunction
 
 command! Projects call fzf#run(fzf#wrap({
-      \   'source': 'fd --type d -H '.fdIgnoreDirectories,
-      \   'dir': expand('$HOME'),
-      \   'sink': function('SinkSwitchProjects')
-      \ }))
+  \   'source': 'fd --type d -H '.fdIgnoreDirectories,
+  \   'dir': expand('$HOME'),
+  \   'sink': function('SinkSwitchProjects')
+  \ }))
 
 command! Directories call fzf#run(fzf#wrap({
-      \   'source': 'fd --type d -H '.fdIgnoreDirectories,
-      \   'sink': function('SinkSwitchDirectories')
-      \ }))
+  \   'source': 'fd --type d -H '.fdIgnoreDirectories,
+  \   'sink': function('SinkSwitchDirectories')
+  \ }))
 
 command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --hidden --column --line-number --no-heading --color=always
-      \   --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
-      \   1, fzf#vim#with_preview(), <bang>0
-      \ )
+  \ call fzf#vim#grep(
+  \   'rg --hidden --column --line-number --no-heading --color=always
+  \   --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
+  \   1, fzf#vim#with_preview(), <bang>0
+  \ )
 
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
@@ -215,14 +223,13 @@ nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 Plug 'kylechui/nvim-surround'
 
 Plug 'tpope/vim-fugitive'
-nnoremap <leader>g :Git<space>
 nnoremap <leader>1 :diffget //2<cr>:diffupdate<cr>
 nnoremap <leader>2 :diffget //3<cr>:diffupdate<cr>
 nnoremap <leader><cr> :diffupdate<cr>
@@ -234,7 +241,6 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 
 Plug 'vimwiki/vimwiki'
-let g:vimwiki_global_ext = 0
 let g:vimwiki_auto_header = 1
 let g:vimwiki_markdown_link_ext = 1
 let g:vimwiki_key_mappings =
@@ -296,11 +302,14 @@ hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
 hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
 hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
 hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=none     ctermbg=none     cterm=bold
+hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
 
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
+
+hi StatusLine                ctermfg=255      ctermbg=233     cterm=bold
+hi StatusLineNC              ctermfg=255      ctermbg=233     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -351,9 +360,9 @@ command! Trim :call Trim()
 augroup ConfigStyleTabOrSpace
   autocmd!
   autocmd BufNewFile,BufRead,BufWrite *.go
-        \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+    \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
   autocmd BufNewFile,BufRead,Bufwrite *.md
-        \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+    \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup RunFile
@@ -390,14 +399,13 @@ augroup LoadFile
   autocmd VimResized * wincmd =
   autocmd BufWritePre * call Mkdir()
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
-        \ | exe "normal! g'\"" | endif
+    \ | exe "normal! g'\"" | endif
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
 
   autocmd BufWritePre *.* lua vim.diagnostic.enable()
   autocmd InsertEnter *.* lua vim.diagnostic.disable()
 
   autocmd FileType oil,git setlocal nonumber
-
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 augroup end

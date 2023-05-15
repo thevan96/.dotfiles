@@ -1,4 +1,4 @@
-require('vfiler/config').setup {
+require('vfiler/config').setup({
   options = {
     auto_cd = true,
     auto_resize = true,
@@ -9,6 +9,6 @@ require('vfiler/config').setup {
     columns = 'indent,icon,name',
     show_hidden_files = true,
   },
-}
+})
 
 --- require('vfiler').start()

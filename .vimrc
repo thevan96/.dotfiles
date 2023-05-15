@@ -52,6 +52,12 @@ let g:loaded_netrwPlugin = 1
 let html_no_rendering = 1
 inoremap <tab> <nop>
 
+" Undo
+if has('persistent_undo')
+  set undofile
+  set undodir=$HOME/.vim/undo
+endif
+
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
 
@@ -76,6 +82,11 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
+
+" Utils command
+command! Date let @+ = strftime("%d-%m-%Y")
+command! Time let @+ = strftime("%H:%M:%S")
+command! DateTime let @+ = strftime("%d-%m-%Y %H:%M:%S")
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
