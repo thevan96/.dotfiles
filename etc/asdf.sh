@@ -10,8 +10,8 @@ echo 'asdf done!'
 
 java_version=openjdk-17.0.2
 
-asdf install nodejs lts
-asdf global nodejs lts
+asdf install nodejs latest:18
+asdf global nodejs latest:18
 
 asdf install python latest
 asdf global python latest

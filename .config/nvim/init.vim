@@ -11,7 +11,7 @@ set incsearch
 set ignorecase
 
 set list
-set listchars=tab:\|\ ,leadmultispace:\|\.,multispace:.,trail:-
+set listchars=tab:→\ ,trail:-
 
 set number
 set norelativenumber
@@ -35,7 +35,7 @@ set mouse=a
 set showmatch
 set autoindent
 set backspace=0
-set matchtime=1
+set matchtime=0
 set nofoldenable
 set diffopt=vertical
 set scrolloff=0
@@ -229,11 +229,6 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'mattn/emmet-vim'
 Plug 'kylechui/nvim-surround'
 
-Plug 'tpope/vim-fugitive'
-nnoremap <leader>1 :diffget //2<cr>:diffupdate<cr>
-nnoremap <leader>2 :diffget //3<cr>:diffupdate<cr>
-nnoremap <leader><cr> :diffupdate<cr>
-
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -305,8 +300,8 @@ hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
 
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
-hi SpecialKey                ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                ctermfg=236      ctermbg=none     cterm=none
+hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
+hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
 
 hi StatusLine                ctermfg=255      ctermbg=233     cterm=bold
 hi StatusLineNC              ctermfg=255      ctermbg=233     cterm=none
@@ -330,7 +325,7 @@ hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
-hi ExtraWhitespace           ctermbg=196
+hi ExtraWhitespace           ctermfg=196      ctermbg=196
 
 "--- Function utils ---
 function! Mkdir()
@@ -373,8 +368,8 @@ augroup end
 
 augroup ShowExtraWhitespace
   autocmd!
-  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd BufRead,InsertLeave *.* match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter *.* match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup RunFile

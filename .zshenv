@@ -25,7 +25,7 @@ export FZF_DEFAULT_COMMAND="fd --type f -H \
   --exclude composer \
   --exclude gems \
   "
-export FZF_ALT_C_COMMAND="fd . $HOME --type d -H \
+export FZF_ALT_C_COMMAND="fd --type d -H \
   --exclude .git \
   --exclude .idea \
   --exclude .vscode \
