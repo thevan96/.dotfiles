@@ -55,12 +55,6 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
-" Undo
-if has('persistent_undo')
-  set undofile
-  set undodir=$HOME/.vim/undo
-endif
-
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
 

@@ -52,12 +52,6 @@ let g:loaded_netrwPlugin = 1
 let html_no_rendering = 1
 inoremap <tab> <nop>
 
-" Undo
-if has('persistent_undo')
-  set undofile
-  set undodir=$HOME/.vim/undo
-endif
-
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
 
