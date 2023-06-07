@@ -93,6 +93,7 @@ bindsym $mod+Left workspace prev
 # Assign app
 for_window [class="Alacritty"] move to workspace number $ws1
 for_window [class="Google-chrome"] move to workspace number $ws2
+for_window [class="Brave-browser"] move to workspace number $ws2
 for_window [class="Gnome-pomodoro"] move to workspace number $ws3
 for_window [class="Evince"] move to workspace number $ws4
 for_window [class="Nautilus"] move to workspace number $ws5
@@ -104,7 +105,7 @@ for_window [class="Gnome-pomodoro"] floating enable
 for_window [class="Eog"] floating enable
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 # bindsym $mod+Shift+r restart

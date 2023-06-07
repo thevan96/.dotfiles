@@ -5,16 +5,17 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set(
   'n',
   '<leader>k',
-  ':lua vim.diagnostic.goto_prev({ float = false })<cr>',
+  ':lua vim.diagnostic.goto_prev({ float = true })<cr>',
   opts
 )
 vim.keymap.set(
   'n',
   '<leader>j',
-  ':lua vim.diagnostic.goto_next({ float = false })<cr>',
+  ':lua vim.diagnostic.goto_next({ float = true })<cr>',
   opts
 )
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', '<leader>z', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', '<leader>g', vim.diagnostic.setqflist, opts)
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -47,10 +48,11 @@ vim.diagnostic.config({
   signs = true,
   underline = true,
   update_in_insert = false,
-  virtual_text = {
-    prefix = '●',
-    source = 'always',
-  },
+  virtual_text = false,
+  ---{
+  ---  prefix = '●',
+  ---  source = 'always',
+  ---},
   float = {
     source = 'always',
     border = 'single',

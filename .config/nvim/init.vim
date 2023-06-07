@@ -11,7 +11,7 @@ set incsearch
 set ignorecase
 
 set list
-set listchars=tab:→\ ,trail:-
+set listchars=tab:│\ ,lead:.,multispace:.,trail:-
 
 set number
 set norelativenumber
@@ -69,6 +69,10 @@ nnoremap <leader>x :bd!<cr>
 nnoremap <leader>n :set relativenumber!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+nnoremap cn *``cgn
+nnoremap cN #``cgN
+nnoremap Qv i<C-r>=eval(substitute(@", '\n', '+', 'g'))<esc>
+nnoremap Qr 0yt=A<C-r>=<C-r>"<CR><esc>
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -131,8 +135,8 @@ Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 inoremap <C-Space> <Cmd>lua require('cmp').complete()<cr>
 
@@ -221,10 +225,10 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
-Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
+Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -296,9 +300,6 @@ hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
-
-hi StatusLine                ctermfg=255      ctermbg=233     cterm=bold
-hi StatusLineNC              ctermfg=255      ctermbg=233     cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -409,5 +410,4 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
-  require 'nvim-surround'.setup()
 EOF

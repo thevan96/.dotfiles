@@ -1,10 +1,6 @@
 # Date time
-snippet monthyear "MM-YYYY"
-`!v strftime("%m-%Y")`
-endsnippet
-
 snippet date "DD-MM-YYYY"
-`!v strftime("%d-%m-%Y")`
+`!v strftime("%Y-%m-%d")`
 endsnippet
 
 snippet time "hh:mm:ss"
@@ -12,7 +8,7 @@ snippet time "hh:mm:ss"
 endsnippet
 
 snippet datetime "DD-MM-YYYY hh:mm"
-`!v strftime("%d-%m-%Y %H:%M:%S")`
+`!v strftime("%Y-%m-%d %H:%M:%S")`
 endsnippet
 
 snippet box "Box"
@@ -20,6 +16,12 @@ snippet box "Box"
 │ $1 │
 `!p snip.rv = '└' + '─' * (len(t[1]) + 2) + '┘'`
 $0
+endsnippet
+
+snippet money "Money table"
+| Danh mục       | Tiền |
+| -------------- | ---- |
+|                |      |
 endsnippet
 
 snippet line

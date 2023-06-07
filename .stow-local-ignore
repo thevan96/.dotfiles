@@ -4,5 +4,6 @@
 \.editorconfig
 \.config/i3
 \.config/i3status
+Makefile
 etc
 README.md

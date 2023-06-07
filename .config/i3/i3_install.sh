@@ -12,8 +12,6 @@ sudo apt install i3 \
   picom \
   hsetroot \
   feh \
-  xrandr \
-  nm-applet \
   pasystray \
   xss-lock
 
