@@ -11,5 +11,6 @@ require('mason-lspconfig').setup({
     'tsserver',
     'gopls',
     'lua_ls',
+    'clangd',
   },
 })

@@ -35,8 +35,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, bufopts)
-  vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, bufopts)
+  vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, bufopts)
+  vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, bufopts)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set({ 'n', 'v' }, '<space>ac', vim.lsp.buf.code_action, opts)
@@ -49,28 +49,11 @@ vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
   virtual_text = false,
-  ---{
-  ---  prefix = '●',
-  ---  source = 'always',
-  ---},
   float = {
     source = 'always',
     border = 'single',
   },
 })
-
-local servers = {
-  'html',
-  'cssls',
-  'clangd',
-  'cssmodules_ls',
-  'jsonls',
-  'pyright',
-  'texlab',
-  'tsserver',
-  'rust_analyzer',
-  'gopls',
-}
 
 local on_capabilities = require('cmp_nvim_lsp').default_capabilities(
   vim.lsp.protocol.make_client_capabilities()
@@ -89,6 +72,19 @@ local on_handlers = {
   ),
 }
 
+local servers = {
+  'html',
+  'cssls',
+  'clangd',
+  'cssmodules_ls',
+  'jsonls',
+  'pyright',
+  'texlab',
+  'tsserver',
+  'rust_analyzer',
+  'gopls',
+}
+
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
@@ -96,3 +92,16 @@ for _, lsp in ipairs(servers) do
     handlers = on_handlers,
   })
 end
+
+nvim_lsp['lua_ls'].setup({
+  on_attach = on_attach,
+  capabilities = on_capabilities,
+  handlers = on_handlers,
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' },
+      },
+    },
+  },
+})
