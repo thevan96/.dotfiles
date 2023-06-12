@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 xset r rate 200 80 &
-hsetroot -solid #000 &
+
+# hsetroot -solid #000 &
+hsetroot -cover ~/Dropbox/Pictures/lockscreen1366x768.png
+
 xrdb -merge ~/.Xresources &
 xrandr --output eDP-1 --mode 1366x768 &
 

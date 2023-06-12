@@ -1,18 +1,13 @@
 #!/usr/bin/env bash
 
 sudo apt install i3 \
-  autorandr \
-  caffeine \
-  feh \
   keychain \
   i3lock-fancy \
   light \
   lxappearance \
   pavucontrol \
   picom \
-  hsetroot \
-  feh \
   pasystray \
-  xss-lock
+  hsetroot
 
 sudo chmod +s $(which light)

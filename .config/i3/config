@@ -11,6 +11,9 @@ floating_modifier $mod
 # Kill focused window
 bindsym $mod+Shift+q kill
 
+# Window
+for_window [class="^.*"] border pixel 1
+
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -35,10 +38,10 @@ bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
 
 # enter fullscreen mode for the focused container
-bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # toggle tiling / floating
-bindsym $mod+f floating toggle
+bindsym $mod+Shift+f floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+t focus mode_toggle
@@ -94,9 +97,12 @@ bindsym $mod+Left workspace prev
 for_window [class="Alacritty"] move to workspace number $ws1
 for_window [class="Google-chrome"] move to workspace number $ws2
 for_window [class="Brave-browser"] move to workspace number $ws2
-for_window [class="Gnome-pomodoro"] move to workspace number $ws3
-for_window [class="Evince"] move to workspace number $ws4
-for_window [class="Nautilus"] move to workspace number $ws5
+for_window [class="Evince"] move to workspace number $ws3
+for_window [class="Nautilus"] move to workspace number $ws4
+
+for_window [class="Google-chrome"] layout tabbed
+for_window [class="firefox"] layout tabbed
+for_window [class="Brave-browser"] layout tabbed
 
 # Force floating window
 for_window [class="Pavucontrol"] floating enable
@@ -114,14 +120,14 @@ bindsym $mod+Shift+BackSpace restart
 # Set shut down, restart and locking features
 set $mode_system (l)ock, (e)xit (s)uspend, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id i3lock-fancy, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id systemctl suspend, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
+  bindsym l exec --no-startup-id i3lock-fancy, mode "default"
+  bindsym e exec --no-startup-id i3-msg exit, mode "default"
+  bindsym s exec --no-startup-id systemctl suspend, mode "default"
+  bindsym r exec --no-startup-id systemctl reboot, mode "default"
+  bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
 }
 bindsym $mod+Shift+e mode "$mode_system"
 
