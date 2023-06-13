@@ -10,4 +10,7 @@ sudo apt install i3 \
   pasystray \
   hsetroot
 
+# Make caplocks to esc
+# sudo vi /usr/share/X11/xkb/symbols/pc
+
 sudo chmod +s $(which light)

@@ -4,7 +4,10 @@ vim.diagnostic.config({
   signs = true,
   underline = true,
   update_in_insert = false,
-  virtual_text = false,
+  virtual_text = {
+    prefix = '●',
+    source = 'always',
+  },
   float = {
     source = 'always',
     border = 'single',

@@ -14,7 +14,7 @@ set list
 set listchars=tab:→\ ,lead:.,multispace:.,trail:\ |
 
 set number
-set norelativenumber
+set relativenumber
 
 set ruler
 set laststatus=2
@@ -56,7 +56,7 @@ inoremap <Left> <nop>
 inoremap <Right> <nop>
 
 " Setting tab/space
-set tabstop=2 shiftwidth=2 expandtab | retab
+set tabstop=2 shiftwidth=2 expandtab
 
 " Set keymap
 let mapleader = ' '
@@ -65,8 +65,6 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <leader>y :%y<cr>
-nnoremap <leader>x :bd!<cr>
-nnoremap <leader>n :set relativenumber!<cr>
 nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 nnoremap cn *``cgn
@@ -79,11 +77,6 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
-
-" Utils command
-command! Date let @+ = strftime("%d-%m-%Y")
-command! Time let @+ = strftime("%H:%M:%S")
-command! DateTime let @+ = strftime("%d-%m-%Y %H:%M:%S")
 
 " Remap diary vimwiki
 command! Diary VimwikiDiaryIndex
@@ -117,12 +110,10 @@ nnoremap zH :lfirst<cr>
 nnoremap zL :llast<cr>
 
 " Open in tab terminal
-nnoremap <leader>t" :silent
+nnoremap <leader>" :silent
   \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>t% :silent
+nnoremap <leader>% :silent
   \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>tc :silent
-  \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 call plug#begin()
 
@@ -193,12 +184,6 @@ function! SinkSwitchDirectories(line)
   e `=a:line`
 endfunction
 
-command! Projects call fzf#run(fzf#wrap({
-  \   'source': 'fd --type d -H '.fdIgnoreDirectories,
-  \   'dir': expand('$HOME'),
-  \   'sink': function('SinkSwitchProjects')
-  \ }))
-
 command! Directories call fzf#run(fzf#wrap({
   \   'source': 'fd --type d -H '.fdIgnoreDirectories,
   \   'sink': function('SinkSwitchDirectories')
@@ -213,7 +198,6 @@ command! -bang -nargs=* Rg
 
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>D :Projects<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
@@ -222,14 +206,13 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 
 " Extends feature vim
 Plug 'mattn/emmet-vim'
-Plug 'kylechui/nvim-surround'
 
 "--- Other plugins ---
-Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_auto_header = 1
@@ -254,9 +237,22 @@ let g:vimwiki_list = [{
   \   'links_space_char': '_',
   \ }]
 
-Plug 'jpalardy/vim-slime'
-let g:slime_target = 'tmux'
-let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
+Plug 'christoomey/vim-tmux-runner'
+let g:VtrPercentage = 30
+let g:VtrStripLeadingWhitespace = 0
+let g:VtrClearEmptyLines = 0
+let g:VtrAppendNewline = 1
+nnoremap <leader>ta :VtrAttachToPane<cr>
+nnoremap <leader>tA :VtrUnsetRunnerPane<cr>
+nnoremap <leader>ts :VtrSendCommandToRunner<cr>
+nnoremap <leader>tl :VtrSendLinesToRunner<cr>
+vnoremap <leader>tl :VtrSendLinesToRunner<cr>
+nnoremap <leader>to :VtrOpenRunner<cr>
+nnoremap <leader>tk :VtrKillRunner<cr>
+nnoremap <leader>tz :VtrFocusRunner<cr>
+nnoremap <leader>tc :VtrClearRunner<cr>
+nnoremap <leader>tf :VtrFlushCommand<cr>
+nnoremap <leader>td :VtrSendCtrlD<cr>
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
@@ -355,20 +351,14 @@ augroup end
 
 augroup RunFile
   autocmd!
-  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
-  autocmd FileType python vnoremap <leader>vf :w !python<cr>
+  autocmd FileType javascript vnoremap <leader>rr :w !node<cr>
+  autocmd FileType python vnoremap <leader>rr :w !python<cr>
 augroup end
 
 augroup ShowExtraWhitespace
   autocmd!
   autocmd BufRead,InsertLeave *.* match ExtraWhitespace /\s\+$/
   autocmd InsertEnter *.* match ExtraWhitespace /\s\+\%#\@<!$/
-augroup end
-
-augroup RunFile
-  autocmd!
-  autocmd FileType javascript vnoremap <leader>vf :w !node<cr>
-  autocmd FileType python vnoremap <leader>vf :w !python<cr>
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -388,10 +378,6 @@ augroup LoadFile
   autocmd BufWritePre * call Mkdir()
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif
-  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
-
-  autocmd BufWritePre *.* lua vim.diagnostic.enable()
-  autocmd InsertEnter *.* lua vim.diagnostic.disable()
 
   autocmd FileType oil,git setlocal nonumber
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
@@ -408,5 +394,4 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
-  require 'nvim-surround'.setup()
 EOF

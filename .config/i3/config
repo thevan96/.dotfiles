@@ -11,8 +11,9 @@ floating_modifier $mod
 # Kill focused window
 bindsym $mod+Shift+q kill
 
-# Window
+# Window, layout
 for_window [class="^.*"] border pixel 1
+workspace_layout tabbed
 
 # change focus
 bindsym $mod+h focus left
@@ -185,6 +186,6 @@ bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 
 # Statusline
 bar {
-  position bottom
+  position top
   status_command i3status
 }

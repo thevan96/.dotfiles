@@ -56,6 +56,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     vim-gtk \
     screenkey \
     simplescreenrecorder \
+    msttcorefonts \
     timeshift \
     trash-cli \
     rofi \
