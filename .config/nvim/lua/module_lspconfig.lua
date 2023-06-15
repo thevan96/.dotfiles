@@ -64,10 +64,10 @@ nvim_lsp['lua_ls'].setup({
 })
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>k', vim.diagnostic.goto_prev)
-vim.keymap.set('n', '<leader>j', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>z', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>g', vim.diagnostic.setqflist)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<leader>L', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),

@@ -11,7 +11,7 @@ set incsearch
 set ignorecase
 
 set list
-set listchars=tab:→\ ,lead:.,multispace:.,trail:\ |
+set listchars=tab:→\ ,lead:.,trail:\ |
 
 set number
 set relativenumber
@@ -46,6 +46,8 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
+inoremap <C-n> <nop>
+inoremap <C-p> <nop>
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
 nnoremap <Left> <nop>
@@ -64,13 +66,17 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gp `[v`]
-nnoremap <leader>y :%y<cr>
-nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <C-l> :noh<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+
+" Better relative number
+nnoremap <silent><leader>n m':setlocal relativenumber!<cr>
+vnoremap <silent><leader>n <esc>m':setlocal relativenumber!<cr>V
+xnoremap <silent><leader>n <esc>m':setlocal relativenumber!<cr>gv
+
+" Better search and replace all
 nnoremap cn *``cgn
 nnoremap cN #``cgN
-nnoremap Qc i<C-r>=eval(substitute(@", '\n', '+', 'g'))<esc>
-nnoremap Qr 0yt=A<C-r>=<C-r>"<CR><esc>
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -85,6 +91,21 @@ command! Diary VimwikiDiaryIndex
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
+" Navigate quickfix/loclist
+nnoremap <leader>qq :copen<cr>
+nnoremap <leader>qx :cclose<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]q :cnext<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap ]Q :clast<cr>
+
+nnoremap <leader>ll :lopen<cr>
+nnoremap <leader>lx :lclose<cr>
+nnoremap [a :lprev<cr>
+nnoremap ]a :lnext<cr>
+nnoremap [A :lfirst<cr>
+nnoremap ]A :llast<cr>
+
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
@@ -94,20 +115,14 @@ nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
 
-" Navigate quickfix/loclist
-nnoremap go :copen<cr>
-nnoremap gx :cclose<cr>
-nnoremap gh :cprev<cr>
-nnoremap gl :cnext<cr>
-nnoremap gH :cfirst<cr>
-nnoremap gL :clast<cr>
-
-nnoremap zo :lopen<cr>
-nnoremap zx :lclose<cr>
-nnoremap zh :lprev<cr>
-nnoremap zl :lnext<cr>
-nnoremap zH :lfirst<cr>
-nnoremap zL :llast<cr>
+" Fix conflict git
+if &diff
+  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
+  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
+  nnoremap <leader><cr> :diffupdate<cr>
+  vnoremap <leader>= :GremoveMarkers<cr><gv>
+endif
 
 " Open in tab terminal
 nnoremap <leader>" :silent
@@ -207,6 +222,15 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 
+Plug 'takac/vim-hardtime'
+nnoremap <leader>H :HardTimeToggle<cr>
+let g:hardtime_default_on = 1
+let g:hardtime_maxcount = 1
+let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt']
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:hardtime_motion_with_count_resets = 1
+
 "--- Other plugins ---
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
@@ -285,35 +309,15 @@ hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                    ctermfg=238      ctermbg=none     cterm=none
-hi LineNrAbove               ctermfg=238      ctermbg=none     cterm=none
-hi LineNrBelow               ctermfg=238      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=238      ctermbg=none     cterm=none
+hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
+hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
+hi CursorLine                ctermfg=240      ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
 
 hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
-
-hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticHint            ctermfg=34       ctermbg=none     cterm=none
-
-hi DiagnosticSignError       ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
-
-hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
-
-hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
 hi ExtraWhitespace           ctermfg=196      ctermbg=196
 
 "--- Function utils ---
@@ -376,6 +380,7 @@ augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
   autocmd BufWritePre * call Mkdir()
+  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif
 

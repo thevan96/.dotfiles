@@ -61,14 +61,9 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap Y y$
 nnoremap gp `[v`]
-nnoremap <leader>y :%y<cr>
-nnoremap <leader>n :set relativenumber!<cr>
-nnoremap <leader>N :set number!<cr>
-nnoremap <leader>x :bd!<cr>
-nnoremap <leader>= :Format<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>p :call Trim()<cr>
-nnoremap <silent><C-l> :noh<cr>:redraw!<cr>
+nnoremap <C-l> :noh<cr>:redraw!<cr>
 nnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Buffer only
@@ -86,6 +81,21 @@ command! DateTime let @+ = strftime("%d-%m-%Y %H:%M:%S")
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
+" Navigate quickfix/loclist
+nnoremap <leader>qq :copen<cr>
+nnoremap <leader>qx :cclose<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]q :cnext<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap ]Q :clast<cr>
+
+nnoremap <leader>ll :lopen<cr>
+nnoremap <leader>lx :lclose<cr>
+nnoremap [a :lprev<cr>
+nnoremap ]a :lnext<cr>
+nnoremap [A :lfirst<cr>
+nnoremap ]A :llast<cr>
+
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
 vnoremap <leader>y "+y
@@ -94,21 +104,6 @@ nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>p o<esc>"+p
 nnoremap <leader>P O<esc>"+p
 vnoremap <leader>p "+p
-
-" Navigate quickfix/loclist
-nnoremap go :copen<cr>
-nnoremap gx :cclose<cr>
-nnoremap gh :cprev<cr>
-nnoremap gl :cnext<cr>
-nnoremap gH :cfirst<cr>
-nnoremap gL :clast<cr>
-
-nnoremap zo :lopen<cr>
-nnoremap zx :lclose<cr>
-nnoremap zh :lprev<cr>
-nnoremap zl :lnext<cr>
-nnoremap zH :lfirst<cr>
-nnoremap zL :llast<cr>
 
 " Fix conflict git
 if &diff
@@ -124,8 +119,6 @@ nnoremap <leader>" :silent
       \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
 nnoremap <leader>% :silent
       \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>c :silent
-      \ exe(':!tmux new-window -c '. expand('%:p:h').' -a')<cr>
 
 "--- Customize theme ---"
 syntax off
@@ -176,45 +169,6 @@ function! GRemoveMarkers() range
   execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
-
-function! Format()
-  if !IsInCurrentProject()
-    return
-  endif
-
-  if filereadable('format_linter.sh')
-    echo 'Run file format_linter.sh instead!'
-    return
-  endif
-
-  if filereadable('format.sh')
-    echo 'Run file format.sh instead!'
-    return
-  endif
-
-  if filereadable('linter.sh')
-    echo 'Run file linter.sh instead!'
-    return
-  endif
-
-  let extension = expand('%:e')
-  call Trim()
-  if extension == 'go'
-    !gofmt -w %
-    !golines -m 80 -w %
-  elseif extension == 'rs'
-    !rufmt %
-  elseif extension == 'lua'
-    !stylua %
-  elseif extension == 'sql'
-    !sqlfluff fix --dialect postgres -f %
-  elseif extension == 'md'
-    !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
-    !prettier -w %
-  endif
-endfunction
-command! Format :call Format()
 
 function! Trim()
   let pwd = getcwd()

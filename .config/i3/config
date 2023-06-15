@@ -8,12 +8,11 @@ font pango:monospace 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Hide window title bar
+for_window [class="^.*"] border pixel 1
+
 # Kill focused window
 bindsym $mod+Shift+q kill
-
-# Window, layout
-for_window [class="^.*"] border pixel 1
-workspace_layout tabbed
 
 # change focus
 bindsym $mod+h focus left
@@ -112,11 +111,11 @@ for_window [class="Gnome-pomodoro"] floating enable
 for_window [class="Eog"] floating enable
 
 # reload the configuration file
-# bindsym $mod+Shift+c reload
+bindsym $mod+Shift+c restart
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 # bindsym $mod+Shift+r restart
-bindsym $mod+Shift+BackSpace restart
+# bindsym $mod+Shift+BackSpace restart
 
 # Set shut down, restart and locking features
 set $mode_system (l)ock, (e)xit (s)uspend, (r)eboot, (Shift+s)hutdown
