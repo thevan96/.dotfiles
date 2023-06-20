@@ -82,19 +82,19 @@ nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 " Navigate quickfix/loclist
-nnoremap <leader>qq :copen<cr>
-nnoremap <leader>qx :cclose<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]q :cnext<cr>
-nnoremap [Q :cfirst<cr>
-nnoremap ]Q :clast<cr>
+nnoremap go :copen<cr>
+nnoremap gx :cclose<cr>
+nnoremap gh :cprev<cr>
+nnoremap gl :cnext<cr>
+nnoremap gH :cfirst<cr>
+nnoremap gL :clast<cr>
 
-nnoremap <leader>ll :lopen<cr>
-nnoremap <leader>lx :lclose<cr>
-nnoremap [a :lprev<cr>
-nnoremap ]a :lnext<cr>
-nnoremap [A :lfirst<cr>
-nnoremap ]A :llast<cr>
+nnoremap zo :lopen<cr>
+nnoremap zx :lclose<cr>
+nnoremap zh :lprev<cr>
+nnoremap zl :lnext<cr>
+nnoremap zH :lfirst<cr>
+nnoremap zL :llast<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy

@@ -3,7 +3,7 @@ require('vfiler/config').setup({
     auto_cd = true,
     auto_resize = true,
     keep = true,
-    layout = 'right',
+    layout = 'left',
     name = 'explorer',
     width = 40,
     columns = 'indent,icon,name',

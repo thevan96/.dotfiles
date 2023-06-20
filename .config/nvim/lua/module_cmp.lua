@@ -11,8 +11,7 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    --- ['<C-Space>'] = cmp.mapping.complete(),
-    --- ['<C-x><C-o>'] = cmp.mapping.complete(),
+    ['<C-x><C-o>'] = cmp.mapping.complete(),
   }),
   snippet = {
     expand = function(args)
