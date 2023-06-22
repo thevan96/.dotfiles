@@ -225,7 +225,7 @@ Plug 'mattn/emmet-vim'
 Plug 'takac/vim-hardtime'
 nnoremap <leader>H :HardTimeToggle<cr>
 let g:hardtime_default_on = 1
-let g:hardtime_maxcount = 10
+let g:hardtime_maxcount = 9
 let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt']
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
@@ -262,7 +262,7 @@ let g:vimwiki_list = [{
   \ }]
 
 Plug 'christoomey/vim-tmux-runner'
-let g:VtrPercentage = 30
+let g:VtrPercentage = 50
 let g:VtrStripLeadingWhitespace = 0
 let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
@@ -270,7 +270,7 @@ nnoremap <leader>ta :VtrAttachToPane<cr>
 nnoremap <leader>tA :VtrUnsetRunnerPane<cr>
 nnoremap <leader>ts :VtrSendCommandToRunner<cr>
 nnoremap <leader>tl :VtrSendLinesToRunner<cr>
-vnoremap <leader>tl :VtrSendLinesToRunner<cr>
+vnoremap <leader>tl :VtrSendLinesToRunner<cr>gv
 nnoremap <leader>to :VtrOpenRunner<cr>
 nnoremap <leader>tk :VtrKillRunner<cr>
 nnoremap <leader>tz :VtrFocusRunner<cr>
@@ -376,10 +376,15 @@ augroup vimwikigroup
   autocmd BufRead,BufNewFile diary.md VimwikiDiaryGenerateLinks
 augroup end
 
+augroup DisableNoiseLSP
+  autocmd InsertEnter *.* lua vim.diagnostic.disable()
+  autocmd BufWritePost *.* lua vim.diagnostic.enable()
+augroup end
+
 augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
-  autocmd BufWritePre * call Mkdir()
+  autocmd BufWritePost * call Mkdir()
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif

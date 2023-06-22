@@ -20,10 +20,3 @@ require('oil').setup({
     show_hidden = true,
   },
 })
-
-vim.keymap.set(
-  'n',
-  '<leader><BS>',
-  require('oil').open,
-  { desc = 'Open parent directory' }
-)

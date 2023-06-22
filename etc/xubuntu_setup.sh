@@ -2,6 +2,8 @@
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
+  sudo apt remove xfce4-screensaver
+
   # Update/upgrade/install
   sudo apt -y update && sudo apt -y upgrade && sudo apt install \
     gcc \
@@ -49,6 +51,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     timeshift \
     trash-cli \
     rofi \
+    light-locker \
     transmission
 fi
 
@@ -56,6 +59,20 @@ fi
 echo ""
 echo "Switch to zsh ..."
 chsh -s $(which zsh)
+
+# Create folder
+folders=(
+  "${HOME}/Personal"
+  "${HOME}/OSS"
+  "${HOME}/Company"
+  "${HOME}/.config/autostart",
+)
+
+for el in ${folders[@]}; do
+  if [ ! -d $el ]; then
+    mkdir $el
+  fi
+done
 
 # Make alias
 if [ ! -f "fdfind" ]; then

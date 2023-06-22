@@ -60,6 +60,20 @@ echo ""
 echo "Switch to zsh ..."
 chsh -s $(which zsh)
 
+# Create folder
+folders=(
+  "${HOME}/Personal"
+  "${HOME}/OSS"
+  "${HOME}/Company"
+  "${HOME}/.config/autostart",
+)
+
+for el in ${folders[@]}; do
+  if [ ! -d $el ]; then
+    mkdir $el
+  fi
+done
+
 # Make alias
 if [ ! -f "nvim" ]; then
   sudo ln -sf $(which nvim) /usr/local/bin/vi
