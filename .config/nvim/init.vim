@@ -13,8 +13,8 @@ set ignorecase
 set list
 set listchars=tab:→\ ,lead:.,trail:\ |
 
-set number
-set relativenumber
+set nonumber
+set norelativenumber
 
 set ruler
 set laststatus=2
@@ -70,9 +70,12 @@ nnoremap <C-l> :noh<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Better relative number
-nnoremap <silent><leader>n m':setlocal relativenumber!<cr>
-vnoremap <silent><leader>n <esc>m':setlocal relativenumber!<cr>V
-xnoremap <silent><leader>n <esc>m':setlocal relativenumber!<cr>gv
+nnoremap <silent><leader>n m':set relativenumber!<cr>
+vnoremap <silent><leader>n <esc>m':set relativenumber!<cr>V
+xnoremap <silent><leader>n <esc>m':set relativenumber!<cr>gv
+nnoremap <silent><leader>N :set invnumber<cr>
+vnoremap <silent><leader>N <esc>:set invnumber<cr>V
+xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
 
 " Better search and replace all
 nnoremap cn *``cgn
@@ -222,44 +225,12 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 " Extends feature vim
 Plug 'mattn/emmet-vim'
 
-Plug 'takac/vim-hardtime'
-nnoremap <leader>H :HardTimeToggle<cr>
-let g:hardtime_default_on = 1
-let g:hardtime_maxcount = 9
-let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt']
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_allow_different_key = 1
-let g:hardtime_motion_with_count_resets = 1
-
 "--- Other plugins ---
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
-
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_auto_header = 1
-let g:vimwiki_markdown_link_ext = 1
-let g:vimwiki_key_mappings =
-  \ {
-  \   'all_maps': 1,
-  \   'global': 1,
-  \   'headers': 1,
-  \   'text_objs': 1,
-  \   'table_format': 1,
-  \   'table_mappings': 1,
-  \   'lists': 1,
-  \   'links': 1,
-  \   'html': 0,
-  \   'mouse': 0,
-  \ }
-
-let g:vimwiki_list = [{
-  \   'path': '~/Personal/notes/',
-  \   'syntax': 'markdown', 'ext': '.md',
-  \   'links_space_char': '_',
-  \ }]
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -385,11 +356,10 @@ augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
   autocmd BufWritePost * call Mkdir()
-  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
+  autocmd CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif
 
-  autocmd FileType oil,git setlocal nonumber
   autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
   autocmd FileType markdown nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 augroup end
