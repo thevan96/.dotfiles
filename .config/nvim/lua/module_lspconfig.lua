@@ -14,12 +14,6 @@ vim.diagnostic.config({
   },
 })
 
-local on_capabilities = require('cmp_nvim_lsp').default_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
-on_capabilities.textDocument.completion.completionItem.snippetSupport = true
-on_capabilities.offsetEncoding = { 'utf-16' }
-
 local on_handlers = {
   ['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,
@@ -31,12 +25,15 @@ local on_handlers = {
   ),
 }
 
+--Enable (broadcasting) snippet capability for completion
+local on_capabilities = vim.lsp.protocol.make_client_capabilities()
+on_capabilities.textDocument.completion.completionItem.snippetSupport = true
+on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
+on_capabilities.offsetEncoding = { 'utf-16' }
+
 local servers = {
-  'html',
-  'cssls',
   'clangd',
   'cssmodules_ls',
-  'jsonls',
   'pyright',
   'texlab',
   'tsserver',
@@ -46,10 +43,33 @@ local servers = {
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
+    handlers = on_handlers,
+  })
+end
+
+for _, lsp in ipairs({ 'html', 'jsonls' }) do
+  nvim_lsp[lsp].setup({
     capabilities = on_capabilities,
     handlers = on_handlers,
   })
 end
+
+nvim_lsp['cssls'].setup({
+  capabilities = on_capabilities,
+  handlers = on_handlers,
+  settings = {
+    css = {
+      completion = {
+        completePropertyWithSemicolon = false,
+      },
+    },
+    scss = {
+      completion = {
+        completePropertyWithSemicolon = false,
+      },
+    },
+  },
+})
 
 nvim_lsp['lua_ls'].setup({
   capabilities = on_capabilities,
@@ -72,6 +92,9 @@ vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
     local opts = { buffer = args.buf }
     local client = vim.lsp.get_client_by_id(args.data.client_id)
 

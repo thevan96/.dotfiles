@@ -12,6 +12,7 @@ set ignorecase
 
 set list
 set listchars=tab:→\ ,lead:.,trail:\ |
+set fillchars=stl:_,stlnc:_
 
 set nonumber
 set norelativenumber
@@ -46,8 +47,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-inoremap <C-n> <nop>
-inoremap <C-p> <nop>
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
 nnoremap <Left> <nop>
@@ -67,6 +66,8 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
+nnoremap <leader>X :bd<cr>
+nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Better relative number
@@ -141,10 +142,6 @@ call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
-
-" Autocomplete
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -274,6 +271,9 @@ hi clear Error
 hi clear SignColumn
 hi clear VertSplit
 
+hi StatusLine                ctermfg=none     ctermbg=none     cterm=bold
+hi StatusLineNC              ctermfg=none     ctermbg=none     cterm=none
+
 hi NonText                   ctermfg=none     ctermbg=none     cterm=none
 hi Normal                    ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
@@ -369,7 +369,6 @@ lua << EOF
   require 'module_lspconfig'
   require 'module_vfiler'
   require 'module_mason'
-  require 'module_cmp'
   require 'module_oil'
 
   -- Without config
