@@ -4,7 +4,7 @@
 
 [core]
   editor = nvim
-  excludesfile = /home/thevan96/.gitignore_global
+  excludesfile = $HOME/.gitignore_global
 
 [init]
   defaultBranch = main
@@ -19,4 +19,4 @@
   status = always
 
 [alias]
-  lg = log --all --decorate --oneline --graph --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  prettier = log --all --decorate --oneline --graph --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

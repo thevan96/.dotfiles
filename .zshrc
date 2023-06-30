@@ -11,6 +11,9 @@ export HISTFILE=~/.zsh_history
 
 # Key bindings
 bindkey -v # vi-mode / bindkey -e # emacs
+bindkey '^P' up-history
+bindkey '^N' down-history
+
 zle -N edit-command-line
 autoload -U edit-command-line
 bindkey '\C-x\C-e' edit-command-line

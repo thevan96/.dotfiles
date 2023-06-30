@@ -120,10 +120,9 @@ vnoremap <leader>p "+p
 
 " Fix conflict git
 if &diff
-  nnoremap <leader>p2 :diffput //2<cr>:diffupdate<cr>
-  nnoremap <leader>p3 :diffput //3<cr>:diffupdate<cr>
-  nnoremap <leader>g2 :diffget //2<cr>:diffupdate<cr>
-  nnoremap <leader>g3 :diffget //3<cr>:diffupdate<cr>
+  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
+  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
   nnoremap <leader><cr> :diffupdate<cr>
   vnoremap <leader>= :GremoveMarkers<cr><gv>
 endif
@@ -224,7 +223,6 @@ Plug 'mattn/emmet-vim'
 
 "--- Other plugins ---
 Plug 'rlue/vim-barbaric'
-Plug 'tpope/vim-fugitive'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -253,9 +251,6 @@ nnoremap <leader>td :VtrSendCtrlD<cr>
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
 nnoremap <leader>mp :MarkdownPreviewToggle<cr>
-
-Plug 'img-paste-devs/img-paste.vim'
-let g:mdip_imgdir = 'images'
 
 call plug#end()
 
@@ -360,9 +355,6 @@ augroup LoadFile
   autocmd CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif
-
-  autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
-  autocmd FileType markdown nmap <buffer><silent> <leader>I :call mdip#MarkdownClipboardImage()<cr>
 augroup end
 
 "--- Load lua---
