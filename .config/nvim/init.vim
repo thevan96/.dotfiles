@@ -12,7 +12,6 @@ set ignorecase
 
 set list
 set listchars=tab:→\ ,lead:.,trail:\ |
-set fillchars=stl:_,stlnc:_
 
 set nonumber
 set norelativenumber
@@ -121,9 +120,10 @@ vnoremap <leader>p "+p
 
 " Fix conflict git
 if &diff
-  nnoremap <leader>1 :diffget LOCAL<cr>:diffupdate<cr>
-  nnoremap <leader>2 :diffget BASE<cr>:diffupdate<cr>
-  nnoremap <leader>3 :diffget REMOTE<cr>:diffupdate<cr>
+  nnoremap <leader>p2 :diffput //2<cr>:diffupdate<cr>
+  nnoremap <leader>p3 :diffput //3<cr>:diffupdate<cr>
+  nnoremap <leader>g2 :diffget //2<cr>:diffupdate<cr>
+  nnoremap <leader>g3 :diffget //3<cr>:diffupdate<cr>
   nnoremap <leader><cr> :diffupdate<cr>
   vnoremap <leader>= :GremoveMarkers<cr><gv>
 endif
@@ -224,10 +224,14 @@ Plug 'mattn/emmet-vim'
 
 "--- Other plugins ---
 Plug 'rlue/vim-barbaric'
+Plug 'tpope/vim-fugitive'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
+Plug 'dhruvasagar/vim-table-mode'
+let g:table_mode_corner='|'
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -270,9 +274,6 @@ filetype indent off
 hi clear Error
 hi clear SignColumn
 hi clear VertSplit
-
-hi StatusLine                ctermfg=none     ctermbg=none     cterm=bold
-hi StatusLineNC              ctermfg=none     ctermbg=none     cterm=none
 
 hi NonText                   ctermfg=none     ctermbg=none     cterm=none
 hi Normal                    ctermfg=none     ctermbg=none     cterm=none
