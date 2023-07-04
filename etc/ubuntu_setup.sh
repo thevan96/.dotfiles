@@ -44,7 +44,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     mysql-client \
     stow \
     rofi \
-    fonts-noto-color-emoji \
     vlc \
     blender \
     gimp \
@@ -64,8 +63,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-shell-extensions\
     gnome-clocks \
     gnome-tweaks \
-    chrome-gnome-shell \
-    gnome-shell-pomodoro
+    chrome-gnome-shell
 fi
 
 # Change shell

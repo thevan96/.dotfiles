@@ -8,9 +8,6 @@ font pango:monospace 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# Hide window title bar
-for_window [class="^.*"] border pixel 1
-
 # Kill focused window
 bindsym $mod+Shift+q kill
 
@@ -33,6 +30,7 @@ bindsym $mod+v split h
 bindsym $mod+y split v
 
 # change container layout (stacked, tabbed, toggle split)
+workspace_layout tabbed
 bindsym $mod+w layout tabbed
 bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
@@ -95,14 +93,11 @@ bindsym $mod+Left workspace prev
 
 # Assign app
 for_window [class="Alacritty"] move to workspace number $ws1
+for_window [class="firefox"] move to workspace number $ws2
 for_window [class="Google-chrome"] move to workspace number $ws2
 for_window [class="Brave-browser"] move to workspace number $ws2
 for_window [class="Evince"] move to workspace number $ws3
 for_window [class="Nautilus"] move to workspace number $ws4
-
-for_window [class="Google-chrome"] layout tabbed
-for_window [class="firefox"] layout tabbed
-for_window [class="Brave-browser"] layout tabbed
 
 # Force floating window
 for_window [class="Pavucontrol"] floating enable
@@ -112,10 +107,6 @@ for_window [class="Eog"] floating enable
 
 # reload the configuration file
 bindsym $mod+Shift+c restart
-
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-# bindsym $mod+Shift+r restart
-# bindsym $mod+Shift+BackSpace restart
 
 # Set shut down, restart and locking features
 set $mode_system (l)ock, (e)xit (s)uspend, (r)eboot, (Shift+s)hutdown
@@ -150,11 +141,11 @@ bindsym $mod+Control+j exec --no-startup-id light -U 1
 bindsym $mod+Control+k exec --no-startup-id light -A 1
 
 # Run startup
-exec --no-startup-id ~/.config/i3/i3_startup.sh
+exec --no-startup-id ~/.config/i3/i3_startup
 
 # Utils
 bindsym Print exec --no-startup-id flameshot gui
-bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/fast_open.sh
+bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/fast_open
 bindsym $mod+Shift+w exec --no-startup-id rofi -show window -show-icons
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 bindsym $mod+Shift+p exec --no-startup-id gpick -p
@@ -185,6 +176,6 @@ bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 
 # Statusline
 bar {
-  position top
+  position bottom
   status_command i3status
 }

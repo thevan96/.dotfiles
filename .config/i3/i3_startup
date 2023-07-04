@@ -10,10 +10,9 @@ xrandr --output eDP-1 --mode 1366x768 &
 
 xinput set-prop "Synaptics TM3096-001" "libinput Tapping Enabled" 1 &
 
-nm-applet &
-pasystray &
 picom &
+nm-applet &
 ibus-daemon -drxR &
 
 # Dropbox
-~/.local/bin/run_dropbox.sh &
+~/.local/bin/run_dropbox &

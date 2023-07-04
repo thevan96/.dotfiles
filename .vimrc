@@ -20,7 +20,7 @@ set norelativenumber
 
 set ruler
 set laststatus=2
-set signcolumn=yes
+set signcolumn=no
 
 set textwidth=80
 set colorcolumn=+1

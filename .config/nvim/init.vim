@@ -18,7 +18,7 @@ set norelativenumber
 
 set ruler
 set laststatus=2
-set signcolumn=yes
+set signcolumn=no
 
 set textwidth=80
 set colorcolumn=+1
@@ -245,7 +245,7 @@ nnoremap <leader>to :VtrOpenRunner<cr>
 nnoremap <leader>tk :VtrKillRunner<cr>
 nnoremap <leader>tz :VtrFocusRunner<cr>
 nnoremap <leader>tc :VtrClearRunner<cr>
-nnoremap <leader>tf :VtrFlushCommand<cr>
+nnoremap <leader>tC :VtrFlushCommand<cr>
 nnoremap <leader>td :VtrSendCtrlD<cr>
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
