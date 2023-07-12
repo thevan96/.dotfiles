@@ -66,6 +66,7 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
 nnoremap <leader>X :bd<cr>
+inoremap <C-Space> <C-x><C-o>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
