@@ -66,7 +66,6 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
 nnoremap <leader>X :bd<cr>
-inoremap <C-Space> <C-x><C-o>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
@@ -143,6 +142,10 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
+" Autocomplete
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+
 " Snippets
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger='<C-j>'
@@ -191,24 +194,14 @@ let fdIgnoreDirectories = '
 
 let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.fdIgnoreDirectories
 
-function! SinkSwitchProjects(line)
-  %bd | cd `=a:line`
-endfunction
-
-function! SinkSwitchDirectories(line)
-  e `=a:line`
-endfunction
-
 command! Directories call fzf#run(fzf#wrap({
   \   'source': 'fd --type d -H '.fdIgnoreDirectories,
-  \   'sink': function('SinkSwitchDirectories')
   \ }))
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --hidden --column --line-number --no-heading --color=always
-  \   --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
-  \   1, fzf#vim#with_preview(), <bang>0
+command! -bang -nargs=* Rg call fzf#vim#grep(
+  \  'rg --hidden --column --line-number --no-heading --color=always
+  \  --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
+  \  1, fzf#vim#with_preview(), <bang>0
   \ )
 
 nnoremap <leader>i :Files<cr>
@@ -237,17 +230,24 @@ let g:VtrPercentage = 50
 let g:VtrStripLeadingWhitespace = 0
 let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
-nnoremap <leader>ta :VtrAttachToPane<cr>
-nnoremap <leader>tA :VtrUnsetRunnerPane<cr>
-nnoremap <leader>ts :VtrSendCommandToRunner<cr>
-nnoremap <leader>tl :VtrSendLinesToRunner<cr>
-vnoremap <leader>tl :VtrSendLinesToRunner<cr>gv
-nnoremap <leader>to :VtrOpenRunner<cr>
-nnoremap <leader>tk :VtrKillRunner<cr>
-nnoremap <leader>tz :VtrFocusRunner<cr>
-nnoremap <leader>tc :VtrClearRunner<cr>
-nnoremap <leader>tC :VtrFlushCommand<cr>
-nnoremap <leader>td :VtrSendCtrlD<cr>
+nnoremap <leader>ra :VtrAttachToPane<cr>
+nnoremap <leader>rA :VtrUnsetRunnerPane<cr>
+nnoremap <leader>rs :VtrSendCommandToRunner<cr>
+nnoremap <leader>rl :VtrSendLinesToRunner<cr>
+vnoremap <leader>rl :VtrSendLinesToRunner<cr>gv
+nnoremap <leader>ro :VtrOpenRunner<cr>
+nnoremap <leader>rk :VtrKillRunner<cr>
+nnoremap <leader>rz :VtrFocusRunner<cr>
+nnoremap <leader>rc :VtrClearRunner<cr>
+nnoremap <leader>rC :VtrFlushCommand<cr>
+nnoremap <leader>rd :VtrSendCtrlD<cr>
+
+Plug 'vim-test/vim-test'
+nnoremap <leader>tn :TestNearest<cr>
+nnoremap <leader>tf :TestFile<cr>
+nnoremap <leader>ts :TestSuite<cr>
+nnoremap <leader>tl :TestLast<cr>
+nnoremap <leader>tv :TestVisit<cr>
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
@@ -364,6 +364,7 @@ lua << EOF
   require 'module_vfiler'
   require 'module_mason'
   require 'module_oil'
+  require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()

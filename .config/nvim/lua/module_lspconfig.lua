@@ -26,7 +26,9 @@ local on_handlers = {
 }
 
 --Enable (broadcasting) snippet capability for completion
-local on_capabilities = vim.lsp.protocol.make_client_capabilities()
+local on_capabilities = require('cmp_nvim_lsp').default_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
 on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
 on_capabilities.offsetEncoding = { 'utf-16' }
@@ -93,7 +95,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
     -- Enable completion triggered by <c-x><c-o>
-    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    -- vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     local opts = { buffer = args.buf }
     local client = vim.lsp.get_client_by_id(args.data.client_id)
