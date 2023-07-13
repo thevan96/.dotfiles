@@ -151,6 +151,10 @@ bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 bindsym $mod+Shift+p exec --no-startup-id gpick -p
 bindsym $mod+Shift+x exec --no-startup-id i3lock-fancy
 
+# Ibus switch engine
+bindsym $mod+Shift+space exec --no-startup-id ibus engine Bamboo
+bindsym $mod+space exec --no-startup-id ibus engine xkb:us::eng
+
 # Scatchpad
 bindsym $mod+n scratchpad show
 bindsym $mod+Shift+n move scratchpad
