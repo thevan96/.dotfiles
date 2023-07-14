@@ -69,6 +69,10 @@ nnoremap <leader>X :bd<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
+" Virtual edit
+nnoremap <leader>va :set virtualedit=all nolist<cr>
+nnoremap <leader>vn :set virtualedit=none list<cr>
+
 " Better relative number
 nnoremap <silent><leader>n m':set relativenumber!<cr>
 vnoremap <silent><leader>n <esc>m':set relativenumber!<cr>V
@@ -216,6 +220,7 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'mattn/emmet-vim'
 
 "--- Other plugins ---
+Plug 'gyim/vim-boxdraw'
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
