@@ -15,7 +15,7 @@ set list
 set listchars=tab:>\ |
 set fillchars=vert:\|
 
-set number
+set nonumber
 set norelativenumber
 
 set ruler
@@ -60,22 +60,25 @@ let mapleader = ' '
 
 " Customizer mapping
 nnoremap Y y$
+xnoremap p pgvy
 nnoremap gp `[v`]
+nnoremap <C-l> :noh<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>p :call Trim()<cr>
-nnoremap <C-l> :noh<cr>:redraw!<cr>
 nnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+
+" Better relative number
+nnoremap <silent><leader>n m':set relativenumber!<cr>
+vnoremap <silent><leader>n <esc>m':set relativenumber!<cr>V
+xnoremap <silent><leader>n <esc>m':set relativenumber!<cr>gv
+nnoremap <silent><leader>N :set invnumber<cr>
+vnoremap <silent><leader>N <esc>:set invnumber<cr>V
+xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
-
-" Utils command
-command! Date let @+ = strftime("%d-%m-%Y")
-command! Time let @+ = strftime("%H:%M:%S")
-command! DateTime let @+ = strftime("%d-%m-%Y %H:%M:%S")
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -179,6 +182,7 @@ function! Trim()
     silent! g/^\_$\n\_^$/d " single blank line
   endif
 endfunction
+command! Trim :call Trim()
 
 augroup ConfigStyleTabOrSpace
   autocmd!

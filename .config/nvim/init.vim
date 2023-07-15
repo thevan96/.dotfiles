@@ -65,8 +65,9 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
-nnoremap <leader>X :bd<cr>
-nnoremap <leader>C :set invspell<cr>
+nnoremap <leader>h yypVr=
+nnoremap <leader>x :bd<cr>
+nnoremap <leader>c :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Virtual edit
