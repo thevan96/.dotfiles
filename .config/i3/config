@@ -11,45 +11,49 @@ floating_modifier $mod
 # Kill focused window
 bindsym $mod+Shift+q kill
 
-# change focus
+# Change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# move focused window
+# Move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# split in horizontal orientation
+# Split in horizontal orientation
 bindsym $mod+v split h
 
-# split in vertical orientation
+# Split in vertical orientation
 bindsym $mod+y split v
 
-# change container layout (stacked, tabbed, toggle split)
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Hide window title bar
+default_border pixel 1
+default_floating_border pixel 1
+
+# Toggle tiling / floating
+bindsym $mod+Shift+f floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+t focus mode_toggle
+
+# Terminal
+bindsym $mod+Return exec alacritty
+
+# Rofi replace dmenu
+bindsym $mod+Shift+d exec --no-startup-id rofi -modi drun -show drun -show-icons
+bindsym $mod+Shift+r exec --no-startup-id rofi -modi run -show run -show-icons
+
+# Change container layout (stacked, tabbed, toggle split)
 workspace_layout tabbed
 bindsym $mod+w layout tabbed
 bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
-
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-
-# toggle tiling / floating
-bindsym $mod+Shift+f floating toggle
-
-# change focus between tiling / floating windows
-bindsym $mod+t focus mode_toggle
-
-# terminal
-bindsym $mod+Return exec alacritty
-
-# rofi replace dmenu
-bindsym $mod+Shift+d exec --no-startup-id rofi -modi drun -show drun -show-icons
-bindsym $mod+Shift+r exec --no-startup-id rofi -modi run -show run -show-icons
 
 # Define workspaces
 set $ws1 "1"
@@ -63,7 +67,7 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# switch to workspace
+# Switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -75,7 +79,7 @@ bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
-# move focused container to workspace
+# Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
@@ -87,7 +91,7 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
-# next/previous workspace
+# Next/previous workspace
 bindsym $mod+Right workspace next
 bindsym $mod+Left workspace prev
 
@@ -105,7 +109,7 @@ for_window [class="Nautilus"] floating enable
 for_window [class="Gnome-pomodoro"] floating enable
 for_window [class="Eog"] floating enable
 
-# reload the configuration file
+# Reload the configuration file
 bindsym $mod+Shift+c restart
 
 # Set shut down, restart and locking features
@@ -122,7 +126,7 @@ mode "$mode_system" {
 }
 bindsym $mod+Shift+e mode "$mode_system"
 
-# resize window
+# Resize window
 mode "resize" {
   bindsym h resize shrink width 10 px or 10 ppt
   bindsym j resize grow height 10 px or 10 ppt
