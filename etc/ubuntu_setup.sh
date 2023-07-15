@@ -66,6 +66,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     chrome-gnome-shell
 fi
 
+echo "Increasing the amount of inotify watchers"
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
 # Change shell
 echo ""
 echo "Switch to zsh ..."

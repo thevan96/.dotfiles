@@ -156,7 +156,7 @@ bindsym $mod+Shift+p exec --no-startup-id gpick -p
 
 # Lock
 bindsym $mod+Shift+x exec --no-startup-id i3lock-fancy
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy& --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy --nofork
 
 # Ibus switch engine
 bindsym $mod+Shift+space exec --no-startup-id ibus engine Bamboo
