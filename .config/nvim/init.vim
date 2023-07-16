@@ -221,7 +221,6 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 Plug 'mattn/emmet-vim'
 
 "--- Other plugins ---
-Plug 'gyim/vim-boxdraw'
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
