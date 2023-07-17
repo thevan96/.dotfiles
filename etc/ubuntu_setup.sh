@@ -94,7 +94,7 @@ if [ ! -f "fdfind" ]; then
 fi
 
 if [ ! -f "nvim" ]; then
-  sudo ln -sf $(which nvim) ~/.local/bin/vi
+  sudo ln -sf $(which nvim) ~/.local/bin/vim
 fi
 
 # Install fzf

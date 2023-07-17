@@ -76,7 +76,7 @@ done
 
 # Make alias
 if [ ! -f "nvim" ]; then
-  sudo ln -sf $(which nvim) /usr/local/bin/vi
+  sudo ln -sf $(which nvim) /usr/local/bin/vim
 fi
 
 # Install fzf

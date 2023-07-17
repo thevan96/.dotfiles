@@ -217,10 +217,8 @@ nnoremap <leader>S :Rg <c-r><c-w><cr>
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-" Extends feature vim
-Plug 'mattn/emmet-vim'
-
 "--- Other plugins ---
+Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
