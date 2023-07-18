@@ -55,6 +55,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     transmission
 fi
 
+
+echo ""
+echo "Increasing the amount of inotify watchers"
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+echo "Seting repeat keyboard"
+xset r rate 200 80
+
 # Change shell
 echo ""
 echo "Switch to zsh ..."

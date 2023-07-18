@@ -63,11 +63,18 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-shell-extensions\
     gnome-clocks \
     gnome-tweaks \
+    dconf-editor \
     chrome-gnome-shell
 fi
 
+echo ""
 echo "Increasing the amount of inotify watchers"
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+# Export
+dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
+echo "Import custom shortcuts"
+cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plugins/media-keys/
 
 # Change shell
 echo ""
@@ -122,7 +129,7 @@ fi
 
 # Gnome setup
 # gsettings reset org.gnome.mutter overlay-key
-gsettings set org.gnome.mutter overlay-key ''
+# gsettings set org.gnome.mutter overlay-key ''
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
