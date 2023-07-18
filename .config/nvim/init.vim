@@ -31,7 +31,7 @@ set wildmode=longest,list
 set completeopt=menu,menuone
 
 " Other
-set mouse=a
+set mouse=
 set showmatch
 set autoindent
 set backspace=0

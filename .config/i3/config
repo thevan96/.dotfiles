@@ -182,6 +182,6 @@ bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 
 # Statusline
 bar {
-  position bottom
+  position top
   status_command i3status
 }
