@@ -67,7 +67,7 @@ nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
 nnoremap <leader>h yypVr=
 nnoremap <leader>x :bd<cr>
-nnoremap <leader>c :set invspell<cr>
+nnoremap <leader>cc :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Virtual edit
@@ -224,6 +224,9 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
+Plug 'wellle/tmux-complete.vim'
+let g:tmuxcomplete#trigger = 'omnifunc'
 
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner='|'
