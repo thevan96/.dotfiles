@@ -92,9 +92,6 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
 
-" Remap diary vimwiki
-command! Diary VimwikiDiaryIndex
-
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -134,7 +131,7 @@ endif
 
 " Open in tab terminal
 nnoremap <leader>" :silent
-  \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
+  \ exe(':!tmux split-window -v -p 50 -c '.expand('%:p:h'))<cr>
 nnoremap <leader>% :silent
   \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
 

@@ -71,8 +71,8 @@ echo ""
 echo "Increasing the amount of inotify watchers"
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-# Export
-dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
+# Import custom shortcuts
+# Note dump:  dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
 echo "Import custom shortcuts"
 cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plugins/media-keys/
 
@@ -135,3 +135,4 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
 gsettings set org.gnome.desktop.interface enable-animations false
 gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 1
