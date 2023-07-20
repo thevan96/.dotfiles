@@ -28,7 +28,7 @@ font:
 colors:
   primary:
     background: "#000000"
-    foreground: "#d0f0c0"
+    foreground: "#ffffff"
 
   cursor:
     text: "#000000"

@@ -50,7 +50,6 @@ let g:loaded_netrwPlugin = 1
 
 " Disable
 let html_no_rendering = 1
-inoremap <tab> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab

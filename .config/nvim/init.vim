@@ -222,6 +222,9 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
+
 Plug 'wellle/tmux-complete.vim'
 let g:tmuxcomplete#trigger = 'omnifunc'
 
@@ -340,11 +343,6 @@ augroup RelativeWorkingDirectory
   autocmd!
   autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
   autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
-augroup end
-
-augroup vimwikigroup
-  autocmd!
-  autocmd BufRead,BufNewFile diary.md VimwikiDiaryGenerateLinks
 augroup end
 
 augroup DisableNoiseLSP
