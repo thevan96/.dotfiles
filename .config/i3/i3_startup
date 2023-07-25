@@ -15,4 +15,4 @@ nm-applet &
 ibus-daemon -drxR &
 
 # Dropbox
-~/.local/bin/run_dropbox &
+~/.dotfiles/etc/run_dropbox.sh &

@@ -146,7 +146,7 @@ exec --no-startup-id ~/.config/i3/i3_startup
 
 # Utils
 bindsym Print exec --no-startup-id flameshot gui
-bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/fast_open
+bindsym $mod+Shift+o exec --no-startup-id fast_open
 bindsym $mod+Shift+w exec --no-startup-id rofi -show window -show-icons
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 bindsym $mod+Shift+p exec --no-startup-id gpick -p

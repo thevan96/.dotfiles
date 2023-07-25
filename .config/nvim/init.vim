@@ -2,58 +2,27 @@
 set nobackup
 set noswapfile
 set encoding=utf-8
-
 set autoread
 set autowrite
-
-set hlsearch
-set incsearch
 set ignorecase
-
 set list
-set listchars=tab:→\ ,lead:.,trail:\ |
-
-set nonumber
-set norelativenumber
-
-set ruler
-set laststatus=2
+set listchars=tab:>-,lead:.,trail:\ |
 set signcolumn=no
-
 set textwidth=80
 set colorcolumn=+1
-
 set cursorline
 set cursorlineopt=number
-
-set wildmenu
 set wildmode=longest,list
 set completeopt=menu,menuone
-
-" Other
 set mouse=
 set showmatch
-set autoindent
 set backspace=0
 set matchtime=0
 set nofoldenable
-set diffopt=vertical
-set scrolloff=0
 
 " Netrw
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-
-" Disable
-let html_no_rendering = 1
-nnoremap <Up> <nop>
-nnoremap <Down> <nop>
-nnoremap <Left> <nop>
-nnoremap <Right> <nop>
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-inoremap <Left> <nop>
-inoremap <Right> <nop>
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -65,9 +34,9 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
-nnoremap <leader>h yypVr=
-nnoremap <leader>x :bd<cr>
-nnoremap <leader>cc :set invspell<cr>
+nnoremap <leader>H yypVr=
+nnoremap <leader>X :bd<cr>
+nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Virtual edit
@@ -81,10 +50,6 @@ xnoremap <silent><leader>n <esc>m':set relativenumber!<cr>gv
 nnoremap <silent><leader>N :set invnumber<cr>
 vnoremap <silent><leader>N <esc>:set invnumber<cr>V
 xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
-
-" Better search and replace all
-nnoremap cn *``cgn
-nnoremap cN #``cgN
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -222,8 +187,8 @@ Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
+Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'tyru/open-browser.vim'
 
 Plug 'wellle/tmux-complete.vim'
 let g:tmuxcomplete#trigger = 'omnifunc'
@@ -248,13 +213,6 @@ nnoremap <leader>rc :VtrClearRunner<cr>
 nnoremap <leader>rC :VtrFlushCommand<cr>
 nnoremap <leader>rd :VtrSendCtrlD<cr>
 
-Plug 'vim-test/vim-test'
-nnoremap <leader>tn :TestNearest<cr>
-nnoremap <leader>tf :TestFile<cr>
-nnoremap <leader>ts :TestSuite<cr>
-nnoremap <leader>tl :TestLast<cr>
-nnoremap <leader>tv :TestVisit<cr>
-
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 let g:mkdp_theme = 'light'
 nnoremap <leader>mp :MarkdownPreviewToggle<cr>
@@ -271,7 +229,7 @@ let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
 "--- Customize theme ---
 syntax off
 set background=dark
-filetype indent off
+filetype plugin indent off
 
 hi clear Error
 hi clear SignColumn
@@ -321,9 +279,9 @@ command! Trim :call Trim()
 
 augroup ConfigStyleTabOrSpace
   autocmd!
-  autocmd BufNewFile,BufRead,BufWrite *.go
+  autocmd BufNewFile,BufRead,BufEnter,BufWrite *.go
     \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
-  autocmd BufNewFile,BufRead,Bufwrite *.md
+  autocmd BufNewFile,BufRead,BufEnter,Bufwrite *.md
     \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
@@ -335,8 +293,8 @@ augroup end
 
 augroup ShowExtraWhitespace
   autocmd!
-  autocmd BufRead,InsertLeave *.* match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter *.* match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup RelativeWorkingDirectory

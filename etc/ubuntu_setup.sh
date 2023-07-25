@@ -40,15 +40,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     wmctrl \
     pgcli \
     mycli \
-    postgresql-client \
-    mysql-client \
     stow \
     rofi \
     vlc \
-    blender \
     gimp \
     gpick \
-    inkscape \
     uget \
     flameshot \
     gparted \
@@ -58,12 +54,13 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     msttcorefonts \
     timeshift \
     trash-cli \
-    rofi \
     transmission \
     gnome-shell-extensions\
     gnome-clocks \
     gnome-tweaks \
     dconf-editor \
+    plantuml \
+    net-tools \
     chrome-gnome-shell
 fi
 
@@ -80,20 +77,6 @@ cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plug
 echo ""
 echo "Switch to zsh ..."
 chsh -s $(which zsh)
-
-# Create folder
-folders=(
-  "${HOME}/Personal"
-  "${HOME}/OSS"
-  "${HOME}/Company"
-  "${HOME}/.config/autostart",
-)
-
-for el in ${folders[@]}; do
-  if [ ! -d $el ]; then
-    mkdir $el
-  fi
-done
 
 # Make alias
 if [ ! -f "fdfind" ]; then

@@ -3,36 +3,24 @@ set nobackup
 set noswapfile
 set nocompatible
 set encoding=utf-8
-
 set autoread
 set autowrite
-
 set hlsearch
 set incsearch
 set ignorecase
-
 set list
-set listchars=tab:>\ |
+set listchars=tab:>-,lead:.,trail:\ |
 set fillchars=vert:\|
-
-set nonumber
-set norelativenumber
-
 set ruler
 set laststatus=2
 set signcolumn=no
-
 set textwidth=80
 set colorcolumn=+1
-
 set cursorline
 set cursorlineopt=number
-
 set wildmenu
 set wildmode=longest,list
 set completeopt=menu,menuone
-
-" Other
 set mouse=a
 set showmatch
 set autoindent
@@ -47,9 +35,6 @@ packadd matchit
 " Netrw
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-
-" Disable
-let html_no_rendering = 1
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab | retab
@@ -125,7 +110,7 @@ nnoremap <leader>% :silent
 "--- Customize theme ---"
 syntax off
 set background=dark
-filetype indent off
+filetype plugin indent off
 
 hi clear Error
 hi clear SignColumn
@@ -185,17 +170,16 @@ command! Trim :call Trim()
 
 augroup ConfigStyleTabOrSpace
   autocmd!
-  autocmd BufNewFile,BufRead,BufWrite *.go
-        \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
-  autocmd BufNewFile,BufRead,Bufwrite *.md
-        \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  autocmd BufNewFile,BufRead,BufEnter,BufWrite *.go
+    \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
+  autocmd BufNewFile,BufRead,BufEnter,Bufwrite *.md
+    \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
 augroup end
 
 augroup ShowExtraWhitespace
   autocmd!
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
   autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-  autocmd TerminalOpen * match none
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -207,10 +191,8 @@ augroup LoadFile
   autocmd!
   autocmd VimResized * wincmd =
   autocmd FocusGained * redraw!
-
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
-
   autocmd BufWritePre * call Mkdir()
   autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
 augroup end

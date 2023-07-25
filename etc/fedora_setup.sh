@@ -7,8 +7,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     util-linux-user \
     pgcli \
     mycli \
-    postgresql \
-    mysql \
     gcc \
     g++ \
     tree \
@@ -36,10 +34,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     alacritty \
     rofi \
     vlc \
-    blender \
     gimp \
     gpick \
-    inkscape \
     uget \
     flameshot \
     gparted \
@@ -52,7 +48,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-extensions-app \
     gnome-clocks \
     gnome-tweaks \
-    gnome-pomodoro
+    dconf-editor \
+    plantuml \
+    chrome-gnome-shell
 fi
 
 echo ""
@@ -60,7 +58,7 @@ echo "Increasing the amount of inotify watchers"
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 # Export
-dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
+# dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
 echo "Import custom shortcuts"
 cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plugins/media-keys/
 
@@ -68,20 +66,6 @@ cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plug
 echo ""
 echo "Switch to zsh ..."
 chsh -s $(which zsh)
-
-# Create folder
-folders=(
-  "${HOME}/Personal"
-  "${HOME}/OSS"
-  "${HOME}/Company"
-  "${HOME}/.config/autostart",
-)
-
-for el in ${folders[@]}; do
-  if [ ! -d $el ]; then
-    mkdir $el
-  fi
-done
 
 # Make alias
 if [ ! -f "nvim" ]; then
@@ -119,3 +103,4 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.interface clock-show-date true
 gsettings set org.gnome.desktop.interface enable-animations false
 gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 1
