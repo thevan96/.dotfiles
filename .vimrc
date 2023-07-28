@@ -9,7 +9,7 @@ set hlsearch
 set incsearch
 set ignorecase
 set list
-set listchars=tab:>-,lead:.,trail:\ |
+set listchars=tab:→\ ,lead:.,trail:\ |
 set fillchars=vert:\|
 set ruler
 set laststatus=2
@@ -48,7 +48,10 @@ xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+nnoremap <leader>h yypVr=
+nnoremap <leader>x :bd<cr>
+nnoremap <leader>C :set invspell<cr>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " Better relative number
 nnoremap <silent><leader>n m':set relativenumber!<cr>

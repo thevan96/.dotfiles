@@ -8,7 +8,6 @@ sudo apt install i3 \
   lxappearance \
   pavucontrol \
   picom \
-  pasystray \
   hsetroot
 
 # Make caplocks to esc

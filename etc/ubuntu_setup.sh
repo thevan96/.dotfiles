@@ -24,7 +24,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     fd-find \
     curl \
     wget \
-    zsh \
     git \
     tmux \
     vim \
@@ -72,11 +71,6 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 # Note dump:  dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
 echo "Import custom shortcuts"
 cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plugins/media-keys/
-
-# Change shell
-echo ""
-echo "Switch to zsh ..."
-chsh -s $(which zsh)
 
 # Make alias
 if [ ! -f "fdfind" ]; then

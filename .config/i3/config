@@ -141,9 +141,6 @@ bindsym $mod+Control+l exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@
 bindsym $mod+Control+j exec --no-startup-id light -U 1
 bindsym $mod+Control+k exec --no-startup-id light -A 1
 
-# Run startup
-exec --no-startup-id ~/.config/i3/i3_startup
-
 # Utils
 bindsym Print exec --no-startup-id flameshot gui
 bindsym $mod+Shift+o exec --no-startup-id fast_open
@@ -179,6 +176,9 @@ bindsym XF86AudioMicMute exec \
 # Brightness
 bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
+
+# Run startup
+exec --no-startup-id ~/.config/i3/i3_startup
 
 # Statusline
 bar {
