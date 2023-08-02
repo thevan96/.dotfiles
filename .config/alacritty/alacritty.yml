@@ -19,7 +19,11 @@ font:
     family: Code New Roman
     style: Italic
 
-  size: 10
+  bold_italic:
+    family: Code New Roman
+    style: Bold Italic
+
+  size: 10.0
 
   offset:
     x: 0

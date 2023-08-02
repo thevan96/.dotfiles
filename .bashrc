@@ -37,3 +37,8 @@ fi
 # Load asdf cli manager
 . "$HOME/.asdf/asdf.sh"
 . "$HOME/.asdf/completions/asdf.bash"
+
+# Setup ssh with keychain
+if [[ $XDG_CURRENT_DESKTOP == 'i3' || $XDG_CURRENT_DESKTOP == 'ubuntu:GNOME' ]]; then
+  eval `keychain --noask --eval --agents ssh id_rsa_github_personal --quick --quiet`
+fi

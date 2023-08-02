@@ -37,9 +37,7 @@ export FZF_ALT_C_COMMAND="fd --type d -H \
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
-alias ls="ls --color=auto"
-alias notes="cd ~/Personal/notes"
-alias cpp="cd ~/Personal/competitive-programming"
+alias ls='ls --color=auto'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 

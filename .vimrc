@@ -47,6 +47,7 @@ nnoremap Y y$
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
+inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>h yypVr=
 nnoremap <leader>x :bd<cr>
@@ -160,42 +161,44 @@ function! GRemoveMarkers() range
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 
-function! Trim()
+function! IsInCurrentProject()
   let pwd = getcwd()
   let file = expand('%:p:h')
-  if stridx(file, pwd) >= 0
-    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
-    silent! %s/\s\+$//e " trim whitespace
-    silent! g/^\_$\n\_^$/d " single blank line
-  endif
+
+  return stridx(file, pwd) >= 0
+endfunction
+
+function! Trim()
+  silent! %s#\($\n\s*\)\+\%$## " trim end newlines
+  silent! %s/\s\+$//e " trim whitespace
+  silent! g/^\_$\n\_^$/d " single blank line
 endfunction
 command! Trim :call Trim()
 
 augroup ConfigStyleTabOrSpace
-  autocmd!
-  autocmd BufNewFile,BufRead,BufEnter,BufWrite *.go
-    \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
-  autocmd BufNewFile,BufRead,BufEnter,Bufwrite *.md
-    \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  au!
+  au BufNewFile,BufReadPost *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  au BufNewFile,BufReadPost *.md setlocal tabstop=2 shiftwidth=2 expandtab
 augroup end
 
 augroup ShowExtraWhitespace
-  autocmd!
-  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  au!
+  au InsertLeave * match ExtraWhitespace /\s\+$/
+  au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup RelativeWorkingDirectory
-  autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
-  autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
+  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
+  au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
 augroup LoadFile
-  autocmd!
-  autocmd VimResized * wincmd =
-  autocmd FocusGained * redraw!
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
+  au!
+  au VimResized * wincmd =
+  au FocusGained * redraw!
+  au BufWritePost * if IsInCurrentProject() |  exe "Trim" | endif
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
-  autocmd BufWritePre * call Mkdir()
-  autocmd CursorMoved,CursorMovedI * setlocal norelativenumber
+  au BufWritePre * call Mkdir()
+  au CursorMoved,CursorMovedI * setlocal norelativenumber
 augroup end

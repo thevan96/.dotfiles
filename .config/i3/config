@@ -45,6 +45,9 @@ bindsym $mod+t focus mode_toggle
 # Terminal
 bindsym $mod+Return exec alacritty
 
+# Run startup
+exec --no-startup-id ~/.config/i3/i3_startup
+
 # Rofi replace dmenu
 bindsym $mod+Shift+d exec --no-startup-id rofi -modi drun -show drun -show-icons
 bindsym $mod+Shift+r exec --no-startup-id rofi -modi run -show run -show-icons
@@ -176,9 +179,6 @@ bindsym XF86AudioMicMute exec \
 # Brightness
 bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
-
-# Run startup
-exec --no-startup-id ~/.config/i3/i3_startup
 
 # Statusline
 bar {

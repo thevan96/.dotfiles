@@ -19,6 +19,7 @@ set showmatch
 set backspace=0
 set matchtime=0
 set nofoldenable
+set statusline=%<%f\ %h%m%r%{GitBranch()}%=%y%-14.([%l/%L],%c%V%)%P
 
 " Netrw
 let g:loaded_netrw = 1
@@ -33,6 +34,8 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gp `[v`]
+nnoremap <C-l> :noh<cr>
+inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>h yypVr=
 nnoremap <leader>x :bd<cr>
 nnoremap <leader>C :set invspell<cr>
@@ -177,16 +180,37 @@ nnoremap <leader>d :Directories<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+au! FileType fzf set laststatus=0 noshowmode noruler
+  \| au BufLeave <buffer> set laststatus=2 showmode ruler
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
+Plug 'itchyny/vim-gitbranch'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'kylechui/nvim-surround'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
+Plug 'simeji/winresizer'
+let g:winresizer_vert_resize=3
+let g:winresizer_horiz_resize=3
+
+Plug 'takac/vim-hardtime'
+let g:hardtime_maxcount = 9
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:hardtime_motion_with_count_resets = 1
+let g:hardtime_ignore_buffer_patterns = ["txt", "oil"]
+let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_visual_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_disabled_keys = []
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
@@ -198,7 +222,7 @@ Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner='|'
 
 Plug 'christoomey/vim-tmux-runner'
-let g:VtrPercentage = 50
+let g:VtrPercentage = 30
 let g:VtrStripLeadingWhitespace = 0
 let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
@@ -208,7 +232,7 @@ nnoremap <leader>rs :VtrSendCommandToRunner<cr>
 nnoremap <leader>rl :VtrSendLinesToRunner<cr>
 vnoremap <leader>rl :VtrSendLinesToRunner<cr>gv
 nnoremap <leader>ro :VtrOpenRunner<cr>
-nnoremap <leader>rk :VtrKillRunner<cr>
+nnoremap <leader>rx :VtrKillRunner<cr>
 nnoremap <leader>rz :VtrFocusRunner<cr>
 nnoremap <leader>rc :VtrClearRunner<cr>
 nnoremap <leader>rC :VtrFlushCommand<cr>
@@ -253,6 +277,26 @@ hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
 hi ExtraWhitespace           ctermfg=196      ctermbg=196
 
+hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticHint            ctermfg=34       ctermbg=none     cterm=none
+
+hi DiagnosticSignError       ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
+
+hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
+hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
+hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
+hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
+
+hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
+
 "--- Function utils ---
 function! Mkdir()
   let dir = expand('%:p:h')
@@ -266,10 +310,27 @@ function! Mkdir()
   endif
 endfunction
 
+function! GitBranch()
+  let branchname = gitbranch#name()
+
+  if branchname != ""
+    return '[Git('.branchname.')]'
+  endif
+
+  return ""
+endfunction
+
 function! GRemoveMarkers() range
   execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
+
+function! IsInCurrentProject()
+  let pwd = getcwd()
+  let file = expand('%:p:h')
+
+  return stridx(file, pwd) >= 0
+endfunction
 
 function! Trim()
   silent! %s#\($\n\s*\)\+\%$## " trim end newlines
@@ -278,43 +339,70 @@ function! Trim()
 endfunction
 command! Trim :call Trim()
 
+function! Format()
+  if !IsInCurrentProject()
+    return
+  endif
+
+  if filereadable('Makefile')
+    make
+    return
+  endif
+
+  let extension = expand('%:e')
+  call Trim()
+  if extension == 'go'
+	  !goimports -w . && golines -m 80 -w .
+  elseif extension == 'rs'
+    !rufmt %
+  elseif extension == 'lua'
+    !stylua %
+  elseif extension == 'sql'
+    !sqlfluff fix --dialect postgres -f %
+  elseif extension == 'md'
+    !prettier --prose-wrap always -w %
+  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
+    !prettier -w %
+  endif
+endfunction
+command! Format :call Format()
+
 augroup ConfigStyleTabOrSpace
-  autocmd!
-  autocmd BufNewFile,BufRead,BufEnter,BufWrite *.go
-    \ setlocal tabstop=2 shiftwidth=2 noexpandtab | retab
-  autocmd BufNewFile,BufRead,BufEnter,Bufwrite *.md
-    \ setlocal tabstop=2 shiftwidth=2 expandtab | retab
+  au!
+  au BufNewFile,BufReadPost *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  au BufNewFile,BufReadPost *.md setlocal tabstop=2 shiftwidth=2 expandtab
 augroup end
 
 augroup RunFile
-  autocmd!
-  autocmd FileType javascript vnoremap <leader>rr :w !node<cr>
-  autocmd FileType python vnoremap <leader>rr :w !python<cr>
+  au!
+  au FileType javascript vnoremap <leader>rr :w !node<cr>
+  au FileType python vnoremap <leader>rr :w !python<cr>
 augroup end
 
 augroup ShowExtraWhitespace
-  autocmd!
-  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  au!
+  au InsertLeave * match ExtraWhitespace /\s\+$/
+  au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 augroup end
 
 augroup RelativeWorkingDirectory
-  autocmd!
-  autocmd InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
-  autocmd InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
+  au!
+  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
+  au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
 augroup DisableNoiseLSP
-  autocmd InsertEnter *.* lua vim.diagnostic.disable()
-  autocmd BufWritePost *.* lua vim.diagnostic.enable()
+  au InsertEnter *.* lua vim.diagnostic.disable()
+  au BufWritePost *.* lua vim.diagnostic.enable()
 augroup end
 
 augroup LoadFile
-  autocmd!
-  autocmd VimResized * wincmd =
-  autocmd BufWritePost * call Mkdir()
-  autocmd CursorMoved,CursorMovedI * set norelativenumber
-  autocmd BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
+  au!
+  au VimResized * wincmd =
+  au BufWritePost * call Mkdir()
+  au BufWritePost * if IsInCurrentProject() |  exe "Trim" | endif
+  au CursorMoved,CursorMovedI * set norelativenumber
+  au BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
     \ | exe "normal! g'\"" | endif
 augroup end
 
@@ -328,4 +416,5 @@ lua << EOF
 
   -- Without config
   require 'fidget'.setup()
+  require 'nvim-surround'.setup()
 EOF

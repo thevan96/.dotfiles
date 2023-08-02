@@ -6,12 +6,10 @@ cmp.setup({
     autocomplete = false,
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-space>'] = cmp.mapping.complete(),
+    -- ['<C-space>'] = cmp.mapping.complete(),
   }),
   snippet = {
     expand = function(args)
