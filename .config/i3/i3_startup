@@ -9,7 +9,7 @@ xrdb -merge ~/.Xresources &
 xrandr --output eDP-1 --mode 1366x768 &
 
 # Enable click touchpad
-xinput set-prop "Synaptics TM3096-001" "libinput Tapping Enabled" 1 &
+xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1 &
 
 picom &
 nm-applet &

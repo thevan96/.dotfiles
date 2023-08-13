@@ -1,25 +1,24 @@
 "--- General setting ---
 set nobackup
 set noswapfile
+set spelllang=en_us
 set encoding=utf-8
 set autoread
 set autowrite
-set ignorecase
 set list
 set listchars=tab:→\ ,lead:.,trail:\ |
+set nonumber norelativenumber
 set signcolumn=no
 set textwidth=80
-set colorcolumn=+1
+set colorcolumn=80
 set cursorline
 set cursorlineopt=number
 set wildmode=longest,list
-set completeopt=menu,menuone
-set mouse=
-set showmatch
+set completeopt=menu,menuone,noinsert
+set noshowcmd
 set backspace=0
 set matchtime=0
 set nofoldenable
-set statusline=%<%f\ %h%m%r%{GitBranch()}%=%y%-14.([%l/%L],%c%V%)%P
 
 " Netrw
 let g:loaded_netrw = 1
@@ -35,35 +34,49 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gp `[v`]
 nnoremap <C-l> :noh<cr>
+nnoremap <leader>hd yypVr=
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>h yypVr=
-nnoremap <leader>x :bd<cr>
+nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
+noremap K :execute 'help '.expand('<cword>')<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 inoremap <C-n> <nop>
-inoremap <C-p> <nop>
+inoremap <c-p> <nop>
+
+" Remap omnifunc
+inoremap <C-Space> <C-x><C-o>
+inoremap <expr> <C-h>
+  \ (pumvisible() && &omnifunc != '' ? '<C-h><C-x><C-o>' : '<C-h>')
+inoremap <expr> <BS>
+  \ (pumvisible() && &omnifunc != '' ? '<BS><C-x><C-o>' : '<BS>')
+inoremap <expr> <C-w>
+  \ (pumvisible() && &omnifunc != '' ? '<C-w><C-x><C-o>' : '<C-w>')
+
+" Align table
+vnoremap <leader>ft :'<,'>!prettier --parser markdown<cr>
+nnoremap <leader>ft vip:'<,'>!prettier --parser markdown<cr>
 
 " Virtual edit
 nnoremap <leader>va :set virtualedit=all nolist<cr>
 nnoremap <leader>vn :set virtualedit=none list<cr>
 
-" Better relative number
-nnoremap <silent><leader>n m':set relativenumber!<cr>
-vnoremap <silent><leader>n <esc>m':set relativenumber!<cr>V
-xnoremap <silent><leader>n <esc>m':set relativenumber!<cr>gv
+" Toggle relative number/number
+nnoremap <silent><leader>n :set invrelativenumber<cr>
+vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
+xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 nnoremap <silent><leader>N :set invnumber<cr>
 vnoremap <silent><leader>N <esc>:set invnumber<cr>V
 xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
+
+" Relativenumber keep jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
 command! CopyPath let @+ = expand('%')
-
-" Navigate wrap
-nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
-nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 " Navigate quickfix/loclist
 nnoremap go :copen<cr>
@@ -113,10 +126,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
-" Autocomplete
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-
 " Snippets
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger='<C-j>'
@@ -128,10 +137,6 @@ Plug 'stevearc/oil.nvim'
 nnoremap <leader>ff :Oil<cr>
 nnoremap <leader>fv :vsp+Oil<cr>
 nnoremap <leader>fs :sp+Oil<cr>
-
-Plug 'obaland/vfiler.vim'
-nnoremap <leader>vv :VFiler<cr>
-nnoremap <leader>vf :VFiler -find-file<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -185,44 +190,27 @@ au! FileType fzf set laststatus=0 noshowmode noruler
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
-Plug 'rlue/vim-barbaric'
-Plug 'itchyny/vim-gitbranch'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'kylechui/nvim-surround'
-Plug 'AndrewRadev/tagalong.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
-Plug 'simeji/winresizer'
-let g:winresizer_vert_resize=3
-let g:winresizer_horiz_resize=3
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 9
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_allow_different_key = 1
-let g:hardtime_motion_with_count_resets = 1
-let g:hardtime_ignore_buffer_patterns = ["txt", "oil"]
-let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_visual_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_disabled_keys = []
-
 Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
+command! W exe 'SudaWrite'
+
+Plug 'machakann/vim-swap'
+omap is <Plug>(swap-textobject-i)
+xmap is <Plug>(swap-textobject-i)
+omap as <Plug>(swap-textobject-a)
+xmap as <Plug>(swap-textobject-a)
+
+Plug 'tommcdo/vim-exchange'
+Plug 'kylechui/nvim-surround'
 
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 
-Plug 'wellle/tmux-complete.vim'
-let g:tmuxcomplete#trigger = 'omnifunc'
-
-Plug 'dhruvasagar/vim-table-mode'
-let g:table_mode_corner='|'
-
 Plug 'christoomey/vim-tmux-runner'
-let g:VtrPercentage = 30
+let g:VtrPercentage = 50
+let g:VtrOrientation = 'h'
 let g:VtrStripLeadingWhitespace = 0
 let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
@@ -238,10 +226,6 @@ nnoremap <leader>rc :VtrClearRunner<cr>
 nnoremap <leader>rC :VtrFlushCommand<cr>
 nnoremap <leader>rd :VtrSendCtrlD<cr>
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
-let g:mkdp_theme = 'light'
-nnoremap <leader>mp :MarkdownPreviewToggle<cr>
-
 call plug#end()
 
 "--- Config Provider ---
@@ -256,26 +240,21 @@ syntax off
 set background=dark
 filetype plugin indent off
 
-hi clear Error
-hi clear SignColumn
-hi clear VertSplit
-
-hi NonText                   ctermfg=none     ctermbg=none     cterm=none
-hi Normal                    ctermfg=none     ctermbg=none     cterm=none
+hi SignColumn                ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
 hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
 
-hi LineNr                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrAbove               ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow               ctermfg=240      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=240      ctermbg=none     cterm=none
+hi LineNr                    ctermfg=244      ctermbg=none     cterm=none
+hi LineNrAbove               ctermfg=244      ctermbg=none     cterm=none
+hi LineNrBelow               ctermfg=244      ctermbg=none     cterm=none
+hi CursorLine                ctermfg=244      ctermbg=none     cterm=none
 hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
 
-hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
 hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
-hi ExtraWhitespace           ctermfg=196      ctermbg=196
+hi ExtraWhitespace           ctermfg=196      ctermbg=196      cterm=none
+hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
 
 hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
 hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
@@ -298,28 +277,6 @@ hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
 hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
 
 "--- Function utils ---
-function! Mkdir()
-  let dir = expand('%:p:h')
-  if dir =~ '://'
-    return
-  endif
-
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-    echo 'Created non-existing directory: '.dir
-  endif
-endfunction
-
-function! GitBranch()
-  let branchname = gitbranch#name()
-
-  if branchname != ""
-    return '[Git('.branchname.')]'
-  endif
-
-  return ""
-endfunction
-
 function! GRemoveMarkers() range
   execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
@@ -333,19 +290,17 @@ function! IsInCurrentProject()
 endfunction
 
 function! Trim()
-  silent! %s#\($\n\s*\)\+\%$## " trim end newlines
-  silent! %s/\s\+$//e " trim whitespace
-  silent! g/^\_$\n\_^$/d " single blank line
+  if !&binary && IsInCurrentProject()
+    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
+    silent! %s/\s\+$//e " trim whitespace
+    silent! g/^\_$\n\_^$/d " single blank line
+    silent! w
+  endif
 endfunction
 command! Trim :call Trim()
 
 function! Format()
   if !IsInCurrentProject()
-    return
-  endif
-
-  if filereadable('Makefile')
-    make
     return
   endif
 
@@ -366,6 +321,15 @@ function! Format()
   endif
 endfunction
 command! Format :call Format()
+
+function! Scratch()
+  new
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal ft=scratch
+endfunction
+command! Scratch :call Scratch()
 
 augroup ConfigStyleTabOrSpace
   au!
@@ -391,28 +355,29 @@ augroup RelativeWorkingDirectory
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup DisableNoiseLSP
-  au InsertEnter *.* lua vim.diagnostic.disable()
-  au BufWritePost *.* lua vim.diagnostic.enable()
+augroup DisableNoise
+  au InsertEnter * setlocal nolist
+  au BufWritePost * setlocal list
+  au InsertEnter * lua vim.diagnostic.disable()
+  au BufWritePost * lua vim.diagnostic.enable()
 augroup end
 
 augroup LoadFile
   au!
   au VimResized * wincmd =
-  au BufWritePost * call Mkdir()
-  au BufWritePost * if IsInCurrentProject() |  exe "Trim" | endif
+  au BufWritePost * call Trim()
   au CursorMoved,CursorMovedI * set norelativenumber
-  au BufReadPost *.* if line("'\"") > 1 && line("'\"") <= line("$")
-    \ | exe "normal! g'\"" | endif
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
 augroup end
 
 "--- Load lua---
 lua << EOF
   require 'module_lspconfig'
-  require 'module_vfiler'
   require 'module_mason'
   require 'module_oil'
-  require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()

@@ -53,7 +53,6 @@ update_asdf() {
   asdf reshim python
   asdf reshim rust
   asdf reshim golang
-  asdf reshim java
   echo 'Asdf update done!'
 }
 

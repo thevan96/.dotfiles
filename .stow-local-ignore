@@ -7,9 +7,6 @@
 /.zshrc
 /.zshenv
 
-/.config/i3
-/.config/i3status
-
 /etc
 /Makefile
 /README.md

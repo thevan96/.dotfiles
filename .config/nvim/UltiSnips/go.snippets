@@ -1,20 +1,3 @@
-snippet base "Base template for go"
-package main
-
-import "fmt"
-
-func main() {
-}
-endsnippet
-
-snippet fpn "fmt.Println()"
-fmt.Println($1)
-endsnippet
-
-snippet fps "fmt.Printf()"
-fmt.Printf($1)
-endsnippet
-
 snippet measure "Time"
 start := time.Now()
 fmt.Println(time.Since(start))
@@ -40,6 +23,15 @@ func minInt(a, b int) int {
 }
 endsnippet
 
+snippet base "Base template for go"
+package main
+
+import "fmt"
+
+func main() {
+}
+endsnippet
+
 snippet cp "Competive programing"
 package main
 
@@ -48,12 +40,10 @@ import (
 	"os"
 )
 
-var (
-	reader = bufio.NewReader(os.Stdin)
-	writer = bufio.NewWriter(os.Stdout)
-)
-
 func main() {
+	reader := bufio.NewReader(os.Stdin)
+	writer := bufio.NewWriter(os.Stdout)
+
 	writer.Flush()
 }
 endsnippet

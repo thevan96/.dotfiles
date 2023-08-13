@@ -58,8 +58,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-clocks \
     gnome-tweaks \
     dconf-editor \
-    plantuml \
     net-tools \
+    keychain \
+    peek \
     chrome-gnome-shell
 fi
 

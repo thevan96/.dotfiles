@@ -5,6 +5,7 @@ pip install -U pynvim
 pip install -U httpie
 pip install -U sqlfluff
 pip install -U httpie
+pip install -U pyright
 
 npm install -g npm@latest
 npm install -g neovim
@@ -12,8 +13,7 @@ npm install -g prettier
 npm install -g standard
 npm install -g kill-port
 npm install -g browser-sync
-npm install -g pyright
-npm install -g typescript
+npm install -g typescript typescript-language-server
 npm install -g sass
 
 go install github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest

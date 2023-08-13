@@ -1,7 +1,8 @@
 #  Export env variable
-export EDITOR=nvim
+export EDITOR=vim
 export KEYTIMEOUT=1
 export TERM=screen-256color
+export MANPAGER='vim +Man!'
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
@@ -37,7 +38,7 @@ export FZF_ALT_C_COMMAND="fd --type d -H \
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
-alias ls='ls --color=auto'
+alias ls='ls --color=always'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
@@ -51,7 +52,6 @@ update_asdf() {
   asdf reshim python
   asdf reshim rust
   asdf reshim golang
-  asdf reshim java
   echo 'Asdf update done!'
 }
 
