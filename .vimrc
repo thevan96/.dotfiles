@@ -45,7 +45,7 @@ let mapleader = ' '
 " Customizer mapping
 nnoremap Y y$
 xnoremap p pgvy
-nnoremap gp `[v`]
+nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>o :ls<cr>:b<space>

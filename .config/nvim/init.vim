@@ -3,22 +3,20 @@ set nobackup
 set noswapfile
 set spelllang=en_us
 set encoding=utf-8
-set autoread
-set autowrite
-set list
-set listchars=tab:→\ ,lead:.,trail:\ |
-set nonumber norelativenumber
+set autoread autowrite
+set list listchars=tab:→\ ,lead:.,trail:\ |
+set number norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
-set cursorline
-set cursorlineopt=number
+set cursorline cursorlineopt=number
 set wildmode=longest,list
 set completeopt=menu,menuone,noinsert
 set noshowcmd
 set backspace=0
 set matchtime=0
 set nofoldenable
+set guicursor=i:block
 
 " Netrw
 let g:loaded_netrw = 1
@@ -32,19 +30,22 @@ let mapleader = ' '
 
 " Customizer mapping
 xnoremap p pgvy
-nnoremap gp `[v`]
+nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
-nnoremap <leader>hd yypVr=
+nnoremap <leader>H yypVr=
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
-noremap K :execute 'help '.expand('<cword>')<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+
+" Disable
 inoremap <C-n> <nop>
-inoremap <c-p> <nop>
+inoremap <C-p> <nop>
+inoremap <C-x><C-n> <nop>
+inoremap <C-x><C-p> <nop>
+inoremap <C-x><C-o> <nop>
 
 " Remap omnifunc
-inoremap <C-Space> <C-x><C-o>
 inoremap <expr> <C-h>
   \ (pumvisible() && &omnifunc != '' ? '<C-h><C-x><C-o>' : '<C-h>')
 inoremap <expr> <BS>
@@ -64,9 +65,6 @@ nnoremap <leader>vn :set virtualedit=none list<cr>
 nnoremap <silent><leader>n :set invrelativenumber<cr>
 vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
 xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
-nnoremap <silent><leader>N :set invnumber<cr>
-vnoremap <silent><leader>N <esc>:set invnumber<cr>V
-xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
@@ -79,19 +77,19 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 command! CopyPath let @+ = expand('%')
 
 " Navigate quickfix/loclist
-nnoremap go :copen<cr>
-nnoremap gx :cclose<cr>
-nnoremap gh :cprev<cr>
-nnoremap gl :cnext<cr>
-nnoremap gH :cfirst<cr>
-nnoremap gL :clast<cr>
+nnoremap <leader>qo :copen<cr>
+nnoremap <leader>qx :cclose<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]q :cnext<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap ]Q :clast<cr>
 
-nnoremap zo :lopen<cr>
-nnoremap zx :lclose<cr>
-nnoremap zh :lprev<cr>
-nnoremap zl :lnext<cr>
-nnoremap zH :lfirst<cr>
-nnoremap zL :llast<cr>
+nnoremap <leader>lo :lopen<cr>
+nnoremap <leader>lx :lclose<cr>
+nnoremap [l :lprev<cr>
+nnoremap ]l :lnext<cr>
+nnoremap [L :lfirst<cr>
+nnoremap ]L :llast<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -142,18 +140,11 @@ nnoremap <leader>fs :sp+Oil<cr>
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
-" Send to quickfix
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
 let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
+let g:fzf_layout = { 'down': '~40%' }
 
 let rgIgnoreDirectories = "
   \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
@@ -185,6 +176,7 @@ nnoremap <leader>d :Directories<cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
+nnoremap <leader>T :Snippets<cr>
 au! FileType fzf set laststatus=0 noshowmode noruler
   \| au BufLeave <buffer> set laststatus=2 showmode ruler
 
@@ -195,12 +187,6 @@ Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
-
-Plug 'machakann/vim-swap'
-omap is <Plug>(swap-textobject-i)
-xmap is <Plug>(swap-textobject-i)
-omap as <Plug>(swap-textobject-a)
-xmap as <Plug>(swap-textobject-a)
 
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
@@ -240,41 +226,41 @@ syntax off
 set background=dark
 filetype plugin indent off
 
-hi SignColumn                ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat               ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                     ctermfg=15       ctermbg=236      cterm=none
-hi PmenuSel                  ctermfg=0        ctermbg=39       cterm=none
+hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
+hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
+hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
+hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
 
-hi LineNr                    ctermfg=244      ctermbg=none     cterm=none
-hi LineNrAbove               ctermfg=244      ctermbg=none     cterm=none
-hi LineNrBelow               ctermfg=244      ctermbg=none     cterm=none
-hi CursorLine                ctermfg=244      ctermbg=none     cterm=none
-hi CursorLineNr              ctermfg=255      ctermbg=none     cterm=bold
+hi LineNr                    ctermfg=8      ctermbg=none   cterm=none
+hi LineNrAbove               ctermfg=8      ctermbg=none   cterm=none
+hi LineNrBelow               ctermfg=8      ctermbg=none   cterm=none
+hi CursorLine                ctermfg=8      ctermbg=none   cterm=none
+hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
 
-hi SpecialKey                ctermfg=235      ctermbg=none     cterm=none
-hi Whitespace                ctermfg=235      ctermbg=none     cterm=none
-hi ExtraWhitespace           ctermfg=196      ctermbg=196      cterm=none
-hi ColorColumn               ctermfg=none     ctermbg=233      cterm=none
+hi SpecialKey                ctermfg=235    ctermbg=none   cterm=none
+hi Whitespace                ctermfg=235    ctermbg=none   cterm=none
+hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
+hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
 
-hi DiagnosticError           ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticWarn            ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticInfo            ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticHint            ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticInfo            ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticHint            ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticSignError       ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticSignWarn        ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticSignInfo        ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticSignHint        ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticSignError       ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticSignWarn        ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticSignInfo        ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticSignHint        ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticFloatingError   ctermfg=196      ctermbg=none     cterm=none
-hi DiagnosticFloatingWarn    ctermfg=226      ctermbg=none     cterm=none
-hi DiagnosticFloatingInfo    ctermfg=39       ctermbg=none     cterm=none
-hi DiagnosticFloatingHint    ctermfg=34       ctermbg=none     cterm=none
+hi DiagnosticFloatingError   ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none     ctermbg=none     cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none     ctermbg=none     cterm=underline
+hi DiagnosticUnderlineError  ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=none   ctermbg=none   cterm=underline
 
 "--- Function utils ---
 function! GRemoveMarkers() range
@@ -307,7 +293,7 @@ function! Format()
   let extension = expand('%:e')
   call Trim()
   if extension == 'go'
-	  !goimports -w . && golines -m 80 -w .
+	  !goimports -w . && golines -m 80 -w . && golangci-lint run
   elseif extension == 'rs'
     !rufmt %
   elseif extension == 'lua'
@@ -316,7 +302,7 @@ function! Format()
     !sqlfluff fix --dialect postgres -f %
   elseif extension == 'md'
     !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html', 'js'], extension) >= 0
+  elseif index(['css', 'scss', 'html', 'js', 'ts', 'tsx'], extension) >= 0
     !prettier -w %
   endif
 endfunction
@@ -355,11 +341,14 @@ augroup RelativeWorkingDirectory
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup DisableNoise
-  au InsertEnter * setlocal nolist
-  au BufWritePost * setlocal list
+augroup DisableNoiseLSP
   au InsertEnter * lua vim.diagnostic.disable()
   au BufWritePost * lua vim.diagnostic.enable()
+augroup end
+
+augroup JumpQuickfx
+  au QuickFixCmdPost [^l]* nested cwindow
+  au QuickFixCmdPost    l* nested lwindow
 augroup end
 
 augroup LoadFile

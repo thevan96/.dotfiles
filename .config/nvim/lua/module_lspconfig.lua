@@ -83,8 +83,8 @@ nvim_lsp['lua_ls'].setup({
   },
 })
 
-vim.keymap.set('n', '<leader>k', vim.diagnostic.goto_prev)
-vim.keymap.set('n', '<leader>j', vim.diagnostic.goto_next)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>ql', vim.diagnostic.setqflist)
@@ -113,6 +113,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
