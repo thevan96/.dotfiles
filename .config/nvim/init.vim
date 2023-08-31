@@ -4,8 +4,7 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
-set list listchars=tab:→\ ,lead:.,trail:\ |
-set number norelativenumber
+set list listchars=tab:\ \ ,lead:.,trail:\ |
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -14,7 +13,6 @@ set wildmode=longest,list
 set completeopt=menu,menuone,noinsert
 set noshowcmd
 set backspace=0
-set matchtime=0
 set nofoldenable
 set guicursor=i:block
 
@@ -38,7 +36,7 @@ nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
-" Disable
+" Disable autocomplete
 inoremap <C-n> <nop>
 inoremap <C-p> <nop>
 inoremap <C-x><C-n> <nop>
@@ -144,7 +142,6 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
-let g:fzf_layout = { 'down': '~40%' }
 
 let rgIgnoreDirectories = "
   \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
@@ -193,24 +190,6 @@ Plug 'kylechui/nvim-surround'
 
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
-
-Plug 'christoomey/vim-tmux-runner'
-let g:VtrPercentage = 50
-let g:VtrOrientation = 'h'
-let g:VtrStripLeadingWhitespace = 0
-let g:VtrClearEmptyLines = 0
-let g:VtrAppendNewline = 1
-nnoremap <leader>ra :VtrAttachToPane<cr>
-nnoremap <leader>rA :VtrUnsetRunnerPane<cr>
-nnoremap <leader>rs :VtrSendCommandToRunner<cr>
-nnoremap <leader>rl :VtrSendLinesToRunner<cr>
-vnoremap <leader>rl :VtrSendLinesToRunner<cr>gv
-nnoremap <leader>ro :VtrOpenRunner<cr>
-nnoremap <leader>rx :VtrKillRunner<cr>
-nnoremap <leader>rz :VtrFocusRunner<cr>
-nnoremap <leader>rc :VtrClearRunner<cr>
-nnoremap <leader>rC :VtrFlushCommand<cr>
-nnoremap <leader>rd :VtrSendCtrlD<cr>
 
 call plug#end()
 
@@ -321,12 +300,6 @@ augroup ConfigStyleTabOrSpace
   au!
   au BufNewFile,BufReadPost *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au BufNewFile,BufReadPost *.md setlocal tabstop=2 shiftwidth=2 expandtab
-augroup end
-
-augroup RunFile
-  au!
-  au FileType javascript vnoremap <leader>rr :w !node<cr>
-  au FileType python vnoremap <leader>rr :w !python<cr>
 augroup end
 
 augroup ShowExtraWhitespace
