@@ -60,6 +60,7 @@ nnoremap <leader>va :set virtualedit=all nolist<cr>
 nnoremap <leader>vn :set virtualedit=none list<cr>
 
 " Toggle relative number/number
+nnoremap <silent><leader>N :set invnumber<cr>
 nnoremap <silent><leader>n :set invrelativenumber<cr>
 vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
 xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
@@ -75,19 +76,19 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 command! CopyPath let @+ = expand('%')
 
 " Navigate quickfix/loclist
-nnoremap <leader>qo :copen<cr>
-nnoremap <leader>qx :cclose<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]q :cnext<cr>
-nnoremap [Q :cfirst<cr>
-nnoremap ]Q :clast<cr>
+nnoremap qo :copen<cr>
+nnoremap qx :cclose<cr>
+nnoremap qk :cprev<cr>
+nnoremap qj :cnext<cr>
+nnoremap qK :cfirst<cr>
+nnoremap qJ :clast<cr>
 
-nnoremap <leader>lo :lopen<cr>
-nnoremap <leader>lx :lclose<cr>
-nnoremap [l :lprev<cr>
-nnoremap ]l :lnext<cr>
-nnoremap [L :lfirst<cr>
-nnoremap ]L :llast<cr>
+nnoremap zo :lopen<cr>
+nnoremap zx :lclose<cr>
+nnoremap zk :lprev<cr>
+nnoremap zj :lnext<cr>
+nnoremap zK :lfirst<cr>
+nnoremap zJ :llast<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -210,12 +211,6 @@ hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
 hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
 hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
 
-hi LineNr                    ctermfg=8      ctermbg=none   cterm=none
-hi LineNrAbove               ctermfg=8      ctermbg=none   cterm=none
-hi LineNrBelow               ctermfg=8      ctermbg=none   cterm=none
-hi CursorLine                ctermfg=8      ctermbg=none   cterm=none
-hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
-
 hi SpecialKey                ctermfg=235    ctermbg=none   cterm=none
 hi Whitespace                ctermfg=235    ctermbg=none   cterm=none
 hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
@@ -236,10 +231,10 @@ hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
 
 "--- Function utils ---
 function! GRemoveMarkers() range

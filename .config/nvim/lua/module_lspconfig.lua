@@ -1,13 +1,14 @@
 local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
-  signs = true,
+  signs = false,
   underline = true,
   update_in_insert = false,
-  virtual_text = {
-    prefix = '●',
-    source = 'always',
-  },
+  virtual_text = false,
+  -- {
+  --   prefix = '●',
+  --   source = 'always',
+  -- },
   float = {
     source = 'always',
     border = 'single',
@@ -86,8 +87,8 @@ nvim_lsp['lua_ls'].setup({
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>ql', vim.diagnostic.setqflist)
+vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
