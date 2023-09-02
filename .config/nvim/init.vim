@@ -4,7 +4,8 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
-set list listchars=tab:\ \ ,lead:.,trail:\ |
+set list listchars=tab:→\ ,lead:.,trail:\ |
+set number norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -17,8 +18,8 @@ set nofoldenable
 set guicursor=i:block
 
 " Netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+let g:loaded_netrw = 0
+let g:loaded_netrwPlugin = 0
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -30,11 +31,12 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
+nnoremap <leader>h yypVr-
 nnoremap <leader>H yypVr=
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " Disable autocomplete
 inoremap <C-n> <nop>
@@ -76,19 +78,24 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 command! CopyPath let @+ = expand('%')
 
 " Navigate quickfix/loclist
-nnoremap qo :copen<cr>
-nnoremap qx :cclose<cr>
-nnoremap qk :cprev<cr>
-nnoremap qj :cnext<cr>
-nnoremap qK :cfirst<cr>
-nnoremap qJ :clast<cr>
+nnoremap <leader>qo :copen<cr>
+nnoremap <leaer>qx :cclose<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]q :cnext<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap ]Q :clast<cr>
 
-nnoremap zo :lopen<cr>
-nnoremap zx :lclose<cr>
-nnoremap zk :lprev<cr>
-nnoremap zj :lnext<cr>
-nnoremap zK :lfirst<cr>
-nnoremap zJ :llast<cr>
+nnoremap <leader>zo :lopen<cr>
+nnoremap <leader>zx :lclose<cr>
+nnoremap [z :lprev<cr>
+nnoremap ]z :lnext<cr>
+nnoremap [Z :lfirst<cr>
+nnoremap ]Z :llast<cr>
+
+nnoremap [a :previous<cr>
+nnoremap ]a :next<cr>
+nnoremap [A :first<cr>
+nnoremap ]A :last<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -143,6 +150,7 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
+let g:fzf_layout = { 'down': '~40%' }
 
 let rgIgnoreDirectories = "
   \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
@@ -170,8 +178,8 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
   \ )
 
 nnoremap <leader>i :Files<cr>
-nnoremap <leader>d :Directories<cr>
 nnoremap <leader>o :Buffers<cr>
+nnoremap <leader>d :Directories<cr>
 nnoremap <leader>s :Rg<cr>
 nnoremap <leader>S :Rg <c-r><c-w><cr>
 nnoremap <leader>T :Snippets<cr>
@@ -180,8 +188,14 @@ au! FileType fzf set laststatus=0 noshowmode noruler
 
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
+Plug 'rlue/vim-barbaric'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
+Plug 'jpalardy/vim-slime'
+let g:slime_target = 'tmux'
+let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
+let g:slime_dont_ask_default = 1
 
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
@@ -211,8 +225,14 @@ hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
 hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
 hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
 
-hi SpecialKey                ctermfg=235    ctermbg=none   cterm=none
-hi Whitespace                ctermfg=235    ctermbg=none   cterm=none
+hi LineNr                    ctermfg=242    ctermbg=none   cterm=none
+hi LineNrAbove               ctermfg=242    ctermbg=none   cterm=none
+hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
+hi CursorLine                ctermfg=242    ctermbg=none   cterm=none
+hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
+
+hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
+hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
 hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
 hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
 
@@ -267,7 +287,7 @@ function! Format()
   let extension = expand('%:e')
   call Trim()
   if extension == 'go'
-	  !goimports -w . && golines -m 80 -w . && golangci-lint run
+	  !goimports -w . && golines -m 80 -w .
   elseif extension == 'rs'
     !rufmt %
   elseif extension == 'lua'
@@ -293,8 +313,10 @@ command! Scratch :call Scratch()
 
 augroup ConfigStyleTabOrSpace
   au!
-  au BufNewFile,BufReadPost *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
-  au BufNewFile,BufReadPost *.md setlocal tabstop=2 shiftwidth=2 expandtab
+  au BufNewFile,BufRead *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  au BufNewFile,BufRead *.rs setlocal tabstop=4 shiftwidth=4 expandtab
+  au BufNewFile,BufRead *.md setlocal tabstop=2 shiftwidth=2 expandtab
+  au BufNewFile,BufRead Makefile setlocal tabstop=2 shiftwidth=2 noexpandtab
 augroup end
 
 augroup ShowExtraWhitespace
@@ -309,11 +331,6 @@ augroup RelativeWorkingDirectory
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup DisableNoiseLSP
-  au InsertEnter * lua vim.diagnostic.disable()
-  au BufWritePost * lua vim.diagnostic.enable()
-augroup end
-
 augroup JumpQuickfx
   au QuickFixCmdPost [^l]* nested cwindow
   au QuickFixCmdPost    l* nested lwindow
@@ -323,9 +340,9 @@ augroup LoadFile
   au!
   au VimResized * wincmd =
   au BufWritePost * call Trim()
+  au BufWritePost * lua vim.diagnostic.setloclist()
   au CursorMoved,CursorMovedI * set norelativenumber
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
 augroup end

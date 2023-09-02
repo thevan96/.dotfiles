@@ -161,8 +161,8 @@
   },
   "OutputCharset": "Unicode",
   "Flags": 7,
-  "IBflags": 295408,
+  "IBflags": 295920,
   "Shortcuts": [5, 126, 0, 0, 0, 0, 0, 0, 5, 117],
-  "DefaultInputMode": 3,
+  "DefaultInputMode": 1,
   "InputModeMapping": {}
 }

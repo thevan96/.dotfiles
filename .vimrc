@@ -37,7 +37,7 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
 " Setting tab/space
-set tabstop=2 shiftwidth=2 expandtab | retab
+set tabstop=2 shiftwidth=2 noexpandtab
 
 " Set keymap
 let mapleader = ' '
