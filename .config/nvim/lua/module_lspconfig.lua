@@ -1,7 +1,7 @@
 local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
-  signs = false,
+  signs = true,
   underline = true,
   update_in_insert = false,
   virtual_text = false,
@@ -111,6 +111,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, opts)
-    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })

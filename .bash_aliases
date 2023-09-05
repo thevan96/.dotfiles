@@ -2,7 +2,7 @@
 export EDITOR=vim
 export KEYTIMEOUT=1
 export TERM=screen-256color
-export MANPAGER='vim +Man!'
+export MANPAGER="vim '+set nonumber' +Man!"
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config

@@ -66,7 +66,7 @@ mouse:
   hide_when_typing: true
 
 selection:
-  save_to_clipboard: true
+  save_to_clipboard: false
 
 key_bindings:
   # Disable vi-mode and search, trust only tmux

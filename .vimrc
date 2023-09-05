@@ -33,8 +33,8 @@ set ttymouse=sgr
 packadd matchit
 
 " Netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+let g:loaded_netrw = 0
+let g:loaded_netrwPlugin = 0
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 noexpandtab
@@ -66,7 +66,8 @@ xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
-command! CopyPath let @+ = expand('%')
+command! Path let @+ = expand('%')
+command! Dpath let @+ = expand('%:h')
 
 " Navigate wrap
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -169,9 +170,12 @@ function! IsInCurrentProject()
 endfunction
 
 function! Trim()
-  silent! %s#\($\n\s*\)\+\%$## " trim end newlines
-  silent! %s/\s\+$//e " trim whitespace
-  silent! g/^\_$\n\_^$/d " single blank line
+  if !&binary && IsInCurrentProject()
+    silent! %s#\($\n\s*\)\+\%$## " trim end newlines
+    silent! %s/\s\+$//e " trim whitespace
+    silent! g/^\_$\n\_^$/d " single blank line
+    silent! w
+  endif
 endfunction
 command! Trim :call Trim()
 
@@ -196,7 +200,8 @@ augroup LoadFile
   au!
   au VimResized * wincmd =
   au FocusGained * redraw!
-  au BufWritePost * if IsInCurrentProject() |  exe "Trim" | endif
+  au CursorMoved * checktime
+  au BufWritePost * call Trim()
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
   au BufWritePre * call Mkdir()

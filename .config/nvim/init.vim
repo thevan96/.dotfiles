@@ -6,7 +6,7 @@ set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:→\ ,lead:.,trail:\ |
 set number norelativenumber
-set signcolumn=no
+set signcolumn=yes
 set textwidth=80
 set colorcolumn=80
 set cursorline cursorlineopt=number
@@ -16,6 +16,7 @@ set noshowcmd
 set backspace=0
 set nofoldenable
 set guicursor=i:block
+set mouse=
 
 " Netrw
 let g:loaded_netrw = 0
@@ -75,7 +76,8 @@ nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Current path to clipboard
-command! CopyPath let @+ = expand('%')
+command! Path let @+ = expand('%')
+command! Dpath let @+ = expand('%:h')
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -251,10 +253,10 @@ hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineError  ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=none   ctermbg=none   cterm=underline
 
 "--- Function utils ---
 function! GRemoveMarkers() range
@@ -296,7 +298,7 @@ function! Format()
     !sqlfluff fix --dialect postgres -f %
   elseif extension == 'md'
     !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html', 'js', 'ts', 'tsx'], extension) >= 0
+  elseif index(['css', 'scss', 'html'], extension) >= 0
     !prettier -w %
   endif
 endfunction
@@ -336,11 +338,16 @@ augroup JumpQuickfx
   au QuickFixCmdPost    l* nested lwindow
 augroup end
 
+augroup DisableNoiseLSP
+  au BufWrite * lua vim.diagnostic.enable()
+  au InsertEnter * lua vim.diagnostic.disable()
+augroup end
+
 augroup LoadFile
   au!
   au VimResized * wincmd =
+  au CursorMoved * checktime
   au BufWritePost * call Trim()
-  au BufWritePost * lua vim.diagnostic.setloclist()
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
