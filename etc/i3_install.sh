@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+sudo cp i3.desktop /usr/share/xsessions
 sudo apt install i3 \
   i3lock-fancy \
   light \

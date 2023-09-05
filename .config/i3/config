@@ -46,16 +46,7 @@ bindsym $mod+t focus mode_toggle
 bindsym $mod+Return exec alacritty
 
 # Run startup
-# exec --no-startup-id ~/.config/i3/i3_startup
-exec --no-startup-id xset r rate 200 80
-exec --no-startup-id hsetroot -cover ~/Dropbox/Pictures/lockscreen1366x768.png
-exec --no-startup-id xrdb -merge ~/.Xresources
-exec --no-startup-id xrandr --output eDP-1 --mode 1366x768
-exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1
-exec --no-startup-id picom
-exec --no-startup-id nm-applet
-exec --no-startup-id ibus-daemon -drxR
-exec --no-startup-id run_dropbox
+exec --no-startup-id ~/.config/i3/i3_startup
 
 # Rofi replace dmenu
 bindsym $mod+Shift+d exec --no-startup-id rofi -modi drun -show drun -show-icons
@@ -68,11 +59,11 @@ bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
 
 # Define workspaces
-set $ws1 "1: Terminal"
-set $ws2 "2: Browser"
-set $ws3 "3: Document"
-set $ws4 "4: Files"
-set $ws5 "5: Other"
+set $ws1 "1"
+set $ws2 "2
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
