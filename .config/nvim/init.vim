@@ -348,6 +348,7 @@ augroup LoadFile
   au VimResized * wincmd =
   au CursorMoved * checktime
   au BufWritePost * call Trim()
+  au BufWritePost * lua vim.diagnostic.setloclist()
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |

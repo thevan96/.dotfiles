@@ -5,12 +5,9 @@ require('mason-lspconfig').setup({
     'cssls',
     'jsonls',
     'rust_analyzer',
-    'clangd',
     'cssmodules_ls',
-    'pyright',
     'tsserver',
     'gopls',
     'lua_ls',
-    'clangd',
   },
 })
