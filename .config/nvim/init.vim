@@ -298,7 +298,7 @@ function! Format()
     !sqlfluff fix --dialect postgres -f %
   elseif extension == 'md'
     !prettier --prose-wrap always -w %
-  elseif index(['css', 'scss', 'html'], extension) >= 0
+  elseif index(['html', 'css', 'scss', 'yml', 'json'], extension) >= 0
     !prettier -w %
   endif
 endfunction

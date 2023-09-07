@@ -39,6 +39,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     wmctrl \
     pgcli \
     mycli \
+    postgresql-client \
+    mysql-client \
     stow \
     rofi \
     vlc \
