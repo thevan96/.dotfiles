@@ -194,10 +194,32 @@ Plug 'rlue/vim-barbaric'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
-Plug 'jpalardy/vim-slime'
-let g:slime_target = 'tmux'
-let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
-let g:slime_dont_ask_default = 1
+Plug 'preservim/vimux'
+let g:VimuxHeight = '50'
+let g:VimuxOrientation = 'h'
+nnoremap <leader>vp :VimuxPromptCommand<CR>
+nnoremap <leader>vl :VimuxRunLastCommand<CR>
+nnoremap <leader>vi :VimuxInspectRunner<CR>
+nnoremap <leader>vo :VimuxOpenRunner<CR>
+nnoremap <leader>vq :VimuxCloseRunner<CR>
+nnoremap <leader>vx :VimuxInterruptRunner<CR>
+nnoremap <leader>vz :call VimuxZoomRunner()<CR>
+nnoremap <leader>v<C-l> :VimuxClearTerminalScreen<CR>
+nnoremap <leader>vm :call VimuxRunCommand('clear; make')<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vr
+  \ :call VimuxRunCommand('go run '.expand('%'), 0)<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vt
+  \ :call VimuxRunCommand('go test -v '.expand('%:p:h'))<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vT
+  \ :call VimuxRunCommand('go test ./...')<cr>
+
+" Like tslime
+function! VimuxSlime()
+  call VimuxRunCommand(@v, 0)
+  let @v = ''
+endfunction
+vmap <leader>vs "vy :call VimuxSlime()<cr>
+nmap <leader>vs vip<leader>vs<cr>
 
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
