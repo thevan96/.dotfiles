@@ -194,32 +194,35 @@ Plug 'rlue/vim-barbaric'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
-Plug 'preservim/vimux'
-let g:VimuxHeight = '50'
-let g:VimuxOrientation = 'h'
-nnoremap <leader>vp :VimuxPromptCommand<CR>
-nnoremap <leader>vl :VimuxRunLastCommand<CR>
-nnoremap <leader>vi :VimuxInspectRunner<CR>
-nnoremap <leader>vo :VimuxOpenRunner<CR>
-nnoremap <leader>vq :VimuxCloseRunner<CR>
-nnoremap <leader>vx :VimuxInterruptRunner<CR>
-nnoremap <leader>vz :call VimuxZoomRunner()<CR>
-nnoremap <leader>v<C-l> :VimuxClearTerminalScreen<CR>
-nnoremap <leader>vm :call VimuxRunCommand('clear; make')<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vr
-  \ :call VimuxRunCommand('go run '.expand('%'), 0)<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vt
-  \ :call VimuxRunCommand('go test -v '.expand('%:p:h'))<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vT
-  \ :call VimuxRunCommand('go test ./...')<cr>
+Plug 'christoomey/vim-tmux-runner'
+let g:VtrPercentage = 50
+let g:VtrOrientation = 'h'
+nnoremap <leader>va :VtrAttachToPane<cr>
+nnoremap <leader>vA :VtrUnsetRunnerPane<cr>
+nnoremap <leader>vs :VtrSendCommandToRunner<cr>
+nnoremap <leader>vl :VtrSendLinesToRunner<cr>
+vnoremap <leader>vl :VtrSendLinesToRunner<cr>gv
+nnoremap <leader>vo :VtrOpenRunner<cr>
+nnoremap <leader>vx :VtrKillRunner<cr>
+nnoremap <leader>vz :VtrFocusRunner<cr>
+nnoremap <leader>vf :VtrFlushCommand<cr>
+nnoremap <leader>vd :VtrSendCtrlD<cr>
+nnoremap <leader>vc :VtrSendCtrlC<cr>
+nnoremap <leader>vC :VtrClearRunner<cr>
 
-" Like tslime
-function! VimuxSlime()
-  call VimuxRunCommand(@v, 0)
-  let @v = ''
+function! SendCommand(command)
+  if a:command == ''
+    return
+  endif
+  exe 'VtrSendCommandToRunner '.a:command
 endfunction
-vmap <leader>vs "vy :call VimuxSlime()<cr>
-nmap <leader>vs vip<leader>vs<cr>
+
+au BufNewFile,BufRead *.go nnoremap <leader>vr
+  \ :call SendCommand('go run '.expand('%'))<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vt
+  \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vT
+  \ :call SendCommand('go test ./...')<cr>
 
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
@@ -320,7 +323,7 @@ function! Format()
     !sqlfluff fix --dialect postgres -f %
   elseif extension == 'md'
     !prettier --prose-wrap always -w %
-  elseif index(['html', 'css', 'scss', 'yml', 'json'], extension) >= 0
+  elseif index(['html', 'css', 'scss', 'yaml', 'json'], extension) >= 0
     !prettier -w %
   endif
 endfunction
@@ -368,9 +371,8 @@ augroup end
 augroup LoadFile
   au!
   au VimResized * wincmd =
-  au CursorMoved * checktime
   au BufWritePost * call Trim()
-  au BufWritePost * lua vim.diagnostic.setloclist()
+  au CursorMoved *.* checktime
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |

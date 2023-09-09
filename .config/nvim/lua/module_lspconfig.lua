@@ -1,7 +1,7 @@
 local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
-  signs = true,
+  signs = false,
   underline = true,
   update_in_insert = false,
   virtual_text = false,
