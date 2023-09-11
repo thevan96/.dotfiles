@@ -191,6 +191,7 @@ au! FileType fzf set laststatus=0 noshowmode noruler
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
+Plug 'wellle/targets.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
