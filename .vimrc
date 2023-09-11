@@ -54,14 +54,6 @@ nnoremap <leader>x :bd<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
-" Better relative number
-nnoremap <silent><leader>n m':set relativenumber!<cr>
-vnoremap <silent><leader>n <esc>m':set relativenumber!<cr>V
-xnoremap <silent><leader>n <esc>m':set relativenumber!<cr>gv
-nnoremap <silent><leader>N :set invnumber<cr>
-vnoremap <silent><leader>N <esc>:set invnumber<cr>V
-xnoremap <silent><leader>N <esc>:set invnumber<cr>gv
-
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
@@ -205,5 +197,4 @@ augroup LoadFile
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor
   au BufWritePre * call Mkdir()
-  au CursorMoved,CursorMovedI * setlocal norelativenumber
 augroup end

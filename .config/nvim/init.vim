@@ -6,7 +6,7 @@ set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:→\ ,lead:.,trail:\ |
 set number norelativenumber
-set signcolumn=yes
+set signcolumn=no
 set textwidth=80
 set colorcolumn=80
 set cursorline cursorlineopt=number
@@ -59,8 +59,8 @@ vnoremap <leader>ft :'<,'>!prettier --parser markdown<cr>
 nnoremap <leader>ft vip:'<,'>!prettier --parser markdown<cr>
 
 " Virtual edit
-nnoremap <leader>va :set virtualedit=all nolist<cr>
-nnoremap <leader>vn :set virtualedit=none list<cr>
+nnoremap <leader>Va :set virtualedit=all nolist<cr>
+nnoremap <leader>Vn :set virtualedit=none list<cr>
 
 " Toggle relative number/number
 nnoremap <silent><leader>N :set invnumber<cr>
@@ -71,7 +71,6 @@ xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
-
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
@@ -279,10 +278,10 @@ hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=none   ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=none   ctermbg=none   cterm=underline
+hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
 
 "--- Function utils ---
 function! GRemoveMarkers() range
@@ -372,8 +371,8 @@ augroup end
 augroup LoadFile
   au!
   au VimResized * wincmd =
-  au BufWritePost * call Trim()
   au CursorMoved *.* checktime
+  au BufWritePost * call Trim()
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |

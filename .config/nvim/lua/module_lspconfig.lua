@@ -4,11 +4,10 @@ vim.diagnostic.config({
   signs = false,
   underline = true,
   update_in_insert = false,
-  virtual_text = false,
-  -- {
-  --   prefix = '●',
-  --   source = 'always',
-  -- },
+  virtual_text = {
+    prefix = '●',
+    source = 'always',
+  },
   float = {
     source = 'always',
     border = 'single',
@@ -84,8 +83,18 @@ nvim_lsp['lua_ls'].setup({
   },
 })
 
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set(
+  'n',
+  '[d',
+  '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
+)
+
+vim.keymap.set(
+  'n',
+  ']d',
+  '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
+)
+
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
@@ -109,8 +118,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
     vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
