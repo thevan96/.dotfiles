@@ -63,6 +63,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     net-tools \
     keychain \
     peek \
+    gnome-sushi \
     chrome-gnome-shell
 fi
 

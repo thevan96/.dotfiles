@@ -5,7 +5,7 @@ set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:→\ ,lead:.,trail:\ |
-set number norelativenumber
+set nonumber norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -32,12 +32,14 @@ let mapleader = ' '
 xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
+inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>h yypVr-
 nnoremap <leader>H yypVr=
-inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+nnoremap Zz <c-w>_ \| <c-w>\|
+nnoremap Zo <c-w>=
 
 " Disable autocomplete
 inoremap <C-n> <nop>
@@ -103,13 +105,10 @@ nnoremap [A :first<cr>:args<cr>
 nnoremap ]A :last<cr>:args<cr>
 
 " Mapping copy clipboard and past
-nnoremap <leader>y "+yy
-vnoremap <leader>y "+y
+noremap <leader>y "+yy
+noremap <leader>p "+p
 nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
-nnoremap <leader>p o<esc>"+p
-nnoremap <leader>P O<esc>"+p
-vnoremap <leader>p "+p
 
 " Fix conflict git
 if &diff
@@ -194,9 +193,16 @@ au! FileType fzf set laststatus=0 noshowmode noruler
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
-Plug 'wellle/targets.vim'
+Plug 'machakann/vim-swap'
+Plug 'tommcdo/vim-exchange'
+Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'tyru/open-browser.vim'
+
+Plug 'lambdalisue/suda.vim'
+command! W exe 'SudaWrite'
 
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 nmap <silent> <leader>D <Plug>(doge-generate)
@@ -224,21 +230,14 @@ function! SendCommand(command)
   exe 'VtrSendCommandToRunner '.a:command
 endfunction
 
+au BufNewFile,BufRead *.go nnoremap <leader>vi
+  \ :call SendCommand('go run '.expand('%').' < '.expand('%:h').'/1.in')<cr>
 au BufNewFile,BufRead *.go nnoremap <leader>vr
   \ :call SendCommand('go run '.expand('%'))<cr>
 au BufNewFile,BufRead *.go nnoremap <leader>vt
   \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
 au BufNewFile,BufRead *.go nnoremap <leader>vT
   \ :call SendCommand('go test ./...')<cr>
-
-Plug 'lambdalisue/suda.vim'
-command! W exe 'SudaWrite'
-
-Plug 'tommcdo/vim-exchange'
-Plug 'kylechui/nvim-surround'
-
-Plug 'weirongxu/plantuml-previewer.vim'
-Plug 'tyru/open-browser.vim'
 
 call plug#end()
 
@@ -332,6 +331,18 @@ function! Format()
     !prettier --prose-wrap always -w %
   elseif index(['html', 'css', 'scss', 'yaml', 'json'], extension) >= 0
     !prettier -w %
+  elseif filereadable('package.json')
+    if filereadable('node_modules/bin/prettier')
+      !npx prettier -w %
+    elseif filereadable('node_modules/bin/standard')
+      !npx standard --fix %
+    elseif filereadable('node_modules/bin/eslint')
+      !npx eslint --fix %
+    endif
+  elseif extension == 'js' || extension == 'jsx'
+    !standard --fix %
+  elseif extension == 'ts' || extension == 'tsx'
+    !ts-standard --fix %
   endif
 endfunction
 command! Format :call Format()
@@ -361,18 +372,13 @@ augroup end
 
 augroup RelativeWorkingDirectory
   au!
-  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
+  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
 augroup JumpQuickfx
   au QuickFixCmdPost [^l]* nested cwindow
   au QuickFixCmdPost    l* nested lwindow
-augroup end
-
-augroup DisableNoiseLSP
-  au BufWrite * lua vim.diagnostic.enable()
-  au InsertEnter * lua vim.diagnostic.disable()
 augroup end
 
 augroup LoadFile

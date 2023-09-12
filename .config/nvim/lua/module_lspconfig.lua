@@ -6,6 +6,7 @@ vim.diagnostic.config({
   update_in_insert = false,
   virtual_text = {
     prefix = '●',
+    spacing = 2,
     source = 'always',
   },
   float = {
@@ -14,49 +15,41 @@ vim.diagnostic.config({
   },
 })
 
-local on_handlers = {
-  ['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover,
-    { border = 'single' }
-  ),
-  ['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help,
-    { border = 'single' }
-  ),
-}
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = 'single',
+})
 
---Enable (broadcasting) snippet capability for completion
+vim.lsp.handlers['textDocument/signatureHelp'] =
+  vim.lsp.with(vim.lsp.handlers.signature_help, {
+    border = 'single',
+  })
+
+-- Enable (broadcasting) snippet capability for completion
 local on_capabilities = vim.lsp.protocol.make_client_capabilities()
 on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
 on_capabilities.offsetEncoding = { 'utf-16' }
 
 local servers = {
-  'clangd',
   'cssmodules_ls',
   'pyright',
-  'texlab',
   'tsserver',
   'rust_analyzer',
   'gopls',
 }
 
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup({
-    handlers = on_handlers,
-  })
+  nvim_lsp[lsp].setup({})
 end
 
 for _, lsp in ipairs({ 'html', 'jsonls' }) do
   nvim_lsp[lsp].setup({
     capabilities = on_capabilities,
-    handlers = on_handlers,
   })
 end
 
 nvim_lsp['cssls'].setup({
   capabilities = on_capabilities,
-  handlers = on_handlers,
   settings = {
     css = {
       completion = {
@@ -73,7 +66,6 @@ nvim_lsp['cssls'].setup({
 
 nvim_lsp['lua_ls'].setup({
   capabilities = on_capabilities,
-  handlers = on_handlers,
   settings = {
     Lua = {
       diagnostics = {
@@ -83,21 +75,21 @@ nvim_lsp['lua_ls'].setup({
   },
 })
 
-vim.keymap.set(
-  'n',
-  '[d',
-  '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
-)
+-- vim.keymap.set(
+--   'n',
+--   '[d',
+--   '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
+-- )
 
-vim.keymap.set(
-  'n',
-  ']d',
-  '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
-)
+-- vim.keymap.set(
+--   'n',
+--   ']d',
+--   '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
+-- )
 
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
+-- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+-- vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -122,3 +114,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
+
+-- Disable noise diagnostics neovim lsp
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  callback = function(args)
+    vim.diagnostic.disable(args.buf)
+  end,
+})
+
+-- vim.api.nvim_create_autocmd({ 'BufWrite' }, {
+--   callback = function(args)
+--     vim.diagnostic.enable(args.buf)
+--   end,
+-- })

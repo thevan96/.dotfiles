@@ -184,7 +184,7 @@ augroup ShowExtraWhitespace
 augroup end
 
 augroup RelativeWorkingDirectory
-  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:p:h
+  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 

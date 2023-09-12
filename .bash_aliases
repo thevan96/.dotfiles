@@ -60,3 +60,9 @@ update_asdf() {
 live_server() {
   browser-sync start --server --files '**/*.*' --port ${1}
 }
+
+ide() {
+  tmux split-window -h -p 50
+  tmux split-window -v -p 50
+  tmux select-pane -t 0
+}
