@@ -93,10 +93,14 @@ nnoremap ]z :lnext<cr>
 nnoremap [Z :lfirst<cr>
 nnoremap ]Z :llast<cr>
 
-nnoremap [a :previous<cr>
-nnoremap ]a :next<cr>
-nnoremap [A :first<cr>
-nnoremap ]A :last<cr>
+nnoremap <leader>ao :args<cr>
+nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
+nnoremap <leader>ax :args<cr>:argdelete<space>
+nnoremap <leader>aX :argdelete *<cr>:echo 'clear args list'<cr>
+nnoremap [a :previous<cr>:args<cr>
+nnoremap ]a :next<cr>:args<cr>
+nnoremap [A :first<cr>:args<cr>
+nnoremap ]A :last<cr>:args<cr>
 
 " Mapping copy clipboard and past
 nnoremap <leader>y "+yy
@@ -193,6 +197,9 @@ Plug 'rlue/vim-barbaric'
 Plug 'wellle/targets.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+nmap <silent> <leader>D <Plug>(doge-generate)
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
