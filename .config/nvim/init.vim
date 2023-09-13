@@ -5,7 +5,7 @@ set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:→\ ,lead:.,trail:\ |
-set nonumber norelativenumber
+set number relativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -38,15 +38,9 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+inoremap <C-x><C-o> <nop>
 nnoremap Zz <c-w>_ \| <c-w>\|
 nnoremap Zo <c-w>=
-
-" Disable autocomplete
-inoremap <C-n> <nop>
-inoremap <C-p> <nop>
-inoremap <C-x><C-n> <nop>
-inoremap <C-x><C-p> <nop>
-inoremap <C-x><C-o> <nop>
 
 " Remap omnifunc
 inoremap <expr> <C-h>
@@ -57,22 +51,22 @@ inoremap <expr> <C-w>
   \ (pumvisible() && &omnifunc != '' ? '<C-w><C-x><C-o>' : '<C-w>')
 
 " Align table
-vnoremap <leader>ft :'<,'>!prettier --parser markdown<cr>
-nnoremap <leader>ft vip:'<,'>!prettier --parser markdown<cr>
+au BufNewFile,BufRead *.md,*.txt
+  \ vnoremap <leader>ft :'<,'>!prettier --parser markdown<cr>
+au BufNewFile,BufRead *.md,*.txt
+  \ nnoremap <leader>ft vip:'<,'>!prettier --parser markdown<cr>
 
 " Virtual edit
 nnoremap <leader>Va :set virtualedit=all nolist<cr>
 nnoremap <leader>Vn :set virtualedit=none list<cr>
 
-" Toggle relative number/number
-nnoremap <silent><leader>N :set invnumber<cr>
-nnoremap <silent><leader>n :set invrelativenumber<cr>
-vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
-xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
+" Toggle relative number
+nnoremap <silent><leader>N :set invrelativenumber<cr>
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 
@@ -88,12 +82,12 @@ nnoremap ]q :cnext<cr>
 nnoremap [Q :cfirst<cr>
 nnoremap ]Q :clast<cr>
 
-nnoremap <leader>zo :lopen<cr>
-nnoremap <leader>zx :lclose<cr>
-nnoremap [z :lprev<cr>
-nnoremap ]z :lnext<cr>
-nnoremap [Z :lfirst<cr>
-nnoremap ]Z :llast<cr>
+nnoremap <leader>so :lopen<cr>
+nnoremap <leader>sx :lclose<cr>
+nnoremap [s :lprev<cr>
+nnoremap ]s :lnext<cr>
+nnoremap [s :lfirst<cr>
+nnoremap ]s :llast<cr>
 
 nnoremap <leader>ao :args<cr>
 nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
@@ -230,15 +224,6 @@ function! SendCommand(command)
   exe 'VtrSendCommandToRunner '.a:command
 endfunction
 
-au BufNewFile,BufRead *.go nnoremap <leader>vi
-  \ :call SendCommand('go run '.expand('%').' < '.expand('%:h').'/1.in')<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vr
-  \ :call SendCommand('go run '.expand('%'))<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vt
-  \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vT
-  \ :call SendCommand('go test ./...')<cr>
-
 call plug#end()
 
 "--- Config Provider ---
@@ -364,6 +349,14 @@ augroup ConfigStyleTabOrSpace
   au BufNewFile,BufRead Makefile setlocal tabstop=2 shiftwidth=2 noexpandtab
 augroup end
 
+augroup Test
+  au!
+  au BufNewFile,BufRead *.go nnoremap <leader>tf
+    \ :!go test -v %:p:h<cr>
+  au BufNewFile,BufRead *.go nnoremap <leader>tt
+    \ :!go test ./...<cr>
+augroup end
+
 augroup ShowExtraWhitespace
   au!
   au InsertLeave * match ExtraWhitespace /\s\+$/
@@ -386,7 +379,6 @@ augroup LoadFile
   au VimResized * wincmd =
   au CursorMoved *.* checktime
   au BufWritePost * call Trim()
-  au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif

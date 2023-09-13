@@ -88,7 +88,7 @@ nvim_lsp['lua_ls'].setup({
 -- )
 
 -- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
--- vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '<leader>S', vim.diagnostic.setloclist)
 -- vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
