@@ -38,6 +38,8 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+" inoremap <C-Space> <C-x><C-o>
+inoremap <C-Space> <nop>
 inoremap <C-x><C-o> <nop>
 nnoremap Zz <c-w>_ \| <c-w>\|
 nnoremap Zo <c-w>=
@@ -340,6 +342,34 @@ function! Scratch()
   setlocal ft=scratch
 endfunction
 command! Scratch :call Scratch()
+
+function! Presentation()
+  let save_pos = getpos('.')
+  let start_row = searchpos('\s*```', 'bn')[0]+1
+  let end_row = searchpos('\s*```', 'n')[0]-1
+
+  if start_row > end_row
+    return
+  endif
+
+  let line_language = searchpos('\s*```', 'bn')[0]
+  let lang = matchlist(getline(line_language), '\([`~]\{3,}\)\(\S\+\)\?')[2]
+
+  if lang == 'go'
+    let start_row = searchpos('\s*```', 'bn')[0]+1
+    let end_row = searchpos('\s*```', 'n')[0]-1
+    silent exe start_row.','.end_row.'w! /tmp/main.go'
+  elseif lang == 'js'
+    let start_row = searchpos('\s*```', 'bn')[0]+1
+    let end_row = searchpos('\s*```', 'n')[0]-1
+
+    silent exe start_row.','.end_row.'w! /tmp/main.js'
+  endif
+  call setpos('.', save_pos)
+endfunction
+
+au BufNewFile,BufRead *.md,*.txt
+  \ nnoremap <silent><leader>P :w<cr>:call Presentation()<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
