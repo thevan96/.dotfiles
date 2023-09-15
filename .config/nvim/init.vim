@@ -4,6 +4,7 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
+set undofile undodir=~/.vim/undo
 set list listchars=tab:→\ ,lead:.,trail:\ |
 set number relativenumber
 set signcolumn=no
@@ -38,11 +39,9 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-" inoremap <C-Space> <C-x><C-o>
 inoremap <C-Space> <nop>
 inoremap <C-x><C-o> <nop>
-nnoremap Zz <c-w>_ \| <c-w>\|
-nnoremap Zo <c-w>=
+" inoremap <C-Space> <C-x><C-o>
 
 " Remap omnifunc
 inoremap <expr> <C-h>
@@ -197,11 +196,18 @@ Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 
+Plug 'szw/vim-maximizer'
+nmap <silent><C-w>m :MaximizerToggle<cr>
+
+Plug 'simnalamburt/vim-mundo'
+let g:mundo_right = 1
+nnoremap <leader>md :MundoToggle<cr>
+
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
 
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-nmap <silent> <leader>D <Plug>(doge-generate)
+nmap <silent> <leader>dg <Plug>(doge-generate)
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -369,7 +375,7 @@ function! Presentation()
 endfunction
 
 au BufNewFile,BufRead *.md,*.txt
-  \ nnoremap <silent><leader>P :w<cr>:call Presentation()<cr>
+  \ nnoremap <silent><leader>P :call Presentation()<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
