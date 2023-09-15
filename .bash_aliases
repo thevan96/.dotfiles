@@ -95,3 +95,15 @@ presentation_js() {
 
   ls ${1} | entr -src "node ${1}"
 }
+
+presentation_bash() {
+  set -e
+
+  if [ "${1}" == "" ]; then
+    set -- '/tmp/main.sh'
+  fi
+
+  echo '' > ${1}
+
+  ls ${1} | entr -src "bash ${1}"
+}

@@ -6,7 +6,7 @@ set encoding=utf-8
 set autoread autowrite
 set undofile undodir=~/.vim/undo
 set list listchars=tab:→\ ,lead:.,trail:\ |
-set number relativenumber
+set number norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -61,8 +61,11 @@ au BufNewFile,BufRead *.md,*.txt
 nnoremap <leader>Va :set virtualedit=all nolist<cr>
 nnoremap <leader>Vn :set virtualedit=none list<cr>
 
-" Toggle relative number
-nnoremap <silent><leader>N :set invrelativenumber<cr>
+" Toggle relative number/number
+nnoremap <silent><leader>N :set invnumber<cr>
+nnoremap <silent><leader>n :set invrelativenumber<cr>
+vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
+xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
@@ -77,7 +80,7 @@ command! Dpath let @+ = expand('%:h')
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
-nnoremap <leaer>qx :cclose<cr>
+nnoremap <leader>qx :cclose<cr>
 nnoremap [q :cprev<cr>
 nnoremap ]q :cnext<cr>
 nnoremap [Q :cfirst<cr>
@@ -232,6 +235,11 @@ function! SendCommand(command)
   exe 'VtrSendCommandToRunner '.a:command
 endfunction
 
+au BufNewFile,BufRead *.go nnoremap <leader>vt
+  \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
+au BufNewFile,BufRead *.go nnoremap <leader>vT
+  \ :call SendCommand('go test ./...')<cr>
+
 call plug#end()
 
 "--- Config Provider ---
@@ -349,33 +357,127 @@ function! Scratch()
 endfunction
 command! Scratch :call Scratch()
 
-function! Presentation()
-  let save_pos = getpos('.')
-  let start_row = searchpos('\s*```', 'bn')[0]+1
-  let end_row = searchpos('\s*```', 'n')[0]-1
+function! s:ParseCodeBlock() abort
+  let result = {}
 
-  if start_row > end_row
-    return
+  if match(getline("."), '^```') != -1
+    throw "Not in a code block"
+  endif
+  let start_i = search('^```', 'bnW')
+  if start_i == 0
+    throw "Not in a code block"
+  endif
+  let end_i = search('^```', 'nW')
+  if end_i == 0
+    throw "Not in a code block"
+  endif
+  let lines = getline(start_i, end_i)
+  if len(lines) < 3
+    throw "Code block is empty"
   endif
 
-  let line_language = searchpos('\s*```', 'bn')[0]
-  let lang = matchlist(getline(line_language), '\([`~]\{3,}\)\(\S\+\)\?')[2]
+  let result.src = lines[1:-2]
+  let result.language = lines[0][3:]
+  let result.start = start_i
+  let result.end = end_i
+  let result.result = ''
 
-  if lang == 'go'
-    let start_row = searchpos('\s*```', 'bn')[0]+1
-    let end_row = searchpos('\s*```', 'n')[0]-1
-    silent exe start_row.','.end_row.'w! /tmp/main.go'
-  elseif lang == 'js'
-    let start_row = searchpos('\s*```', 'bn')[0]+1
-    let end_row = searchpos('\s*```', 'n')[0]-1
+  return result
+endfunction
 
-    silent exe start_row.','.end_row.'w! /tmp/main.js'
+function! s:RunJs(runner)
+  let tmp = '/tmp/main.js'
+  let src = a:runner.src
+
+  call writefile(src, tmp)
+  let res = system('node ' . tmp)
+
+  let a:runner.result = res
+  return a:runner
+endfunction
+
+function! s:RunShell(runner)
+  let tmp ='/tmp/main.sh'
+  let src = a:runner.src
+
+  call writefile(src, tmp)
+  silent exe '!chmod +x '.tmp
+  let res = system(a:runner.language.' '.tmp)
+
+  let a:runner.result = res
+  return a:runner
+endfunction
+
+function! s:RunGo(runner)
+  let tmp = '/tmp/main.go'
+  let src = a:runner.src
+
+  call writefile(src, tmp)
+  let res = system('go run ' . tmp)
+
+  let a:runner.result = res
+  return a:runner
+endfunction
+
+function! s:InsertBlockCode(runner)
+  try
+    let runner = a:runner
+
+    let save_cursor = getcurpos()
+    if getline(runner.end + 2) ==# '```result'
+      call cursor(runner.end + 3, 0)
+      let end_result_block_line = search('```', 'cW')
+      if end_result_block_line
+        if getline(end_result_block_line + 1) ==# ''
+          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line + 1)
+        else
+          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
+        endif
+      endif
+    endif
+
+    let result_lines = split(runner.result, '\n')
+    call append(runner.end, '')
+    call append(runner.end + 1, '```result')
+    call append(runner.end + 2, result_lines)
+    call append(runner.end + len(result_lines) + 2, '```')
+    call setpos('.', save_cursor)
+
+  catch  /.*/
+    call s:error(v:exception)
+  endtry
+endfunction
+
+function! s:error(error)
+  execute 'normal! \<Esc>'
+  echohl ErrorMsg
+  echo 'Markdown error: ' . a:error
+  echohl None
+endfunction
+
+function! RunCode(type)
+  let save_pos = getpos('.')
+
+  let runner = s:ParseCodeBlock()
+  if index(['sh', 'bash', 'zsh'], runner.language) >= 0
+    let runner = s:RunShell(runner)
+  elseif runner.language == 'go'
+    let runner = s:RunGo(runner)
+  elseif runner.language == 'js'
+    let runner = s:RunJs(runner)
+  endif
+
+  if a:type == 'insert'
+    call s:InsertBlockCode(runner)
+  elseif a:type == 'echo'
+    echo runner.result
   endif
   call setpos('.', save_pos)
 endfunction
 
-au BufNewFile,BufRead *.md,*.txt
-  \ nnoremap <silent><leader>P :call Presentation()<cr>
+nnoremap <silent><leader>R :call RunCode('insert')<cr>
+nnoremap <silent><leader>rr :call RunCode('echo')<cr>
+nnoremap <silent><leader>P :call RunCode('')<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
@@ -413,8 +515,10 @@ augroup end
 augroup LoadFile
   au!
   au VimResized * wincmd =
-  au CursorMoved *.* checktime
+  au CursorMoved  *.* checktime
   au BufWritePost * call Trim()
+  au FileType oil setlocal nonumber
+  au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
