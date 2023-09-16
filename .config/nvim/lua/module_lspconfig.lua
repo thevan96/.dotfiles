@@ -4,11 +4,12 @@ vim.diagnostic.config({
   signs = false,
   underline = true,
   update_in_insert = false,
-  virtual_text = {
-    prefix = '●',
-    spacing = 2,
-    source = 'always',
-  },
+  virtual_text = false,
+  -- {
+  --   prefix = '●',
+  --   spacing = 2,
+  --   source = 'always',
+  -- },
   float = {
     source = 'always',
     border = 'single',
@@ -75,21 +76,21 @@ nvim_lsp['lua_ls'].setup({
   },
 })
 
--- vim.keymap.set(
---   'n',
---   '[d',
---   '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
--- )
+vim.keymap.set(
+  'n',
+  '[d',
+  '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
+)
 
--- vim.keymap.set(
---   'n',
---   ']d',
---   '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
--- )
+vim.keymap.set(
+  'n',
+  ']d',
+  '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
+)
 
--- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
--- vim.keymap.set('n', '<leader>S', vim.diagnostic.setloclist)
--- vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -114,16 +115,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
-
--- Disable noise diagnostics neovim lsp
-vim.api.nvim_create_autocmd({ 'BufEnter' }, {
-  callback = function(args)
-    vim.diagnostic.disable(args.buf)
-  end,
-})
-
--- vim.api.nvim_create_autocmd({ 'BufWrite' }, {
---   callback = function(args)
---     vim.diagnostic.enable(args.buf)
---   end,
--- })

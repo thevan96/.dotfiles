@@ -39,9 +39,7 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-inoremap <C-Space> <nop>
-inoremap <C-x><C-o> <nop>
-" inoremap <C-Space> <C-x><C-o>
+inoremap <C-Space> <C-x><C-o>
 
 " Remap omnifunc
 inoremap <expr> <C-h>
@@ -86,12 +84,12 @@ nnoremap ]q :cnext<cr>
 nnoremap [Q :cfirst<cr>
 nnoremap ]Q :clast<cr>
 
-nnoremap <leader>so :lopen<cr>
-nnoremap <leader>sx :lclose<cr>
-nnoremap [s :lprev<cr>
-nnoremap ]s :lnext<cr>
-nnoremap [s :lfirst<cr>
-nnoremap ]s :llast<cr>
+nnoremap <leader>zo :lopen<cr>
+nnoremap <leader>zx :lclose<cr>
+nnoremap [z :lprev<cr>
+nnoremap ]z :lnext<cr>
+nnoremap [Z :lfirst<cr>
+nnoremap ]Z :llast<cr>
 
 nnoremap <leader>ao :args<cr>
 nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
@@ -104,7 +102,9 @@ nnoremap ]A :last<cr>:args<cr>
 
 " Mapping copy clipboard and past
 noremap <leader>y "+yy
-noremap <leader>p "+p
+vnoremap <leader>p "+p
+nnoremap <leader>p :put +<cr>
+nnoremap <leader>P :put! +<cr>
 nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
 
@@ -423,8 +423,8 @@ function! s:InsertBlockCode(runner)
   try
     let runner = a:runner
 
-    let save_cursor = getcurpos()
     if getline(runner.end + 2) ==# '```result'
+      let save_cursor = getcurpos()
       call cursor(runner.end + 3, 0)
       let end_result_block_line = search('```', 'cW')
       if end_result_block_line
@@ -434,6 +434,7 @@ function! s:InsertBlockCode(runner)
           call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
         endif
       endif
+      call setpos('.', save_cursor)
     endif
 
     let result_lines = split(runner.result, '\n')
@@ -441,7 +442,6 @@ function! s:InsertBlockCode(runner)
     call append(runner.end + 1, '```result')
     call append(runner.end + 2, result_lines)
     call append(runner.end + len(result_lines) + 2, '```')
-    call setpos('.', save_cursor)
 
   catch  /.*/
     call s:error(v:exception)
@@ -456,8 +456,6 @@ function! s:error(error)
 endfunction
 
 function! RunCode(type)
-  let save_pos = getpos('.')
-
   let runner = s:ParseCodeBlock()
   if index(['sh', 'bash', 'zsh'], runner.language) >= 0
     let runner = s:RunShell(runner)
@@ -472,12 +470,11 @@ function! RunCode(type)
   elseif a:type == 'echo'
     echo runner.result
   endif
-  call setpos('.', save_pos)
 endfunction
 
-nnoremap <silent><leader>R :call RunCode('insert')<cr>
+nnoremap <silent><leader>ri :call RunCode('insert')<cr>
 nnoremap <silent><leader>rr :call RunCode('echo')<cr>
-nnoremap <silent><leader>P :call RunCode('')<cr>
+nnoremap <silent><leader>rl :call RunCode('')<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
@@ -517,7 +514,8 @@ augroup LoadFile
   au VimResized * wincmd =
   au CursorMoved  *.* checktime
   au BufWritePost * call Trim()
-  au FileType oil setlocal nonumber
+  au FileType oil,qf setlocal nonumber
+  au BufWritePost *  lua vim.diagnostic.setloclist()
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
