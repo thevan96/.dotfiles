@@ -4,12 +4,11 @@ vim.diagnostic.config({
   signs = false,
   underline = true,
   update_in_insert = false,
-  virtual_text = false,
-  -- {
-  --   prefix = '●',
-  --   spacing = 2,
-  --   source = 'always',
-  -- },
+  virtual_text = {
+    prefix = '●',
+    spacing = 2,
+    source = 'always',
+  },
   float = {
     source = 'always',
     border = 'single',
@@ -89,9 +88,6 @@ vim.keymap.set(
 )
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>Z', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
-
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
@@ -113,5 +109,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+  end,
+})
+
+--- Disable noise diagnostics neovim lsp
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+  callback = function(args)
+    vim.diagnostic.disable(args.buf)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+  callback = function(args)
+    vim.diagnostic.enable(args.buf)
   end,
 })

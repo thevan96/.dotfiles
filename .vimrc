@@ -28,6 +28,7 @@ set backspace=0
 set matchtime=1
 set nofoldenable
 set diffopt=vertical
+set scrolloff=5
 set ttymouse=sgr
 
 packadd matchit

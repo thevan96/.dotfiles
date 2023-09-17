@@ -17,6 +17,7 @@ set noshowcmd
 set backspace=0
 set nofoldenable
 set guicursor=i:block
+set scrolloff=5
 set mouse=
 
 " Netrw
@@ -40,14 +41,6 @@ nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 inoremap <C-Space> <C-x><C-o>
-
-" Remap omnifunc
-inoremap <expr> <C-h>
-  \ (pumvisible() && &omnifunc != '' ? '<C-h><C-x><C-o>' : '<C-h>')
-inoremap <expr> <BS>
-  \ (pumvisible() && &omnifunc != '' ? '<BS><C-x><C-o>' : '<BS>')
-inoremap <expr> <C-w>
-  \ (pumvisible() && &omnifunc != '' ? '<C-w><C-x><C-o>' : '<C-w>')
 
 " Align table
 au BufNewFile,BufRead *.md,*.txt
@@ -199,8 +192,12 @@ Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 
-Plug 'szw/vim-maximizer'
-nmap <silent><C-w>m :MaximizerToggle<cr>
+Plug 'iamcco/markdown-preview.nvim',
+  \ { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+nnoremap <leader>M :MarkdownPreviewToggle<cr>
+
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+nmap <silent> <leader>dg <Plug>(doge-generate)
 
 Plug 'simnalamburt/vim-mundo'
 let g:mundo_right = 1
@@ -208,9 +205,6 @@ nnoremap <leader>md :MundoToggle<cr>
 
 Plug 'lambdalisue/suda.vim'
 command! W exe 'SudaWrite'
-
-Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-nmap <silent> <leader>dg <Plug>(doge-generate)
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -235,60 +229,12 @@ function! SendCommand(command)
   exe 'VtrSendCommandToRunner '.a:command
 endfunction
 
-au BufNewFile,BufRead *.go nnoremap <leader>vt
+au FileType go nnoremap <buffer> <leader>vt
   \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
-au BufNewFile,BufRead *.go nnoremap <leader>vT
+au FileType go nnoremap <buffer> <leader>vT
   \ :call SendCommand('go test ./...')<cr>
 
 call plug#end()
-
-"--- Config Provider ---
-let g:loaded_perl_provider = 0
-let g:loaded_node_provider = 0
-let g:loaded_ruby_provider = 0
-let g:loaded_python_provider = 0
-let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
-
-"--- Customize theme ---
-syntax off
-set background=dark
-filetype plugin indent off
-
-hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
-hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
-hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
-hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
-
-hi LineNr                    ctermfg=242    ctermbg=none   cterm=none
-hi LineNrAbove               ctermfg=242    ctermbg=none   cterm=none
-hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
-hi CursorLine                ctermfg=242    ctermbg=none   cterm=none
-hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
-
-hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
-hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
-hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
-hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
-
-hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
-hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
-hi DiagnosticInfo            ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticHint            ctermfg=34     ctermbg=none   cterm=none
-
-hi DiagnosticSignError       ctermfg=196    ctermbg=none   cterm=none
-hi DiagnosticSignWarn        ctermfg=226    ctermbg=none   cterm=none
-hi DiagnosticSignInfo        ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticSignHint        ctermfg=34     ctermbg=none   cterm=none
-
-hi DiagnosticFloatingError   ctermfg=196    ctermbg=none   cterm=none
-hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
-hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
-
-hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
 
 "--- Function utils ---
 function! GRemoveMarkers() range
@@ -361,19 +307,22 @@ function! s:ParseCodeBlock() abort
   let result = {}
 
   if match(getline("."), '^```') != -1
-    throw "Not in a code block"
+    return result
   endif
+
   let start_i = search('^```', 'bnW')
   if start_i == 0
-    throw "Not in a code block"
+    return result
   endif
+
   let end_i = search('^```', 'nW')
   if end_i == 0
-    throw "Not in a code block"
+    return {}
   endif
+
   let lines = getline(start_i, end_i)
   if len(lines) < 3
-    throw "Code block is empty"
+    return {}
   endif
 
   let result.src = lines[1:-2]
@@ -386,18 +335,19 @@ function! s:ParseCodeBlock() abort
 endfunction
 
 function! s:RunJs(runner)
-  let tmp = '/tmp/main.js'
+  let tmp = tempname().'.js'
   let src = a:runner.src
 
   call writefile(src, tmp)
   let res = system('node ' . tmp)
 
   let a:runner.result = res
+  call delete(tmp)
   return a:runner
 endfunction
 
 function! s:RunShell(runner)
-  let tmp ='/tmp/main.sh'
+  let tmp = tempname(). '.sh'
   let src = a:runner.src
 
   call writefile(src, tmp)
@@ -405,17 +355,19 @@ function! s:RunShell(runner)
   let res = system(a:runner.language.' '.tmp)
 
   let a:runner.result = res
+  call delete(tmp)
   return a:runner
 endfunction
 
 function! s:RunGo(runner)
-  let tmp = '/tmp/main.go'
+  let tmp = tempname().'.go'
   let src = a:runner.src
 
   call writefile(src, tmp)
   let res = system('go run ' . tmp)
 
   let a:runner.result = res
+  call delete(tmp)
   return a:runner
 endfunction
 
@@ -457,7 +409,13 @@ endfunction
 
 function! RunCode(type)
   let runner = s:ParseCodeBlock()
-  if index(['sh', 'bash', 'zsh'], runner.language) >= 0
+  if runner == {}
+    return
+  endif
+
+  if runner.language == 'result' || runner.language == ''
+    return
+  elseif index(['sh', 'bash', 'zsh'], runner.language) >= 0
     let runner = s:RunShell(runner)
   elseif runner.language == 'go'
     let runner = s:RunGo(runner)
@@ -471,10 +429,8 @@ function! RunCode(type)
     echo runner.result
   endif
 endfunction
-
-nnoremap <silent><leader>ri :call RunCode('insert')<cr>
-nnoremap <silent><leader>rr :call RunCode('echo')<cr>
-nnoremap <silent><leader>rl :call RunCode('')<cr>
+nnoremap <silent><leader>rr :call RunCode('insert')<cr>
+nnoremap <silent><leader>re :call RunCode('echo')<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
@@ -482,14 +438,6 @@ augroup ConfigStyleTabOrSpace
   au BufNewFile,BufRead *.rs setlocal tabstop=4 shiftwidth=4 expandtab
   au BufNewFile,BufRead *.md setlocal tabstop=2 shiftwidth=2 expandtab
   au BufNewFile,BufRead Makefile setlocal tabstop=2 shiftwidth=2 noexpandtab
-augroup end
-
-augroup Test
-  au!
-  au BufNewFile,BufRead *.go nnoremap <leader>tf
-    \ :!go test -v %:p:h<cr>
-  au BufNewFile,BufRead *.go nnoremap <leader>tt
-    \ :!go test ./...<cr>
 augroup end
 
 augroup ShowExtraWhitespace
@@ -514,13 +462,61 @@ augroup LoadFile
   au VimResized * wincmd =
   au CursorMoved  *.* checktime
   au BufWritePost * call Trim()
-  au FileType oil,qf setlocal nonumber
-  au BufWritePost *  lua vim.diagnostic.setloclist()
+  au FileType oil,qf,markdown,text setlocal nonumber
   au CursorMoved,CursorMovedI * set norelativenumber
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
 augroup end
+
+"--- Config Provider ---
+let g:loaded_perl_provider = 0
+let g:loaded_node_provider = 0
+let g:loaded_ruby_provider = 0
+let g:loaded_python_provider = 0
+let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
+
+"--- Customize theme ---
+syntax off
+set background=dark
+filetype plugin on
+filetype indent off
+
+hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
+hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
+hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
+hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
+
+hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
+hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none
+hi LineNrBelow               ctermfg=244    ctermbg=none   cterm=none
+hi CursorLine                ctermfg=244    ctermbg=none   cterm=none
+hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
+
+hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
+hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
+hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
+hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
+
+hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticInfo            ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticHint            ctermfg=34     ctermbg=none   cterm=none
+
+hi DiagnosticSignError       ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticSignWarn        ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticSignInfo        ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticSignHint        ctermfg=34     ctermbg=none   cterm=none
+
+hi DiagnosticFloatingError   ctermfg=196    ctermbg=none   cterm=none
+hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
+hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
+hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
+
+hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
 
 "--- Load lua---
 lua << EOF
