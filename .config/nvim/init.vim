@@ -194,7 +194,7 @@ Plug 'tyru/open-browser.vim'
 
 Plug 'iamcco/markdown-preview.nvim',
   \ { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-nnoremap <leader>M :MarkdownPreviewToggle<cr>
+nnoremap <leader>mp :MarkdownPreviewToggle<cr>
 
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 nmap <silent> <leader>dg <Plug>(doge-generate)
@@ -254,7 +254,6 @@ function! Trim()
     silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
-    silent! w
   endif
 endfunction
 command! Trim :call Trim()
@@ -442,8 +441,10 @@ augroup end
 
 augroup ShowExtraWhitespace
   au!
-  au InsertLeave * match ExtraWhitespace /\s\+$/
-  au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  match ExtraWhitespace /\s\+$/
+  hi ExtraWhitespace ctermbg=196
+  au InsertEnter * hi ExtraWhitespace ctermbg=none
+  au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -495,7 +496,6 @@ hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
 
 hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
 hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
-hi ExtraWhitespace           ctermfg=196    ctermbg=196    cterm=none
 hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
 
 hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
