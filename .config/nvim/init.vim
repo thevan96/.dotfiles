@@ -40,7 +40,6 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-inoremap <C-Space> <C-x><C-o>
 
 " Align table
 au BufNewFile,BufRead *.md,*.txt
@@ -124,6 +123,10 @@ call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
+
+" Autocomplete
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -523,6 +526,7 @@ lua << EOF
   require 'module_lspconfig'
   require 'module_mason'
   require 'module_oil'
+  require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()
