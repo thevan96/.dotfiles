@@ -3,7 +3,6 @@ local nvim_lsp = require('lspconfig')
 vim.diagnostic.config({
   signs = false,
   underline = true,
-  update_in_insert = false,
   virtual_text = {
     prefix = '●',
     spacing = 2,
@@ -13,6 +12,7 @@ vim.diagnostic.config({
     source = 'always',
     border = 'single',
   },
+  update_in_insert = false,
 })
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -122,5 +122,37 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
 vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   callback = function(args)
     vim.diagnostic.enable(args.buf)
+  end,
+})
+
+local function get_all_diagnostics(bufnr)
+  local error =
+    #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.ERROR })
+  local warning =
+    #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.WARN })
+  local info =
+    #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.INFO })
+  local hint =
+    #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.HINT })
+
+  if error + warning + info + hint == 0 then
+    return ''
+  end
+
+  return '[E/'
+    .. error
+    .. ' W/'
+    .. warning
+    .. ' I/'
+    .. info
+    .. ' H/'
+    .. hint
+    .. ']'
+end
+
+vim.api.nvim_create_autocmd({ 'DiagnosticChanged', 'BufWritePost' }, {
+  callback = function(args)
+    local error_all = get_all_diagnostics(args.buf)
+    vim.opt.statusline = '%<%f ' .. error_all .. ' %h%m%r%=%-14.(%l,%c%V%) %P'
   end,
 })

@@ -35,11 +35,14 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>h yypVr-
-nnoremap <leader>H yypVr=
 nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+inoremap <C-Space> <C-x><C-o>
+nnoremap gd <C-]>
+nnoremap gS <C-w>]
+nnoremap gp <C-w>}
+nnoremap gP <C-w>z
 
 " Align table
 au BufNewFile,BufRead *.md,*.txt
@@ -124,10 +127,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
-" Autocomplete
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-
 " Snippets
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger='<C-j>'
@@ -187,13 +186,18 @@ au! FileType fzf set laststatus=0 noshowmode noruler
 "--- Other plugins ---
 Plug 'mattn/emmet-vim'
 Plug 'rlue/vim-barbaric'
-Plug 'machakann/vim-swap'
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
+
+Plug 'machakann/vim-swap'
+omap ia <Plug>(swap-textobject-i)
+xmap ia <Plug>(swap-textobject-i)
+omap aa <Plug>(swap-textobject-a)
+xmap aa <Plug>(swap-textobject-a)
 
 Plug 'iamcco/markdown-preview.nvim',
   \ { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -436,10 +440,10 @@ nnoremap <silent><leader>re :call RunCode('echo')<cr>
 
 augroup ConfigStyleTabOrSpace
   au!
-  au BufNewFile,BufRead *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
-  au BufNewFile,BufRead *.rs setlocal tabstop=4 shiftwidth=4 expandtab
-  au BufNewFile,BufRead *.md setlocal tabstop=2 shiftwidth=2 expandtab
-  au BufNewFile,BufRead Makefile setlocal tabstop=2 shiftwidth=2 noexpandtab
+  au BufNewFile,BufRead,BufWrite *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  au BufNewFile,BufRead,BufWrite *.rs setlocal tabstop=4 shiftwidth=4 expandtab
+  au BufNewFile,BufRead,BufWrite *.md setlocal tabstop=2 shiftwidth=2 expandtab
+  au BufNewFile,BufRead,BufWrite Makefile setlocal tabstop=2 shiftwidth=2 noexpandtab
 augroup end
 
 augroup ShowExtraWhitespace
@@ -468,6 +472,7 @@ augroup LoadFile
   au BufWritePost * call Trim()
   au FileType oil,qf,markdown,text setlocal nonumber
   au CursorMoved,CursorMovedI * set norelativenumber
+  au TextYankPost * silent! lua vim.highlight.on_yank()
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -526,7 +531,6 @@ lua << EOF
   require 'module_lspconfig'
   require 'module_mason'
   require 'module_oil'
-  require 'module_cmp'
 
   -- Without config
   require 'fidget'.setup()
