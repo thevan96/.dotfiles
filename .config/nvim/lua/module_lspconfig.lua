@@ -36,6 +36,7 @@ local servers = {
   'tsserver',
   'rust_analyzer',
   'gopls',
+  'marksman'
 }
 
 for _, lsp in ipairs(servers) do

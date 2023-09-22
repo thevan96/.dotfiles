@@ -49,6 +49,11 @@ exit() {
   echo 'Use <C-d> instead!'
 }
 
+
+mkdircd() {
+  mkdir -p ${1} && cd ${1}
+}
+
 update_asdf() {
   asdf reshim nodejs
   asdf reshim python

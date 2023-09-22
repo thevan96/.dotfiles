@@ -6,7 +6,7 @@ set encoding=utf-8
 set autoread autowrite
 set undofile undodir=~/.vim/undo
 set list listchars=tab:→\ ,lead:.,trail:\ |
-set number norelativenumber
+set nonumber norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -17,7 +17,6 @@ set noshowcmd
 set backspace=0
 set nofoldenable
 set guicursor=i:block
-set scrolloff=5
 set mouse=
 
 " Netrw
@@ -35,12 +34,11 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>fm :Format<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 inoremap <C-Space> <C-x><C-o>
 nnoremap gd <C-]>
-nnoremap gS <C-w>]
+nnoremap gs <C-w>]
 nnoremap gp <C-w>}
 nnoremap gP <C-w>z
 
@@ -60,9 +58,9 @@ nnoremap <silent><leader>n :set invrelativenumber<cr>
 vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
 xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 
-" Relativenumber keep jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+" Relativenumber keep jumplist and navigate wrap lines
+nnoremap <expr> k (v:count > 1  && &relativenumber ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1  && &relativenumber ? "m'" . v:count : '') . 'gj'
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -147,7 +145,6 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
-let g:fzf_layout = { 'down': '~40%' }
 
 let rgIgnoreDirectories = "
   \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
@@ -194,6 +191,11 @@ Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 
 Plug 'machakann/vim-swap'
+let g:swap_no_default_key_mappings = 1
+nmap g< <Plug>(swap-prev)
+nmap g> <Plug>(swap-next)
+nmap gS <Plug>(swap-interactive)
+xmap gS <Plug>(swap-interactive)
 omap ia <Plug>(swap-textobject-i)
 xmap ia <Plug>(swap-textobject-i)
 omap aa <Plug>(swap-textobject-a)
@@ -253,6 +255,10 @@ function! IsInCurrentProject()
   let pwd = getcwd()
   let file = expand('%:p:h')
 
+  if stridx(file, 'node_modules') >= 0
+    return
+  endif
+
   return stridx(file, pwd) >= 0
 endfunction
 
@@ -282,20 +288,12 @@ function! Format()
     !sqlfluff fix --dialect postgres -f %
   elseif extension == 'md'
     !prettier --prose-wrap always -w %
-  elseif index(['html', 'css', 'scss', 'yaml', 'json'], extension) >= 0
+  elseif index(
+    \ [
+    \   'html', 'css', 'scss', 'yaml', 'json',
+    \   'js', 'jsx', 'ts', 'tsx'
+    \ ], extension) >= 0
     !prettier -w %
-  elseif filereadable('package.json')
-    if filereadable('node_modules/bin/prettier')
-      !npx prettier -w %
-    elseif filereadable('node_modules/bin/standard')
-      !npx standard --fix %
-    elseif filereadable('node_modules/bin/eslint')
-      !npx eslint --fix %
-    endif
-  elseif extension == 'js' || extension == 'jsx'
-    !standard --fix %
-  elseif extension == 'ts' || extension == 'tsx'
-    !ts-standard --fix %
   endif
 endfunction
 command! Format :call Format()
