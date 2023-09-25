@@ -6,7 +6,7 @@ set encoding=utf-8
 set autoread autowrite
 set undofile undodir=~/.vim/undo
 set list listchars=tab:→\ ,lead:.,trail:\ |
-set nonumber norelativenumber
+set number norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
@@ -18,10 +18,14 @@ set backspace=0
 set nofoldenable
 set guicursor=i:block
 set mouse=
+set noshowmode
+set noruler
 
 " Netrw
-let g:loaded_netrw = 0
-let g:loaded_netrwPlugin = 0
+let g:netrw_banner = 0
+let g:netrw_keepdir = 0
+let g:netrw_cursor = 0
+let g:root_cwd = getcwd()
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -36,11 +40,11 @@ nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>C :set invspell<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-inoremap <C-Space> <C-x><C-o>
 nnoremap gd <C-]>
 nnoremap gs <C-w>]
 nnoremap gp <C-w>}
 nnoremap gP <C-w>z
+inoremap <C-Space> <C-x><C-o>
 
 " Align table
 au BufNewFile,BufRead *.md,*.txt
@@ -132,10 +136,13 @@ let g:UltiSnipsJumpForwardTrigger='<C-j>'
 let g:UltiSnipsJumpBackwardTrigger='<C-k>'
 
 " File manager
-Plug 'stevearc/oil.nvim'
-nnoremap <leader>ff :Oil<cr>
-nnoremap <leader>fv :vsp+Oil<cr>
-nnoremap <leader>fs :sp+Oil<cr>
+nnoremap <leader>ff :JumpFile<cr>
+nnoremap <leader>fv :vsp+JumpFile<cr>
+nnoremap <leader>fs :sp+JumpFile<cr>
+command! Ro :e `=g:root_cwd`
+command! Ex :e+JumpFile
+command! Se :sp+JumpFile
+command! Ve :vsp+JumpFile
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -171,11 +178,11 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
   \  1, fzf#vim#with_preview(), <bang>0
   \ )
 
-nnoremap <leader>i :Files<cr>
-nnoremap <leader>o :Buffers<cr>
-nnoremap <leader>d :Directories<cr>
-nnoremap <leader>s :Rg<cr>
-nnoremap <leader>S :Rg <c-r><c-w><cr>
+nnoremap <leader>o :ls<cr>:b<space>
+nnoremap <leader>i :cd `=g:root_cwd`<cr>:Files<cr>
+nnoremap <leader>d :cd `=g:root_cwd`<cr>:Directories<cr>
+nnoremap <leader>s :cd `=g:root_cwd`<cr>:Rg<cr>
+nnoremap <leader>S :cd `=g:root_cwd`<cr>:Rg <c-r><c-w><cr>
 nnoremap <leader>T :Snippets<cr>
 au! FileType fzf set laststatus=0 noshowmode noruler
   \| au BufLeave <buffer> set laststatus=2 showmode ruler
@@ -189,6 +196,14 @@ Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
+
+Plug 'szw/vim-maximizer'
+noremap <C-w>m :MaximizerToggle<cr>
+
+Plug 'simeji/winresizer'
+let g:winresizer_vert_resize = 5
+let g:winresizer_horiz_resize = 2
+let g:winresizer_start_key = '<C-w>r'
 
 Plug 'machakann/vim-swap'
 let g:swap_no_default_key_mappings = 1
@@ -206,7 +221,7 @@ Plug 'iamcco/markdown-preview.nvim',
 nnoremap <leader>mp :MarkdownPreviewToggle<cr>
 
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-nmap <silent> <leader>dg <Plug>(doge-generate)
+let g:doge_mapping = '<leader>D'
 
 Plug 'simnalamburt/vim-mundo'
 let g:mundo_right = 1
@@ -436,6 +451,18 @@ endfunction
 nnoremap <silent><leader>rr :call RunCode('insert')<cr>
 nnoremap <silent><leader>re :call RunCode('echo')<cr>
 
+function HandleFileNotExist(name)
+  let msg = 'File "'.a:name.'"'
+  let v:fcs_choice = ''
+  if v:fcs_reason == "deleted"
+    let msg .= " no longer available"
+    call setbufvar(expand(a:name), '&modified', '1')
+    call setbufvar(expand(a:name), '&readonly', '1')
+    echohl WarningMsg
+  endif
+  echomsg msg
+endfunction
+
 augroup ConfigStyleTabOrSpace
   au!
   au BufNewFile,BufRead,BufWrite *.go setlocal tabstop=2 shiftwidth=2 noexpandtab
@@ -463,14 +490,46 @@ augroup JumpQuickfx
   au QuickFixCmdPost    l* nested lwindow
 augroup end
 
+function! JumpFile()
+  let file_name = expand('%:t')
+  e `=expand('%:h')`
+  call search(file_name)
+endfunction
+command! JumpFile call JumpFile()
+
+function! NetrwSetting()
+  au BufLeave <buffer> cd `=g:root_cwd`
+  nnoremap <buffer> % :!touch<space>
+  nnoremap <buffer> d :!mkdir -p<space>
+  nnoremap <silent><buffer> D :call NetrwDelete()<cr>
+  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
+  nnoremap <silent><buffer> mL :echo join(
+        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
+endfunction
+
+function! NetrwDelete()
+  let target =  netrw#Call('NetrwFile', netrw#Call('NetrwGetWord'))
+  if target == ''
+    return
+  endif
+
+  let name = input('Delete '.getcwd().'/'.target.'? y/n: ')
+  if name == 'y'
+    redraw
+    exe '!rm -rf '.getcwd().'/'.target
+    e .
+  endif
+endfunction
+
 augroup LoadFile
   au!
   au VimResized * wincmd =
-  au CursorMoved  *.* checktime
   au BufWritePost * call Trim()
-  au FileType oil,qf,markdown,text setlocal nonumber
+  au FileType netrw call NetrwSetting()
+  au FileType qf,markdown,text setlocal nonumber
   au CursorMoved,CursorMovedI * set norelativenumber
   au TextYankPost * silent! lua vim.highlight.on_yank()
+  au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -491,44 +550,43 @@ filetype indent off
 
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
-hi Pmenu                     ctermfg=15     ctermbg=236    cterm=none
-hi PmenuSel                  ctermfg=0      ctermbg=39     cterm=none
+hi Pmenu                     ctermfg=255    ctermbg=233    cterm=none
+hi PmenuSel                  ctermfg=46     ctermbg=0      cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none
 hi LineNrBelow               ctermfg=244    ctermbg=none   cterm=none
 hi CursorLine                ctermfg=244    ctermbg=none   cterm=none
-hi CursorLineNr              ctermfg=255    ctermbg=none   cterm=bold,underline
+hi CursorLineNr              ctermfg=46     ctermbg=none   cterm=none
 
-hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
-hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
+hi SpecialKey                ctermfg=238    ctermbg=none   cterm=none
+hi Whitespace                ctermfg=238    ctermbg=none   cterm=none
 hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
 
 hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
 hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticInfo            ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticHint            ctermfg=34     ctermbg=none   cterm=none
+hi DiagnosticHint            ctermfg=46     ctermbg=none   cterm=none
 
 hi DiagnosticSignError       ctermfg=196    ctermbg=none   cterm=none
 hi DiagnosticSignWarn        ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticSignInfo        ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticSignHint        ctermfg=34     ctermbg=none   cterm=none
+hi DiagnosticSignHint        ctermfg=46     ctermbg=none   cterm=none
 
 hi DiagnosticFloatingError   ctermfg=196    ctermbg=none   cterm=none
 hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
-hi DiagnosticFloatingHint    ctermfg=34     ctermbg=none   cterm=none
+hi DiagnosticFloatingHint    ctermfg=46     ctermbg=none   cterm=none
 
 hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
 hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
 hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=34     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=46     ctermbg=none   cterm=underline
 
 "--- Load lua---
 lua << EOF
   require 'module_lspconfig'
   require 'module_mason'
-  require 'module_oil'
 
   -- Without config
   require 'fidget'.setup()

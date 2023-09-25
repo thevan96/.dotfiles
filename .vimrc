@@ -192,7 +192,7 @@ augroup LoadFile
   au!
   au VimResized * wincmd =
   au FocusGained * redraw!
-  au CursorMoved * checktime
+  au CursorMoved *.* checktime
   au BufWritePost * call Trim()
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")
         \ | exe "normal! g'\"" | endif " save late position cursor

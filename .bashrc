@@ -17,7 +17,7 @@ GIT_PS1_SHOWSTASHSTATE='y'
 GIT_PS1_SHOWUNTRACKEDFILES='y'
 GIT_PS1_DESCRIBE_STYLE='contains'
 GIT_PS1_SHOWUPSTREAM='auto'
-PS1='\u@\H:\w$(__git_ps1)\n\\$ '
+PS1='\u@\H: \w$(__git_ps1)\n\\$ '
 
 # Enable git prompt
 source /etc/bash_completion.d/git-prompt
