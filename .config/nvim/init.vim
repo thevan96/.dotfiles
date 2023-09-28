@@ -136,9 +136,9 @@ let g:UltiSnipsJumpForwardTrigger='<C-j>'
 let g:UltiSnipsJumpBackwardTrigger='<C-k>'
 
 " File manager
-nnoremap <leader>ff :JumpFile<cr>
-nnoremap <leader>fv :vsp+JumpFile<cr>
-nnoremap <leader>fs :sp+JumpFile<cr>
+nnoremap <silent><leader>ff :JumpFile<cr>
+nnoremap <silent><leader>fv :vsp+JumpFile<cr>
+nnoremap <silent><leader>fs :sp+JumpFile<cr>
 command! Ro :e `=g:root_cwd`
 command! Ex :e+JumpFile
 command! Se :sp+JumpFile
@@ -319,6 +319,7 @@ function! Scratch()
   setlocal bufhidden=hide
   setlocal noswapfile
   setlocal ft=scratch
+  execute 'file scratch'
 endfunction
 command! Scratch :call Scratch()
 
@@ -474,7 +475,6 @@ augroup end
 augroup ShowExtraWhitespace
   au!
   match ExtraWhitespace /\s\+$/
-  hi ExtraWhitespace ctermbg=196
   au InsertEnter * hi ExtraWhitespace ctermbg=none
   au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
@@ -491,20 +491,27 @@ augroup JumpQuickfx
 augroup end
 
 function! JumpFile()
+  let folder = expand('%:h')
+  if folder == ''
+    e .
+    return
+  endif
+
   let file_name = expand('%:t')
-  e `=expand('%:h')`
+  exe 'e '.folder
   call search(file_name)
 endfunction
 command! JumpFile call JumpFile()
 
 function! NetrwSetting()
   au BufLeave <buffer> cd `=g:root_cwd`
+  nnoremap <silent><buffer> Q :bd<cr>
   nnoremap <buffer> % :!touch<space>
   nnoremap <buffer> d :!mkdir -p<space>
   nnoremap <silent><buffer> D :call NetrwDelete()<cr>
   nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
   nnoremap <silent><buffer> mL :echo join(
-        \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
+    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
 endfunction
 
 function! NetrwDelete()
@@ -548,9 +555,12 @@ set background=dark
 filetype plugin on
 filetype indent off
 
+match ExtraWhitespace /\s\+$/
+hi ExtraWhitespace           ctermbg=196
+
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
-hi Pmenu                     ctermfg=255    ctermbg=233    cterm=none
+hi Pmenu                     ctermfg=255    ctermbg=236    cterm=none
 hi PmenuSel                  ctermfg=46     ctermbg=0      cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
