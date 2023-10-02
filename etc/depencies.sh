@@ -4,7 +4,6 @@ pip install -U pip
 pip install -U pynvim
 pip install -U httpie
 pip install -U sqlfluff
-pip install -U httpie
 pip install -U pyright
 
 npm install -g npm@latest
@@ -21,6 +20,7 @@ go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install golang.org/x/tools/cmd/goimports@latest
 go install golang.org/x/tools/gopls@latest
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 cargo install stylua
 

@@ -7,6 +7,8 @@ export MANPAGER="vim '+set nonumber' +Man!"
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
 export ANDROID_HOME=$HOME/Android/Sdk
+export ASDF_GOLANG_MOD_VERSION_ENABLED=false
+
 # macos export ANDROID_HOME=$HOME/Library/Android/sdk
 
 # ADD PATH
@@ -39,8 +41,6 @@ export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
 alias ls='ls --color=always'
-alias ta='tmux attach'
-alias tm='tmux new -s default'
 alias pwdcp='pwd | xclip -selection clipboard'
 alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
@@ -48,7 +48,6 @@ alias reload_zsh=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 exit() {
   echo 'Use <C-d> instead!'
 }
-
 
 mkdircd() {
   mkdir -p ${1} && cd ${1}
