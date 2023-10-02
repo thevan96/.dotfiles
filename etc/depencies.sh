@@ -13,17 +13,15 @@ npm install -g prettier
 npm install -g standard
 npm install -g kill-port
 npm install -g browser-sync
-npm install -g typescript typescript-language-server
+npm install -g typescript
 npm install -g sass
 
 go install github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest
-go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/segmentio/golines@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install golang.org/x/tools/cmd/goimports@latest
 go install golang.org/x/tools/gopls@latest
 
-rustup component add rust-analyzer
 cargo install stylua
 
 asdf reshim nodejs

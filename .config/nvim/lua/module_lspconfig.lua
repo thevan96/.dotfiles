@@ -30,26 +30,34 @@ on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
 on_capabilities.offsetEncoding = { 'utf-16' }
 
-local servers = {
-  'cssmodules_ls',
-  'pyright',
-  'tsserver',
-  'rust_analyzer',
-  'gopls',
-  'marksman',
-}
+nvim_lsp.gopls.setup({
+  cmd = { os.getenv('HOME') .. '/.local/share/nvim/mason/bin/gopls' },
+})
 
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup({})
-end
+nvim_lsp.html.setup({
+  cmd = {
+    os.getenv('HOME')
+      .. '/.local/share/nvim/mason/bin/vscode-html-language-server',
+    '--stdio',
+  },
+  capabilities = on_capabilities,
+})
 
-for _, lsp in ipairs({ 'html', 'jsonls' }) do
-  nvim_lsp[lsp].setup({
-    capabilities = on_capabilities,
-  })
-end
+nvim_lsp.jsonls.setup({
+  cmd = {
+    os.getenv('HOME')
+      .. '/.local/share/nvim/mason/bin/vscode-json-language-server',
+    '--stdio',
+  },
+  capabilities = on_capabilities,
+})
 
-nvim_lsp['cssls'].setup({
+nvim_lsp.cssls.setup({
+  cmd = {
+    os.getenv('HOME')
+      .. '/.local/share/nvim/mason/bin/vscode-css-language-server',
+    '--stdio',
+  },
   capabilities = on_capabilities,
   settings = {
     css = {
@@ -65,7 +73,17 @@ nvim_lsp['cssls'].setup({
   },
 })
 
-nvim_lsp['lua_ls'].setup({
+nvim_lsp.cssmodules_ls.setup({
+  cmd = {
+    os.getenv('HOME')
+      .. '/.local/share/nvim/mason/bin/cssmodules-language-server',
+  },
+})
+
+nvim_lsp.lua_ls.setup({
+  cmd = {
+    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/lua-language-server',
+  },
   capabilities = on_capabilities,
   settings = {
     Lua = {
@@ -73,6 +91,27 @@ nvim_lsp['lua_ls'].setup({
         globals = { 'vim' },
       },
     },
+  },
+})
+
+nvim_lsp.tsserver.setup({
+  cmd = {
+    os.getenv('HOME')
+      .. '/.local/share/nvim/mason/bin/typescript-language-server',
+    '--stdio',
+  },
+})
+
+nvim_lsp.rust_analyzer.setup({
+  cmd = {
+    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/rust-analyzer',
+  },
+})
+
+nvim_lsp.marksman.setup({
+  cmd = {
+    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/marksman',
+    'server',
   },
 })
 

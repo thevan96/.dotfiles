@@ -19,7 +19,6 @@ set nofoldenable
 set guicursor=i:block
 set mouse=
 set noshowmode
-set noruler
 
 " Netrw
 let g:netrw_banner = 0
@@ -561,7 +560,7 @@ hi ExtraWhitespace           ctermbg=196
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
 hi Pmenu                     ctermfg=255    ctermbg=236    cterm=none
-hi PmenuSel                  ctermfg=46     ctermbg=0      cterm=none
+hi PmenuSel                  ctermfg=46     ctermbg=238    cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none
