@@ -2,12 +2,13 @@ local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
   signs = false,
-  underline = true,
-  virtual_text = {
-    prefix = '●',
-    spacing = 2,
-    source = 'always',
-  },
+  underline = false,
+  virtual_text = false,
+  -- {
+  --   prefix = '●',
+  --   spacing = 2,
+  --   source = 'always',
+  -- },
   float = {
     source = 'always',
     border = 'single',
@@ -30,34 +31,15 @@ on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
 on_capabilities.offsetEncoding = { 'utf-16' }
 
-nvim_lsp.gopls.setup({
-  cmd = { os.getenv('HOME') .. '/.local/share/nvim/mason/bin/gopls' },
-})
-
 nvim_lsp.html.setup({
-  cmd = {
-    os.getenv('HOME')
-      .. '/.local/share/nvim/mason/bin/vscode-html-language-server',
-    '--stdio',
-  },
   capabilities = on_capabilities,
 })
 
 nvim_lsp.jsonls.setup({
-  cmd = {
-    os.getenv('HOME')
-      .. '/.local/share/nvim/mason/bin/vscode-json-language-server',
-    '--stdio',
-  },
   capabilities = on_capabilities,
 })
 
 nvim_lsp.cssls.setup({
-  cmd = {
-    os.getenv('HOME')
-      .. '/.local/share/nvim/mason/bin/vscode-css-language-server',
-    '--stdio',
-  },
   capabilities = on_capabilities,
   settings = {
     css = {
@@ -73,17 +55,7 @@ nvim_lsp.cssls.setup({
   },
 })
 
-nvim_lsp.cssmodules_ls.setup({
-  cmd = {
-    os.getenv('HOME')
-      .. '/.local/share/nvim/mason/bin/cssmodules-language-server',
-  },
-})
-
 nvim_lsp.lua_ls.setup({
-  cmd = {
-    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/lua-language-server',
-  },
   capabilities = on_capabilities,
   settings = {
     Lua = {
@@ -94,40 +66,26 @@ nvim_lsp.lua_ls.setup({
   },
 })
 
-nvim_lsp.tsserver.setup({
-  cmd = {
-    os.getenv('HOME')
-      .. '/.local/share/nvim/mason/bin/typescript-language-server',
-    '--stdio',
-  },
-})
+nvim_lsp.gopls.setup({})
+nvim_lsp.nixd.setup({})
+nvim_lsp.cssmodules_ls.setup({})
+nvim_lsp.tsserver.setup({})
+nvim_lsp.rust_analyzer.setup({})
+nvim_lsp.marksman.setup({})
 
-nvim_lsp.rust_analyzer.setup({
-  cmd = {
-    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/rust-analyzer',
-  },
-})
+-- vim.keymap.set(
+--   'n',
+--   '[d',
+--   '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
+-- )
+--
+-- vim.keymap.set(
+--   'n',
+--   ']d',
+--   '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
+-- )
+-- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 
-nvim_lsp.marksman.setup({
-  cmd = {
-    os.getenv('HOME') .. '/.local/share/nvim/mason/bin/marksman',
-    'server',
-  },
-})
-
-vim.keymap.set(
-  'n',
-  '[d',
-  '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
-)
-
-vim.keymap.set(
-  'n',
-  ']d',
-  '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
-)
-
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
@@ -143,6 +101,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     client.server_capabilities.semanticTokensProvider = nil
 
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
     vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, opts)
@@ -179,7 +138,7 @@ local function get_all_diagnostics(bufnr)
     return ''
   end
 
-  return '[E/'
+  return '[🐞/'
     .. error
     .. ' W/'
     .. warning

@@ -1,0 +1,21 @@
+/* Global */
+.Trashes
+.Spotlight-V100
+.DS_Store
+Desktop.ini
+Thumbs.db
+
+/* SCSS */
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
+
+**/node_modules
+**/vendor
+**/composer
+**/gems
+
+*.in
+*.out
+tags

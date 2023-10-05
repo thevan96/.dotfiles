@@ -6,3 +6,4 @@
 - Terminal multiplexer: tmux
 - Distro linux: Ubuntu
 - Symlink manager: stow
+- Package manager: apt + nix

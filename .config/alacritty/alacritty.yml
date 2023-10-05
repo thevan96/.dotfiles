@@ -8,22 +8,22 @@ window:
 # Font
 font:
   normal:
-    family: Code New Roman
+    family: Source Code Pro
     style: Regular
 
   bold:
-    family: Code New Roman
+    family: Source Code Pro
     style: Bold
 
   italic:
-    family: Code New Roman
+    family: Source Code Pro
     style: Italic
 
   bold_italic:
-    family: Code New Roman
+    family: Source Code Pro
     style: Bold Italic
 
-  size: 10.0
+  size: 9
 
   offset:
     x: 0
@@ -42,7 +42,7 @@ colors:
     black: "#2e3436"
     red: "#cc0000"
     green: "#4e9a06"
-    yellow: "#c4a000"
+    yellow: "#d7af00"
     blue: "#3465a4"
     magenta: "#75507b"
     cyan: "#06989a"
@@ -66,7 +66,7 @@ mouse:
   hide_when_typing: true
 
 selection:
-  save_to_clipboard: false
+  save_to_clipboard: true
 
 key_bindings:
   # Disable vi-mode and search, trust only tmux

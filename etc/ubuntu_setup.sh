@@ -19,6 +19,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     g++ \
     tree \
     neofetch \
+    jq \
+    sxhkd \
+    entr \
+    direnv \
     htop \
     ripgrep \
     fd-find \
@@ -33,87 +37,39 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     rar \
     unrar \
     zip \
-    ibus \
     xsel \
-    xclip \
     wmctrl \
-    pgcli \
-    mycli \
-    postgresql-client \
-    mysql-client \
     stow \
     rofi \
-    vlc \
-    gimp \
-    gpick \
-    uget \
-    flameshot \
-    gparted \
+    mysql-client \
+    postgresql-client \
+    trash-cli \
+    net-tools \
     vim-gtk \
+    uget \
+    gparted \
+    flameshot \
+    gpick \
     screenkey \
     simplescreenrecorder \
-    msttcorefonts \
     timeshift \
-    trash-cli \
-    transmission \
+    vlc \
+    gimp \
+    peek \
+    gnome-sushi \
     gnome-shell-extensions\
     gnome-clocks \
     gnome-tweaks \
-    dconf-editor \
-    net-tools \
-    keychain \
-    peek \
-    gnome-sushi \
     chrome-gnome-shell
 fi
 
 echo ""
+echo "Install PPA app"
+sudo add-apt-repository ppa:bamboo-engine/ibus-bamboo
+sudo add-apt-repository ppa:obsproject/obs-studio
+
+sudo apt -y install obs-studio ibus-bamboo
+
+echo ""
 echo "Increasing the amount of inotify watchers"
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-# Import custom shortcuts
-# Note dump:  dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > custom_shortcut
-echo "Import custom shortcuts"
-cat ~/.dotfiles/etc/custom_shortcut | dconf load /org/gnome/settings-daemon/plugins/media-keys/
-
-# Make alias
-if [ ! -f "fdfind" ]; then
-  sudo ln -sf $(which fdfind) ~/.local/bin/fd
-fi
-
-if [ ! -f "nvim" ]; then
-  sudo ln -sf $(which nvim) ~/.local/bin/vim
-fi
-
-# Install fzf
-dir_fzf="$HOME/.fzf/"
-if [ ! -d "$dir_fzf" ]; then
-  echo "Installing fzf ..."
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install
-fi
-
-# Install asdf
-dir_asdf="$HOME/.asdf/"
-if [ ! -d "$dir_asdf" ]; then
-  echo "Installing asdf ..."
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-fi
-
-# Install vimplug
-dir_vimplug="$HOME/.local/share/nvim/"
-if [ ! -d "$dir_vimplug" ]; then
-  echo "Installing vimplug ..."
-  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-fi
-
-# Gnome setup
-# gsettings reset org.gnome.mutter overlay-key
-# gsettings set org.gnome.mutter overlay-key ''
-gsettings set org.gnome.desktop.interface show-battery-percentage true
-gsettings set org.gnome.desktop.interface clock-show-weekday true
-gsettings set org.gnome.desktop.interface clock-show-date true
-gsettings set org.gnome.desktop.interface enable-animations false
-gsettings set org.gnome.mutter dynamic-workspaces false
-gsettings set org.gnome.desktop.wm.preferences num-workspaces 1

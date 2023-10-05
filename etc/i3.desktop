@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=i3
-Comment=i3
-Exec=i3
-TryExec=/usr/bin/i3
-Type=Application
-DesktopNames=i3
