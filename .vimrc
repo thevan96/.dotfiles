@@ -201,25 +201,37 @@ command! Format :call Format()
 
 function! FZF()
   let command =
-    \ '.!find -type f
+    \ 'find -type f
     \ -not -path */\.git/*
     \ -not -path */node_modules/*
     \ | sed "s|^./||"
     \ | sort '
 
+  let res = split(system(command), '\n')
+
   if bufexists(str2nr(bufnr('fzf'))) == 1
     b fzf
-    setlocal noreadonly modifiable
-    exe '%d'
-    execute command
-    setlocal readonly nomodifiable
+    let save_cursor = getcurpos()
+    let res = split(system(command), '\n')
+    let buff = getline(1, '$')
+    let buff =  buff[:(len(buff)-2)]
+
+    if len(res) != len(buff)
+      setlocal noreadonly modifiable
+      exe '%d'
+      call append(0, res)
+      setlocal readonly nomodifiable
+    endif
+    call setpos('.', save_cursor)
+
     return
   endif
 
   enew
   setlocal nonumber buftype=nofile bufhidden=hide noswapfile ft=fzf
   execute 'file fzf'
-  execute command
+  call append(0, res)
+  normal! gg
   setlocal readonly nomodifiable
 endfunction
 command! FZF :call FZF()
