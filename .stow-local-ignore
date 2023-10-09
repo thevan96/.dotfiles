@@ -1,12 +1,12 @@
 /.git
 /.gitignore
-
 /.stylua.toml
 /.editorconfig
+/.envrc
 
-/.zshrc
-/.zshenv
-
+/shell.nix
+/install.sh
+/configuration.nix
 /etc
 /Makefile
 /README.md

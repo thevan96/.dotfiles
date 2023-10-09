@@ -119,20 +119,25 @@ nnoremap <leader>" :silent
 nnoremap <leader>% :silent
   \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
 
+" Automatic installation
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin()
 
 "--- Core plugins ---
 
 " Lsp
 Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/mason.nvim'
-Plug 'williamboman/mason-lspconfig.nvim'
 
 " Snippets
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger='<C-j>'
-let g:UltiSnipsJumpForwardTrigger='<C-j>'
-let g:UltiSnipsJumpBackwardTrigger='<C-k>'
+" Plug 'SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger='<C-j>'
+" let g:UltiSnipsJumpForwardTrigger='<C-j>'
+" let g:UltiSnipsJumpBackwardTrigger='<C-k>'
 
 " File manager
 nnoremap <silent><leader>ff :JumpFile<cr>
@@ -546,7 +551,7 @@ let g:loaded_perl_provider = 0
 let g:loaded_node_provider = 0
 let g:loaded_ruby_provider = 0
 let g:loaded_python_provider = 0
-let g:python3_host_prog = expand('$HOME/.asdf/shims/python3')
+let g:loaded_python3_provider = 0
 
 "--- Customize theme ---
 syntax off
@@ -595,7 +600,6 @@ hi DiagnosticUnderlineHint   ctermfg=46     ctermbg=none   cterm=underline
 "--- Load lua---
 lua << EOF
   require 'module_lspconfig'
-  require 'module_mason'
 
   -- Without config
   require 'fidget'.setup()

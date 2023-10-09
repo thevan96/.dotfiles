@@ -1,0 +1,26 @@
+[user]
+  name = thevan96
+  email = vothevan96@gmail.com
+
+[core]
+  editor = vim
+  excludesfile = $HOME/.gitignore_global
+
+[init]
+  defaultBranch = main
+
+[merge]
+  tool = vimdiff
+
+[mergetool]
+  keepBackup = false
+
+[color]
+  status = always
+
+[alias]
+  prettier = "log --all --decorate --oneline --graph \
+  --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold \
+  blue)<%an>%Creset' --abbrev-commit"
+
+  lo = "log --all --decorate --oneline --graph"
