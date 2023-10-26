@@ -18,14 +18,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gcc \
     g++ \
     tree \
-    neofetch \
-    jq \
-    sxhkd \
-    entr \
-    direnv \
-    htop \
-    ripgrep \
-    fd-find \
     curl \
     wget \
     git \

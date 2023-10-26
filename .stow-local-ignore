@@ -6,8 +6,10 @@
 
 /.zshrc
 /.zshenv
+/.envrc
 
-/install.sh
-/etc
-/Makefile
-/README.md
+shell.nix
+install.sh
+etc
+Makefile
+README.md

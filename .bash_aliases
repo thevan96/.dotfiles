@@ -48,25 +48,28 @@ export FZF_ALT_C_COMMAND="fd --type d -H \
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias
-alias ls='ls --color=always'
-alias cppwd='pwd | xsel -i --clipboard'
-alias reload_bash=". ~/.bashrc && echo 'Bash config reloaded from ~/.bashrc'"
+alias vim='nvim'
 
 # Utils
-exit() {
-  echo 'Use <C-d> instead!'
+
+find_f() {
+  find -type f \
+    -not -path */.git/* \
+    -not -path */.direnv/*\
+    -not -path */node_modules/*\
+    | sed "s|^./||" \
+    | sort
 }
 
-mkdircd() {
-  mkdir -p ${1} && cd ${1}
-}
-
-live_server() {
-  npx browser-sync start --server --files '**/*.*' --port ${1}
-}
-
-ide() {
-  tmux split-window -h -p 50
-  tmux split-window -v -p 50
-  tmux select-pane -t 0
+find_d() {
+  find -type d \
+    \( -path */.git/* \
+    -o \
+    -path */.direnv/* \
+    -o \
+    -path */node_modules/* \
+    -prune -o -print \
+    \) \
+    | sed "s|^./||" \
+    | sort
 }

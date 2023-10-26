@@ -4,13 +4,13 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
-set list listchars=tab:→\ ,lead:.,trail:\ |
-set number norelativenumber
+set list listchars=tab:»\ ,lead:.,trail:\ |
+set nonumber norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=80
 set cursorline cursorlineopt=number
-set wildmenu wildmode=list:lastused
+set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
 set noshowcmd
 set backspace=0
@@ -18,13 +18,18 @@ set nofoldenable
 set guicursor=i:block
 set mouse=a
 set noshowmode
-set wildignore+=**/.git/**,**/node_modules/**
+set wildignore=*/.git/*,*/node_modules/*
+
+" Use persistent undo history.
+if !isdirectory("/tmp/.nvim-undo-dir")
+  call mkdir("/tmp/.nvim-undo-dir", "", 0700)
+endif
+set undofile
+set undodir=/tmp/.nvim-undo-dir
 
 " Netrw
-let g:netrw_banner = 0
-let g:netrw_keepdir = 0
-let g:netrw_cursor = 0
-let g:root_cwd = getcwd()
+let g:loaded_netrw = 0
+let g:loaded_netrwPlugin = 0
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -37,39 +42,21 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>e :lua vim.diagnostic.setloclist()<cr>
-nnoremap <leader>E :lua vim.diagnostic.setqflist()<cr>
-nnoremap <leader>s :grep! -r<space>
-nnoremap <leader>S :grep! -r <cword> .<cr>
+nnoremap <leader>n :set invnu<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 
-" Disable
+" Disable autocomplete
 inoremap <C-n> <nop>
 inoremap <C-p> <nop>
-inoremap <C-Space> <nop>
-inoremap <C-x><C-o> <nop>
+inoremap <C-x><C-n> <nop>
+inoremap <C-x><C-p> <nop>
 
-" Virtual edit
-nnoremap <leader>Va :set virtualedit=all nolist<cr>
-nnoremap <leader>Vn :set virtualedit=none list<cr>
-
-" Toggle relative number/number
-nnoremap <silent><leader>N :set invnumber<cr>
-nnoremap <silent><leader>n :set invrelativenumber<cr>
-vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
-xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
-
-" Relativenumber keep jumplist and navigate wrap lines
-nnoremap <expr> k (v:count > 1  && &relativenumber ? "m'" . v:count : '') . 'gk'
-nnoremap <expr> j (v:count > 1  && &relativenumber ? "m'" . v:count : '') . 'gj'
+" Better jump tags/intellisense
+nnoremap <C-]> g<C-]>
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
-
-" Current path to clipboard
-command! Path let @+ = expand('%')
-command! Dpath let @+ = expand('%:h')
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -121,7 +108,9 @@ nnoremap <leader>% :silent
 " Automatic install vimplug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  let lk =
+    \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs '.lk
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -132,20 +121,12 @@ call plug#begin()
 " Lsp
 Plug 'neovim/nvim-lspconfig'
 
-" Snippets
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger='<C-j>'
-let g:UltiSnipsJumpForwardTrigger='<C-j>'
-let g:UltiSnipsJumpBackwardTrigger='<C-k>'
-
 " File manager
-nnoremap <silent><leader>ff :JumpFile<cr>
-nnoremap <silent><leader>fv :vsp+JumpFile<cr>
-nnoremap <silent><leader>fs :sp+JumpFile<cr>
-command! Ro :e `=g:root_cwd`
-command! Ex :e+JumpFile
-command! Se :sp+JumpFile
-command! Ve :vsp+JumpFile
+Plug 'stevearc/oil.nvim'
+nnoremap <leader>ff :Oil<cr>
+nnoremap <leader>fv :vsp+Oil<cr>
+nnoremap <leader>fs :sp+Oil<cr>
+nnoremap <leader>fo :e .<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -155,15 +136,17 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
+let g:fzf_layout = { 'down': '40%' }
 
 let rgIgnoreDirectories = "
-  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**}'
+  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**, **/.direnv/**}'
   \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
 
 let fdIgnoreDirectories = '
   \ --exclude .git
   \ --exclude .idea
   \ --exclude .vscode
+  \ --exclude .direnv
   \ --exclude node_modules
   \ --exclude vendor
   \ --exclude composer
@@ -181,27 +164,41 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
   \  1, fzf#vim#with_preview(), <bang>0
   \ )
 
-nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>i :cd `=g:root_cwd`<cr>:Files<cr>
-nnoremap <leader>d :cd `=g:root_cwd`<cr>:Directories<cr>
-nnoremap <leader>T :Snippets<cr>
+nnoremap <leader>o :Buffers<cr>
+nnoremap <leader>i :Files<cr>
+nnoremap <leader>d :Directories<cr>
+nnoremap <leader>s :Rg <C-R><C-W><cr>
 au! FileType fzf set laststatus=0 noshowmode noruler
   \| au BufLeave <buffer> set laststatus=2 showmode ruler
 
 "--- Other plugins ---
-Plug 'mattn/emmet-vim'
+Plug 'rlue/vim-barbaric'
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 
-Plug 'iamcco/markdown-preview.nvim',
-  \ { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-nnoremap <leader>mp :MarkdownPreviewToggle<cr>
+Plug 'mattn/emmet-vim'
+let g:user_emmet_settings = {
+  \  'html': {
+  \    'snippets': {
+  \      'html:5': "<!DOCTYPE html>\n"
+  \              ."<html lang=\"en\">\n"
+  \              ."<head>\n"
+  \              ."\t<meta charset=\"utf-8\">\n"
+  \              ."\t<title></title>\n"
+  \              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+  \              ."</head>\n"
+  \              ."<body>\n\t${child}|\n</body>\n"
+  \              ."</html>",
+  \    },
+  \  },
+  \}
 
-Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-let g:doge_mapping = '<leader>D'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+nnoremap <leader>mp :MarkdownPreviewToggle<cr>
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -225,11 +222,6 @@ function! SendCommand(command)
   endif
   exe 'VtrSendCommandToRunner '.a:command
 endfunction
-
-au FileType go nnoremap <buffer> <leader>vt
-  \ :call SendCommand('go test -v '.expand('%:p:h'))<cr>
-au FileType go nnoremap <buffer> <leader>vT
-  \ :call SendCommand('go test ./...')<cr>
 
 call plug#end()
 
@@ -270,43 +262,6 @@ function! RenameFile()
   endif
 endfunction
 command! Rename :call RenameFile()
-
-function! Format()
-  if !IsInCurrentProject()
-    return
-  endif
-
-  let extension = expand('%:e')
-  call Trim()
-  if extension == 'go'
-	  !goimports -w . && golines -m 80 -w .
-  elseif extension == 'rs'
-    !rufmt %
-  elseif extension == 'lua'
-    !stylua %
-  elseif extension == 'sql'
-    !sqlfluff fix --dialect postgres -f %
-  elseif extension == 'md'
-    !prettier --prose-wrap always -w %
-  elseif index(
-    \ [
-    \   'html', 'css', 'scss', 'yaml', 'json',
-    \   'js', 'jsx', 'ts', 'tsx'
-    \ ], extension) >= 0
-    !prettier -w %
-  endif
-endfunction
-command! Format :call Format()
-
-function! Scratch()
-  enew
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-  setlocal ft=scratch
-  execute 'file scratch'
-endfunction
-command! Scratch :call Scratch()
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -356,8 +311,7 @@ function! s:RunShell(runner)
   let src = a:runner.src
 
   call writefile(src, tmp)
-  silent exe '!chmod +x '.tmp
-  let res = system(a:runner.language.' '.tmp)
+  let res = system('chmod +x '.tmp.' && '.a:runner.language.' '.tmp)
 
   let a:runner.result = res
   call delete(tmp)
@@ -457,7 +411,6 @@ augroup Aligntable
 augroup end
 
 augroup ConfigStyleTabOrSpace
-  au!
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au FileType rust setlocal tabstop=4 shiftwidth=4 expandtab
   au FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab
@@ -465,19 +418,15 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  au FileType * iab <buffer><expr> sni_date strftime("%d-%m-%Y")
-  au FileType markdown iab <buffer>sni_enter /*<CR><CR>/<Up>
+  au FileType * iab <buffer><expr> __date strftime("%Y-%m-%d")
 augroup end
 
 augroup ShowExtraWhitespace
-  au!
-  match ExtraWhitespace /\s\+$/
   au InsertEnter * hi ExtraWhitespace ctermbg=none
   au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
 
 augroup RelativeWorkingDirectory
-  au!
   au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
@@ -487,61 +436,12 @@ augroup JumpQuickfx
   au QuickFixCmdPost    l* nested lwindow
 augroup end
 
-function! JumpFile()
-  let folder = expand('%:h')
-  if folder == ''
-    e .
-    return
-  endif
-
-  let file_name = expand('%:t')
-  exe 'e '.folder
-  call search(file_name)
-endfunction
-command! JumpFile call JumpFile()
-
-function! NetrwSetting()
-  au BufLeave <buffer> cd `=g:root_cwd`
-  nnoremap <silent><buffer> Q :bd<cr>
-  nnoremap <buffer> % :call CreateFile()<cr>
-  nnoremap <silent><buffer> D :call NetrwDelete()<cr>
-  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
-  nnoremap <silent><buffer> mL :echo join(
-    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
-endfunction
-
-function! CreateFile()
-  let name = input('Enter file name: ')
-  if name == ''
-    return
-  endif
-
-  redraw
-  exe '!touch '.name
-  e .
-endfunction
-
-function! NetrwDelete()
-  let target =  netrw#Call('NetrwFile', netrw#Call('NetrwGetWord'))
-  if target == ''
-    return
-  endif
-
-  let name = input('Delete '.getcwd().'/'.target.'? y/n: ')
-  if name == 'y'
-    redraw
-    exe '!rm -rf '.getcwd().'/'.target
-    e .
-  endif
-endfunction
-
 augroup LoadFile
   au!
   au VimResized * wincmd =
   au BufWritePost * call Trim()
-  au FileType netrw call NetrwSetting()
-  au FileType qf,markdown,text setlocal nonumber
-  au CursorMoved,CursorMovedI * set norelativenumber
+  au FileType oil setlocal nonumber
+  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
@@ -553,7 +453,7 @@ let g:loaded_perl_provider = 0
 let g:loaded_node_provider = 0
 let g:loaded_ruby_provider = 0
 let g:loaded_python_provider = 0
-let g:python3_host_prog = expand('/usr/bin/python3')
+let g:loaded_python3_provider = 0
 
 "--- Customize theme ---
 syntax off
@@ -567,7 +467,7 @@ hi ExtraWhitespace           ctermbg=196
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
 hi Pmenu                     ctermfg=255    ctermbg=236    cterm=none
-hi PmenuSel                  ctermfg=46     ctermbg=238    cterm=none
+hi PmenuSel                  ctermfg=178    ctermbg=238    cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none
@@ -594,13 +494,9 @@ hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticFloatingHint    ctermfg=46     ctermbg=none   cterm=none
 
-hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
-hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
-hi DiagnosticUnderlineHint   ctermfg=46     ctermbg=none   cterm=underline
-
 "--- Load lua---
 lua << EOF
+  require 'module_oil'
   require 'module_lspconfig'
 
   -- Without config

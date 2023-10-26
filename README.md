@@ -1,8 +1,8 @@
 # dotfile
 
-- Terminal: alacritty
+- Terminal: terminal default
 - Shell: bash
-- Text editor: neovim
+- Text editor: vim/neovim
 - Terminal multiplexer: tmux
 - Distro linux: Ubuntu
 - Symlink manager: stow

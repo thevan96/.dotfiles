@@ -1,26 +1,20 @@
-super + shift + w
+alt + shift + w
   rofi -show window -show-icons
 
-super + shift + r
+alt + shift + r
   rofi -modi run -show run -show-icons
 
-super + shift + d
+alt + shift + d
   rofi -mod drun -show drun -show-icons
 
-super + shift + q
+alt + shift + q
   wmctrl -c :ACTIVE:
 
-super + shift + space
-  ibus engine xkb:us::eng
-
-super + shift + BackSpace
-  ibus engine Bamboo
-
-super + shift+ s
+alt + shift+ s
   flameshot gui
 
-super + shift + p
+alt + shift + p
   gpick -p
 
-super + shift + o
+alt + shift + o
   fast_open

@@ -5,5 +5,4 @@
 ./etc/install_nix.sh
 ./etc/install_fzf.sh
 
-[ -f $(which fdfind) ] && sudo ln -sf $(which fdfind) ~/.local/bin/fd
 stow .

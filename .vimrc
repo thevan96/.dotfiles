@@ -6,20 +6,33 @@ set autoread autowrite
 set hlsearch incsearch
 set list listchars=tab:»\ ,lead:.,trail:\ |
 set laststatus=2 ruler
-set nonumber
+set nonumber norelativenumber
 set signcolumn=no
 set textwidth=80
 set colorcolumn=+1
 set cursorline cursorlineopt=number
-set wildmenu wildmode=list:lastused
+set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
 set backspace=0
 set mouse=a
 set autoindent
 set nofoldenable
 set diffopt=vertical
-set ttyfast
-set wildignore+=**/.git/**,**/node_modules/**
+set autochdir
+set ttimeout
+set ttimeoutlen=100
+set timeoutlen=1000
+set wildignore=*/.git/*,*/node_modules/*
+
+" Use persistent undo history.
+if !isdirectory("/tmp/.vim-undo-dir")
+  call mkdir("/tmp/.vim-undo-dir", "", 0700)
+endif
+set undofile
+set undodir=/tmp/.vim-undo-dir
+
+" vim use alias bash
+let $BASH_ENV = $HOME.'/.bash_aliases'
 
 " Netrw
 let g:netrw_banner = 0
@@ -38,18 +51,11 @@ nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>:redraw!<cr>
 inoremap <C-l> <C-o>:noh<cr>:redraw!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>s :grep! -r<space>
-nnoremap <leader>S :grep! -r <cword><space>
-nnoremap <leader>v :vim<space>
-nnoremap <leader>V :vim <cword><space>
 nnoremap <leader>n :set invnu<cr>
+nnoremap <leader>s :vim!<space>
+nnoremap <leader>S :vim! /<C-r><C-w>/<space>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
-
-" Disable
-inoremap <C-n> <nop>
-inoremap <C-p> <nop>
-inoremap <C-x><C-o> <nop>
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -78,8 +84,8 @@ nnoremap <leader>Y :%y+<cr>
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
-command! RR :cd `=g:root_cwd`
-command! Ro :e `=g:root_cwd`
+nnoremap <leader>fo :e `=g:root_cwd`<cr>
+command! Ro :cd `=g:root_cwd`
 command! Ex :e+JumpFile
 command! Se :sp+JumpFile
 command! Ve :vsp+JumpFile
@@ -92,12 +98,6 @@ if &diff
   nnoremap <leader><cr> :diffupdate<cr>
   vnoremap <leader>= :GremoveMarkers<cr><gv>
 endif
-
-" Open in tab terminal
-nnoremap <leader>" :silent
-  \ exe(':!tmux split-window -v -p 40 -c '.expand('%:p:h'))<cr>
-nnoremap <leader>% :silent
-  \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
 
 "--- Etc ---"
 function! Mkdir()
@@ -181,22 +181,30 @@ endfunction
 
 let files_command =
   \ 'find -type f
-  \ -not -path "*/.git/*"
-  \ -not -path "*/node_modules/*"
+  \ -not -path */.git/*
+  \ -not -path */.direnv/*
+  \ -not -path */node_modules/*
   \ | sed "s|^./||"
   \ | sort '
 
 let directories_command =
   \ 'find -type d
-  \ \( -path "*/.git*"
+  \ \( -path */.git/*
   \ -o
-  \ -path "*/node_modules*"
+  \ -path */.direnv/*
+  \ -o
+  \ -path */node_modules/*
+  \ -prune -o -print
   \ \)
-  \ -print -prune -o -print
   \ | sed "s|^./||"
   \ | sort '
-nnoremap <silent> <leader>i :call MyExplore(files_command, 'explore_files')<cr>
-nnoremap <silent> <leader>d :call MyExplore(directories_command, 'explore_directories')<cr>
+
+" nnoremap <silent> <leader>i
+"   \ :call MyExplore(files_command, 'explore_files')<cr>
+" nnoremap <silent> <leader>d
+"   \ :call MyExplore(directories_command, 'explore_directories')<cr>
+command! Files :call MyExplore(files_command, 'explore_files')
+command! Directories :call MyExplore(directories_command, 'explore_directories')
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -347,7 +355,6 @@ endfunction
 command! JumpFile call JumpFile()
 
 function! NetrwSetting()
-  au BufLeave <buffer> cd `=g:root_cwd`
   nnoremap <silent><buffer> Q :bd<cr>
   nnoremap <buffer> % :call CreateFile()<cr>
   nnoremap <silent><buffer> D :call NetrwDelete()<cr>
@@ -381,6 +388,13 @@ function! NetrwDelete()
   endif
 endfunction
 
+augroup Aligntable
+  au FileType markdown,text
+    \ vnoremap <buffer> <leader>ft !prettier --parser markdown<cr>
+  au FileType markdown,text
+    \ nnoremap <buffer> <leader>ft vip!prettier --parser markdown<cr>
+augroup end
+
 augroup ConfigStyleTabOrSpace
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au FileType rust setlocal tabstop=4 shiftwidth=4 expandtab
@@ -390,11 +404,6 @@ augroup end
 
 augroup snippet
   au FileType * iab <buffer><expr> __date strftime("%Y-%m-%d")
-augroup end
-
-augroup RelativeWorkingDirectory
-  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
-  au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
 augroup ShowExtraWhitespace
@@ -412,6 +421,7 @@ augroup LoadFile
   au BufWritePost * call Trim()
   au FileType netrw call NetrwSetting()
   au CursorMoved,CursorHold *.* checktime
+  au FileType oil setlocal nonumber
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au FileType explore nnoremap <silent><buffer> <CR> gf
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -436,7 +446,7 @@ hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
-hi PmenuSel                       ctermfg=46       ctermbg=238      cterm=none
+hi PmenuSel                       ctermfg=178      ctermbg=238      cterm=none
 
 hi LineNr                         ctermfg=244      ctermbg=none     cterm=none
 hi LineNrAbove                    ctermfg=244      ctermbg=none     cterm=none

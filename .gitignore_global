@@ -19,3 +19,6 @@ Thumbs.db
 *.in
 *.out
 tags
+
+/* direnv */
+.direnv
