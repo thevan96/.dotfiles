@@ -341,6 +341,25 @@ function HandleFileNotExist(name)
   echomsg msg
 endfunction
 
+function! s:inCodeFence()
+  call search('^```.*$', 'bceW')
+  normal! j
+  normal! 0v
+  call search("```", 'ceW')
+  normal! kg_
+endfunction
+
+function! s:aroundCodeFence()
+  call search('^```.*$', 'bcW')
+  normal! v$
+  call search('```', 'eW')
+endfunction
+
+xnoremap <silent> if :call <sid>inCodeFence()<cr>
+onoremap <silent> if :call <sid>inCodeFence()<cr>
+xnoremap <silent> af :call <sid>aroundCodeFence()<cr>
+onoremap <silent> af :call <sid>aroundCodeFence()<cr>
+
 function! JumpFile()
   let folder = expand('%:h')
   if folder == ''

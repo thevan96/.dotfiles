@@ -127,7 +127,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- })
 
 local function get_all_diagnostics(bufnr)
-  if vim.tbl_count(vim.lsp.buf_get_clients(bufnr)) == 0 then return '' end
+  if vim.tbl_count(vim.lsp.buf_get_clients(bufnr)) == 0 then
+    return ''
+  end
 
   local error =
     #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.ERROR })
