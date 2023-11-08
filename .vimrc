@@ -4,11 +4,12 @@ set encoding=utf-8
 set nobackup noswapfile
 set autoread autowrite
 set hlsearch incsearch
+set ignorecase smartcase
 set list listchars=tab:»\ ,lead:.,trail:\ |
 set laststatus=2 ruler
-set nonumber norelativenumber
+set number relativenumber
 set signcolumn=no
-set textwidth=80
+set textwidth=81
 set colorcolumn=+1
 set cursorline cursorlineopt=number
 set wildmenu wildmode=list
@@ -18,26 +19,20 @@ set mouse=a
 set autoindent
 set nofoldenable
 set diffopt=vertical
-set autochdir
 set ttimeout
 set ttimeoutlen=100
 set timeoutlen=1000
 set wildignore=*/.git/*,*/node_modules/*
-
-" Use persistent undo history.
-if !isdirectory("/tmp/.vim-undo-dir")
-  call mkdir("/tmp/.vim-undo-dir", "", 0700)
-endif
-set undofile
-set undodir=/tmp/.vim-undo-dir
+set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
+packadd! matchit
 
 " vim use alias bash
 let $BASH_ENV = $HOME.'/.bash_aliases'
 
 " Netrw
 let g:netrw_banner = 0
-let g:netrw_keepdir = 0
 let g:netrw_cursor = 0
+let g:netrw_keepdir = 0
 let g:root_cwd = getcwd()
 
 " Setting tab/space
@@ -51,11 +46,16 @@ nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>:redraw!<cr>
 inoremap <C-l> <C-o>:noh<cr>:redraw!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>n :set invnu<cr>
-nnoremap <leader>s :vim!<space>
-nnoremap <leader>S :vim! /<C-r><C-w>/<space>
+nnoremap <leader>n :set invrelativenumber<cr>
+nnoremap <leader>s :grep!<space>
+nnoremap <leader>S :grep! -r <C-R><C-W><cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
+command! BufOnly exe '%bdelete|edit#|bdelete#'
+
+" Relativenumber keep jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -89,6 +89,12 @@ command! Ro :cd `=g:root_cwd`
 command! Ex :e+JumpFile
 command! Se :sp+JumpFile
 command! Ve :vsp+JumpFile
+
+" Open in tab terminal
+nnoremap <leader>" :silent
+  \ exe(':!tmux split-window -v -p 50 -c '.expand('%:p:h'))<cr>
+nnoremap <leader>% :silent
+  \ exe(':!tmux split-window -h -p 50 -c '.expand('%:p:h'))<cr>
 
 " Fix conflict git
 if &diff
@@ -143,10 +149,10 @@ function! RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'), 'file')
   if new_name != '' && new_name != old_name
-      exec ':saveas ' . new_name
-      exec ':silent !rm ' . old_name
-      exec ':bd '.old_name
-      redraw!
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    exec ':bd '.old_name
+    redraw!
   endif
 endfunction
 command! Rename :call RenameFile()
@@ -341,7 +347,7 @@ function HandleFileNotExist(name)
   echomsg msg
 endfunction
 
-function! s:inCodeFence()
+function! InCodeFence()
   call search('^```.*$', 'bceW')
   normal! j
   normal! 0v
@@ -349,16 +355,26 @@ function! s:inCodeFence()
   normal! kg_
 endfunction
 
-function! s:aroundCodeFence()
+function! AroundCodeFence()
   call search('^```.*$', 'bcW')
   normal! v$
   call search('```', 'eW')
 endfunction
 
-xnoremap <silent> if :call <sid>inCodeFence()<cr>
-onoremap <silent> if :call <sid>inCodeFence()<cr>
-xnoremap <silent> af :call <sid>aroundCodeFence()<cr>
-onoremap <silent> af :call <sid>aroundCodeFence()<cr>
+xnoremap <silent> if :call InCodeFence()<cr>
+onoremap <silent> if :call InCodeFence()<cr>
+xnoremap <silent> af :call AroundCodeFence()<cr>
+onoremap <silent> af :call AroundCodeFence()<cr>
+
+function! Scratch()
+  enew
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal ft=scratch
+  execute 'file scratch'
+endfunction
+command! Scratch :call Scratch()
 
 function! JumpFile()
   let folder = expand('%:h')
@@ -372,40 +388,6 @@ function! JumpFile()
   call search(file_name)
 endfunction
 command! JumpFile call JumpFile()
-
-function! NetrwSetting()
-  nnoremap <silent><buffer> Q :bd<cr>
-  nnoremap <buffer> % :call CreateFile()<cr>
-  nnoremap <silent><buffer> D :call NetrwDelete()<cr>
-  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
-  nnoremap <silent><buffer> mL :echo join(
-    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
-endfunction
-
-function! CreateFile()
-  let name = input('Enter file name: ')
-  if name == ''
-    return
-  endif
-
-  redraw
-  exe '!touch '.name
-  e .
-endfunction
-
-function! NetrwDelete()
-  let target =  netrw#Call('NetrwFile', netrw#Call('NetrwGetWord'))
-  if target == ''
-    return
-  endif
-
-  let name = input('Delete '.getcwd().'/'.target.'? y/n: ')
-  if name == 'y'
-    redraw
-    exe '!rm -rf '.getcwd().'/'.target
-    e .
-  endif
-endfunction
 
 augroup Aligntable
   au FileType markdown,text
@@ -422,7 +404,8 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  au FileType * iab <buffer><expr> __date strftime("%Y-%m-%d")
+  iab <expr> date@@ strftime("%Y-%m-%d")
+  iab div@@ <div></div>
 augroup end
 
 augroup ShowExtraWhitespace
@@ -430,19 +413,30 @@ augroup ShowExtraWhitespace
   au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
 
+augroup RelativeWorkingDirectory
+  au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
+  au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
+augroup end
+
 augroup JumpQuickfx
   au QuickFixCmdPost [^l]* nested cwindow
   au QuickFixCmdPost    l* nested lwindow
 augroup end
 
+function! NetrwSetting()
+  au BufLeave <buffer> cd `=g:root_cwd`
+  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
+  nnoremap <silent><buffer> mL :echo join(
+    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
+endfunction
+
 augroup LoadFile
   au VimResized * wincmd =
+  au BufWritePost * redraw!
   au BufWritePost * call Trim()
   au FileType netrw call NetrwSetting()
   au CursorMoved,CursorHold *.* checktime
-  au FileType oil setlocal nonumber
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
-  au FileType explore nnoremap <silent><buffer> <CR> gf
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -464,6 +458,7 @@ match ExtraWhitespace /\s\+$/
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
+hi Search                         ctermfg=0        ctermbg=255      cterm=none
 hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=178      ctermbg=238      cterm=none
 

@@ -3,4 +3,4 @@ Name=dropbox
 Exec=run_dropbox
 Terminal=false
 Type=Application
-X-GNOME-Autostart-enabled=false
+X-GNOME-Autostart-enabled=true

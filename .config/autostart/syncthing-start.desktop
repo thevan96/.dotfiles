@@ -8,3 +8,4 @@ Terminal=false
 Type=Application
 Keywords=synchronization;daemon;
 Categories=Network;FileTransfer;P2P
+X-GNOME-Autostart-enabled=true

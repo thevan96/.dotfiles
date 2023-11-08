@@ -4,11 +4,6 @@ vim.diagnostic.config({
   signs = false,
   underline = false,
   virtual_text = false,
-  -- {
-  --   prefix = '●',
-  --   spacing = 2,
-  --   source = 'always',
-  -- },
   float = {
     source = 'always',
     border = 'single',
@@ -74,17 +69,6 @@ nvim_lsp.rust_analyzer.setup({})
 nvim_lsp.marksman.setup({})
 nvim_lsp.bashls.setup({})
 
--- vim.keymap.set(
---   'n',
---   '[d',
---   '<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>'
--- )
---
--- vim.keymap.set(
---   'n',
---   ']d',
---   '<cmd>lua vim.diagnostic.goto_next({float = false})<cr>'
--- )
 vim.keymap.set('n', '<leader>e', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>E', vim.diagnostic.setqflist)
 
@@ -105,26 +89,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
-    vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, opts)
+    vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
+    vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
     -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
-
--- Disable noise diagnostics neovim lsp
--- vim.api.nvim_create_autocmd({ 'InsertEnter', 'BufEnter' }, {
---   callback = function(args)
---     vim.diagnostic.disable(args.buf)
---   end,
--- })
---
--- vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
---   callback = function(args)
---     vim.diagnostic.enable(args.buf)
---   end,
--- })
 
 local function get_all_diagnostics(bufnr)
   if vim.tbl_count(vim.lsp.buf_get_clients(bufnr)) == 0 then
@@ -155,7 +126,7 @@ local function get_all_diagnostics(bufnr)
     .. ']'
 end
 
-vim.api.nvim_create_autocmd({ 'DiagnosticChanged', 'BufWritePost' }, {
+vim.api.nvim_create_autocmd({ 'DiagnosticChanged' }, {
   callback = function(args)
     local error_all = get_all_diagnostics(args.buf)
     vim.wo.statusline = '%<%f ' .. error_all .. ' %h%m%r%=%-14.(%l,%c%V%) %P'

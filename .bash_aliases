@@ -3,15 +3,18 @@ export EDITOR=vim
 export KEYTIMEOUT=1
 export TERM=screen-256color
 
-# Show color man
-export LESS_TERMCAP_mb=$'\e[1;31m'
-export LESS_TERMCAP_md=$'\e[1;33m'
-export LESS_TERMCAP_so=$'\e[01;44;37m'
-export LESS_TERMCAP_us=$'\e[01;37m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export MANPAGER="less"
+if command -v nvim > /dev/null 2 >&1; then
+  export MANPAGER='nvim +Man!'
+else
+  export LESS_TERMCAP_mb=$'\e[1;31m'
+  export LESS_TERMCAP_md=$'\e[1;33m'
+  export LESS_TERMCAP_so=$'\e[01;44;37m'
+  export LESS_TERMCAP_us=$'\e[01;37m'
+  export LESS_TERMCAP_me=$'\e[0m'
+  export LESS_TERMCAP_se=$'\e[0m'
+  export LESS_TERMCAP_ue=$'\e[0m'
+  export MANPAGER="less"
+fi
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
@@ -47,10 +50,9 @@ export FZF_ALT_C_COMMAND="fd --type d -H \
   "
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
-# Alias
-alias vim='nvim'
-
-# Utils
+# Alias, utils
+alias ls='ls -F'
+alias grep="grep -rn --color=always --exclude-dir={.git,node_modules}"
 
 find_f() {
   find -type f \

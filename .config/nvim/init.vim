@@ -5,10 +5,11 @@ set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:»\ ,lead:.,trail:\ |
-set nonumber norelativenumber
+set number relativenumber
+set ignorecase smartcase
 set signcolumn=no
 set textwidth=80
-set colorcolumn=80
+set colorcolumn=+1
 set cursorline cursorlineopt=number
 set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
@@ -17,7 +18,6 @@ set backspace=0
 set nofoldenable
 set guicursor=i:block
 set mouse=a
-set noshowmode
 set wildignore=*/.git/*,*/node_modules/*
 
 " Use persistent undo history.
@@ -26,6 +26,9 @@ if !isdirectory("/tmp/.nvim-undo-dir")
 endif
 set undofile
 set undodir=/tmp/.nvim-undo-dir
+
+" vim use alias bash
+let $BASH_ENV = $HOME.'/.bash_aliases'
 
 " Netrw
 let g:loaded_netrw = 0
@@ -42,18 +45,17 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>n :set invnu<cr>
+nnoremap <leader>n :set invrelativenumber<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 
-" Disable autocomplete
-inoremap <C-n> <nop>
-inoremap <C-p> <nop>
-inoremap <C-x><C-n> <nop>
-inoremap <C-x><C-p> <nop>
-
 " Better jump tags/intellisense
 nnoremap <C-]> g<C-]>
+inoremap <C-x><C-o> <C-Space>
+
+" Relativenumber keep jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 
 " Buffer only
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -167,18 +169,19 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>s :Rg <C-R><C-W><cr>
-au! FileType fzf set laststatus=0 noshowmode noruler
+nnoremap <leader>s :Rg<space>
+nnoremap <leader>S :Rg <C-R><C-W><cr>
+au! FileType fzf setlocal laststatus=0 noshowmode noruler
   \| au BufLeave <buffer> set laststatus=2 showmode ruler
 
 "--- Other plugins ---
+Plug 'j-hui/fidget.nvim'
 Plug 'rlue/vim-barbaric'
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
-Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
-Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
+Plug 'weirongxu/plantuml-previewer.vim'
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_settings = {
@@ -216,13 +219,6 @@ nnoremap <leader>vd :VtrSendCtrlD<cr>
 nnoremap <leader>vc :VtrSendCtrlC<cr>
 nnoremap <leader>vC :VtrClearRunner<cr>
 
-function! SendCommand(command)
-  if a:command == ''
-    return
-  endif
-  exe 'VtrSendCommandToRunner '.a:command
-endfunction
-
 call plug#end()
 
 "--- Function utils ---
@@ -255,10 +251,10 @@ function! RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'), 'file')
   if new_name != '' && new_name != old_name
-      exec ':saveas ' . new_name
-      exec ':silent !rm ' . old_name
-      exec ':bd '.old_name
-      redraw!
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    exec ':bd '.old_name
+    redraw!
   endif
 endfunction
 command! Rename :call RenameFile()
@@ -403,7 +399,7 @@ function HandleFileNotExist(name)
   echomsg msg
 endfunction
 
-function! s:inCodeFence()
+function! InCodeFence()
   call search('^```.*$', 'bceW')
   normal! j
   normal! 0v
@@ -411,16 +407,26 @@ function! s:inCodeFence()
   normal! kg_
 endfunction
 
-function! s:aroundCodeFence()
+function! AroundCodeFence()
   call search('^```.*$', 'bcW')
   normal! v$
   call search('```', 'eW')
 endfunction
 
-xnoremap <silent> if :call <sid>inCodeFence()<cr>
-onoremap <silent> if :call <sid>inCodeFence()<cr>
-xnoremap <silent> af :call <sid>aroundCodeFence()<cr>
-onoremap <silent> af :call <sid>aroundCodeFence()<cr>
+xnoremap <silent> if :call InCodeFence()<cr>
+onoremap <silent> if :call InCodeFence()<cr>
+xnoremap <silent> af :call AroundCodeFence()<cr>
+onoremap <silent> af :call AroundCodeFence()<cr>
+
+function! Scratch()
+  enew
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal ft=scratch
+  execute 'file scratch'
+endfunction
+command! Scratch :call Scratch()
 
 augroup Aligntable
   au FileType markdown,text
@@ -437,7 +443,7 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  au FileType * iab <buffer><expr> __date strftime("%Y-%m-%d")
+  au FileType * iab <buffer><expr> date@@ strftime("%Y-%m-%d")
 augroup end
 
 augroup ShowExtraWhitespace
@@ -459,7 +465,7 @@ augroup LoadFile
   au!
   au VimResized * wincmd =
   au BufWritePost * call Trim()
-  au FileType oil setlocal nonumber
+  au FileType fzf setlocal nonumber norelativenumber
   au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -485,8 +491,12 @@ hi ExtraWhitespace           ctermbg=196
 
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
+hi Search                    ctermfg=0      ctermbg=255    cterm=none
 hi Pmenu                     ctermfg=255    ctermbg=236    cterm=none
 hi PmenuSel                  ctermfg=178    ctermbg=238    cterm=none
+
+hi StatusLine                ctermfg=none   ctermbg=236    cterm=bold
+hi StatusLineNC              ctermfg=none   ctermbg=236    cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none
