@@ -6,11 +6,9 @@ set autoread autowrite
 set hlsearch incsearch
 set ignorecase smartcase
 set list listchars=tab:»\ ,lead:.,trail:\ |
-set laststatus=2 ruler
+set laststatus=2 ruler noshowmode noshowcmd
 set number relativenumber
-set signcolumn=no
-set textwidth=81
-set colorcolumn=+1
+set textwidth=81 colorcolumn=+1
 set cursorline cursorlineopt=number
 set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
@@ -18,10 +16,8 @@ set backspace=0
 set mouse=a
 set autoindent
 set nofoldenable
+set signcolumn=no
 set diffopt=vertical
-set ttimeout
-set ttimeoutlen=100
-set timeoutlen=1000
 set wildignore=*/.git/*,*/node_modules/*
 set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
 packadd! matchit
@@ -43,8 +39,8 @@ let mapleader = ' '
 nnoremap Y y$
 xnoremap p pgvy
 nnoremap gV `[v`]
+inoremap <C-l> <C-o>:noh<cr>
 nnoremap <C-l> :noh<cr>:redraw!<cr>
-inoremap <C-l> <C-o>:noh<cr>:redraw!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>n :set invrelativenumber<cr>
 nnoremap <leader>s :grep!<space>
@@ -106,19 +102,6 @@ if &diff
 endif
 
 "--- Etc ---"
-function! Mkdir()
-  let dir = expand('%:p:h')
-
-  if dir =~ '://'
-    return
-  endif
-
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-    echo 'Created non-existing directory: '.dir
-  endif
-endfunction
-
 function! GRemoveMarkers() range
   execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
@@ -205,12 +188,10 @@ let directories_command =
   \ | sed "s|^./||"
   \ | sort '
 
-" nnoremap <silent> <leader>i
-"   \ :call MyExplore(files_command, 'explore_files')<cr>
-" nnoremap <silent> <leader>d
-"   \ :call MyExplore(directories_command, 'explore_directories')<cr>
-command! Files :call MyExplore(files_command, 'explore_files')
-command! Directories :call MyExplore(directories_command, 'explore_directories')
+nnoremap <silent> <leader>i
+  \ :call MyExplore(files_command, 'explore_files')<cr>
+nnoremap <silent> <leader>d
+  \ :call MyExplore(directories_command, 'explore_directories')<cr>
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -432,10 +413,10 @@ endfunction
 
 augroup LoadFile
   au VimResized * wincmd =
-  au BufWritePost * redraw!
   au BufWritePost * call Trim()
   au FileType netrw call NetrwSetting()
   au CursorMoved,CursorHold *.* checktime
+  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
@@ -457,7 +438,6 @@ match ExtraWhitespace /\s\+$/
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi NormalFloat                    ctermfg=none     ctermbg=none     cterm=none
 hi Search                         ctermfg=0        ctermbg=255      cterm=none
 hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=178      ctermbg=238      cterm=none
