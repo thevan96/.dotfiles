@@ -15,12 +15,12 @@ if [ ! -d "/nix" ]; then
     nixpkgs.direnv \
     nixpkgs.htop \
     nixpkgs.neofetch \
+    nixpkgs.shellcheck \
     nixpkgs.ripgrep
 
   nix-env -iA unstable.lua-language-server \
     unstable.gopls \
     unstable.rust-analyzer \
-    unstable.marksman \
     unstable.nixd \
     nixpkgs.docker \
     nixpkgs.docker-compose

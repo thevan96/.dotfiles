@@ -18,6 +18,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gcc \
     g++ \
     tree \
+    moreutils \
     curl \
     wget \
     git \

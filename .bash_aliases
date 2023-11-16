@@ -39,6 +39,8 @@ export FZF_DEFAULT_COMMAND="fd --type f -H \
   --exclude composer \
   --exclude gems \
   "
+export FZF_DEFAULT_OPTS="-m  --bind alt-a:select-all,alt-d:deselect-all"
+
 export FZF_ALT_C_COMMAND="fd --type d -H \
   --exclude .git \
   --exclude .idea \
@@ -51,25 +53,26 @@ export FZF_ALT_C_COMMAND="fd --type d -H \
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # Alias, utils
-alias ls='ls -F'
-alias grep="grep -rn --color=always --exclude-dir={.git,node_modules}"
+alias vim='nvim'
+alias vimdiff='nvimdiff'
+alias grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
 
 find_f() {
-  find -type f \
-    -not -path */.git/* \
-    -not -path */.direnv/*\
-    -not -path */node_modules/*\
+  find . -type f \
+    -not -path "*/.git/*" \
+    -not -path "*/.direnv/*" \
+    -not -path "*/node_modules/*" \
     | sed "s|^./||" \
     | sort
 }
 
 find_d() {
-  find -type d \
-    \( -path */.git/* \
+  find . -type d \
+    \( -path "*/.git/*" \
     -o \
-    -path */.direnv/* \
+    -path "*/.direnv/*" \
     -o \
-    -path */node_modules/* \
+    -path "/*node_modules/*" \
     -prune -o -print \
     \) \
     | sed "s|^./||" \

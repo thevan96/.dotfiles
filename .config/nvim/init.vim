@@ -5,6 +5,7 @@ set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:»\ ,lead:.,trail:\ |
+set noshowmode noshowcmd
 set number relativenumber
 set ignorecase smartcase
 set signcolumn=no
@@ -13,12 +14,13 @@ set colorcolumn=+1
 set cursorline cursorlineopt=number
 set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
-set noshowcmd
 set backspace=0
 set nofoldenable
 set guicursor=i:block
 set mouse=a
+set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
 set wildignore=*/.git/*,*/node_modules/*
+packadd! matchit
 
 " Use persistent undo history.
 if !isdirectory("/tmp/.nvim-undo-dir")
@@ -28,6 +30,7 @@ set undofile
 set undodir=/tmp/.nvim-undo-dir
 
 " vim use alias bash
+let $ROOT=getcwd()
 let $BASH_ENV = $HOME.'/.bash_aliases'
 
 " Netrw
@@ -43,22 +46,23 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gV `[v`]
+nnoremap <C-j> <C-e>j
+nnoremap <C-k> <C-y>k
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>n :set invrelativenumber<cr>
+nnoremap <leader>s :grep<space>
+nnoremap <leader>S :grep -r <C-R><C-W><space>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
+command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Better jump tags/intellisense
 nnoremap <C-]> g<C-]>
-inoremap <C-x><C-o> <C-Space>
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
-
-" Buffer only
-command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -85,12 +89,12 @@ nnoremap [A :first<cr>:args<cr>
 nnoremap ]A :last<cr>:args<cr>
 
 " Mapping copy clipboard and past
-noremap <leader>y "+yy
-vnoremap <leader>p "+p
-nnoremap <leader>p :put +<cr>
-nnoremap <leader>P :put! +<cr>
+nnoremap <leader>y "+yy
+vnoremap <leader>y "+yy
 nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
 
 " Fix conflict git
 if &diff
@@ -128,7 +132,6 @@ Plug 'stevearc/oil.nvim'
 nnoremap <leader>ff :Oil<cr>
 nnoremap <leader>fv :vsp+Oil<cr>
 nnoremap <leader>fs :sp+Oil<cr>
-nnoremap <leader>fo :e .<cr>
 
 " Fuzzy search
 set rtp+=~/.fzf
@@ -140,10 +143,6 @@ let g:fzf_action = {
   \ }
 let g:fzf_layout = { 'down': '40%' }
 
-let rgIgnoreDirectories = "
-  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**, **/.direnv/**}'
-  \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
-
 let fdIgnoreDirectories = '
   \ --exclude .git
   \ --exclude .idea
@@ -153,12 +152,15 @@ let fdIgnoreDirectories = '
   \ --exclude vendor
   \ --exclude composer
   \ --exclude gems '
-
 let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.fdIgnoreDirectories
 
 command! Directories call fzf#run(fzf#wrap({
   \   'source': 'fd --type d -H '.fdIgnoreDirectories,
   \ }))
+
+let rgIgnoreDirectories = "
+  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**, **/.direnv/**}'
+  \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
 
 command! -bang -nargs=* Rg call fzf#vim#grep(
   \  'rg --hidden --column --line-number --no-heading --color=always
@@ -169,16 +171,15 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>s :Rg<space>
-nnoremap <leader>S :Rg <C-R><C-W><cr>
-au! FileType fzf setlocal laststatus=0 noshowmode noruler
-  \| au BufLeave <buffer> set laststatus=2 showmode ruler
+nnoremap <leader>rg :Rg<space>
+nnoremap <leader>rR :Rg <C-R><C-W><cr>
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
-Plug 'rlue/vim-barbaric'
+Plug 'wellle/targets.vim'
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
+Plug 'stefandtw/quickfix-reflector.vim'
 
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
@@ -202,6 +203,14 @@ let g:user_emmet_settings = {
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
 nnoremap <leader>mp :MarkdownPreviewToggle<cr>
+
+Plug 'takac/vim-hardtime'
+let g:hardtime_maxcount = 5
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:hardtime_motion_with_count_resets = 0
+let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt']
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -243,6 +252,7 @@ function! Trim()
     silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
+    silent! w
   endif
 endfunction
 command! Trim :call Trim()
@@ -327,39 +337,20 @@ function! s:RunGo(runner)
 endfunction
 
 function! s:InsertBlockCode(runner)
-  try
-    let runner = a:runner
+  let runner = a:runner
 
-    if getline(runner.end + 2) ==# '```result'
-      let save_cursor = getcurpos()
-      call cursor(runner.end + 3, 0)
-      let end_result_block_line = search('```', 'cW')
-      if end_result_block_line
-        if getline(end_result_block_line + 1) ==# ''
-          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line + 1)
-        else
-          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
-        endif
-      endif
-      call setpos('.', save_cursor)
-    endif
+  if getline(runner.end + 2) == '```result'
+    call cursor(runner.end + 3, 0)
+    let end_result_block_line = search('```', 'cW')
+    call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
+  endif
 
-    let result_lines = split(runner.result, '\n')
-    call append(runner.end, '')
-    call append(runner.end + 1, '```result')
-    call append(runner.end + 2, result_lines)
-    call append(runner.end + len(result_lines) + 2, '```')
-
-  catch  /.*/
-    call s:error(v:exception)
-  endtry
-endfunction
-
-function! s:error(error)
-  execute 'normal! \<Esc>'
-  echohl ErrorMsg
-  echo 'Markdown error: ' . a:error
-  echohl None
+  let result_lines = split(runner.result, '\n')
+  call append(runner.end, '')
+  call append(runner.end + 1, '```result')
+  call append(runner.end + 2, result_lines)
+  call append(runner.end + len(result_lines) + 2, '```')
+  silent! w
 endfunction
 
 function! RunCode(type)
@@ -379,7 +370,9 @@ function! RunCode(type)
   endif
 
   if a:type == 'insert'
+    let save_cursor = getcurpos()
     call s:InsertBlockCode(runner)
+    call setpos('.', save_cursor)
   elseif a:type == 'echo'
     echo runner.result
   endif
@@ -428,6 +421,9 @@ function! Scratch()
 endfunction
 command! Scratch :call Scratch()
 
+xnoremap <silent> gs <esc>:call <sid>SwapVisualWithCut()<cr>
+xnoremap <silent> gS <esc>:call <sid>SwapVisualWithCut2()<cr>
+
 augroup Aligntable
   au FileType markdown,text
     \ vnoremap <buffer> <leader>ft !prettier --parser markdown<cr>
@@ -443,7 +439,7 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  au FileType * iab <buffer><expr> date@@ strftime("%Y-%m-%d")
+  iab <expr> date@@ strftime("%Y-%m-%d")
 augroup end
 
 augroup ShowExtraWhitespace
@@ -456,18 +452,18 @@ augroup RelativeWorkingDirectory
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup JumpQuickfx
-  au QuickFixCmdPost [^l]* nested cwindow
-  au QuickFixCmdPost    l* nested lwindow
-augroup end
-
 augroup LoadFile
-  au!
   au VimResized * wincmd =
   au BufWritePost * call Trim()
-  au FileType fzf setlocal nonumber norelativenumber
-  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
+  au FileType fzf setlocal laststatus=0
+    \| au BufLeave <buffer> setlocal laststatus=2
+  au FileType oil,fzf setlocal nonumber norelativenumber
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
+  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
+  au FocusGained,BufEnter,CursorMoved,CursorHold *
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == ''
+    \   | checktime
+    \ | endif
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -491,12 +487,9 @@ hi ExtraWhitespace           ctermbg=196
 
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
-hi Search                    ctermfg=0      ctermbg=255    cterm=none
+hi Search                    ctermfg=0      ctermbg=43     cterm=none
 hi Pmenu                     ctermfg=255    ctermbg=236    cterm=none
 hi PmenuSel                  ctermfg=178    ctermbg=238    cterm=none
-
-hi StatusLine                ctermfg=none   ctermbg=236    cterm=bold
-hi StatusLineNC              ctermfg=none   ctermbg=236    cterm=none
 
 hi LineNr                    ctermfg=244    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=244    ctermbg=none   cterm=none

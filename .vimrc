@@ -7,29 +7,38 @@ set hlsearch incsearch
 set ignorecase smartcase
 set list listchars=tab:»\ ,lead:.,trail:\ |
 set laststatus=2 ruler noshowmode noshowcmd
+set ttimeout ttimeoutlen=100 timeoutlen=1000
 set number relativenumber
 set textwidth=81 colorcolumn=+1
 set cursorline cursorlineopt=number
 set wildmenu wildmode=list
 set completeopt=menu,menuone,noinsert
-set backspace=0
-set mouse=a
+set hidden
 set autoindent
+set backspace=0
 set nofoldenable
 set signcolumn=no
 set diffopt=vertical
+set mouse=a ttymouse=xterm2
 set wildignore=*/.git/*,*/node_modules/*
 set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
 packadd! matchit
 
+" Use persistent undo history.
+if !isdirectory("/tmp/.vim-undo-dir")
+  call mkdir("/tmp/.vim-undo-dir", "", 0700)
+endif
+set undofile
+set undodir=/tmp/.vim-undo-dir
+
 " vim use alias bash
+let $ROOT=getcwd()
 let $BASH_ENV = $HOME.'/.bash_aliases'
 
 " Netrw
 let g:netrw_banner = 0
 let g:netrw_cursor = 0
 let g:netrw_keepdir = 0
-let g:root_cwd = getcwd()
 
 " Setting tab/space
 set tabstop=2 shiftwidth=2 expandtab
@@ -42,9 +51,9 @@ nnoremap gV `[v`]
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <C-l> :noh<cr>:redraw!<cr>
 nnoremap <leader>o :ls<cr>:b<space>
+nnoremap <leader>s :grep<space>
+nnoremap <leader>S :grep -r <C-R><C-W><space>
 nnoremap <leader>n :set invrelativenumber<cr>
-nnoremap <leader>s :grep!<space>
-nnoremap <leader>S :grep! -r <C-R><C-W><cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -68,20 +77,29 @@ nnoremap ]z :lnext<cr>
 nnoremap [Z :lfirst<cr>
 nnoremap ]Z :llast<cr>
 
+nnoremap <leader>ao :args<cr>
+nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
+nnoremap <leader>ax :args<cr>:argdelete<space>
+nnoremap <leader>aX :argdelete *<cr>:echo 'clear args list'<cr>
+nnoremap [a :previous<cr>:args<cr>
+nnoremap ]a :next<cr>:args<cr>
+nnoremap [A :first<cr>:args<cr>
+nnoremap ]A :last<cr>:args<cr>
+
 " Mapping copy clipboard and past
-noremap <leader>y "+yy
-vnoremap <leader>p "+p
-nnoremap <leader>p :put +<cr>
-nnoremap <leader>P :put! +<cr>
+nnoremap <leader>y "+yy
+vnoremap <leader>y "+yy
 nnoremap <leader>_ vg_"+y
 nnoremap <leader>Y :%y+<cr>
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
 
 " File manager
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
-nnoremap <leader>fo :e `=g:root_cwd`<cr>
-command! Ro :cd `=g:root_cwd`
+nnoremap <leader>fo :e .<cr>
+command! Ro :cd $ROOT
 command! Ex :e+JumpFile
 command! Se :sp+JumpFile
 command! Ve :vsp+JumpFile
@@ -102,11 +120,6 @@ if &diff
 endif
 
 "--- Etc ---"
-function! GRemoveMarkers() range
-  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
-endfunction
-command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
-
 function! IsInCurrentProject()
   let pwd = getcwd()
   let file = expand('%:p:h')
@@ -139,59 +152,6 @@ function! RenameFile()
   endif
 endfunction
 command! Rename :call RenameFile()
-
-function! MyExplore(command, name)
-  let res = split(system(a:command), '\n')
-
-  if bufexists(str2nr(bufnr(a:name))) == 1
-    exe('b '.a:name)
-    let save_cursor = getcurpos()
-    let res = split(system(a:command), '\n')
-    let buff = getline(1, '$')
-    let buff =  buff[:(len(buff)-2)]
-    if len(res) != len(buff)
-      setlocal noreadonly modifiable
-      exe '%d'
-      call append(0, res)
-      setlocal readonly nomodifiable
-    endif
-    call setpos('.', save_cursor)
-
-    return
-  endif
-
-  enew
-  setlocal nonumber buftype=nofile bufhidden=hide noswapfile ft=explore
-  exe('file '.a:name)
-  call append(0, res)
-  normal! gg
-  setlocal readonly nomodifiable
-endfunction
-
-let files_command =
-  \ 'find -type f
-  \ -not -path */.git/*
-  \ -not -path */.direnv/*
-  \ -not -path */node_modules/*
-  \ | sed "s|^./||"
-  \ | sort '
-
-let directories_command =
-  \ 'find -type d
-  \ \( -path */.git/*
-  \ -o
-  \ -path */.direnv/*
-  \ -o
-  \ -path */node_modules/*
-  \ -prune -o -print
-  \ \)
-  \ | sed "s|^./||"
-  \ | sort '
-
-nnoremap <silent> <leader>i
-  \ :call MyExplore(files_command, 'explore_files')<cr>
-nnoremap <silent> <leader>d
-  \ :call MyExplore(directories_command, 'explore_directories')<cr>
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -259,36 +219,19 @@ function! s:RunGo(runner)
 endfunction
 
 function! s:InsertBlockCode(runner)
-  try
-    let runner = a:runner
-    if getline(runner.end + 2) ==# '```result'
-      let save_cursor = getcurpos()
-      call cursor(runner.end + 3, 0)
-      let end_result_block_line = search('```', 'cW')
-      if end_result_block_line
-        if getline(end_result_block_line + 1) ==# ''
-          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line + 1)
-        else
-          call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
-        endif
-      endif
-      call setpos('.', save_cursor)
-    endif
-    let result_lines = split(runner.result, '\n')
-    call append(runner.end, '')
-    call append(runner.end + 1, '```result')
-    call append(runner.end + 2, result_lines)
-    call append(runner.end + len(result_lines) + 2, '```')
-  catch  /.*/
-    call s:error(v:exception)
-  endtry
-endfunction
+  let runner = a:runner
+  if getline(runner.end + 2) == '```result'
+    call cursor(runner.end + 3, 0)
+    let end_result_block_line = search('```', 'cW')
+    call deletebufline(bufname("%"), runner.end + 2, end_result_block_line)
+  endif
 
-function! s:error(error)
-  execute 'normal! \<Esc>'
-  echohl ErrorMsg
-  echo 'Markdown error: ' . a:error
-  echohl None
+  let result_lines = split(runner.result, '\n')
+  call append(runner.end, '')
+  call append(runner.end + 1, '```result')
+  call append(runner.end + 2, result_lines)
+  call append(runner.end + len(result_lines) + 2, '```')
+  silent! w
 endfunction
 
 function! RunCode(type)
@@ -308,7 +251,9 @@ function! RunCode(type)
   endif
 
   if a:type == 'insert'
+    let save_cursor = getcurpos()
     call s:InsertBlockCode(runner)
+    call setpos('.', save_cursor)
   elseif a:type == 'echo'
     echo runner.result
   endif
@@ -316,7 +261,7 @@ endfunction
 nnoremap <silent><leader>rr :call RunCode('insert')<cr>
 nnoremap <silent><leader>re :call RunCode('echo')<cr>
 
-function HandleFileNotExist(name)
+function! HandleFileNotExist(name)
   let msg = 'File "'.a:name.'"'
   let v:fcs_choice = ''
   if v:fcs_reason == "deleted"
@@ -347,6 +292,62 @@ onoremap <silent> if :call InCodeFence()<cr>
 xnoremap <silent> af :call AroundCodeFence()<cr>
 onoremap <silent> af :call AroundCodeFence()<cr>
 
+function! MyExplore(command, name)
+  let res = split(system(a:command), '\n')
+
+  if bufexists(str2nr(bufnr(a:name))) == 1
+    exe('b '.a:name)
+    let save_cursor = getcurpos()
+    let res = split(system(a:command), '\n')
+    let buff = getline(1, '$')
+    let buff =  buff[:(len(buff)-2)]
+    if len(res) != len(buff)
+      setlocal noreadonly modifiable
+      exe '%d'
+      call append(0, res)
+      silent! %s#\($\n\s*\)\+\%$##
+      setlocal readonly nomodifiable
+    endif
+    call setpos('.', save_cursor)
+    return
+  endif
+
+  enew
+  setlocal nonumber buftype=nofile bufhidden=hide noswapfile ft=explore
+  exe('file '.a:name)
+  call append(0, res)
+  silent! %s#\($\n\s*\)\+\%$##
+  normal! gg
+  setlocal readonly nomodifiable
+endfunction
+
+let files_command =
+  \ 'find -type f
+  \ -not -path */.git/*
+  \ -not -path */.direnv/*
+  \ -not -path */node_modules/*
+  \ | sed "s|^./||"
+  \ | sort'
+
+let directories_command =
+  \ 'find -type d
+  \ \( -path */.git/*
+  \ -o
+  \ -path */.direnv/*
+  \ -o
+  \ -path */node_modules/*
+  \ -prune -o -print
+  \ \)
+  \ | sed "s|^./||"
+  \ | sort'
+
+" nnoremap <silent> <leader>i
+"   \ :call MyExplore(files_command, 'explore_files')<cr>
+" nnoremap <silent> <leader>d
+"   \ :call MyExplore(directories_command, 'explore_directories')<cr>
+" command! Files :call MyExplore(files_command, 'explore_files')
+" command! Directories :call MyExplore(directories_command, 'explore_directories')
+
 function! Scratch()
   enew
   setlocal buftype=nofile
@@ -370,12 +371,16 @@ function! JumpFile()
 endfunction
 command! JumpFile call JumpFile()
 
-augroup Aligntable
-  au FileType markdown,text
-    \ vnoremap <buffer> <leader>ft !prettier --parser markdown<cr>
-  au FileType markdown,text
-    \ nnoremap <buffer> <leader>ft vip!prettier --parser markdown<cr>
-augroup end
+function! NetrwSetting()
+  au BufLeave <buffer> cd $ROOT
+  nnoremap <silent><buffer> Q :bd<cr>
+  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
+  nnoremap <silent><buffer> mp
+    \ :let @+=join(netrw#Expose("netrwmarkfilelist"), "\n")<cr>
+    \ :echo "Copy to clipboard to success"<cr>
+  nnoremap <silent><buffer> ml :echo join(
+    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
+endfunction
 
 augroup ConfigStyleTabOrSpace
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
@@ -386,7 +391,6 @@ augroup end
 
 augroup snippet
   iab <expr> date@@ strftime("%Y-%m-%d")
-  iab div@@ <div></div>
 augroup end
 
 augroup ShowExtraWhitespace
@@ -399,25 +403,16 @@ augroup RelativeWorkingDirectory
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
 augroup end
 
-augroup JumpQuickfx
-  au QuickFixCmdPost [^l]* nested cwindow
-  au QuickFixCmdPost    l* nested lwindow
-augroup end
-
-function! NetrwSetting()
-  au BufLeave <buffer> cd `=g:root_cwd`
-  nnoremap <silent><buffer> g? :h netrw-quickhelp<cr>
-  nnoremap <silent><buffer> mL :echo join(
-    \ netrw#Expose('netrwmarkfilelist'), "\n")<cr>
-endfunction
-
 augroup LoadFile
   au VimResized * wincmd =
   au BufWritePost * call Trim()
   au FileType netrw call NetrwSetting()
-  au CursorMoved,CursorHold *.* checktime
-  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
+  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
+  au FocusGained,BufEnter,CursorMoved,CursorHold *
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == ''
+    \   | checktime
+    \ | endif
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -438,7 +433,7 @@ match ExtraWhitespace /\s\+$/
 
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi Search                         ctermfg=0        ctermbg=255      cterm=none
+hi Search                         ctermfg=0        ctermbg=43       cterm=none
 hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
 hi PmenuSel                       ctermfg=178      ctermbg=238      cterm=none
 

@@ -8,7 +8,7 @@ shopt -s histappend
 
 # Load alias
 if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+  . "$HOME/.bash_aliases"
 fi
 
 # PS1
@@ -30,7 +30,9 @@ source /etc/bash_completion.d/git-prompt
 eval "$(direnv hook bash)"
 
 # Load fzf
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [ -f ~/.fzf.bash ]; then
+  . "$HOME/.fzf.bash"
+fi
 
 # Vi-mode
 set -o vi
@@ -38,6 +40,6 @@ bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
 
 # Load nix
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-  . $HOME/.nix-profile/etc/profile.d/nix.sh
+if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi

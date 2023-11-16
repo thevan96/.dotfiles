@@ -66,7 +66,6 @@ nvim_lsp.nixd.setup({})
 nvim_lsp.cssmodules_ls.setup({})
 nvim_lsp.tsserver.setup({})
 nvim_lsp.rust_analyzer.setup({})
-nvim_lsp.marksman.setup({})
 nvim_lsp.bashls.setup({})
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.setloclist)
@@ -86,14 +85,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.semanticTokensProvider = nil
 
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
+    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', '<C-w>r', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
     vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
-    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
   end,
 })
 
@@ -115,13 +114,13 @@ local function get_all_diagnostics(bufnr)
     return ''
   end
 
-  return '[🐞/'
+  return '[🐞 '
     .. error
-    .. ' W/'
+    .. '] [W '
     .. warning
-    .. ' I/'
+    .. '] [I '
     .. info
-    .. ' H/'
+    .. '] [H '
     .. hint
     .. ']'
 end
