@@ -1,15 +1,16 @@
 local nvim_lsp = require('lspconfig')
 
-vim.diagnostic.config({
-  signs = false,
-  underline = false,
-  virtual_text = false,
-  float = {
-    source = 'always',
-    border = 'single',
-  },
-  update_in_insert = false,
-})
+vim.lsp.handlers['textDocument/publishDiagnostics'] =
+  vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    signs = false,
+    underline = false,
+    virtual_text = false,
+    float = {
+      source = 'always',
+      border = 'single',
+    },
+    update_in_insert = false,
+  })
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = 'single',
@@ -67,6 +68,7 @@ nvim_lsp.cssmodules_ls.setup({})
 nvim_lsp.tsserver.setup({})
 nvim_lsp.rust_analyzer.setup({})
 nvim_lsp.bashls.setup({})
+nvim_lsp.marksman.setup({})
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>E', vim.diagnostic.setqflist)
@@ -75,7 +77,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
     -- Enable completion triggered by <c-x><c-o>
-    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    -- vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    vim.bo[args.buf].omnifunc = ''
 
     local opts = { buffer = args.buf }
     local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -114,7 +117,7 @@ local function get_all_diagnostics(bufnr)
     return ''
   end
 
-  return '[🐞 '
+  return '[E '
     .. error
     .. '] [W '
     .. warning

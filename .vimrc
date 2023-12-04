@@ -70,12 +70,12 @@ nnoremap ]q :cnext<cr>
 nnoremap [Q :cfirst<cr>
 nnoremap ]Q :clast<cr>
 
-nnoremap <leader>zo :lopen<cr>
-nnoremap <leader>zx :lclose<cr>
-nnoremap [z :lprev<cr>
-nnoremap ]z :lnext<cr>
-nnoremap [Z :lfirst<cr>
-nnoremap ]Z :llast<cr>
+nnoremap <leader>wo :lopen<cr>
+nnoremap <leader>wx :lclose<cr>
+nnoremap [w :lprev<cr>
+nnoremap ]w :lnext<cr>
+nnoremap [W :lfirst<cr>
+nnoremap ]W :llast<cr>
 
 nnoremap <leader>ao :args<cr>
 nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
@@ -120,19 +120,8 @@ if &diff
 endif
 
 "--- Etc ---"
-function! IsInCurrentProject()
-  let pwd = getcwd()
-  let file = expand('%:p:h')
-
-  if stridx(file, 'node_modules') >= 0
-    return
-  endif
-
-  return stridx(file, pwd) >= 0
-endfunction
-
 function! Trim()
-  if !&binary && IsInCurrentProject()
+  if !&binary
     silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
@@ -408,11 +397,10 @@ augroup LoadFile
   au BufWritePost * call Trim()
   au FileType netrw call NetrwSetting()
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
-  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FocusGained,BufEnter,CursorMoved,CursorHold *
-    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == ''
-    \   | checktime
-    \ | endif
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
+    \   checktime |
+    \ endif
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif

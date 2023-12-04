@@ -163,6 +163,6 @@
   "Flags": 7,
   "IBflags": 295920,
   "Shortcuts": [5, 126, 0, 0, 0, 0, 0, 0, 5, 117],
-  "DefaultInputMode": 1,
+  "DefaultInputMode": 3,
   "InputModeMapping": {}
 }

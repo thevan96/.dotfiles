@@ -419,15 +419,12 @@ augroup end
 augroup MarkdowFold
   function! MyFoldText()
       let nl = v:foldend - v:foldstart + 1
-      let comment = substitute(getline(v:foldstart),'{{{','',1)
-      let txt = comment . ' ... ' . nl . ' lines'
+      let comment = substitute(getline(v:foldstart),'','',1)
+      let txt =   comment . '" : length ' . nl
       return txt
   endfunction
 
-  au FileType text setlocal
-    \ foldtext=MyFoldText()
-    \ foldmethod=marker foldmarker={{{,}}} foldenable
-    \ fillchars=fold:\ |
+  au FileType text setlocal foldtext=MyFoldText() foldmethod=marker foldmarker={{{,}}} foldenable
 augroup end
 
 augroup snippet

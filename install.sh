@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-./etc/ubuntu_setup.sh
+./etc/debian_setup.sh
 ./etc/gnome_setup.sh
-./etc/install_nix.sh
 ./etc/install_fzf.sh
+./etc/install_nix.sh
 
 stow .
