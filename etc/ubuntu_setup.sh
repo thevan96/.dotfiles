@@ -34,7 +34,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     wmctrl \
     stow \
     rofi \
-    mysql-client \
     postgresql-client \
     trash-cli \
     net-tools \
@@ -52,8 +51,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-sushi \
     gnome-shell-extensions\
     gnome-clocks \
-    gnome-tweaks \
-    chrome-gnome-shell
+    gnome-tweaks
 fi
 
 echo ""

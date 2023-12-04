@@ -14,6 +14,16 @@ fi
 # PS1
 PS1='\u@\H:\w\n\\$ '
 
+# Vi-mode
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
+
+# Load nix
+if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
 # Enable bash autocomplete
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -34,12 +44,7 @@ if [ -f ~/.fzf.bash ]; then
   . "$HOME/.fzf.bash"
 fi
 
-# Vi-mode
-set -o vi
-bind -m vi-command 'Control-l: clear-screen'
-bind -m vi-insert 'Control-l: clear-screen'
-
-# Load nix
-if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
-  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+# Setup ssh with keychain
+if [ $XDG_CURRENT_DESKTOP == 'i3' ]; then
+  eval `keychain --noask --eval --agents ssh id_rsa_github_personal --quick --quiet`
 fi

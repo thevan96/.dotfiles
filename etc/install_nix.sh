@@ -1,27 +1,33 @@
 #!/usr/bin/env bash
 
 if [ ! -d "/nix" ]; then
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-  nix-channel --add https://nixos.org/channels/nixos-23.05 nixpkgs
+  sh <(curl -L https://nixos.org/nix/install) --no-daemon
+  nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
+  if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+  fi
   nix-channel --update
 
   nix-env -iA nixpkgs.nodejs_20  \
-    nixpkgs.neovim \
-    nixpkgs.jq \
-    nixpkgs.fd \
-    nixpkgs.sxhkd \
-    nixpkgs.entr \
     nixpkgs.direnv \
-    nixpkgs.htop \
-    nixpkgs.neofetch \
+    nixpkgs.nix-direnv \
+    nixpkgs.fd \
+    nixpkgs.ripgrep \
     nixpkgs.shellcheck \
-    nixpkgs.ripgrep
+    nixpkgs.wmctrl \
+    nixpkgs.neofetch \
+    nixpkgs.trash-cli \
+    nixpkgs.nettools \
+    nixpkgs.jq \
+    nixpkgs.entr \
+    nixpkgs.htop
 
-  nix-env -iA unstable.lua-language-server \
-    unstable.gopls \
-    unstable.rust-analyzer \
-    unstable.nixd \
+  nix-env -iA nixpkgs.lua-language-server \
+    nixpkgs.gopls \
+    nixpkgs.rust-analyzer \
+    nixpkgs.nixd \
+    nixpkgs.marksman \
     nixpkgs.docker \
     nixpkgs.docker-compose
 

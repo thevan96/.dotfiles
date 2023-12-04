@@ -50,6 +50,8 @@ nnoremap <C-j> <C-e>j
 nnoremap <C-k> <C-y>k
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
+nnoremap <leader>h1 I= <esc>A =<esc>
+nnoremap <leader>h2 I== <esc>A ==<esc>
 nnoremap <leader>n :set invrelativenumber<cr>
 nnoremap <leader>s :grep<space>
 nnoremap <leader>S :grep -r <C-R><C-W><space>
@@ -59,6 +61,7 @@ command! BufOnly exe '%bdelete|edit#|bdelete#'
 
 " Better jump tags/intellisense
 nnoremap <C-]> g<C-]>
+inoremap <C-Space> <C-x><C-o>
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
@@ -72,12 +75,12 @@ nnoremap ]q :cnext<cr>
 nnoremap [Q :cfirst<cr>
 nnoremap ]Q :clast<cr>
 
-nnoremap <leader>zo :lopen<cr>
-nnoremap <leader>zx :lclose<cr>
-nnoremap [z :lprev<cr>
-nnoremap ]z :lnext<cr>
-nnoremap [Z :lfirst<cr>
-nnoremap ]Z :llast<cr>
+nnoremap <leader>wo :lopen<cr>
+nnoremap <leader>wx :lclose<cr>
+nnoremap [w :lprev<cr>
+nnoremap ]w :lnext<cr>
+nnoremap [W :lfirst<cr>
+nnoremap ]W :llast<cr>
 
 nnoremap <leader>ao :args<cr>
 nnoremap <leader>aa :argadd %<cr>:argdedupe<cr>
@@ -138,45 +141,32 @@ set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_action = {
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
+  \   'ctrl-s': 'split',
+  \   'ctrl-v': 'vsplit'
   \ }
 let g:fzf_layout = { 'down': '40%' }
 
-let fdIgnoreDirectories = '
-  \ --exclude .git
-  \ --exclude .idea
-  \ --exclude .vscode
-  \ --exclude .direnv
-  \ --exclude node_modules
-  \ --exclude vendor
-  \ --exclude composer
-  \ --exclude gems '
-let $FZF_DEFAULT_COMMAND = 'fd --type f -H '.fdIgnoreDirectories
-
 command! Directories call fzf#run(fzf#wrap({
-  \   'source': 'fd --type d -H '.fdIgnoreDirectories,
+  \   'source': $FZF_ALT_C_COMMAND
   \ }))
 
-let rgIgnoreDirectories = "
-  \ -g '!{**/.git/**,**/.idea/**, **/.vscode/**, **/.direnv/**}'
-  \ -g '!{**/node_modules/**,**/vendor/**, **/composer/**,**/gems/**}'"
-
-command! -bang -nargs=* Rg call fzf#vim#grep(
-  \  'rg --hidden --column --line-number --no-heading --color=always
-  \  --smart-case '.rgIgnoreDirectories.' '.shellescape(<q-args>),
-  \  1, fzf#vim#with_preview(), <bang>0
-  \ )
+command! -bang -nargs=* Grep
+  \ call fzf#vim#grep(
+  \  'grep -rn --exclude-dir={.git,node_modules} --color=always  -- '
+  \    .fzf#shellescape(<q-args>),
+  \  fzf#vim#with_preview({
+  \    'dir': systemlist('git rev-parse --show-toplevel')[0]
+  \  }),
+  \  <bang>0)
 
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>rg :Rg<space>
-nnoremap <leader>rR :Rg <C-R><C-W><cr>
+nnoremap <leader>g :Grep<space>
+nnoremap <leader>G :Grep <C-R><C-W><cr>
 
 "--- Other plugins ---
 Plug 'j-hui/fidget.nvim'
-Plug 'wellle/targets.vim'
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -204,13 +194,15 @@ let g:user_emmet_settings = {
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
 nnoremap <leader>mp :MarkdownPreviewToggle<cr>
 
+Plug 'tpope/vim-speeddating'
+
 Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 5
+let g:hardtime_maxcount = 9
 let g:hardtime_default_on = 1
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
 let g:hardtime_motion_with_count_resets = 0
-let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt']
+let g:hardtime_ignore_buffer_patterns = [ 'oil']
 
 Plug 'christoomey/vim-tmux-runner'
 let g:VtrPercentage = 50
@@ -236,19 +228,8 @@ function! GRemoveMarkers() range
 endfunction
 command! -range=% GremoveMarkers <line1>,<line2>call GRemoveMarkers()
 
-function! IsInCurrentProject()
-  let pwd = getcwd()
-  let file = expand('%:p:h')
-
-  if stridx(file, 'node_modules') >= 0
-    return
-  endif
-
-  return stridx(file, pwd) >= 0
-endfunction
-
 function! Trim()
-  if !&binary && IsInCurrentProject()
+  if !&binary
     silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
     silent! g/^\_$\n\_^$/d " single blank line
@@ -272,16 +253,16 @@ command! Rename :call RenameFile()
 function! s:ParseCodeBlock() abort
   let result = {}
 
-  if match(getline("."), '^```') != -1
+  if match(getline("."), '```') != -1
     return result
   endif
 
-  let start_i = search('^```', 'bnW')
+  let start_i = search('```', 'bnW')
   if start_i == 0
     return result
   endif
 
-  let end_i = search('^```', 'nW')
+  let end_i = search('```', 'nW')
   if end_i == 0
     return {}
   endif
@@ -459,11 +440,10 @@ augroup LoadFile
     \| au BufLeave <buffer> setlocal laststatus=2
   au FileType oil,fzf setlocal nonumber norelativenumber
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
-  au BufEnter * if !IsInCurrentProject() | setlocal nomodifiable | endif
   au FocusGained,BufEnter,CursorMoved,CursorHold *
-    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == ''
-    \   | checktime
-    \ | endif
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
+    \   checktime |
+    \ endif
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
@@ -506,6 +486,11 @@ hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticInfo            ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticHint            ctermfg=46     ctermbg=none   cterm=none
 
+hi DiagnosticUnderlineError  ctermfg=196    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineWarn   ctermfg=226    ctermbg=none   cterm=underline
+hi DiagnosticUnderlineInfo   ctermfg=39     ctermbg=none   cterm=underline
+hi DiagnosticUnderlineHint   ctermfg=46     ctermbg=none   cterm=underline
+
 hi DiagnosticSignError       ctermfg=196    ctermbg=none   cterm=none
 hi DiagnosticSignWarn        ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticSignInfo        ctermfg=39     ctermbg=none   cterm=none
@@ -516,12 +501,9 @@ hi DiagnosticFloatingWarn    ctermfg=226    ctermbg=none   cterm=none
 hi DiagnosticFloatingInfo    ctermfg=39     ctermbg=none   cterm=none
 hi DiagnosticFloatingHint    ctermfg=46     ctermbg=none   cterm=none
 
-"--- Load lua---
 lua << EOF
   require 'module_oil'
-  require 'module_lspconfig'
-
-  -- Without config
+  require 'module_lsp'
   require 'fidget'.setup()
   require 'nvim-surround'.setup()
 EOF

@@ -2,7 +2,7 @@ local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
   signs = false,
-  underline = false,
+  underline = true,
   virtual_text = false,
   float = {
     source = 'always',
@@ -67,9 +67,12 @@ nvim_lsp.cssmodules_ls.setup({})
 nvim_lsp.tsserver.setup({})
 nvim_lsp.rust_analyzer.setup({})
 nvim_lsp.bashls.setup({})
+nvim_lsp.marksman.setup({})
 
-vim.keymap.set('n', '<leader>e', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>E', vim.diagnostic.setqflist)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<space>E', vim.diagnostic.open_float)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -86,8 +89,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     client.server_capabilities.semanticTokensProvider = nil
 
     -- vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
-    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<C-w>r', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
     vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
