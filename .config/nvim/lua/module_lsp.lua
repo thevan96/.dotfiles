@@ -2,7 +2,7 @@ local nvim_lsp = require('lspconfig')
 
 vim.diagnostic.config({
   signs = false,
-  underline = true,
+  underline = false,
   virtual_text = false,
   float = {
     source = 'always',
@@ -26,14 +26,15 @@ on_capabilities.textDocument.completion.completionItem.snippetSupport = true
 on_capabilities.textDocument.completion.completePropertyWithSemicolon = false
 on_capabilities.offsetEncoding = { 'utf-16' }
 
-nvim_lsp.html.setup({
-  capabilities = on_capabilities,
-})
-
-nvim_lsp.jsonls.setup({
-  capabilities = on_capabilities,
-})
-
+nvim_lsp.html.setup({ capabilities = on_capabilities })
+nvim_lsp.jsonls.setup({ capabilities = on_capabilities })
+nvim_lsp.gopls.setup({})
+nvim_lsp.nixd.setup({})
+nvim_lsp.cssmodules_ls.setup({})
+nvim_lsp.tsserver.setup({})
+nvim_lsp.rust_analyzer.setup({})
+nvim_lsp.bashls.setup({})
+nvim_lsp.marksman.setup({})
 nvim_lsp.cssls.setup({
   capabilities = on_capabilities,
   settings = {
@@ -51,7 +52,6 @@ nvim_lsp.cssls.setup({
 })
 
 nvim_lsp.lua_ls.setup({
-  capabilities = on_capabilities,
   settings = {
     Lua = {
       diagnostics = {
@@ -61,18 +61,18 @@ nvim_lsp.lua_ls.setup({
   },
 })
 
-nvim_lsp.gopls.setup({})
-nvim_lsp.nixd.setup({})
-nvim_lsp.cssmodules_ls.setup({})
-nvim_lsp.tsserver.setup({})
-nvim_lsp.rust_analyzer.setup({})
-nvim_lsp.bashls.setup({})
-nvim_lsp.marksman.setup({})
-
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<space>E', vim.diagnostic.open_float)
+-- vim.keymap.set(
+--   'n',
+--   '[d',
+--   '<cmd>lua vim.diagnostic.goto_prev({ float = false})<cr>'
+-- )
+-- vim.keymap.set(
+--   'n',
+--   ']d',
+--   '<cmd>lua vim.diagnostic.goto_next({ float = false })<cr>'
+-- )
+-- vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '<space>E', vim.diagnostic.open_float)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -88,14 +88,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.semanticTokensProvider = nil
 
-    -- vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set('n', '<C-w>t', vim.lsp.buf.type_definition, opts)
+    -- vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
+    -- vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<C-w>r', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
-    vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
+    -- vim.keymap.set({ 'n', 'i' }, '<C-s>', vim.lsp.buf.signature_help, opts)
   end,
 })
 

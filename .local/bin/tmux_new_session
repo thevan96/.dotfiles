@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/Projects -mindepth 1 -maxdepth 1 -type d | fzf-tmux -p --prompt 'Directory > ')
+  selected=$(find ~/Personal ~/Company -mindepth 1 -maxdepth 1 -type d | fzf-tmux -w 60% -p --prompt 'Directory > ')
 fi
 
 if [[ -z $selected ]]; then

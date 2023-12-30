@@ -3,13 +3,11 @@
 
 /.stylua.toml
 /.editorconfig
-
-/.zshrc
-/.zshenv
 /.envrc
 
 shell.nix
 install.sh
+snippets
 etc
 Makefile
 README.md

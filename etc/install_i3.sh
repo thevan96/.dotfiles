@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
+set -e
 
-sudo apt install i3 \
-  i3lock-fancy \
+sudo dnf install i3 \
+  dunst \
+  hsetroot \
+  keychain \
   light \
-  xss-lock \
   lxappearance \
   pavucontrol \
-  picom \
+  rofi \
   xinput \
-  keychain \
-  hsetroot
+  xset \
+  xss-loctk
 
 sudo chmod +s $(which light)
+
+# ibus issue
+# https://github.com/BambooEngine/ibus-bamboo/issues/193
+# im-chooser > Use-ibus > logout

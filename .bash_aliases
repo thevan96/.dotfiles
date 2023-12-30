@@ -4,15 +4,18 @@ export KEYTIMEOUT=1
 export TERM=screen-256color
 export NIXPKGS_ALLOW_UNFREE=1
 
-# export LESS_TERMCAP_mb=$'\e[1;31m'
-# export LESS_TERMCAP_md=$'\e[1;33m'
-# export LESS_TERMCAP_so=$'\e[01;44;37m'
-# export LESS_TERMCAP_us=$'\e[01;37m'
-# export LESS_TERMCAP_me=$'\e[0m'
-# export LESS_TERMCAP_se=$'\e[0m'
-# export LESS_TERMCAP_ue=$'\e[0m'
-# export MANPAGER="less"
-export MANPAGER='nvim +Man!'
+if command -v nvim &> /dev/null; then
+  export MANPAGER='nvim +Man!'
+else
+  export LESS_TERMCAP_mb=$'\e[1;31m'
+  export LESS_TERMCAP_md=$'\e[1;33m'
+  export LESS_TERMCAP_so=$'\e[01;44;37m'
+  export LESS_TERMCAP_us=$'\e[01;37m'
+  export LESS_TERMCAP_me=$'\e[0m'
+  export LESS_TERMCAP_se=$'\e[0m'
+  export LESS_TERMCAP_ue=$'\e[0m'
+  export MANPAGER="less"
+fi
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
@@ -45,14 +48,16 @@ export FZF_ALT_C_COMMAND="find . -type d \
   \) \
   | sed 's|^./||'
 "
+
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 export FZF_DEFAULT_OPTS="-m --bind alt-a:toggle-all,alt-d:deselect-all --height 99%"
 
 # Alias, utils
+alias ls='ls -F'
 alias vim='nvim'
 alias vimdiff='nvimdiff'
-alias ls='ls -F'
-alias grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
+alias cpwd='pwd | xsel -i --clipboard'
+alias Grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
 
 find_f() {
   find . -type f \

@@ -1,20 +1,19 @@
-
 [user]
   name = thevan96
   email = vothevan96@gmail.com
 
 [core]
-  editor = vim
-	excludesfile = ~/.gitignore_global
+  editor = nvim
+  excludesfile = ~/.gitignore_global
 
 [init]
   defaultBranch = main
 
 [diff]
-  tool = vimdiff
+  tool = nvimdiff
 
 [merge]
-  tool = vimdiff
+  tool = nvimdiff
 
 [mergetool]
   keepBackup = false
