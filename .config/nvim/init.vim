@@ -7,11 +7,12 @@ set autoread autowrite
 set list listchars=tab:»\ ,lead:.,trail:\ |
 set number relativenumber
 set ignorecase smartcase
-set signcolumn=no nocursorline
+set signcolumn=no
+set nocursorline
 set textwidth=80
 set colorcolumn=+1
 set wildmenu wildmode=list
-set completeopt=menu,menuone,noinsert
+set completeopt=menu
 set backspace=0
 set nofoldenable
 set guicursor=i:block
@@ -48,28 +49,14 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gV `[v`]
-nnoremap <C-l> :noh<cr>
-inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>h yypVr-
-nnoremap <leader>s :r ~/.dotfiles/snippets/
 nnoremap <leader>n :set invrelativenumber<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 command! Path let @+ = expand("%:h")
 
-" Manager terminal
-nnoremap <leader>ts :sp+terminal<cr>
-nnoremap <leader>tv :vsp+terminal<cr>
-
 " Better remap tags/intellisense
 nnoremap <C-]> g<C-]>
-
-" Disable
-inoremap <C-n> <nop>
-inoremap <C-p> <nop>
-inoremap <C-Space> <nop>
-inoremap <C-x><C-o> <nop>
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
@@ -117,7 +104,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   let lk =
     \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs '.lk
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  au VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin()
@@ -125,8 +112,8 @@ call plug#begin()
 "--- Core plugins ---
 
 " Lsp
-" Plug 'j-hui/fidget.nvim'
-" Plug 'neovim/nvim-lspconfig'
+Plug 'j-hui/fidget.nvim'
+Plug 'neovim/nvim-lspconfig'
 
 " File manager
 Plug 'stevearc/oil.nvim'
@@ -138,7 +125,14 @@ nnoremap <leader>fs :sp+Oil<cr>
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
 let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
@@ -164,30 +158,10 @@ nnoremap <leader>g :Grep<space>
 nnoremap <leader>G :Grep <C-R><C-W>
 
 "--- Other plugins ---
-" Plug 'kylechui/nvim-surround'
-" Plug 'tommcdo/vim-exchange'
-" Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'stefandtw/quickfix-reflector.vim'
 
-" Plug 'tyru/open-browser.vim'
-" Plug 'weirongxu/plantuml-previewer.vim'
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-
-" Plug 'mattn/emmet-vim'
-" let g:user_emmet_settings = {
-"   \  'html': {
-"   \    'snippets': {
-"   \      'html5': "<!DOCTYPE html>\n"
-"   \              ."<html lang=\"en\">\n"
-"   \              ."<head>\n"
-"   \              ."\t<meta charset=\"utf-8\">\n"
-"   \              ."\t<title></title>\n"
-"   \              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-"   \              ."</head>\n"
-"   \              ."<body>\n\t${child}|\n</body>\n"
-"   \              ."</html>",
-"   \    },
-"   \  },
-"   \}
+Plug 'tyru/open-browser.vim'
+Plug 'weirongxu/plantuml-previewer.vim'
 
 Plug 'takac/vim-hardtime'
 let g:hardtime_maxcount = 3
@@ -195,7 +169,7 @@ let g:hardtime_default_on = 1
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
 let g:hardtime_motion_with_count_resets = 1
-let g:hardtime_ignore_buffer_patterns = [ 'oil', 'help' ]
+let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt' ]
 
 call plug#end()
 
@@ -390,24 +364,6 @@ function! Scratch()
 endfunction
 command! Scratch :call Scratch()
 
-function! Note()
-  let file = strftime('%Y-%m-%d')
-  let path = '~/Personal/notes/daily/' .file. '.txt'
-  execute ':e ' . fnameescape(path)
-endfunction
-command! Note call Note()
-
-function! GoToColumnInFile(fileInfoString)
-  let fileInfo = split(a:fileInfoString, ":")
-  let column = 0
-  normal! gF
-  if len(fileInfo) > 2
-    let column = fileInfo[2]
-    execute 'normal! ' . column . '|'
-  endif
-endfunction
-nnoremap gf :call GoToColumnInFile(expand("<cWORD>"))<cr>
-
 " Make Vim handle line and column numbers in file names
 let s:fnameMatcher = ':\d\+\(:.*\)\?$'
 function! s:ProcessTrailingLineNum()
@@ -436,12 +392,23 @@ function! s:FileNameFrom(fnameWithLineNum)
   return substitute(a:fnameWithLineNum, '^\(.\{-}\):\d\+\(:.*\)\?$', '\1', '')
 endfunction
 
+function! MyFoldText()
+  let tittle = getline(v:foldstart)
+  return tittle
+endfunction
+
+augroup ShowExtraWhitespace
+  match ExtraWhitespace /\s\+$/
+  au InsertEnter * hi ExtraWhitespace ctermbg=none
+  au InsertLeave * hi ExtraWhitespace ctermbg=196
+augroup end
+
 augroup OpenWithLineCol
-    autocmd!
-    autocmd bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
+  au bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
 augroup END
 
 augroup ConfigStyleTabOrSpace
+  au FileType text setlocal foldenable foldmethod=marker foldtext=MyFoldText()
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au FileType rust setlocal tabstop=4 shiftwidth=4 expandtab
   au FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab
@@ -449,14 +416,8 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  iab <expr> sni_date strftime("%Y-%m-%d")
-  iab <expr> sni_note strftime("%Y%m%d%H%M%S")
-  iab  sni_line --------------------------------------------------------------------------------
-augroup end
-
-augroup ShowExtraWhitespace
-  au InsertEnter * hi ExtraWhitespace ctermbg=none
-  au InsertLeave * hi ExtraWhitespace ctermbg=196
+  iab <expr> _snidate strftime("%Y-%m-%d")
+  iab _sniline --------------------------------------------------------------------------------
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -465,18 +426,16 @@ augroup RelativeWorkingDirectory
 augroup end
 
 augroup LoadFile
-  autocmd TermOpen * hi ExtraWhitespace ctermbg=none
-  autocmd TermOpen * setlocal nonumber norelativenumber
   au VimResized * wincmd =
-  au BufWritePost * call Trim()
-  autocmd FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+  au TermOpen * setlocal nonumber norelativenumber
+  au FileType fzf set laststatus=0 noruler
+    \| au BufLeave <buffer> set laststatus=2 ruler
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au FocusGained,BufEnter,CursorMoved,CursorHold *
     \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
     \   checktime |
     \ endif
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
 augroup end
@@ -494,9 +453,9 @@ set background=dark
 filetype plugin on
 filetype indent off
 
-match ExtraWhitespace /\s\+$/
 hi ExtraWhitespace           ctermbg=196
-
+hi Folded                    ctermfg=none   ctermbg=232    cterm=none
+hi ColorColumn               ctermfg=none   ctermbg=232    cterm=none
 hi NonText                   ctermfg=none   ctermbg=none   cterm=none
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
@@ -505,17 +464,13 @@ hi PmenuSel                  ctermfg=46     ctermbg=236    cterm=none
 hi MatchParen                ctermfg=46     ctermbg=none   cterm=bold
 
 hi LineNr                    ctermfg=none   ctermbg=none   cterm=none
-hi LineNrAbove               ctermfg=240    ctermbg=none   cterm=none
-hi LineNrBelow               ctermfg=240    ctermbg=none   cterm=none
+hi LineNrAbove               ctermfg=242    ctermbg=none   cterm=none
+hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
 hi CursorLine                ctermfg=none   ctermbg=none   cterm=none
 hi CursorLineNr              ctermfg=none   ctermbg=none   cterm=none
 
-hi StatusLine                ctermfg=220    ctermbg=234    cterm=none
-hi StatusLineNC              ctermfg=255    ctermbg=234    cterm=none
-
 hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
 hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
-hi ColorColumn               ctermfg=none   ctermbg=233    cterm=none
 
 hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none
 hi DiagnosticWarn            ctermfg=226    ctermbg=none   cterm=none
@@ -534,7 +489,6 @@ hi DiagnosticFloatingHint    ctermfg=46     ctermbg=none   cterm=none
 
 lua << EOF
   require 'module_oil'
-  -- require 'module_lsp'
-  -- require 'fidget'.setup()
-  -- require 'nvim-surround'.setup()
+  require 'module_lsp'
+  require 'fidget'.setup()
 EOF

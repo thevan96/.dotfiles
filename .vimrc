@@ -11,14 +11,15 @@ set ttimeout ttimeoutlen=100 timeoutlen=1000
 set number relativenumber
 set textwidth=80 colorcolumn=+1
 set wildmenu wildmode=list
-set completeopt=menu,menuone,noinsert
+set completeopt=menu
 set hidden
 set autoindent
 set backspace=0
 set nofoldenable
-set signcolumn=no nocursorline
+set signcolumn=no
 set diffopt=vertical
 set mouse=a ttymouse=xterm2
+set nocursorline
 set wildignore=*/.git/*,*/node_modules/*
 set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
 packadd! matchit
@@ -51,10 +52,9 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <C-l> :noh<cr>:redraw!<cr>
-nnoremap <leader>s :r ~/.dotfiles/snippets/
 nnoremap <leader>o :ls<cr>:b<space>
-nnoremap <leader>g :grep<space>
-nnoremap <leader>G :grep -r <C-R><C-W>
+nnoremap <leader>g :grep!<space>
+nnoremap <leader>G :grep! <C-R><C-W>
 nnoremap <leader>n :set invrelativenumber<cr>
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -217,16 +217,6 @@ nnoremap <silent> <leader>i
 nnoremap <silent> <leader>d
   \ :call MyExplore(directories_command, 'explore_directories')<cr>
 
-function! Fuzzy()
-  let res = system('find_f | dmenu')
-  if res == ''
-    return
-  endif
-
-  execute 'e '.res
-endfunction
-nnoremap <leader>z :call Fuzzy()<cr>
-
 function! Command()
   if bufexists(str2nr(bufnr('command'))) == 1
     exe 'b command'
@@ -238,7 +228,7 @@ function! Command()
   setlocal ft=command
   silent execute 'file command'
 endfunction
-nnoremap <silent> <leader>c :call Command()<cr>
+nnoremap <silent><leader>c :call Command()<cr>
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -380,13 +370,6 @@ function! Scratch()
 endfunction
 command! Scratch :call Scratch()
 
-function! Note()
-  let file = strftime('%Y-%m-%d')
-  let path = '~/Personal/notes/daily/' .file. '.txt'
-  execute ':e ' . fnameescape(path)
-endfunction
-command! Note call Note()
-
 function! JumpFile()
   let folder = expand('%:h')
   if folder == ''
@@ -433,7 +416,13 @@ augroup OpenWithLineCol
     autocmd bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
 augroup END
 
+function! MyFoldText()
+  let tittle = getline(v:foldstart)
+  return tittle
+endfunction
+
 augroup ConfigStyleTabOrSpace
+  au FileType text setlocal foldenable foldmethod=marker foldtext=MyFoldText()
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au FileType rust setlocal tabstop=4 shiftwidth=4 expandtab
   au FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab
@@ -441,12 +430,14 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  iab <expr> sni_date strftime("%Y-%m-%d")
-  iab <expr> sni_note strftime("%Y%m%d%H%M%S")
-  iab sni_line ----------------------------------------
+  iab <expr> _snidate strftime("%Y-%m-%d")
+  iab _sniline --------------------------------------------------------------------------------
 augroup end
 
 augroup ShowExtraWhitespace
+  hi ExtraWhitespace                ctermbg=196
+  match ExtraWhitespace /\s\+$/
+
   au InsertEnter * hi ExtraWhitespace ctermbg=none
   au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
@@ -458,7 +449,6 @@ augroup end
 
 augroup LoadFile
   au VimResized * wincmd =
-  au BufWritePost * call Trim()
   au FileType netrw
     \ cnoremap <buffer><expr> %% getcmdtype() == ':' ? b:netrw_curdir.'/' : '%%'
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
@@ -481,9 +471,7 @@ hi clear Error
 hi clear SignColumn
 hi clear VertSplit
 
-hi ExtraWhitespace                ctermbg=196
-match ExtraWhitespace /\s\+$/
-
+hi Folded                         ctermfg=none   ctermbg=232    cterm=none
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
 hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
@@ -495,9 +483,6 @@ hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
 hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi StatusLine                     ctermfg=220      ctermbg=234      cterm=none
-hi StatusLineNC                   ctermfg=255      ctermbg=234      cterm=none
-
-hi ColorColumn                    ctermfg=none     ctermbg=233
+hi ColorColumn                    ctermfg=none     ctermbg=232
 hi SpecialKey                     ctermfg=238      ctermbg=none     cterm=none
 hi Whitespace                     ctermfg=238      ctermbg=none     cterm=none

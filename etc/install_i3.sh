@@ -8,10 +8,9 @@ sudo dnf install i3 \
   light \
   lxappearance \
   pavucontrol \
-  rofi \
   xinput \
   xset \
-  xss-loctk
+  xss-lock
 
 sudo chmod +s $(which light)
 

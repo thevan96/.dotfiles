@@ -10,6 +10,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
   sudo dnf -y update && sudo dnf -y upgrade && sudo dnf install -y \
+    brightnessctl \
     curl \
     entr \
     fd-find \
@@ -60,15 +61,15 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   # codec
   sudo dnf -y swap ffmpeg-free ffmpeg --allowerasing
+
+  echo ""
+  echo "Increasing the amount of inotify watchers"
+  echo fs.inotify.max_user_watches=524288 \
+    | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+  echo "Set timezone"
+  timedatectl set-timezone 'Asia/Ho_Chi_Minh'
+
+  echo "Set namehost"
+  sudo hostnamectl set-hostname elliot
 fi
-
-echo ""
-echo "Increasing the amount of inotify watchers"
-echo fs.inotify.max_user_watches=524288 \
-  | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-echo "Set timezone"
-timedatectl set-timezone 'Asia/Ho_Chi_Minh'
-
-echo "Set namehost"
-sudo hostnamectl set-hostname elliot

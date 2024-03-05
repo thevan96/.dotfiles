@@ -61,18 +61,18 @@ nvim_lsp.lua_ls.setup({
   },
 })
 
--- vim.keymap.set(
---   'n',
---   '[d',
---   '<cmd>lua vim.diagnostic.goto_prev({ float = false})<cr>'
--- )
--- vim.keymap.set(
---   'n',
---   ']d',
---   '<cmd>lua vim.diagnostic.goto_next({ float = false })<cr>'
--- )
--- vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist)
--- vim.keymap.set('n', '<space>E', vim.diagnostic.open_float)
+vim.keymap.set(
+  'n',
+  '[d',
+  '<cmd>lua vim.diagnostic.goto_prev({ float = false})<cr>'
+)
+vim.keymap.set(
+  'n',
+  ']d',
+  '<cmd>lua vim.diagnostic.goto_next({ float = false })<cr>'
+)
+vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<space>E', vim.diagnostic.open_float)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -89,8 +89,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     client.server_capabilities.semanticTokensProvider = nil
 
     -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
-    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     -- vim.keymap.set('n', '<C-w>t', vim.lsp.buf.type_definition, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     -- vim.keymap.set('n', '<leader>lw', vim.lsp.buf.workspace_symbol, opts)
     -- vim.keymap.set('n', '<leader>ld', vim.lsp.buf.document_symbol, opts)
     vim.keymap.set('n', '<C-w>r', vim.lsp.buf.references, opts)
