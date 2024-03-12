@@ -45,10 +45,10 @@ export FZF_DEFAULT_OPTS="-m --bind ctrl-a:toggle-all --height 99%"
 alias ls='ls -F'
 alias vim='nvim'
 alias vimdiff='nvimdiff'
-alias _cpwd='pwd | xsel -i --clipboard'
-alias _grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
+alias grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
+alias cpwd='pwd | xsel -i --clipboard'
 
-_findf() {
+findf() {
   find . -type f \
     -not -path "*/.git/*" \
     -not -path "*/.direnv/*" \
@@ -57,7 +57,7 @@ _findf() {
     | sort
 }
 
-_findd() {
+findd() {
   find . -type d \
     \( -path "*/.git/*" \
     -o \

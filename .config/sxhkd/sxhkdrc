@@ -1,0 +1,35 @@
+super + 1
+  jumpapp google-chrome
+
+super + 2
+  jumpapp alacritty
+
+super + 3
+  jumpapp evince
+
+super + 4
+  jumpapp thunar
+
+super + shift + p
+  gpick -p
+
+super + shift + s
+  flameshot gui
+
+super + shift + d
+  rofi -modi drun -show drun -show-icons
+
+super + shift + r
+  rofi -modi run -show run -show-icons
+
+super + shift + w
+  rofi -show window -show-icons
+
+super + shift + @space
+  ibus engine Bamboo
+
+super + @space
+  ibus engine xkb:us::eng
+
+super + l
+  xflock4

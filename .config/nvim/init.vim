@@ -5,6 +5,7 @@ set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:»\ ,lead:.,trail:\ |
+set fillchars=stl:\_,stlnc:\_
 set number relativenumber
 set ignorecase smartcase
 set signcolumn=no
@@ -49,6 +50,8 @@ let mapleader = ' '
 " Customizer mapping
 xnoremap p pgvy
 nnoremap gV `[v`]
+nnoremap <C-l> :noh<cr>
+inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>n :set invrelativenumber<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
@@ -57,6 +60,13 @@ command! Path let @+ = expand("%:h")
 
 " Better remap tags/intellisense
 nnoremap <C-]> g<C-]>
+
+" Disable autocomplete
+inoremap <C-n> <nop>
+inoremap <C-p> <nop>
+inoremap <C-Space> <nop>
+inoremap <C-x><C-o> <nop>
+inoremap <C-x><C-l> <nop>
 
 " Relativenumber keep jumplist
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
@@ -112,8 +122,8 @@ call plug#begin()
 "--- Core plugins ---
 
 " Lsp
-Plug 'j-hui/fidget.nvim'
-Plug 'neovim/nvim-lspconfig'
+" Plug 'j-hui/fidget.nvim'
+" Plug 'neovim/nvim-lspconfig'
 
 " File manager
 Plug 'stevearc/oil.nvim'
@@ -154,10 +164,14 @@ command! -bang -nargs=* Grep
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
-nnoremap <leader>g :Grep<space>
-nnoremap <leader>G :Grep <C-R><C-W>
+nnoremap <leader>s :Grep<space>
+nnoremap <leader>S :Grep <C-R><C-W>
+nnoremap <leader>g :grep!<space>
+nnoremap <leader>G :grep! <C-R><C-W>
 
 "--- Other plugins ---
+Plug 'tommcdo/vim-exchange'
+Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
 
 Plug 'tyru/open-browser.vim'
@@ -469,6 +483,9 @@ hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
 hi CursorLine                ctermfg=none   ctermbg=none   cterm=none
 hi CursorLineNr              ctermfg=none   ctermbg=none   cterm=none
 
+hi StatusLine                ctermfg=none   ctermbg=none   cterm=bold
+hi StatusLineNC              ctermfg=none   ctermbg=none   cterm=none
+
 hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
 hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
 
@@ -489,6 +506,7 @@ hi DiagnosticFloatingHint    ctermfg=46     ctermbg=none   cterm=none
 
 lua << EOF
   require 'module_oil'
-  require 'module_lsp'
-  require 'fidget'.setup()
+  require 'nvim-surround'.setup()
+  -- require 'module_lsp'
+  -- require 'fidget'.setup()
 EOF
