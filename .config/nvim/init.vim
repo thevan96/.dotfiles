@@ -4,9 +4,9 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
-set list listchars=tab:»\ ,lead:.,trail:\ |
-set fillchars=stl:\_,stlnc:\_
-set number relativenumber
+set list listchars=tab:»\ ,lead:.
+set fillchars=stl:\_,stlnc:\_,fold:\ |
+set number norelativenumber
 set ignorecase smartcase
 set signcolumn=no
 set nocursorline
@@ -52,7 +52,11 @@ xnoremap p pgvy
 nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <leader>n :set invrelativenumber<cr>
+nnoremap <leader>h yypVr-
+nnoremap <leader>H yypVr=
+nnoremap <leader>g :grep!<space>
+nnoremap <leader>G :grep! <C-R><C-W>
+nnoremap <leader>e :r ~/.dotfiles/snippets/
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -60,6 +64,11 @@ command! Path let @+ = expand("%:h")
 
 " Better remap tags/intellisense
 nnoremap <C-]> g<C-]>
+
+" Better toggle relative number/number
+nnoremap <silent><leader>n :set invrelativenumber<cr>
+vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
+xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 
 " Disable autocomplete
 inoremap <C-n> <nop>
@@ -166,16 +175,17 @@ nnoremap <leader>i :Files<cr>
 nnoremap <leader>d :Directories<cr>
 nnoremap <leader>s :Grep<space>
 nnoremap <leader>S :Grep <C-R><C-W>
-nnoremap <leader>g :grep!<space>
-nnoremap <leader>G :grep! <C-R><C-W>
 
 "--- Other plugins ---
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
-
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
 
 Plug 'takac/vim-hardtime'
 let g:hardtime_maxcount = 3
@@ -408,14 +418,9 @@ endfunction
 
 function! MyFoldText()
   let tittle = getline(v:foldstart)
-  return tittle
+  let numberlines = v:foldend - v:foldstart
+  return tittle .' +'.numberlines
 endfunction
-
-augroup ShowExtraWhitespace
-  match ExtraWhitespace /\s\+$/
-  au InsertEnter * hi ExtraWhitespace ctermbg=none
-  au InsertLeave * hi ExtraWhitespace ctermbg=196
-augroup end
 
 augroup OpenWithLineCol
   au bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
@@ -430,8 +435,15 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  iab <expr> _snidate strftime("%Y-%m-%d")
-  iab _sniline --------------------------------------------------------------------------------
+  iab <expr> snidate strftime("%Y-%m-%d")
+  iab sniline --------------------------------------------------------------------------------
+augroup end
+
+augroup ShowExtraWhitespace
+  match ExtraWhitespace /\s\+$/
+  hi ExtraWhitespace ctermbg=196
+  au InsertEnter * hi ExtraWhitespace ctermbg=none
+  au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -442,6 +454,7 @@ augroup end
 augroup LoadFile
   au VimResized * wincmd =
   au TermOpen * setlocal nonumber norelativenumber
+  au CursorMoved,CursorMovedI * set norelativenumber
   au FileType fzf set laststatus=0 noruler
     \| au BufLeave <buffer> set laststatus=2 ruler
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
@@ -467,17 +480,18 @@ set background=dark
 filetype plugin on
 filetype indent off
 
-hi ExtraWhitespace           ctermbg=196
-hi Folded                    ctermfg=none   ctermbg=232    cterm=none
+hi Folded                    ctermfg=none   ctermbg=none   cterm=none
+hi FoldColumn                ctermfg=none   ctermbg=none   cterm=none
 hi ColorColumn               ctermfg=none   ctermbg=232    cterm=none
 hi NonText                   ctermfg=none   ctermbg=none   cterm=none
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
+hi Normal                    ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
 hi Pmenu                     ctermfg=255    ctermbg=234    cterm=none
 hi PmenuSel                  ctermfg=46     ctermbg=236    cterm=none
 hi MatchParen                ctermfg=46     ctermbg=none   cterm=bold
 
-hi LineNr                    ctermfg=none   ctermbg=none   cterm=none
+hi LineNr                    ctermfg=242    ctermbg=none   cterm=none
 hi LineNrAbove               ctermfg=242    ctermbg=none   cterm=none
 hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
 hi CursorLine                ctermfg=none   ctermbg=none   cterm=none

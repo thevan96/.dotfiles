@@ -4,7 +4,7 @@ export KEYTIMEOUT=1
 export TERM=screen-256color
 export NIXPKGS_ALLOW_UNFREE=1
 export NIXPKGS_ALLOW_INSECURE=1
-export MANPAGER="vi -c MANPAGER -"
+export MANPAGER="nvim -c Man! -"
 
 # DEFAULT EVIROMENT
 export XDG_CONFIG_HOME=$HOME/.config
@@ -43,23 +43,24 @@ export FZF_DEFAULT_OPTS="-m --bind ctrl-a:toggle-all --height 99%"
 
 # Alias, utils
 alias ls='ls -F'
-alias vim='nvim'
-alias vimdiff='nvimdiff'
-alias grep='grep -rn --color=always --exclude-dir={.git,node_modules}'
-alias cpwd='pwd | xsel -i --clipboard'
+alias agrep='grep -rn --exclude-dir={.git,.vscode,.direnv,node_modules}'
+alias acpwd='pwd | xsel -i --clipboard'
 
-findf() {
+afindf() {
   find . -type f \
     -not -path "*/.git/*" \
     -not -path "*/.direnv/*" \
+    -not -path "*/.vscode/*" \
     -not -path "*/node_modules/*" \
     | sed "s|^./||" \
     | sort
 }
 
-findd() {
+afindd() {
   find . -type d \
     \( -path "*/.git/*" \
+    -o \
+    -path "*/.vscode/*" \
     -o \
     -path "*/.direnv/*" \
     -o \

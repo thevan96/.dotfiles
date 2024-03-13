@@ -5,10 +5,11 @@ set nobackup noswapfile
 set autoread autowrite
 set hlsearch incsearch
 set ignorecase smartcase
-set list listchars=tab:»\ ,lead:.,trail:\ |
+set list listchars=tab:»\ ,lead:.
+set fillchars=stl:\_,stlnc:\_,fold:\ |
 set laststatus=2 ruler
 set ttimeout ttimeoutlen=100 timeoutlen=1000
-set number relativenumber
+set nonumber norelativenumber
 set textwidth=80 colorcolumn=+1
 set wildmenu wildmode=list
 set completeopt=menu
@@ -20,8 +21,8 @@ set signcolumn=no
 set diffopt=vertical
 set mouse=a ttymouse=xterm2
 set nocursorline
-set wildignore=*/.git/*,*/node_modules/*
-set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
+set wildignore=*/.git/*,*/.vscode/*,*/.direnv/*,*/node_modules/*
+set grepprg=grep\ -rn\ --exclude-dir={.git,.vscode,.direnv,node_modules}
 packadd! matchit
 
 " Use persistent undo history.
@@ -50,12 +51,15 @@ let mapleader = ' '
 nnoremap Y y$
 xnoremap p pgvy
 nnoremap gV `[v`]
+nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
-nnoremap <C-l> :noh<cr>:redraw!<cr>
+nnoremap <leader>h yypVr-
+nnoremap <leader>H yypVr=
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>g :grep!<space>
 nnoremap <leader>G :grep! <C-R><C-W>
-nnoremap <leader>n :set invrelativenumber<cr>
+nnoremap <leader>e :r ~/.dotfiles/snippets/
+nnoremap <leader>n :set invnumber<cr>
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
@@ -184,7 +188,7 @@ function! MyExplore(command, name)
   endif
 
   enew
-  setlocal nonumber buftype=nofile bufhidden=hide noswapfile ft=explore
+  setlocal buftype=nofile bufhidden=hide noswapfile ft=explore
   exe('file '.a:name)
   call append(0, res)
   silent! %s#\($\n\s*\)\+\%$##
@@ -195,6 +199,7 @@ endfunction
 let files_command =
   \ 'find -type f
   \ -not -path */.git/*
+  \ -not -path */.vscode/*
   \ -not -path */.direnv/*
   \ -not -path */node_modules/*
   \ | sed "s|^./||"
@@ -202,7 +207,10 @@ let files_command =
 
 let directories_command =
   \ 'find -type d
-  \ \( -path */.git/*
+  \ \(
+  \ -path */.git/*
+  \ -o
+  \ -path */.vscode/*
   \ -o
   \ -path */.direnv/*
   \ -o
@@ -418,7 +426,8 @@ augroup END
 
 function! MyFoldText()
   let tittle = getline(v:foldstart)
-  return tittle
+  let numberlines = v:foldend - v:foldstart
+  return tittle .' +'.numberlines
 endfunction
 
 augroup ConfigStyleTabOrSpace
@@ -430,14 +439,13 @@ augroup ConfigStyleTabOrSpace
 augroup end
 
 augroup snippet
-  iab <expr> _snidate strftime("%Y-%m-%d")
-  iab _sniline --------------------------------------------------------------------------------
+  iab <expr> snidate strftime("%Y-%m-%d")
+  iab sniline --------------------------------------------------------------------------------
 augroup end
 
 augroup ShowExtraWhitespace
-  hi ExtraWhitespace                ctermbg=196
+  hi ExtraWhitespace ctermbg=196
   match ExtraWhitespace /\s\+$/
-
   au InsertEnter * hi ExtraWhitespace ctermbg=none
   au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
@@ -451,6 +459,7 @@ augroup LoadFile
   au VimResized * wincmd =
   au FileType netrw
     \ cnoremap <buffer><expr> %% getcmdtype() == ':' ? b:netrw_curdir.'/' : '%%'
+  au FileType explore nnoremap <cr> gf
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au FocusGained,BufEnter,CursorMoved,CursorHold *
     \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
@@ -468,21 +477,27 @@ filetype plugin on
 filetype indent off
 
 hi clear Error
-hi clear SignColumn
 hi clear VertSplit
 
-hi Folded                         ctermfg=none   ctermbg=232    cterm=none
+hi Folded                         ctermfg=none     ctermbg=none     cterm=none
+hi FoldColumn                     ctermfg=none     ctermbg=none     cterm=none
+hi SignColumn                     ctermfg=none     ctermbg=none     cterm=none
 hi NonText                        ctermfg=none     ctermbg=none     cterm=none
 hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=255      ctermbg=236      cterm=none
-hi PmenuSel                       ctermfg=46       ctermbg=238      cterm=none
+hi Pmenu                          ctermfg=255      ctermbg=234      cterm=none
+hi PmenuSel                       ctermfg=46       ctermbg=236      cterm=none
+hi MatchParen                     ctermfg=46       ctermbg=none     cterm=bold
+hi Visual                         ctermfg=255      ctermbg=242      cterm=none
 
-hi LineNr                         ctermfg=255      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=240      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=240      ctermbg=none     cterm=none
+hi LineNr                         ctermfg=242      ctermbg=none     cterm=none
+hi LineNrAbove                    ctermfg=242      ctermbg=none     cterm=none
+hi LineNrBelow                    ctermfg=242      ctermbg=none     cterm=none
 hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
 hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
 
-hi ColorColumn                    ctermfg=none     ctermbg=232
-hi SpecialKey                     ctermfg=238      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=238      ctermbg=none     cterm=none
+hi StatusLine                     ctermfg=none     ctermbg=none     cterm=bold
+hi StatusLineNC                   ctermfg=none     ctermbg=none     cterm=none
+
+hi ColorColumn                    ctermfg=none     ctermbg=233
+hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
+hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none

@@ -26,8 +26,12 @@ foreground = "#ffffff"
 cursor = "#00ff00"
 text = "#000000"
 
+[cursor]
+blink_interval = 450
+
 [cursor.style]
 shape = "Block"
+blinking = "Always"
 
 [font]
 size = 10

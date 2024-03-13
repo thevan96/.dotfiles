@@ -10,7 +10,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
   sudo dnf -y update && sudo dnf -y upgrade && sudo dnf install -y \
-    brightnessctl \
     curl \
     entr \
     fd-find \
@@ -33,9 +32,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     trash-cli \
     tree \
     unrar \
-    vim \
     wget \
     wmctrl \
+    xclip \
     xsel \
     zip
 
@@ -49,6 +48,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     gnome-sound-recorder \
     gparted \
     gpick \
+    guvcview \
     libreoffice \
     obs-studio \
     peek \

@@ -30,6 +30,5 @@ super + shift + @space
 
 super + @space
   ibus engine xkb:us::eng
-
 super + l
   xflock4

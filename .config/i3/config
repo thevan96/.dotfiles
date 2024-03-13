@@ -37,10 +37,13 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # Toggle tiling / floating
-bindsym $mod+Shift+t floating toggle
+bindsym $mod+Shift+f floating toggle
 
 # Change focus between tiling / floating windows
 bindsym $mod+t focus mode_toggle
+
+# Stick float window
+bindsym $mod+Shift+t sticky toggle
 
 # Run startup
 exec --no-startup-id eval "$(ssh-agent)"
@@ -48,10 +51,10 @@ exec --no-startup-id hsetroot -cover ~/.dotfiles/etc/lockscreen1366x768.png
 exec --no-startup-id xset r rate 200 40
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec --no-startup-id xrandr --output eDP-1 --mode 1366x768
-exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1
 exec --no-startup-id nm-applet
 exec --no-startup-id ibus-daemon -drxR
 exec --no-startup-id run_dropbox
+# exec xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1
 
 # Change container layout (stacked, tabbed, toggle split)
 workspace_layout tabbed
@@ -108,9 +111,11 @@ for_window [class="Evince"] move to workspace number $ws3
 for_window [class="Zathura"] move to workspace number $ws3
 for_window [class="Nautilus"] move to workspace number $ws4
 for_window [class="Thunar"] move to workspace number $ws4
+for_window [class="guvcview"] move to workspace number $ws4
 
 # Force floating window
 for_window [class="Pavucontrol"] floating enable
+for_window [class="guvcview"] floating enable
 
 # Reload the configuration file
 bindsym $mod+Shift+c restart
