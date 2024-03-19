@@ -52,8 +52,3 @@ fi
 if command -v z &> /dev/null; then
   source ~/.local/bin/z
 fi
-
-# Setup ssh with keychain
-if [ $XDG_CURRENT_DESKTOP == 'i3' ]; then
-  eval `keychain --noask --eval --agents ssh github_personal --quick --quiet`
-fi

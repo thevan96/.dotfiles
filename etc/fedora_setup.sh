@@ -11,6 +11,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   sudo dnf -y update && sudo dnf -y upgrade && sudo dnf install -y \
     curl \
+    direnv \
     entr \
     fd-find \
     fzf \
@@ -32,6 +33,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     trash-cli \
     tree \
     unrar \
+    vim-X11 \
     wget \
     wmctrl \
     xclip \
@@ -56,6 +58,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     simplescreenrecorder \
     timeshift \
     transmission \
+    gnome-extensions-app \
+    gnome-tweaks \
     uget \
     vlc
 

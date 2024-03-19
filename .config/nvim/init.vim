@@ -6,10 +6,9 @@ set encoding=utf-8
 set autoread autowrite
 set list listchars=tab:»\ ,lead:.
 set fillchars=stl:\_,stlnc:\_,fold:\ |
-set number norelativenumber
+set nonumber norelativenumber noshowcmd nocursorline
 set ignorecase smartcase
 set signcolumn=no
-set nocursorline
 set textwidth=80
 set colorcolumn=+1
 set wildmenu wildmode=list
@@ -19,8 +18,8 @@ set nofoldenable
 set guicursor=i:block
 set mouse=a
 set nrformats+=alpha,bin,hex
-set grepprg=grep\ -rn\ --exclude-dir={.git,node_modules}
-set wildignore=*/.git/*,*/node_modules/*
+set grepprg=grep\ -rn\ --exclude-dir={.git,.vscode,.direnv,node_modules}
+set wildignore=*/.git/*,*/.vscode/*,*/.direnv/*,*/node_modules/*
 packadd! matchit
 
 " Use persistent undo history.
@@ -57,6 +56,7 @@ nnoremap <leader>H yypVr=
 nnoremap <leader>g :grep!<space>
 nnoremap <leader>G :grep! <C-R><C-W>
 nnoremap <leader>e :r ~/.dotfiles/snippets/
+nnoremap <silent><leader>n :set invnumber<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -64,11 +64,6 @@ command! Path let @+ = expand("%:h")
 
 " Better remap tags/intellisense
 nnoremap <C-]> g<C-]>
-
-" Better toggle relative number/number
-nnoremap <silent><leader>n :set invrelativenumber<cr>
-vnoremap <silent><leader>n <esc>:set invrelativenumber<cr>V
-xnoremap <silent><leader>n <esc>:set invrelativenumber<cr>gv
 
 " Disable autocomplete
 inoremap <C-n> <nop>
@@ -180,6 +175,7 @@ nnoremap <leader>S :Grep <C-R><C-W>
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
+
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
@@ -188,7 +184,7 @@ Plug 'lambdalisue/suda.vim'
 let g:suda_smart_edit = 1
 
 Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 3
+let g:hardtime_maxcount = 9
 let g:hardtime_default_on = 1
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
@@ -419,7 +415,7 @@ endfunction
 function! MyFoldText()
   let tittle = getline(v:foldstart)
   let numberlines = v:foldend - v:foldstart
-  return tittle .' +'.numberlines
+  return tittle .' --- +'.numberlines
 endfunction
 
 augroup OpenWithLineCol
@@ -453,8 +449,6 @@ augroup end
 
 augroup LoadFile
   au VimResized * wincmd =
-  au TermOpen * setlocal nonumber norelativenumber
-  au CursorMoved,CursorMovedI * set norelativenumber
   au FileType fzf set laststatus=0 noruler
     \| au BufLeave <buffer> set laststatus=2 ruler
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))

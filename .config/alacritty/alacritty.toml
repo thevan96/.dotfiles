@@ -27,7 +27,7 @@ cursor = "#00ff00"
 text = "#000000"
 
 [cursor]
-blink_interval = 450
+blink_interval = 400
 
 [cursor.style]
 shape = "Block"
