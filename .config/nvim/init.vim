@@ -4,13 +4,12 @@ set noswapfile
 set spelllang=en_us
 set encoding=utf-8
 set autoread autowrite
-set list listchars=tab:»\ ,lead:.
+set list listchars=tab:›\ ,leadmultispace:·\ ,trail:-
 set fillchars=stl:\_,stlnc:\_,fold:\ |
-set nonumber norelativenumber noshowcmd nocursorline
+set number relativenumber noshowcmd
 set ignorecase smartcase
 set signcolumn=no
-set textwidth=80
-set colorcolumn=+1
+set colorcolumn=81
 set wildmenu wildmode=list
 set completeopt=menu
 set backspace=0
@@ -29,13 +28,6 @@ endif
 set undofile
 set undodir=/tmp/.nvim-undo-dir
 
-" vim use alias bash
-let $ROOT=getcwd()
-
-if filereadable(expand('~/.bash_aliases'))
-  let $BASH_ENV = $HOME.'/.bash_aliases'
-end
-
 " Netrw
 let g:loaded_netrw = 0
 let g:loaded_netrwPlugin = 0
@@ -52,11 +44,10 @@ nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>h yypVr-
-nnoremap <leader>H yypVr=
 nnoremap <leader>g :grep!<space>
 nnoremap <leader>G :grep! <C-R><C-W>
 nnoremap <leader>e :r ~/.dotfiles/snippets/
-nnoremap <silent><leader>n :set invnumber<cr>
+nnoremap <silent><leader>n :set invrelativenumber<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 command! Spell set invspell
 command! BufOnly exe '%bdelete|edit#|bdelete#'
@@ -175,22 +166,6 @@ nnoremap <leader>S :Grep <C-R><C-W>
 Plug 'tommcdo/vim-exchange'
 Plug 'kylechui/nvim-surround'
 Plug 'stefandtw/quickfix-reflector.vim'
-
-Plug 'tyru/open-browser.vim'
-Plug 'weirongxu/plantuml-previewer.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-
-Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
-
-Plug 'takac/vim-hardtime'
-let g:hardtime_maxcount = 9
-let g:hardtime_default_on = 1
-let g:hardtime_ignore_quickfix = 1
-let g:hardtime_allow_different_key = 1
-let g:hardtime_motion_with_count_resets = 1
-let g:hardtime_ignore_buffer_patterns = [ 'oil', 'txt' ]
-
 call plug#end()
 
 "--- Function utils ---
@@ -231,6 +206,18 @@ function! RenameFile()
   endif
 endfunction
 command! Rename :call RenameFile()
+
+function! Command()
+  if bufexists(str2nr(bufnr('Command_mode'))) == 1
+    exe 'b Command_mode'
+    return
+  endif
+
+  enew
+  setlocal buftype=nofile bufhidden=hide noswapfile
+  silent execute 'file Command_mode'
+endfunction
+nnoremap <silent><leader><cr> :call Command()<cr>
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -316,7 +303,7 @@ function! s:InsertBlockCode(runner)
   silent! w
 endfunction
 
-function! RunCode(type)
+function! RunCode()
   let runner = s:ParseCodeBlock()
   if runner == {}
     return
@@ -332,16 +319,11 @@ function! RunCode(type)
     let runner = s:RunJs(runner)
   endif
 
-  if a:type == 'insert'
-    let save_cursor = getcurpos()
-    call s:InsertBlockCode(runner)
-    call setpos('.', save_cursor)
-  elseif a:type == 'echo'
-    echo runner.result
-  endif
+  let save_cursor = getcurpos()
+  call s:InsertBlockCode(runner)
+  call setpos('.', save_cursor)
 endfunction
-nnoremap <silent><leader>rr :call RunCode('insert')<cr>
-nnoremap <silent><leader>re :call RunCode('echo')<cr>
+nnoremap <silent><leader>r :call RunCode()<cr>
 
 function HandleFileNotExist(name)
   let msg = 'File "'.a:name.'"'
@@ -354,6 +336,64 @@ function HandleFileNotExist(name)
   endif
   echomsg msg
 endfunction
+
+function! MyExplore(command, name)
+  let res = split(system(a:command), '\n')
+
+  if bufexists(str2nr(bufnr(a:name))) == 1
+    exe('b '.a:name)
+    let save_cursor = getcurpos()
+    let res = split(system(a:command), '\n')
+    let buff = getline(1, '$')
+    let buff =  buff[:(len(buff)-2)]
+    if len(res)-1 != len(buff)
+      setlocal noreadonly modifiable
+      exe '%d'
+      call append(0, res)
+      silent! %s#\($\n\s*\)\+\%$##
+      setlocal readonly nomodifiable
+    endif
+    call setpos('.', save_cursor)
+    return
+  endif
+
+  enew
+  setlocal buftype=nofile bufhidden=hide noswapfile ft=explore
+  exe('file '.a:name)
+  call append(0, res)
+  silent! %s#\($\n\s*\)\+\%$##
+  normal! gg
+  setlocal readonly nomodifiable
+endfunction
+
+let files_command =
+  \ 'find -type f
+  \ -not -path */.git/*
+  \ -not -path */.vscode/*
+  \ -not -path */.direnv/*
+  \ -not -path */node_modules/*
+  \ | sed "s|^./||"
+  \ | sort'
+
+let directories_command =
+  \ 'find -type d
+  \ \(
+  \ -path */.git/*
+  \ -o
+  \ -path */.vscode/*
+  \ -o
+  \ -path */.direnv/*
+  \ -o
+  \ -path */node_modules/*
+  \ -prune -o -print
+  \ \)
+  \ | sed "s|^./||"
+  \ | sort'
+
+" nnoremap <silent> <leader>i
+"   \ :call MyExplore(files_command, 'explore_files')<cr>
+" nnoremap <silent> <leader>d
+"   \ :call MyExplore(directories_command, 'explore_directories')<cr>
 
 function! InCodeFence()
   call search('^```.*$', 'bceW')
@@ -415,7 +455,7 @@ endfunction
 function! MyFoldText()
   let tittle = getline(v:foldstart)
   let numberlines = v:foldend - v:foldstart
-  return tittle .' --- +'.numberlines
+  return tittle.' --- +'.numberlines
 endfunction
 
 augroup OpenWithLineCol
@@ -435,13 +475,6 @@ augroup snippet
   iab sniline --------------------------------------------------------------------------------
 augroup end
 
-augroup ShowExtraWhitespace
-  match ExtraWhitespace /\s\+$/
-  hi ExtraWhitespace ctermbg=196
-  au InsertEnter * hi ExtraWhitespace ctermbg=none
-  au InsertLeave * hi ExtraWhitespace ctermbg=196
-augroup end
-
 augroup RelativeWorkingDirectory
   au InsertEnter * let save_cwd = getcwd() | silent! lcd %:h
   au InsertLeave * silent execute 'lcd' fnameescape(save_cwd)
@@ -449,8 +482,8 @@ augroup end
 
 augroup LoadFile
   au VimResized * wincmd =
-  au FileType fzf set laststatus=0 noruler
-    \| au BufLeave <buffer> set laststatus=2 ruler
+  au FileType fzf set laststatus=0 noruler |
+    \ au BufLeave <buffer> set laststatus=2 ruler
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au FocusGained,BufEnter,CursorMoved,CursorHold *
     \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
@@ -471,13 +504,12 @@ let g:loaded_python3_provider = 0
 "--- Customize theme ---
 syntax off
 set background=dark
-filetype plugin on
+filetype plugin off
 filetype indent off
 
-hi Folded                    ctermfg=none   ctermbg=none   cterm=none
+hi Folded                                   ctermbg=none   cterm=none
 hi FoldColumn                ctermfg=none   ctermbg=none   cterm=none
 hi ColorColumn               ctermfg=none   ctermbg=232    cterm=none
-hi NonText                   ctermfg=none   ctermbg=none   cterm=none
 hi SignColumn                ctermfg=none   ctermbg=none   cterm=none
 hi Normal                    ctermfg=none   ctermbg=none   cterm=none
 hi NormalFloat               ctermfg=none   ctermbg=none   cterm=none
@@ -485,9 +517,9 @@ hi Pmenu                     ctermfg=255    ctermbg=234    cterm=none
 hi PmenuSel                  ctermfg=46     ctermbg=236    cterm=none
 hi MatchParen                ctermfg=46     ctermbg=none   cterm=bold
 
-hi LineNr                    ctermfg=242    ctermbg=none   cterm=none
-hi LineNrAbove               ctermfg=242    ctermbg=none   cterm=none
-hi LineNrBelow               ctermfg=242    ctermbg=none   cterm=none
+hi LineNr                    ctermfg=240    ctermbg=none   cterm=none
+hi LineNrAbove               ctermfg=240    ctermbg=none   cterm=none
+hi LineNrBelow               ctermfg=240    ctermbg=none   cterm=none
 hi CursorLine                ctermfg=none   ctermbg=none   cterm=none
 hi CursorLineNr              ctermfg=none   ctermbg=none   cterm=none
 
@@ -495,6 +527,7 @@ hi StatusLine                ctermfg=none   ctermbg=none   cterm=bold
 hi StatusLineNC              ctermfg=none   ctermbg=none   cterm=none
 
 hi SpecialKey                ctermfg=236    ctermbg=none   cterm=none
+hi NonText                   ctermfg=236    ctermbg=none   cterm=none
 hi Whitespace                ctermfg=236    ctermbg=none   cterm=none
 
 hi DiagnosticError           ctermfg=196    ctermbg=none   cterm=none

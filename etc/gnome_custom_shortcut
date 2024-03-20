@@ -1,5 +1,5 @@
 [/]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/']
 
 [custom-keybindings/custom0]
 binding='<Shift><Super>s'
@@ -20,18 +20,3 @@ name='Ibus_en'
 binding='<Shift><Super>space'
 command='ibus engine Bamboo'
 name='Ibus_vn'
-
-[custom-keybindings/custom4]
-binding='<Shift><Super>d'
-command='rofi -modi drun -show drun -show-icons'
-name='Rofi drun'
-
-[custom-keybindings/custom5]
-binding='<Shift><Super>r'
-command='rofi -modi run -show run -show-icons'
-name='Rofi run'
-
-[custom-keybindings/custom6]
-binding='<Shift><Super>w'
-command='rofi -show window -show-icons'
-name='Rofi window'

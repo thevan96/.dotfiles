@@ -3,24 +3,22 @@ set nocompatible
 set encoding=utf-8
 set nobackup noswapfile
 set autoread autowrite
-set hlsearch incsearch
 set ignorecase smartcase
-set list listchars=tab:»\ ,lead:.
+set hlsearch incsearch shortmess-=S
+set list listchars=tab:›\ ,leadmultispace:·\ ,trail:-
 set fillchars=stl:\_,stlnc:\_,fold:\ |
-set laststatus=2 ruler
+set laststatus=2 backspace=0 ruler signcolumn=no
 set ttimeout ttimeoutlen=100 timeoutlen=1000
-set nonumber norelativenumber
-set textwidth=80 colorcolumn=+1
+set number relativenumber
+set colorcolumn=81
 set wildmenu wildmode=list
 set completeopt=menu
-set hidden
-set autoindent
-set backspace=0
-set nofoldenable
-set signcolumn=no
+set hidden autoindent
 set diffopt=vertical
 set mouse=a ttymouse=xterm2
-set nocursorline
+set nofoldenable nocursorline
+set undofile
+set undodir=/tmp/.vim-undo-dir
 set wildignore=*/.git/*,*/.vscode/*,*/.direnv/*,*/node_modules/*
 set grepprg=grep\ -rn\ --exclude-dir={.git,.vscode,.direnv,node_modules}
 packadd! matchit
@@ -29,15 +27,6 @@ packadd! matchit
 if !isdirectory("/tmp/.vim-undo-dir")
   call mkdir("/tmp/.vim-undo-dir", "", 0700)
 endif
-set undofile
-set undodir=/tmp/.vim-undo-dir
-
-" vim use alias bash
-let $ROOT = getcwd()
-
-if filereadable(expand('~/.bash_aliases'))
-  let $BASH_ENV = $HOME.'/.bash_aliases'
-end
 
 " Netrw
 let g:netrw_banner = 0
@@ -54,26 +43,26 @@ nnoremap gV `[v`]
 nnoremap <C-l> :noh<cr>
 inoremap <C-l> <C-o>:noh<cr>
 nnoremap <leader>h yypVr-
-nnoremap <leader>H yypVr=
 nnoremap <leader>o :ls<cr>:b<space>
 nnoremap <leader>g :grep!<space>
 nnoremap <leader>G :grep! <C-R><C-W>
+nnoremap <leader>n :set invrelativenumber<cr>
 nnoremap <leader>e :r ~/.dotfiles/snippets/
-nnoremap <leader>n :set invnumber<cr>
-command! Spell set invspell
-command! BufOnly exe '%bdelete|edit#|bdelete#'
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+command! Scratch setlocal buftype=nofile bufhidden=hide noswapfile
+command! Tab setlocal tabstop=2 shiftwidth=2 noexpandtab
+command! Space setlocal tabstop=2 shiftwidth=2 expandtab
+command! Spell setlocal invspell
 command! Path let @+ = expand("%:h")
+command! File let @+ = expand("%")
 
 " Disable autocomplete
 inoremap <C-n> <nop>
 inoremap <C-p> <nop>
+inoremap <C-o> <nop>
 inoremap <C-Space> <nop>
 inoremap <C-x><C-o> <nop>
-
-" Relativenumber keep jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 
 " Navigate quickfix/loclist
 nnoremap <leader>qo :copen<cr>
@@ -102,11 +91,9 @@ vnoremap <leader>p "+p
 nnoremap <leader>ff :JumpFile<cr>
 nnoremap <leader>fv :vsp+JumpFile<cr>
 nnoremap <leader>fs :sp+JumpFile<cr>
-nnoremap <leader>fo :e .<cr>
-command! Ro :cd $ROOT
 command! Ex :e+JumpFile
-command! Se :sp+JumpFile
-command! Ve :vsp+JumpFile
+command! Sex :sp+JumpFile
+command! Vex :vsp+JumpFile
 
 " Open in tab terminal
 nnoremap <leader>" :silent exe(':!tmux split-window -v -c '.expand('%:p:h'))<cr>
@@ -137,7 +124,6 @@ function! Trim()
   if !&binary && IsInCurrentProject()
     silent! %s#\($\n\s*\)\+\%$## " trim end newlines
     silent! %s/\s\+$//e " trim whitespace
-    silent! g/^\_$\n\_^$/d " single blank line
     silent! w
   endif
 endfunction
@@ -155,88 +141,17 @@ function! RenameFile()
 endfunction
 command! Rename :call RenameFile()
 
-function! HandleFileNotExist(name)
-  let msg = 'File "'.a:name.'"'
-  let v:fcs_choice = ''
-  if v:fcs_reason == "deleted"
-    let msg .= " no longer available"
-    call setbufvar(expand(a:name), '&modified', '1')
-    call setbufvar(expand(a:name), '&readonly', '1')
-    echohl WarningMsg
-  endif
-  echomsg msg
-endfunction
-
-function! MyExplore(command, name)
-  let res = split(system(a:command), '\n')
-
-  if bufexists(str2nr(bufnr(a:name))) == 1
-    exe('b '.a:name)
-    let save_cursor = getcurpos()
-    let res = split(system(a:command), '\n')
-    let buff = getline(1, '$')
-    let buff =  buff[:(len(buff)-2)]
-    if len(res)-1 != len(buff)
-      setlocal noreadonly modifiable
-      exe '%d'
-      call append(0, res)
-      silent! %s#\($\n\s*\)\+\%$##
-      setlocal readonly nomodifiable
-    endif
-    call setpos('.', save_cursor)
-    return
-  endif
-
-  enew
-  setlocal buftype=nofile bufhidden=hide noswapfile ft=explore
-  exe('file '.a:name)
-  call append(0, res)
-  silent! %s#\($\n\s*\)\+\%$##
-  normal! gg
-  setlocal readonly nomodifiable
-endfunction
-
-let files_command =
-  \ 'find -type f
-  \ -not -path */.git/*
-  \ -not -path */.vscode/*
-  \ -not -path */.direnv/*
-  \ -not -path */node_modules/*
-  \ | sed "s|^./||"
-  \ | sort'
-
-let directories_command =
-  \ 'find -type d
-  \ \(
-  \ -path */.git/*
-  \ -o
-  \ -path */.vscode/*
-  \ -o
-  \ -path */.direnv/*
-  \ -o
-  \ -path */node_modules/*
-  \ -prune -o -print
-  \ \)
-  \ | sed "s|^./||"
-  \ | sort'
-
-nnoremap <silent> <leader>i
-  \ :call MyExplore(files_command, 'explore_files')<cr>
-nnoremap <silent> <leader>d
-  \ :call MyExplore(directories_command, 'explore_directories')<cr>
-
 function! Command()
-  if bufexists(str2nr(bufnr('command'))) == 1
-    exe 'b command'
+  if bufexists(str2nr(bufnr('Command_mode'))) == 1
+    exe 'b Command_mode'
     return
   endif
 
   enew
   setlocal buftype=nofile bufhidden=hide noswapfile
-  setlocal ft=command
-  silent execute 'file command'
+  silent execute 'file Command_mode'
 endfunction
-nnoremap <silent><leader>c :call Command()<cr>
+nnoremap <silent><leader><cr> :call Command()<cr>
 
 function! s:ParseCodeBlock() abort
   let result = {}
@@ -322,7 +237,7 @@ function! s:InsertBlockCode(runner)
   silent! w
 endfunction
 
-function! RunCode(type)
+function! RunCode()
   let runner = s:ParseCodeBlock()
   if runner == {}
     return
@@ -338,16 +253,23 @@ function! RunCode(type)
     let runner = s:RunJs(runner)
   endif
 
-  if a:type == 'insert'
-    let save_cursor = getcurpos()
-    call s:InsertBlockCode(runner)
-    call setpos('.', save_cursor)
-  elseif a:type == 'echo'
-    echo runner.result
-  endif
+  let save_cursor = getcurpos()
+  call s:InsertBlockCode(runner)
+  call setpos('.', save_cursor)
 endfunction
-nnoremap <silent><leader>rr :call RunCode('insert')<cr>
-nnoremap <silent><leader>re :call RunCode('echo')<cr>
+nnoremap <silent><leader>r :call RunCode()<cr>
+
+function HandleFileNotExist(name)
+  let msg = 'File "'.a:name.'"'
+  let v:fcs_choice = ''
+  if v:fcs_reason == "deleted"
+    let msg .= " no longer available"
+    call setbufvar(expand(a:name), '&modified', '1')
+    call setbufvar(expand(a:name), '&readonly', '1')
+    echohl WarningMsg
+  endif
+  echomsg msg
+endfunction
 
 function! InCodeFence()
   call search('^```.*$', 'bceW')
@@ -368,15 +290,94 @@ onoremap <silent> if :call InCodeFence()<cr>
 xnoremap <silent> af :call AroundCodeFence()<cr>
 onoremap <silent> af :call AroundCodeFence()<cr>
 
-function! Scratch()
-  enew
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-  setlocal ft=scratch
-  silent execute 'file scratch'
+function! HandleFileNotExist(name)
+  let msg = 'File "'.a:name.'"'
+  let v:fcs_choice = ''
+  if v:fcs_reason == "deleted"
+    let msg .= " no longer available"
+    call setbufvar(expand(a:name), '&modified', '1')
+    call setbufvar(expand(a:name), '&readonly', '1')
+    echohl WarningMsg
+  endif
+  echomsg msg
 endfunction
-command! Scratch :call Scratch()
+
+function! MyExplore(command, name)
+  let res = split(system(a:command), '\n')
+
+  if bufexists(str2nr(bufnr(a:name))) == 1
+    exe('b '.a:name)
+    let save_cursor = getcurpos()
+    let res = split(system(a:command), '\n')
+    let buff = getline(1, '$')
+    let buff =  buff[:(len(buff)-2)]
+    if len(res)-1 != len(buff)
+      setlocal noreadonly modifiable
+      exe '%d'
+      call append(0, res)
+      silent! %s#\($\n\s*\)\+\%$##
+      setlocal readonly nomodifiable
+    endif
+    call setpos('.', save_cursor)
+    return
+  endif
+
+  enew
+  setlocal buftype=nofile bufhidden=hide noswapfile ft=explore
+  exe('file '.a:name)
+  call append(0, res)
+  silent! %s#\($\n\s*\)\+\%$##
+  normal! gg
+  setlocal readonly nomodifiable
+endfunction
+
+let files_command =
+  \ 'find -type f
+  \ -not -path */.git/*
+  \ -not -path */.vscode/*
+  \ -not -path */.direnv/*
+  \ -not -path */node_modules/*
+  \ | sed "s|^./||"
+  \ | sort'
+
+let directories_command =
+  \ 'find -type d
+  \ \(
+  \ -path */.git/*
+  \ -o
+  \ -path */.vscode/*
+  \ -o
+  \ -path */.direnv/*
+  \ -o
+  \ -path */node_modules/*
+  \ -prune -o -print
+  \ \)
+  \ | sed "s|^./||"
+  \ | sort'
+
+nnoremap <silent> <leader>i
+  \ :call MyExplore(files_command, 'explore_files')<cr>
+nnoremap <silent> <leader>d
+  \ :call MyExplore(directories_command, 'explore_directories')<cr>
+
+function! InCodeFence()
+  call search('^```.*$', 'bceW')
+  normal! j
+  normal! 0v
+  call search("```", 'ceW')
+  normal! kg_
+endfunction
+
+function! AroundCodeFence()
+  call search('^```.*$', 'bcW')
+  normal! v$
+  call search('```', 'eW')
+endfunction
+
+xnoremap <silent> if :call InCodeFence()<cr>
+onoremap <silent> if :call InCodeFence()<cr>
+xnoremap <silent> af :call AroundCodeFence()<cr>
+onoremap <silent> af :call AroundCodeFence()<cr>
 
 function! JumpFile()
   let folder = expand('%:h')
@@ -396,14 +397,14 @@ let s:fnameMatcher = ':\d\+\(:.*\)\?$'
 function! s:ProcessTrailingLineNum()
   let fname = expand('%')
   if filereadable(fname)
-      return
+    return
   endif
 
   if fname =~# s:fnameMatcher
-      let oldBufNum = bufnr()
-      exec 'edit ' . s:FileNameFrom(fname)
-      call cursor(s:LineNumFrom(fname), s:ColNumFrom(fname))
-      exec ':bwipe ' . oldBufNum
+    let oldBufNum = bufnr()
+    exec 'edit ' . s:FileNameFrom(fname)
+    call cursor(s:LineNumFrom(fname), s:ColNumFrom(fname))
+    exec ':bwipe ' . oldBufNum
   endif
 endfunction
 
@@ -419,35 +420,36 @@ function! s:FileNameFrom(fnameWithLineNum)
   return substitute(a:fnameWithLineNum, '^\(.\{-}\):\d\+\(:.*\)\?$', '\1', '')
 endfunction
 
-augroup OpenWithLineCol
-    autocmd!
-    autocmd bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
-augroup END
-
 function! MyFoldText()
-  let tittle = getline(v:foldstart)
+  let title = getline(v:foldstart)
   let numberlines = v:foldend - v:foldstart
-  return tittle .' +'.numberlines
+  return title.' --- +'.numberlines
 endfunction
 
+function! MyFoldText()
+  let title = getline(v:foldstart)
+  let numberlines = v:foldend - v:foldstart
+  return title.' --- +'.numberlines
+endfunction
+
+augroup OpenWithLineCol
+  autocmd bufnewfile,bufenter * ++nested call s:ProcessTrailingLineNum()
+augroup END
+
 augroup ConfigStyleTabOrSpace
-  au FileType text setlocal foldenable foldmethod=marker foldtext=MyFoldText()
+  au FileType text
+    \ setlocal foldenable foldmethod=marker foldtext=MyFoldText()
+  au FileType
+    \ yaml setlocal foldlevel=99 foldmethod=indent foldtext=MyFoldText()
   au FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
   au FileType rust setlocal tabstop=4 shiftwidth=4 expandtab
   au FileType markdown setlocal tabstop=2 shiftwidth=2 expandtab
   au FileType make setlocal tabstop=2 shiftwidth=2 noexpandtab
 augroup end
 
-augroup snippet
+augroup Abbreviation
   iab <expr> snidate strftime("%Y-%m-%d")
   iab sniline --------------------------------------------------------------------------------
-augroup end
-
-augroup ShowExtraWhitespace
-  hi ExtraWhitespace ctermbg=196
-  match ExtraWhitespace /\s\+$/
-  au InsertEnter * hi ExtraWhitespace ctermbg=none
-  au InsertLeave * hi ExtraWhitespace ctermbg=196
 augroup end
 
 augroup RelativeWorkingDirectory
@@ -459,7 +461,6 @@ augroup LoadFile
   au VimResized * wincmd =
   au FileType netrw
     \ cnoremap <buffer><expr> %% getcmdtype() == ':' ? b:netrw_curdir.'/' : '%%'
-  au FileType explore nnoremap <cr> gf
   au FileChangedShell * call HandleFileNotExist(expand("<afile>:p"))
   au FocusGained,BufEnter,CursorMoved,CursorHold *
     \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' |
@@ -470,34 +471,26 @@ augroup LoadFile
     \ endif
 augroup end
 
-"--- Customize theme ---"
 syntax off
 set background=dark
-filetype plugin on
+filetype plugin off
 filetype indent off
 
 hi clear Error
 hi clear VertSplit
-
-hi Folded                         ctermfg=none     ctermbg=none     cterm=none
-hi FoldColumn                     ctermfg=none     ctermbg=none     cterm=none
-hi SignColumn                     ctermfg=none     ctermbg=none     cterm=none
-hi NonText                        ctermfg=none     ctermbg=none     cterm=none
-hi Normal                         ctermfg=none     ctermbg=none     cterm=none
-hi Pmenu                          ctermfg=255      ctermbg=234      cterm=none
-hi PmenuSel                       ctermfg=46       ctermbg=236      cterm=none
-hi MatchParen                     ctermfg=46       ctermbg=none     cterm=bold
-hi Visual                         ctermfg=255      ctermbg=242      cterm=none
-
-hi LineNr                         ctermfg=242      ctermbg=none     cterm=none
-hi LineNrAbove                    ctermfg=242      ctermbg=none     cterm=none
-hi LineNrBelow                    ctermfg=242      ctermbg=none     cterm=none
-hi CursorLine                     ctermfg=none     ctermbg=none     cterm=none
-hi CursorLineNr                   ctermfg=none     ctermbg=none     cterm=none
-
-hi StatusLine                     ctermfg=none     ctermbg=none     cterm=bold
-hi StatusLineNC                   ctermfg=none     ctermbg=none     cterm=none
-
-hi ColorColumn                    ctermfg=none     ctermbg=233
-hi SpecialKey                     ctermfg=236      ctermbg=none     cterm=none
-hi Whitespace                     ctermfg=236      ctermbg=none     cterm=none
+hi Folded                            ctermbg=none    cterm=none
+hi FoldColumn        ctermfg=none    ctermbg=none    cterm=none
+hi SignColumn        ctermfg=none    ctermbg=none    cterm=none
+hi Normal            ctermfg=none    ctermbg=none    cterm=none
+hi Pmenu             ctermfg=255     ctermbg=234     cterm=none
+hi PmenuSel          ctermfg=46      ctermbg=236     cterm=none
+hi MatchParen        ctermfg=46      ctermbg=none    cterm=bold
+hi Visual            ctermfg=255     ctermbg=242     cterm=none
+hi LineNr            ctermfg=240     ctermbg=none    cterm=none
+hi LineNrAbove       ctermfg=240     ctermbg=none    cterm=none
+hi LineNrBelow       ctermfg=240     ctermbg=none    cterm=none
+hi StatusLine        ctermfg=none    ctermbg=none    cterm=bold
+hi StatusLineNC      ctermfg=none    ctermbg=none    cterm=none
+hi NonText           ctermfg=238     ctermbg=none    cterm=none
+hi SpecialKey        ctermfg=238     ctermbg=none    cterm=none
+hi ColorColumn       ctermfg=none    ctermbg=233

@@ -26,30 +26,26 @@ foreground = "#ffffff"
 cursor = "#00ff00"
 text = "#000000"
 
-[cursor]
-blink_interval = 400
-
 [cursor.style]
 shape = "Block"
-blinking = "Always"
 
 [font]
-size = 10
+size = 11
 
 [font.bold]
-family = "Source Code Pro"
+family = "Code New Roman"
 style = "Bold"
 
 [font.bold_italic]
-family = "Source Code Pro"
+family = "Code New Roman"
 style = "Bold Italic"
 
 [font.italic]
-family = "Source Code Pro"
+family = "Code New Roman"
 style = "Italic"
 
 [font.normal]
-family = "Source Code Pro"
+family = "Code New Roman"
 style = "Regular"
 
 [font.offset]
@@ -104,7 +100,7 @@ hide_when_typing = true
 save_to_clipboard = true
 
 [window]
-decorations = "Full"
+decorations = "None"
 opacity = 1.0
 startup_mode = "Maximized"
 title = "Alacritty"

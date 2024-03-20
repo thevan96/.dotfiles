@@ -1,16 +1,3 @@
-# Bash config variable
-HISTSIZE=10000
-HISTFILESIZE=10000
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# Load alias
-if [ -f ~/.bash_aliases ]; then
-  source "$HOME/.bash_aliases"
-fi
-
 # PS1
 PS1='\w\n\\$ '
 

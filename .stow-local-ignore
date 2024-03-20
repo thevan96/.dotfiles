@@ -3,10 +3,8 @@
 
 /.stylua.toml
 /.editorconfig
-/.envrc
 
 shell.nix
-install.sh
 snippets
 etc
 Makefile

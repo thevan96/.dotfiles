@@ -19,24 +19,17 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     htop \
     jq \
     make \
-    mycli \
     nano \
     neofetch \
     neovim \
     net-tools \
-    pgcli \
     ripgrep \
-    rofi \
     stow \
-    tig \
     tmux \
     trash-cli \
     tree \
     unrar \
-    vim-X11 \
     wget \
-    wmctrl \
-    xclip \
     xsel \
     zip
 
@@ -47,6 +40,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     evince \
     flameshot \
     gimp \
+    gnome-extensions-app \
     gnome-sound-recorder \
     gparted \
     gpick \
@@ -56,10 +50,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     peek \
     screenkey \
     simplescreenrecorder \
-    timeshift \
     transmission \
-    gnome-extensions-app \
-    gnome-tweaks \
     uget \
     vlc
 
@@ -75,5 +66,5 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   timedatectl set-timezone 'Asia/Ho_Chi_Minh'
 
   echo "Set namehost"
-  sudo hostnamectl set-hostname elliot
+  sudo hostnamectl set-hostname neo
 fi

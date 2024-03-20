@@ -3,17 +3,17 @@
   email = vothevan96@gmail.com
 
 [core]
-  editor = nvim
+  editor = vim
   excludesfile = ~/.gitignore_global
 
 [init]
   defaultBranch = main
 
 [diff]
-  tool = nvimdiff
+  tool = vimdiff
 
 [merge]
-  tool = nvimdiff
+  tool = vimdiff
 
 [mergetool]
   keepBackup = false

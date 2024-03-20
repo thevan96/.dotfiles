@@ -9,7 +9,7 @@ if [ ! -d "/nix" ]; then
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
   nix-channel --update
 
-  nix-env -iA nixpkgs.nix-direnv nixpkgs.nodejs_20
+  nix-env -iA nixpkgs.nix-direnv
 
   # nix-env -iA \
   #   nixpkgs.gopls \

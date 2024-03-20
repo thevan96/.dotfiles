@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+find . -type d \
+  \( -path "*/.git/*" \
+  -o \
+  -path "*/.vscode/*" \
+  -o \
+  -path "*/.direnv/*" \
+  -o \
+  -path "/*node_modules/*" \
+  -prune -o -print \
+  \) \
+  | sed "s|^./||" \
+  | sort
+
